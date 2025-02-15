@@ -1,7 +1,7 @@
 package pet
 
 import (
-	"github.com/rhtran/gin-petclinic-service/internal/api/visit"
+	"github.com/rhtran/gin-petclinic-service/api/visit"
 	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
 	"github.com/rhtran/gin-petclinic-service/pkg/model"
 )

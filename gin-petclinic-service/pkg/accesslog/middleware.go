@@ -26,9 +26,11 @@ func Handler(logger *zap.Logger) routing.Handler {
 		err := c.Next()
 
 		// generate an access log message
+		// TODO
 		//logger.With(ctx, "duration", time.Now().Sub(start).Milliseconds(), "status", rw.Status).
 		//	Infof("%s %s %s %d %d", c.Request.Method, c.Request.URL.Path, c.Request.Proto, rw.Status, rw.BytesWritten)
-
+		//a := logger.With(zap.Int64("duration", time.Now().Sub(start).Milliseconds()), zap.Int("status", rw.Status)
+		//a.Info("%s %s %s %d %d", c.Request.Method, c.Request.URL.Path, c.Request.Proto, rw.Status, rw.BytesWritten))
 		return err
 	}
 }

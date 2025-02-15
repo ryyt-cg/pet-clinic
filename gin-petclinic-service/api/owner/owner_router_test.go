@@ -20,7 +20,7 @@ func setupRouter() *gin.Engine {
 
 func Test_ownerById(t *testing.T) {
 	//logger := log.New().With(nil, "function", "Test_ownerById")
-	logger := zap.NewNop()
+	logger, _ := zap.NewProduction()
 	ownerMock := MockServicer{}
 
 	ownerResponse := &Response{
@@ -29,7 +29,7 @@ func Test_ownerById(t *testing.T) {
 		LastName:  "Cole",
 	}
 
-	ownerMock.On("getOwnerById", 1).Return(ownerResponse, nil)
+	ownerMock.On("getOwnerById", uint(1)).Return(ownerResponse, nil)
 	ownerRouter := NewRouter(logger, &ownerMock)
 
 	r := setupRouter()

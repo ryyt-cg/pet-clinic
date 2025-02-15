@@ -83,7 +83,7 @@ func setupRouter() *gin.Engine {
 
 func Test_PetById(t *testing.T) {
 	//logger := log.New().With(nil, "function", "Test_PetById")
-	logger := zap.NewNop()
+	logger, _ := zap.NewProduction()
 	petMock := petServiceMock{}
 	petResponse := &Response{
 		ID:   1,
@@ -113,7 +113,7 @@ func Test_PetById(t *testing.T) {
 
 func Test_PetsByName(t *testing.T) {
 	//logger := log.New().With(nil, "function", "Test_PetByName")
-	logger := zap.NewNop()
+	logger, _ := zap.NewProduction()
 	petMock := petServiceMock{}
 
 	petResponses := make([]Response, 1)
@@ -123,7 +123,7 @@ func Test_PetsByName(t *testing.T) {
 	}
 	petResponses[0] = *petRespopnse
 
-	petMock.On("GetPetByName", "Charles").Return(petResponses, nil)
+	petMock.On("getPetsByName", "Charles").Return(petResponses, nil)
 	petRouter := NewRouter(logger, &petMock)
 
 	r := setupRouter()
@@ -141,6 +141,7 @@ func Test_PetsByName(t *testing.T) {
 	// unmarshal to Pet struct for asserts.
 	actualPetResponses := make([]Response, 1)
 	json.Unmarshal(w.Body.Bytes(), &actualPetResponses)
+	
 	assert.Equal(t, petRespopnse.ID, actualPetResponses[0].ID)
 	assert.Equal(t, petRespopnse.Name, actualPetResponses[0].Name)
 }

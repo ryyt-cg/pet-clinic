@@ -1,7 +1,7 @@
 package owner
 
 import (
-	"github.com/rhtran/gin-petclinic-service/internal/api/pet"
+	"github.com/rhtran/gin-petclinic-service/api/pet"
 	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
 	"github.com/rhtran/gin-petclinic-service/pkg/model"
 	"github.com/stretchr/testify/assert"

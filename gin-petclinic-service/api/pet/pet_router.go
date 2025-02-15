@@ -2,7 +2,7 @@ package pet
 
 import (
 	"errors"
-	"github.com/rhtran/gin-petclinic-service/internal/api"
+	"github.com/rhtran/gin-petclinic-service/api"
 	resterr "github.com/rhtran/gin-petclinic-service/middleware/errors"
 	"github.com/rhtran/gin-petclinic-service/pkg/model"
 	"go.uber.org/zap"
