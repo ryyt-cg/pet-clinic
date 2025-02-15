@@ -1,0 +1,4517 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>app: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/rhtran/gin-petclinic-service/app/config.go (0.0%)</option>
+				
+				<option value="file1">github.com/rhtran/gin-petclinic-service/app/database_config.go (0.0%)</option>
+				
+				<option value="file2">github.com/rhtran/gin-petclinic-service/app/info_config.go (100.0%)</option>
+				
+				<option value="file3">github.com/rhtran/gin-petclinic-service/app/okta_config.go (0.0%)</option>
+				
+				<option value="file4">github.com/rhtran/gin-petclinic-service/app/server_config.go (100.0%)</option>
+				
+				<option value="file5">github.com/rhtran/gin-petclinic-service/cmd/server.go (0.0%)</option>
+				
+				<option value="file6">github.com/rhtran/gin-petclinic-service/docs/docs.go (0.0%)</option>
+				
+				<option value="file7">github.com/rhtran/gin-petclinic-service/internal/api/owner/mock_servicer.go (15.3%)</option>
+				
+				<option value="file8">github.com/rhtran/gin-petclinic-service/internal/api/owner/owner_request.go (0.0%)</option>
+				
+				<option value="file9">github.com/rhtran/gin-petclinic-service/internal/api/owner/owner_response.go (100.0%)</option>
+				
+				<option value="file10">github.com/rhtran/gin-petclinic-service/internal/api/owner/owner_router.go (28.8%)</option>
+				
+				<option value="file11">github.com/rhtran/gin-petclinic-service/internal/api/owner/owner_service.go (25.6%)</option>
+				
+				<option value="file12">github.com/rhtran/gin-petclinic-service/internal/api/pet/pet_request.go (0.0%)</option>
+				
+				<option value="file13">github.com/rhtran/gin-petclinic-service/internal/api/pet/pet_response.go (100.0%)</option>
+				
+				<option value="file14">github.com/rhtran/gin-petclinic-service/internal/api/pet/pet_router.go (37.0%)</option>
+				
+				<option value="file15">github.com/rhtran/gin-petclinic-service/internal/api/pet/pet_service.go (35.5%)</option>
+				
+				<option value="file16">github.com/rhtran/gin-petclinic-service/internal/api/service/auth_service.go (0.0%)</option>
+				
+				<option value="file17">github.com/rhtran/gin-petclinic-service/internal/api/vet/mock_servicer.go (0.0%)</option>
+				
+				<option value="file18">github.com/rhtran/gin-petclinic-service/internal/api/vet/vet_request.go (0.0%)</option>
+				
+				<option value="file19">github.com/rhtran/gin-petclinic-service/internal/api/vet/vet_response.go (100.0%)</option>
+				
+				<option value="file20">github.com/rhtran/gin-petclinic-service/internal/api/vet/vet_router.go (34.5%)</option>
+				
+				<option value="file21">github.com/rhtran/gin-petclinic-service/internal/api/vet/vet_service.go (22.0%)</option>
+				
+				<option value="file22">github.com/rhtran/gin-petclinic-service/internal/api/visit/mock_servicer.go (21.2%)</option>
+				
+				<option value="file23">github.com/rhtran/gin-petclinic-service/internal/api/visit/visit_response.go (55.6%)</option>
+				
+				<option value="file24">github.com/rhtran/gin-petclinic-service/internal/api/visit/visit_router.go (47.4%)</option>
+				
+				<option value="file25">github.com/rhtran/gin-petclinic-service/internal/api/visit/visit_service.go (42.9%)</option>
+				
+				<option value="file26">github.com/rhtran/gin-petclinic-service/middleware/errors/middleware.go (96.3%)</option>
+				
+				<option value="file27">github.com/rhtran/gin-petclinic-service/middleware/errors/response.go (73.5%)</option>
+				
+				<option value="file28">github.com/rhtran/gin-petclinic-service/pkg/dbase/postgres.go (0.0%)</option>
+				
+				<option value="file29">github.com/rhtran/gin-petclinic-service/pkg/ds/http_server.go (0.0%)</option>
+				
+				<option value="file30">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/mock_owner_repositorier.go (0.0%)</option>
+				
+				<option value="file31">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/mock_pet_repositorier.go (0.0%)</option>
+				
+				<option value="file32">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/mock_vet_repositorier.go (0.0%)</option>
+				
+				<option value="file33">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/mock_visit_repositorier.go (0.0%)</option>
+				
+				<option value="file34">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/owner_repository.go (26.8%)</option>
+				
+				<option value="file35">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/pet_repository.go (42.9%)</option>
+				
+				<option value="file36">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/test/api.go (85.7%)</option>
+				
+				<option value="file37">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/test/embedded_postgres.go (72.7%)</option>
+				
+				<option value="file38">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/test/mock.go (0.0%)</option>
+				
+				<option value="file39">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/vet_repository.go (26.8%)</option>
+				
+				<option value="file40">github.com/rhtran/gin-petclinic-service/pkg/infra/repository/visit_repository.go (40.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package app
+
+import (
+        "fmt"
+        "os"
+        "strings"
+
+        validation "github.com/go-ozzo/ozzo-validation/v4"
+        "github.com/spf13/viper"
+)
+
+// Config stores the application-wide configurations
+var Config appConfig
+
+type appConfig struct {
+        AppInfo  AppInfoConfig
+        Database DatabaseConfig
+        Okta     OktaConfig
+        Server   ServerConfig
+}
+
+// Validate all config required values are populated.
+func (config appConfig) Validate() error <span class="cov0" title="0">{
+
+        if err := config.Server.Validate(); err != nil </span><span class="cov0" title="0">{
+                panic(err.Error())</span>
+        }
+        <span class="cov0" title="0">if err := config.AppInfo.Validate(); err != nil </span><span class="cov0" title="0">{
+                panic(err.Error())</span>
+        }
+        <span class="cov0" title="0">if err := config.Database.Validate(); err != nil </span><span class="cov0" title="0">{
+                panic(err.Error())</span>
+        }
+        <span class="cov0" title="0">if err := config.Okta.OAuth2.Validate(); err != nil </span><span class="cov0" title="0">{
+                panic(err.Error())</span>
+        }
+        <span class="cov0" title="0">return validation.ValidateStruct(&amp;config)</span> //validation.Field(&amp;config.DSN, validation.Required),
+}
+
+// LoadConfig loads configuration from the given list of paths and populates it into the Config variable.
+// The configuration file(s) should be named as app.yaml.
+// Environment variables with the prefix "NGEN_" in their names are also read automatically.
+func LoadConfig(configPaths ...string) error <span class="cov0" title="0">{
+        v := viper.New()
+        v.SetConfigType("yaml")
+        v.AutomaticEnv()
+        env := strings.ToUpper(os.Getenv("ENV"))
+        v.SetConfigName(getConfigFile(env))
+        v.SetDefault("error_file", "config/errors.yaml")
+
+        for _, path := range configPaths </span><span class="cov0" title="0">{
+                v.AddConfigPath(path)
+        }</span>
+        <span class="cov0" title="0">if err := v.ReadInConfig(); err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to read the configuration file: %s", err)
+        }</span>
+        <span class="cov0" title="0">if err := v.Unmarshal(&amp;Config); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return Config.Validate()</span>
+}
+
+func getConfigFile(env string) string <span class="cov0" title="0">{
+        switch env </span>{
+        case "PROD":<span class="cov0" title="0">
+                return "app-prod"</span>
+        case "STG":<span class="cov0" title="0">
+                return "app-stg"</span>
+        case "DEV":<span class="cov0" title="0">
+                return "app-dev"</span>
+        default:<span class="cov0" title="0">
+                return "app"</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package app
+
+import validation "github.com/go-ozzo/ozzo-validation/v4"
+
+type DatabaseConfig struct {
+        Postgres     PostgresConfig
+        MaxIdleConns int
+        MaxOpenConns int
+        MaxIdleTime  int
+}
+
+func (db DatabaseConfig) Validate() error <span class="cov0" title="0">{
+        return validation.ValidateStruct(&amp;db,
+                validation.Field(&amp;db.Postgres, validation.Required),
+                validation.Field(&amp;db.MaxIdleConns, validation.Min(0)),
+                validation.Field(&amp;db.MaxOpenConns, validation.Required),
+                validation.Field(&amp;db.MaxIdleTime, validation.Min(0)),
+        )
+}</span>
+
+type PostgresConfig struct {
+        Driver string
+        Dsn    string
+}
+
+func (pc PostgresConfig) Validate() error <span class="cov0" title="0">{
+        return validation.ValidateStruct(&amp;pc,
+                validation.Field(&amp;pc.Driver, validation.Required),
+                validation.Field(&amp;pc.Dsn, validation.Required),
+        )
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package app
+
+import validation "github.com/go-ozzo/ozzo-validation/v4"
+
+type AppInfoConfig struct {
+        Name        string
+        Description string
+        Version     string
+}
+
+func (aic AppInfoConfig) Validate() error <span class="cov8" title="1">{
+        return validation.ValidateStruct(&amp;aic,
+                validation.Field(&amp;aic.Name, validation.Required),
+                validation.Field(&amp;aic.Description, validation.Required),
+                validation.Field(&amp;aic.Version, validation.Required),
+        )
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package app
+
+import (
+        validation "github.com/go-ozzo/ozzo-validation/v4"
+)
+
+type OktaConfig struct {
+        OAuth2 OAuth2Config
+}
+
+type OAuth2Config struct {
+        URL      string
+        Audience string
+        Issuer   string
+        ClientId string
+        Scopes   string
+}
+
+func (oa OAuth2Config) Validate() error <span class="cov0" title="0">{
+        return validation.ValidateStruct(&amp;oa,
+                validation.Field(&amp;oa.URL, validation.Required),
+                validation.Field(&amp;oa.Issuer, validation.Required),
+        )
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package app
+
+import (
+        validation "github.com/go-ozzo/ozzo-validation/v4"
+        "regexp"
+)
+
+type ServerConfig struct {
+        HttpPort string `yaml:"httpPort"`
+}
+
+func (sc ServerConfig) Validate() error <span class="cov8" title="1">{
+        return validation.ValidateStruct(&amp;sc,
+                validation.Field(&amp;sc.HttpPort, validation.Required),
+                validation.Field(&amp;sc.HttpPort, validation.Match(regexp.MustCompile("^:\\d+$")).Error("must be in the format :dddd")),
+        )
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package main
+
+import (
+        "context"
+        "fmt"
+        "github.com/rhtran/gin-petclinic-service/app"
+        "github.com/rhtran/gin-petclinic-service/internal/api/health"
+        "github.com/rhtran/gin-petclinic-service/internal/api/info"
+        "github.com/rhtran/gin-petclinic-service/internal/api/owner"
+        "github.com/rhtran/gin-petclinic-service/internal/api/pet"
+        "github.com/rhtran/gin-petclinic-service/internal/api/vet"
+        "github.com/rhtran/gin-petclinic-service/internal/api/visit"
+        "github.com/rhtran/gin-petclinic-service/pkg/dbase"
+        "github.com/rhtran/gin-petclinic-service/pkg/ds"
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+        ginprometheus "github.com/zsais/go-gin-prometheus"
+        "os"
+
+        "github.com/rhtran/gin-petclinic-service/middleware"
+
+        "gorm.io/gorm"
+
+        "github.com/gin-contrib/location"
+
+        "github.com/gin-gonic/gin"
+        "github.com/qiangxue/go-restful-api/pkg/log"
+        "golang.org/x/sync/errgroup"
+)
+
+var (
+        g      errgroup.Group
+        pg     *gorm.DB
+        logger log.Logger
+        r      *gin.Engine
+)
+
+func init() <span class="cov0" title="0">{
+        // load application configurations
+        if err := app.LoadConfig("./config"); err != nil </span><span class="cov0" title="0">{
+                panic(fmt.Errorf("invalid application configuration: %s", err))</span>
+        }
+        <span class="cov0" title="0">logger = log.New().With(context.TODO(), "version", app.Config.AppInfo.Version)
+        logger.Infof("pet-clinic starts")
+        pg = dbase.PgConnect()
+
+        //ctx, client, err := okta.NewClient(context.TODO(), okta.WithOrgUrl("https://dev-293522.okta.com/"), okta.WithToken("{apiToken}"))
+
+        // Creates a router without any middleware by default
+        r = gin.New()
+
+        // Global middleware
+        // Logger middleware will write the logs to gin.DefaultWriter even if you set with GIN_MODE=release.
+        // By default, gin.DefaultWriter = os.Stdout
+        r.Use(gin.Logger())
+
+        // Recovery middleware recovers from any panics and writes a 500 if there was one.
+        r.Use(gin.Recovery())
+        r.Use(location.Default())
+        r.Use(middleware.SetRequestUUID())</span>
+}
+
+// Component initialization
+func init() <span class="cov0" title="0">{
+        logger.Info("Component initialization starts")
+        healthCheckService := health.NewHealthCheckService(logger)
+        healthCheckRouter := health.NewHealthCheckRouter(healthCheckService, logger)
+
+        infoService := info.NewInfoService(logger)
+        ipService := info.NewIPService(logger)
+        infoRouter := info.NewInfoRouter(logger, infoService, ipService)
+
+        // Pet
+        petRepository := repository.NewPetRepository(logger, pg)
+        petService := pet.NewPetService(logger, petRepository)
+        petRouter := pet.NewPetRouter(logger, petService)
+
+        // Vet
+        vetRepository := repository.NewVetRepository(logger, pg)
+        vetService := vet.NewVetService(logger, vetRepository)
+        vetRouter := vet.NewVetRouter(logger, vetService)
+
+        // Owner
+        ownerRepository := repository.NewOwnerRepository(logger, pg)
+        ownerService := owner.NewOwnerService(logger, ownerRepository)
+        ownerRouter := owner.NewOwnerRouter(logger, ownerService)
+
+        // Visit
+        visitRepository := repository.NewVisitRepository(logger, pg)
+        visitService := visit.NewVisitService(logger, visitRepository)
+        visitRouter := visit.NewVisitRouter(logger, visitService)
+
+        //authenService := service.NewAuthenService(logger)
+
+        // config prometheus &amp; endpoint group
+        p := ginprometheus.NewPrometheus("gin")
+        p.Use(r)
+        home := r.Group("/")
+        v1 := r.Group("/v1")
+        //v1.Use(middleware.Authenticate(authenService))
+
+        healthCheckRouter.HealthCheckRegister(home.Group("/health"))
+        infoRouter.InfoRegister(home.Group("/info"))
+        petRouter.PetRegister(v1.Group("/pet"))
+        vetRouter.VetRegister(v1.Group("/vet"))
+        ownerRouter.OwnerRegister(v1.Group("/owner"))
+        visitRouter.VisitRegister(v1.Group("/visit"))
+}</span>
+
+func main() <span class="cov0" title="0">{
+        httpServer := ds.NewHttpServer(r)
+        httpRouter := httpServer.HttpRouter()
+
+        g.Go(func() error </span><span class="cov0" title="0">{
+                return httpRouter.ListenAndServe()
+        }</span>)
+
+        <span class="cov0" title="0">if err := g.Wait(); err != nil </span><span class="cov0" title="0">{
+                logger.Error(err)
+                os.Exit(-1)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">// GENERATED BY THE COMMAND ABOVE; DO NOT EDIT
+// This file was generated by swaggo/swag at
+// 2020-01-19 14:01:54.23164 -0800 PST m=+0.024634476
+
+package docs
+
+import (
+        "bytes"
+        "encoding/json"
+        "strings"
+
+        "github.com/alecthomas/template"
+        "github.com/swaggo/swag"
+)
+
+var doc = `{
+    "schemes": {{ marshal .Schemes }},
+    "swagger": "2.0",
+    "info": {
+        "description": "{{.Description}}",
+        "title": "{{.Title}}",
+        "contact": {},
+        "license": {},
+        "version": "{{.Version}}"
+    },
+    "host": "{{.Host}}",
+    "basePath": "{{.BasePath}}",
+    "paths": {
+        "/info": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Info"
+                ],
+                "summary": "Show app info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/info.Info"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "info.Info": {
+            "type": "object",
+            "properties": {
+                "appName": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}`
+
+type swaggerInfo struct {
+        Version     string
+        Host        string
+        BasePath    string
+        Schemes     []string
+        Title       string
+        Description string
+}
+
+// SwaggerInfo holds exported Swagger Info so clients can modify it
+var SwaggerInfo = swaggerInfo{
+        Version:     "",
+        Host:        "",
+        BasePath:    "",
+        Schemes:     []string{},
+        Title:       "",
+        Description: "",
+}
+
+type s struct{}
+
+func (s *s) ReadDoc() string <span class="cov0" title="0">{
+        sInfo := SwaggerInfo
+        sInfo.Description = strings.Replace(sInfo.Description, "\n", "\\n", -1)
+
+        t, err := template.New("swagger_info").Funcs(template.FuncMap{
+                "marshal": func(v interface{}) string </span><span class="cov0" title="0">{
+                        a, _ := json.Marshal(v)
+                        return string(a)
+                }</span>,
+        }).Parse(doc)
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return doc
+        }</span>
+
+        <span class="cov0" title="0">var tpl bytes.Buffer
+        if err := t.Execute(&amp;tpl, sInfo); err != nil </span><span class="cov0" title="0">{
+                return doc
+        }</span>
+
+        <span class="cov0" title="0">return tpl.String()</span>
+}
+
+func init() <span class="cov0" title="0">{
+        swag.Register(swag.Name, &amp;s{})
+}</span>
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">// Code generated by mockery v2.42.2. DO NOT EDIT.
+
+package owner
+
+import (
+        repository "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+        mock "github.com/stretchr/testify/mock"
+)
+
+// MockServicer is an autogenerated mock type for the Servicer type
+type MockServicer struct {
+        mock.Mock
+}
+
+type MockServicer_Expecter struct {
+        mock *mock.Mock
+}
+
+func (_m *MockServicer) EXPECT() *MockServicer_Expecter <span class="cov0" title="0">{
+        return &amp;MockServicer_Expecter{mock: &amp;_m.Mock}
+}</span>
+
+// create provides a mock function with given fields: owner
+func (_m *MockServicer) create(owner *repository.Owner) (*Response, error) <span class="cov0" title="0">{
+        ret := _m.Called(owner)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for create")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*repository.Owner) (*Response, error)); ok </span><span class="cov0" title="0">{
+                return rf(owner)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(*repository.Owner) *Response); ok </span><span class="cov0" title="0">{
+                r0 = rf(owner)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(*repository.Owner) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(owner)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_create_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'create'
+type MockServicer_create_Call struct {
+        *mock.Call
+}
+
+// create is a helper method to define mock.On call
+//   - owner *repository.Owner
+func (_e *MockServicer_Expecter) create(owner interface{}) *MockServicer_create_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_create_Call{Call: _e.mock.On("create", owner)}
+}</span>
+
+func (_c *MockServicer_create_Call) Run(run func(owner *repository.Owner)) *MockServicer_create_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*repository.Owner))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_create_Call) Return(_a0 *Response, _a1 error) *MockServicer_create_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_create_Call) RunAndReturn(run func(*repository.Owner) (*Response, error)) *MockServicer_create_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// getAllOwners provides a mock function with given fields:
+func (_m *MockServicer) getAllOwners() ([]Response, error) <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for getAllOwners")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func() ([]Response, error)); ok </span><span class="cov0" title="0">{
+                return rf()
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func() []Response); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+                r1 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_getAllOwners_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'getAllOwners'
+type MockServicer_getAllOwners_Call struct {
+        *mock.Call
+}
+
+// getAllOwners is a helper method to define mock.On call
+func (_e *MockServicer_Expecter) getAllOwners() *MockServicer_getAllOwners_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_getAllOwners_Call{Call: _e.mock.On("getAllOwners")}
+}</span>
+
+func (_c *MockServicer_getAllOwners_Call) Run(run func()) *MockServicer_getAllOwners_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run()
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_getAllOwners_Call) Return(_a0 []Response, _a1 error) *MockServicer_getAllOwners_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_getAllOwners_Call) RunAndReturn(run func() ([]Response, error)) *MockServicer_getAllOwners_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// getAllOwnersWithPets provides a mock function with given fields:
+func (_m *MockServicer) getAllOwnersWithPets() ([]Response, error) <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for getAllOwnersWithPets")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func() ([]Response, error)); ok </span><span class="cov0" title="0">{
+                return rf()
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func() []Response); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+                r1 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_getAllOwnersWithPets_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'getAllOwnersWithPets'
+type MockServicer_getAllOwnersWithPets_Call struct {
+        *mock.Call
+}
+
+// getAllOwnersWithPets is a helper method to define mock.On call
+func (_e *MockServicer_Expecter) getAllOwnersWithPets() *MockServicer_getAllOwnersWithPets_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_getAllOwnersWithPets_Call{Call: _e.mock.On("getAllOwnersWithPets")}
+}</span>
+
+func (_c *MockServicer_getAllOwnersWithPets_Call) Run(run func()) *MockServicer_getAllOwnersWithPets_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run()
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_getAllOwnersWithPets_Call) Return(_a0 []Response, _a1 error) *MockServicer_getAllOwnersWithPets_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_getAllOwnersWithPets_Call) RunAndReturn(run func() ([]Response, error)) *MockServicer_getAllOwnersWithPets_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// getOwnerById provides a mock function with given fields: id
+func (_m *MockServicer) getOwnerById(id int) (*Response, error) <span class="cov8" title="1">{
+        ret := _m.Called(id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for getOwnerById")</span>
+        }
+
+        <span class="cov8" title="1">var r0 *Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func(int) (*Response, error)); ok </span><span class="cov0" title="0">{
+                return rf(id)
+        }</span>
+        <span class="cov8" title="1">if rf, ok := ret.Get(0).(func(int) *Response); ok </span><span class="cov0" title="0">{
+                r0 = rf(id)
+        }</span> else<span class="cov8" title="1"> {
+                if ret.Get(0) != nil </span><span class="cov8" title="1">{
+                        r0 = ret.Get(0).(*Response)
+                }</span>
+        }
+
+        <span class="cov8" title="1">if rf, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(id)
+        }</span> else<span class="cov8" title="1"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov8" title="1">return r0, r1</span>
+}
+
+// MockServicer_getOwnerById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'getOwnerById'
+type MockServicer_getOwnerById_Call struct {
+        *mock.Call
+}
+
+// getOwnerById is a helper method to define mock.On call
+//   - id int
+func (_e *MockServicer_Expecter) getOwnerById(id interface{}) *MockServicer_getOwnerById_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_getOwnerById_Call{Call: _e.mock.On("getOwnerById", id)}
+}</span>
+
+func (_c *MockServicer_getOwnerById_Call) Run(run func(id int)) *MockServicer_getOwnerById_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(int))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_getOwnerById_Call) Return(_a0 *Response, _a1 error) *MockServicer_getOwnerById_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_getOwnerById_Call) RunAndReturn(run func(int) (*Response, error)) *MockServicer_getOwnerById_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// getOwnerByLastName provides a mock function with given fields: lastName
+func (_m *MockServicer) getOwnerByLastName(lastName string) ([]Response, error) <span class="cov8" title="1">{
+        ret := _m.Called(lastName)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for getOwnerByLastName")</span>
+        }
+
+        <span class="cov8" title="1">var r0 []Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func(string) ([]Response, error)); ok </span><span class="cov0" title="0">{
+                return rf(lastName)
+        }</span>
+        <span class="cov8" title="1">if rf, ok := ret.Get(0).(func(string) []Response); ok </span><span class="cov0" title="0">{
+                r0 = rf(lastName)
+        }</span> else<span class="cov8" title="1"> {
+                if ret.Get(0) != nil </span><span class="cov8" title="1">{
+                        r0 = ret.Get(0).([]Response)
+                }</span>
+        }
+
+        <span class="cov8" title="1">if rf, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(lastName)
+        }</span> else<span class="cov8" title="1"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov8" title="1">return r0, r1</span>
+}
+
+// MockServicer_getOwnerByLastName_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'getOwnerByLastName'
+type MockServicer_getOwnerByLastName_Call struct {
+        *mock.Call
+}
+
+// getOwnerByLastName is a helper method to define mock.On call
+//   - lastName string
+func (_e *MockServicer_Expecter) getOwnerByLastName(lastName interface{}) *MockServicer_getOwnerByLastName_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_getOwnerByLastName_Call{Call: _e.mock.On("getOwnerByLastName", lastName)}
+}</span>
+
+func (_c *MockServicer_getOwnerByLastName_Call) Run(run func(lastName string)) *MockServicer_getOwnerByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(string))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_getOwnerByLastName_Call) Return(_a0 []Response, _a1 error) *MockServicer_getOwnerByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_getOwnerByLastName_Call) RunAndReturn(run func(string) ([]Response, error)) *MockServicer_getOwnerByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// update provides a mock function with given fields: owner
+func (_m *MockServicer) update(owner *repository.Owner) (*Response, error) <span class="cov0" title="0">{
+        ret := _m.Called(owner)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for update")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*repository.Owner) (*Response, error)); ok </span><span class="cov0" title="0">{
+                return rf(owner)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(*repository.Owner) *Response); ok </span><span class="cov0" title="0">{
+                r0 = rf(owner)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(*repository.Owner) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(owner)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'update'
+type MockServicer_update_Call struct {
+        *mock.Call
+}
+
+// update is a helper method to define mock.On call
+//   - owner *repository.Owner
+func (_e *MockServicer_Expecter) update(owner interface{}) *MockServicer_update_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_update_Call{Call: _e.mock.On("update", owner)}
+}</span>
+
+func (_c *MockServicer_update_Call) Run(run func(owner *repository.Owner)) *MockServicer_update_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*repository.Owner))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_update_Call) Return(_a0 *Response, _a1 error) *MockServicer_update_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_update_Call) RunAndReturn(run func(*repository.Owner) (*Response, error)) *MockServicer_update_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// NewMockServicer creates a new instance of MockServicer. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockServicer(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *MockServicer <span class="cov0" title="0">{
+        mock := &amp;MockServicer{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package owner
+
+import (
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+        "github.com/rhtran/gin-petclinic-service/pkg/model"
+)
+
+type Request struct {
+        ID        int    `json:"id"`
+        FirstName string `json:"firstName"`
+        LastName  string `json:"lastName"`
+        Username  string `json:"username"`
+        Address   string `json:"address"`
+        City      string `json:"city"`
+        Telephone string `json:"telephone"`
+}
+
+func ToOwner(ownerRequest *Request) *repository.Owner <span class="cov0" title="0">{
+        return &amp;repository.Owner{
+                Base: model.Base{
+                        ID: ownerRequest.ID,
+                },
+                Person: model.Person{
+                        FirstName: ownerRequest.FirstName,
+                        LastName:  ownerRequest.LastName,
+                },
+
+                Username:  ownerRequest.Username,
+                Address:   ownerRequest.Address,
+                City:      ownerRequest.City,
+                Telephone: ownerRequest.Telephone,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package owner
+
+import (
+        "github.com/rhtran/gin-petclinic-service/internal/api/pet"
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+)
+
+type Response struct {
+        ID        int            `json:"id"`
+        FirstName string         `json:"firstName"`
+        LastName  string         `json:"lastName"`
+        Username  string         `json:"username"`
+        Address   string         `json:"address"`
+        City      string         `json:"city"`
+        Telephone string         `json:"telephone"`
+        Pets      []pet.Response `json:"pets,omitempty"`
+}
+
+func (or *Response) FromOwner(owner *repository.Owner) <span class="cov8" title="1">{
+        or.ID = owner.ID
+        or.Username = owner.Username
+        or.FirstName = owner.FirstName
+        or.LastName = owner.LastName
+        or.Address = owner.Address
+        or.City = owner.City
+        or.Telephone = owner.Telephone
+        or.Pets = pet.FromPets(owner.Pets)
+}</span>
+
+func FromOwners(owners []repository.Owner) []Response <span class="cov8" title="1">{
+        ownerResponses := make([]Response, len(owners))
+        for i, v := range owners </span><span class="cov8" title="1">{
+                ownerResponses[i].FromOwner(&amp;v)
+        }</span>
+        <span class="cov8" title="1">return ownerResponses</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package owner
+
+import (
+        "errors"
+        resterr "github.com/rhtran/gin-petclinic-service/middleware/errors"
+        "net/http"
+        "strconv"
+
+        "gorm.io/gorm"
+
+        "github.com/gin-gonic/gin"
+        "github.com/qiangxue/go-restful-api/pkg/log"
+)
+
+type Router struct {
+        logger  log.Logger
+        service Servicer
+}
+
+func NewOwnerRouter(logger log.Logger, service Servicer) *Router <span class="cov8" title="1">{
+        return &amp;Router{logger, service}
+}</span>
+
+/*
+ * Owner Router configuration
+ */
+func (ownerRouter *Router) OwnerRegister(router *gin.RouterGroup) <span class="cov8" title="1">{
+        router.GET(":id", ownerRouter.ownerById)
+        router.GET(":id/pet", ownerRouter.allOwnersWithPets)
+        router.GET("", ownerRouter.ownerByLastName)
+        router.POST("", ownerRouter.addNewOwner)
+        router.PUT(":id", ownerRouter.updateOwner)
+}</span>
+
+func (ownerRouter *Router) ownerById(c *gin.Context) <span class="cov8" title="1">{
+        pathID := c.Param("id")
+
+        if pathID == "all" </span><span class="cov0" title="0">{
+                ownerRouter.allOwners(c)
+                return
+        }</span>
+
+        <span class="cov8" title="1">id, err := strconv.Atoi(pathID)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov8" title="1">response, err := ownerRouter.service.getOwnerById(id)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+                        return
+                }</span>
+
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return</span>
+        }
+
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
+}
+
+func (ownerRouter *Router) ownerByLastName(c *gin.Context) <span class="cov8" title="1">{
+        lastName := c.Query("last-name")
+        response, err := ownerRouter.service.getOwnerByLastName(lastName)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return
+        }</span>
+
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
+}
+
+/*
+Return all owners
+*/
+func (ownerRouter *Router) allOwners(c *gin.Context) <span class="cov0" title="0">{
+        responses, err := ownerRouter.service.getAllOwners()
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, responses)</span>
+}
+
+func (ownerRouter *Router) allOwnersWithPets(c *gin.Context) <span class="cov0" title="0">{
+        responses, err := ownerRouter.service.getAllOwnersWithPets()
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, responses)</span>
+}
+
+func (ownerRouter *Router) addNewOwner(c *gin.Context) <span class="cov0" title="0">{
+        var ownerRequest Request
+        err := c.ShouldBindJSON(&amp;ownerRequest)
+        if err != nil </span><span class="cov0" title="0">{
+                ownerRouter.logger.Errorf("Unable to Unmarshal JSON: %s", err.Error())
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">newOwner, err := ownerRouter.service.create(ToOwner(&amp;ownerRequest))
+        c.JSON(http.StatusCreated, newOwner)</span>
+}
+
+func (ownerRouter *Router) updateOwner(c *gin.Context) <span class="cov0" title="0">{
+        var ownerRequest Request
+        id, err := strconv.Atoi(c.Param("id"))
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">err = c.ShouldBindJSON(&amp;ownerRequest)
+        if err != nil </span><span class="cov0" title="0">{
+                ownerRouter.logger.Errorf("Unable to Unmarshal JSON: %s", err.Error())
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">ownerRequest.ID = id
+        updatedOwner, err := ownerRouter.service.update(ToOwner(&amp;ownerRequest))
+        c.JSON(http.StatusCreated, updatedOwner)</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package owner
+
+import (
+        "github.com/qiangxue/go-restful-api/pkg/log"
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+)
+
+type Servicer interface {
+        getOwnerById(id int) (*Response, error)
+        getOwnerByLastName(lastName string) ([]Response, error)
+        getAllOwners() ([]Response, error)
+        getAllOwnersWithPets() ([]Response, error)
+        create(owner *repository.Owner) (*Response, error)
+        update(owner *repository.Owner) (*Response, error)
+}
+
+type Service struct {
+        logger     log.Logger
+        repository repository.OwnerRepositorier
+}
+
+func NewOwnerService(logger log.Logger, repository repository.OwnerRepositorier) *Service <span class="cov8" title="1">{
+        return &amp;Service{logger: logger, repository: repository}
+}</span>
+
+func (service *Service) getOwnerById(id int) (*Response, error) <span class="cov8" title="1">{
+        service.logger.Infof("retrieve owner by id: %v", id)
+        owner, err := service.repository.FindById(id)
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("fails to retrieve owner by id: %v, err: %v", id, err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromOwner(owner)
+        return response, nil</span>
+}
+
+func (service *Service) getOwnerByLastName(lastName string) ([]Response, error) <span class="cov8" title="1">{
+        service.logger.Infof("retrieve owners by last name: %v", lastName)
+        owners, err := service.repository.FindByLastName(lastName)
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("fails to retrieve owner by last name: %v, err: %v", lastName, err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return FromOwners(owners), nil</span>
+}
+
+func (service *Service) getAllOwners() ([]Response, error) <span class="cov0" title="0">{
+        service.logger.Info("retrieve all owner")
+        owners, err := service.repository.FindAll()
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("fails to retrieve all owner, err: %v", err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return FromOwners(owners), nil</span>
+}
+
+func (service *Service) getAllOwnersWithPets() ([]Response, error) <span class="cov0" title="0">{
+        service.logger.Info("retrieve all owner")
+        owners, err := service.repository.FindAllWithPets()
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("fails to retrieve all owner, err: %v", err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return FromOwners(owners), nil</span>
+}
+
+func (service *Service) create(owner *repository.Owner) (*Response, error) <span class="cov0" title="0">{
+        service.logger.Info("Create new owner")
+        newOwner, err := service.repository.Insert(owner)
+
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("insert new owner failed: %v", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">response := &amp;Response{}
+        response.FromOwner(newOwner)
+        return response, nil</span>
+}
+
+func (service *Service) update(owner *repository.Owner) (*Response, error) <span class="cov0" title="0">{
+        service.logger.Infof("update vet: %v", owner)
+        updatedOwner, err := service.repository.Update(owner)
+
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("Update owner failed: %v", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">response := &amp;Response{}
+        response.FromOwner(updatedOwner)
+        return response, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package pet
+
+import (
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+        "github.com/rhtran/gin-petclinic-service/pkg/model"
+)
+
+type Request struct {
+        Name     string `json:"name" binding:"required"`
+        TypeID   int    `json:"typeId" binding:"required"`
+        TypeName string `json:"typeName" binding:"required"`
+}
+
+func (pr Request) ToPet(petRequest *Request) *repository.Pet <span class="cov0" title="0">{
+        return &amp;repository.Pet{
+                Name: petRequest.Name,
+                Type: repository.Type{
+                        Base: model.Base{
+                                ID: petRequest.TypeID,
+                        },
+                        Name: petRequest.TypeName,
+                },
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package pet
+
+import (
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+        "time"
+)
+
+type Response struct {
+        ID        int        `json:"id"`
+        Name      string     `json:"name"`
+        BirthDate *time.Time `json:"birthDate"`
+        Type      string     `json:"type"`
+}
+
+func (pr *Response) FromPet(pet *repository.Pet) <span class="cov8" title="1">{
+        pr.ID = pet.ID
+        pr.Name = pet.Name
+        pr.BirthDate = pet.BirthDate
+        pr.Type = pet.Type.Name
+}</span>
+
+func FromPets(pets []repository.Pet) []Response <span class="cov8" title="1">{
+        petResponses := make([]Response, len(pets))
+        for i, v := range pets </span><span class="cov8" title="1">{
+                petResponses[i].FromPet(&amp;v)
+        }</span>
+        <span class="cov8" title="1">return petResponses</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package pet
+
+import (
+        "errors"
+        "github.com/rhtran/gin-petclinic-service/internal/api"
+        resterr "github.com/rhtran/gin-petclinic-service/middleware/errors"
+        "net/http"
+        "strconv"
+
+        "gorm.io/gorm"
+
+        "github.com/gin-gonic/gin"
+        "github.com/qiangxue/go-restful-api/pkg/log"
+)
+
+type PetRouter struct {
+        logger  log.Logger
+        service Servicer
+}
+
+func NewPetRouter(logger log.Logger, service Servicer) *PetRouter <span class="cov8" title="1">{
+        return &amp;PetRouter{logger, service}
+}</span>
+
+func (petRouter *PetRouter) PetRegister(router *gin.RouterGroup) <span class="cov8" title="1">{
+        router.GET(":id", petRouter.petById)
+        router.GET("", petRouter.petByQueryParam)
+        router.POST("", petRouter.addNewPet)
+        router.PUT("", petRouter.updatePet)
+}</span>
+
+func (petRouter *PetRouter) petById(c *gin.Context) <span class="cov8" title="1">{
+        id, err := strconv.Atoi(c.Param("id"))
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
+                return
+        }</span>
+
+        <span class="cov8" title="1">response, err := petRouter.service.GetPetById(id)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+                        return
+                }</span>
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return</span>
+        }
+
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
+}
+
+func (petRouter *PetRouter) petByQueryParam(c *gin.Context) <span class="cov8" title="1">{
+        var nameParam api.NameParam
+
+        err := c.BindQuery(&amp;nameParam)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov8" title="1">petRouter.petByName(c, nameParam)</span>
+}
+
+func (petRouter *PetRouter) petByName(c *gin.Context, param api.NameParam) <span class="cov8" title="1">{
+        response, err := petRouter.service.GetPetByName(param.Name)
+
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(""))
+                return
+        }</span>
+
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
+}
+
+func (petRouter *PetRouter) addNewPet(c *gin.Context) <span class="cov0" title="0">{
+        var request Request
+        err := c.ShouldBind(&amp;request)
+        if err != nil </span><span class="cov0" title="0">{
+                petRouter.logger.Errorf("Unable to Unmarshal JSON: %s", err.Error())
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">petRouter.logger.Infof("Add a new pet: %v", request.Name)
+        petResponse, err := petRouter.service.Create(request.ToPet(&amp;request))
+        c.JSON(http.StatusCreated, petResponse)</span>
+}
+
+func (petRouter *PetRouter) updatePet(c *gin.Context) <span class="cov0" title="0">{
+        var request Request
+        err := c.ShouldBind(&amp;request)
+        if err != nil </span><span class="cov0" title="0">{
+                petRouter.logger.Errorf("Unable to Unmarshal JSON: %s", err.Error())
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">petRouter.logger.Infof("Add a new pet: %v", request.Name)
+        petResponse, err := petRouter.service.Update(request.ToPet(&amp;request))
+        c.JSON(http.StatusCreated, petResponse)</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package pet
+
+import (
+        "github.com/qiangxue/go-restful-api/pkg/log"
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+)
+
+type Servicer interface {
+        GetPetById(id int) (*Response, error)
+        GetPetByName(name string) ([]Response, error)
+        Create(pet *repository.Pet) (*Response, error)
+        Update(pet *repository.Pet) (*Response, error)
+}
+
+type Service struct {
+        logger     log.Logger
+        repository repository.PetRepositorier
+}
+
+func NewPetService(logger log.Logger, repository repository.PetRepositorier) *Service <span class="cov8" title="1">{
+        return &amp;Service{logger: logger, repository: repository}
+}</span>
+
+func (service *Service) GetPetById(id int) (*Response, error) <span class="cov8" title="1">{
+        service.logger.Info("retrieve pet by id: %v", id)
+        petF, err := service.repository.FindById(id)
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Error("fails to retrieve pet by id: %v, err: %v", id, err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromPet(petF)
+        return response, nil</span>
+}
+
+func (service *Service) GetPetByName(name string) ([]Response, error) <span class="cov8" title="1">{
+        service.logger.Info("retrieve pet by name: %v", name)
+
+        pets, err := service.repository.FindByName(name)
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Error("fails to retrieve pet by name: %v, err: %v", name, err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return FromPets(pets), nil</span>
+}
+
+func (service *Service) Create(pet *repository.Pet) (*Response, error) <span class="cov0" title="0">{
+        service.logger.Info("Create new pet: %v", pet.Name)
+        newPet, err := service.repository.Insert(pet)
+
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Error("insert new pet failed: %v", err.Error())
+                return &amp;Response{}, err
+        }</span>
+
+        <span class="cov0" title="0">response := &amp;Response{}
+        response.FromPet(newPet)
+        return response, nil</span>
+}
+
+func (service *Service) Update(pet *repository.Pet) (*Response, error) <span class="cov0" title="0">{
+        service.logger.Info("update vet: %v", pet)
+        updatedPet, err := service.repository.Update(pet)
+
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Error("Update pet failed: %v", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">response := &amp;Response{}
+        response.FromPet(updatedPet)
+        return response, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package service
+
+import (
+        "errors"
+        "fmt"
+        "github.com/rhtran/gin-petclinic-service/app"
+        "net/http"
+        "strings"
+
+        "github.com/gin-gonic/gin"
+        jwtverifier "github.com/okta/okta-jwt-verifier-golang"
+        "github.com/qiangxue/go-restful-api/pkg/log"
+)
+
+type AuthenService struct {
+        logger      log.Logger
+        jwtVerifier *jwtverifier.JwtVerifier
+}
+
+func NewAuthenService(logger log.Logger) *AuthenService <span class="cov0" title="0">{
+        tv := map[string]string{}
+        tv["aud"] = app.Config.Okta.OAuth2.Audience
+        tv["cid"] = app.Config.Okta.OAuth2.ClientId
+        tv["scp"] = app.Config.Okta.OAuth2.Scopes
+
+        jvConfig := jwtverifier.JwtVerifier{
+                Issuer:           app.Config.Okta.OAuth2.Issuer,
+                ClaimsToValidate: tv,
+        }
+
+        return &amp;AuthenService{
+                logger:      logger,
+                jwtVerifier: jvConfig.New(),
+        }
+}</span>
+
+// redirect and return un-authorized exception
+func (authSvc *AuthenService) RedirectURL(c *gin.Context) <span class="cov0" title="0">{
+        c.JSON(http.StatusUnauthorized, gin.H{"status": http.StatusUnauthorized, "message": "Invalid Token"})
+        c.Abort()
+}</span>
+
+func (authSvc *AuthenService) Verify(bearerToken string) error <span class="cov0" title="0">{
+        tokenString := strings.Split(bearerToken, "Bearer ")
+
+        if len(tokenString) &gt; 1 </span><span class="cov0" title="0">{
+                jwt, err := authSvc.jwtVerifier.VerifyAccessToken(tokenString[1])
+                fmt.Println(jwt.Claims)
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return errors.New("bearer token requires")</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">// Code generated by mockery v2.42.2. DO NOT EDIT.
+
+package vet
+
+import (
+        repository "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+        mock "github.com/stretchr/testify/mock"
+)
+
+// MockServicer is an autogenerated mock type for the Servicer type
+type MockServicer struct {
+        mock.Mock
+}
+
+type MockServicer_Expecter struct {
+        mock *mock.Mock
+}
+
+func (_m *MockServicer) EXPECT() *MockServicer_Expecter <span class="cov0" title="0">{
+        return &amp;MockServicer_Expecter{mock: &amp;_m.Mock}
+}</span>
+
+// Create provides a mock function with given fields: vet
+func (_m *MockServicer) Create(vet *repository.Vet) (*Response, error) <span class="cov0" title="0">{
+        ret := _m.Called(vet)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Create")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*repository.Vet) (*Response, error)); ok </span><span class="cov0" title="0">{
+                return rf(vet)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(*repository.Vet) *Response); ok </span><span class="cov0" title="0">{
+                r0 = rf(vet)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(*repository.Vet) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(vet)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_Create_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Create'
+type MockServicer_Create_Call struct {
+        *mock.Call
+}
+
+// Create is a helper method to define mock.On call
+//   - vet *repository.Vet
+func (_e *MockServicer_Expecter) Create(vet interface{}) *MockServicer_Create_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_Create_Call{Call: _e.mock.On("Create", vet)}
+}</span>
+
+func (_c *MockServicer_Create_Call) Run(run func(vet *repository.Vet)) *MockServicer_Create_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*repository.Vet))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_Create_Call) Return(_a0 *Response, _a1 error) *MockServicer_Create_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_Create_Call) RunAndReturn(run func(*repository.Vet) (*Response, error)) *MockServicer_Create_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// GetAllVets provides a mock function with given fields:
+func (_m *MockServicer) GetAllVets() ([]Response, error) <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetAllVets")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func() ([]Response, error)); ok </span><span class="cov0" title="0">{
+                return rf()
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func() []Response); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+                r1 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_GetAllVets_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllVets'
+type MockServicer_GetAllVets_Call struct {
+        *mock.Call
+}
+
+// GetAllVets is a helper method to define mock.On call
+func (_e *MockServicer_Expecter) GetAllVets() *MockServicer_GetAllVets_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_GetAllVets_Call{Call: _e.mock.On("GetAllVets")}
+}</span>
+
+func (_c *MockServicer_GetAllVets_Call) Run(run func()) *MockServicer_GetAllVets_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run()
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_GetAllVets_Call) Return(_a0 []Response, _a1 error) *MockServicer_GetAllVets_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_GetAllVets_Call) RunAndReturn(run func() ([]Response, error)) *MockServicer_GetAllVets_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// GetAllVetsWithSpecialties provides a mock function with given fields:
+func (_m *MockServicer) GetAllVetsWithSpecialties() ([]Response, error) <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetAllVetsWithSpecialties")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func() ([]Response, error)); ok </span><span class="cov0" title="0">{
+                return rf()
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func() []Response); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+                r1 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_GetAllVetsWithSpecialties_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllVetsWithSpecialties'
+type MockServicer_GetAllVetsWithSpecialties_Call struct {
+        *mock.Call
+}
+
+// GetAllVetsWithSpecialties is a helper method to define mock.On call
+func (_e *MockServicer_Expecter) GetAllVetsWithSpecialties() *MockServicer_GetAllVetsWithSpecialties_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_GetAllVetsWithSpecialties_Call{Call: _e.mock.On("GetAllVetsWithSpecialties")}
+}</span>
+
+func (_c *MockServicer_GetAllVetsWithSpecialties_Call) Run(run func()) *MockServicer_GetAllVetsWithSpecialties_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run()
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_GetAllVetsWithSpecialties_Call) Return(_a0 []Response, _a1 error) *MockServicer_GetAllVetsWithSpecialties_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_GetAllVetsWithSpecialties_Call) RunAndReturn(run func() ([]Response, error)) *MockServicer_GetAllVetsWithSpecialties_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// GetVetById provides a mock function with given fields: id
+func (_m *MockServicer) GetVetById(id int) (*Response, error) <span class="cov0" title="0">{
+        ret := _m.Called(id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetVetById")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func(int) (*Response, error)); ok </span><span class="cov0" title="0">{
+                return rf(id)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(int) *Response); ok </span><span class="cov0" title="0">{
+                r0 = rf(id)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(id)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_GetVetById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetVetById'
+type MockServicer_GetVetById_Call struct {
+        *mock.Call
+}
+
+// GetVetById is a helper method to define mock.On call
+//   - id int
+func (_e *MockServicer_Expecter) GetVetById(id interface{}) *MockServicer_GetVetById_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_GetVetById_Call{Call: _e.mock.On("GetVetById", id)}
+}</span>
+
+func (_c *MockServicer_GetVetById_Call) Run(run func(id int)) *MockServicer_GetVetById_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(int))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_GetVetById_Call) Return(_a0 *Response, _a1 error) *MockServicer_GetVetById_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_GetVetById_Call) RunAndReturn(run func(int) (*Response, error)) *MockServicer_GetVetById_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// GetVetByLastName provides a mock function with given fields: lastName
+func (_m *MockServicer) GetVetByLastName(lastName string) ([]Response, error) <span class="cov0" title="0">{
+        ret := _m.Called(lastName)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetVetByLastName")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func(string) ([]Response, error)); ok </span><span class="cov0" title="0">{
+                return rf(lastName)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(string) []Response); ok </span><span class="cov0" title="0">{
+                r0 = rf(lastName)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(lastName)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_GetVetByLastName_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetVetByLastName'
+type MockServicer_GetVetByLastName_Call struct {
+        *mock.Call
+}
+
+// GetVetByLastName is a helper method to define mock.On call
+//   - lastName string
+func (_e *MockServicer_Expecter) GetVetByLastName(lastName interface{}) *MockServicer_GetVetByLastName_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_GetVetByLastName_Call{Call: _e.mock.On("GetVetByLastName", lastName)}
+}</span>
+
+func (_c *MockServicer_GetVetByLastName_Call) Run(run func(lastName string)) *MockServicer_GetVetByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(string))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_GetVetByLastName_Call) Return(_a0 []Response, _a1 error) *MockServicer_GetVetByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_GetVetByLastName_Call) RunAndReturn(run func(string) ([]Response, error)) *MockServicer_GetVetByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// Update provides a mock function with given fields: vet
+func (_m *MockServicer) Update(vet *repository.Vet) (*Response, error) <span class="cov0" title="0">{
+        ret := _m.Called(vet)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Update")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*repository.Vet) (*Response, error)); ok </span><span class="cov0" title="0">{
+                return rf(vet)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(*repository.Vet) *Response); ok </span><span class="cov0" title="0">{
+                r0 = rf(vet)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(*repository.Vet) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(vet)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
+type MockServicer_Update_Call struct {
+        *mock.Call
+}
+
+// Update is a helper method to define mock.On call
+//   - vet *repository.Vet
+func (_e *MockServicer_Expecter) Update(vet interface{}) *MockServicer_Update_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_Update_Call{Call: _e.mock.On("Update", vet)}
+}</span>
+
+func (_c *MockServicer_Update_Call) Run(run func(vet *repository.Vet)) *MockServicer_Update_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*repository.Vet))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_Update_Call) Return(_a0 *Response, _a1 error) *MockServicer_Update_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_Update_Call) RunAndReturn(run func(*repository.Vet) (*Response, error)) *MockServicer_Update_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// NewMockServicer creates a new instance of MockServicer. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockServicer(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *MockServicer <span class="cov0" title="0">{
+        mock := &amp;MockServicer{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package vet
+
+import (
+        validation "github.com/go-ozzo/ozzo-validation/v4"
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+        model2 "github.com/rhtran/gin-petclinic-service/pkg/model"
+)
+
+type Request struct {
+        ID          int                    `json:"-"`
+        FirstName   string                 `json:"firstName" binding:"required"`
+        LastName    string                 `json:"lastName" binding:"required"`
+        Specialties []repository.Specialty `json:"specialties" binding:"required"`
+}
+
+func (vr Request) Validate() error <span class="cov0" title="0">{
+        return validation.ValidateStruct(&amp;vr,
+                validation.Field(&amp;vr.FirstName, validation.Required),
+                validation.Field(&amp;vr.LastName, validation.Required),
+                validation.Field(&amp;vr.Specialties, validation.Required),
+        )
+}</span>
+
+func (vr Request) ToVet(vetRequest *Request) *repository.Vet <span class="cov0" title="0">{
+        //specialties := make([]Specialty, len(vetRequest.Specialties))
+
+        //for i, v := range vetRequest.Specialties {
+        //        specialties[i] = Specialty{
+        //                Base: model.Base{ID: vetRequest.Specialties[i].ID},
+        //                Name: vetRequest.Specialties[i].Name,
+        //        }
+        //}
+
+        return &amp;repository.Vet{
+                Base: model2.Base{
+                        ID: vetRequest.ID,
+                },
+                Person: model2.Person{
+                        FirstName: vetRequest.FirstName,
+                        LastName:  vetRequest.LastName,
+                },
+                Specialties: vetRequest.Specialties,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package vet
+
+import (
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+)
+
+type Response struct {
+        ID          int                    `json:"id"`
+        FirstName   string                 `json:"firstName"`
+        LastName    string                 `json:"lastName"`
+        Specialties []repository.Specialty `json:"specialties,omitempty"`
+}
+
+type Responses struct {
+        Vets []Response `json:"vets"`
+}
+
+func (vr *Response) FromVet(vet *repository.Vet) <span class="cov8" title="1">{
+        vr.ID = vet.ID
+        vr.FirstName = vet.FirstName
+        vr.LastName = vet.LastName
+        vr.Specialties = vet.Specialties
+}</span>
+
+func FromVets(vets []repository.Vet) []Response <span class="cov8" title="1">{
+        vetResponses := make([]Response, len(vets))
+        for i, v := range vets </span><span class="cov8" title="1">{
+                vetResponses[i].FromVet(&amp;v)
+        }</span>
+        <span class="cov8" title="1">return vetResponses</span>
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package vet
+
+import (
+        "errors"
+        resterr "github.com/rhtran/gin-petclinic-service/middleware/errors"
+        "net/http"
+        "strconv"
+
+        "gorm.io/gorm"
+
+        "github.com/gin-gonic/gin"
+        "github.com/qiangxue/go-restful-api/pkg/log"
+)
+
+type VetRouter struct {
+        logger  log.Logger
+        service Servicer
+}
+
+func NewVetRouter(logger log.Logger, service Servicer) *VetRouter <span class="cov8" title="1">{
+        return &amp;VetRouter{logger, service}
+}</span>
+
+func (vetRouter *VetRouter) VetRegister(router *gin.RouterGroup) <span class="cov8" title="1">{
+        router.GET(":id", vetRouter.vetById)
+        router.GET(":id/specialty", vetRouter.AllVetsWithSpecialties)
+        router.GET("", vetRouter.vetByParam)
+        router.POST("", vetRouter.addNewVet)
+        router.PUT(":id", vetRouter.updateVet)
+}</span>
+
+func (vetRouter *VetRouter) vetById(c *gin.Context) <span class="cov8" title="1">{
+        pathID := c.Param("id")
+        if pathID == "all" </span><span class="cov0" title="0">{
+                vetRouter.AllVets(c)
+                return
+        }</span>
+
+        <span class="cov8" title="1">id, err := strconv.Atoi(pathID)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
+                return
+        }</span>
+
+        <span class="cov8" title="1">response, err := vetRouter.service.GetVetById(id)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+                        return
+                }</span>
+
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return</span>
+        }
+
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
+}
+
+func (vetRouter *VetRouter) vetByParam(c *gin.Context) <span class="cov8" title="1">{
+        lastName := c.Query("last-name")
+
+        vetRouter.vetByLastName(c, lastName)
+        return
+}</span>
+
+func (vetRouter *VetRouter) vetByLastName(c *gin.Context, lastName string) <span class="cov8" title="1">{
+        response, err := vetRouter.service.GetVetByLastName(lastName)
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
+}
+
+func (vetRouter *VetRouter) AllVets(c *gin.Context) <span class="cov0" title="0">{
+        response, err := vetRouter.service.GetAllVets()
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+func (vetRouter *VetRouter) AllVetsWithSpecialties(c *gin.Context) <span class="cov0" title="0">{
+        response, err := vetRouter.service.GetAllVetsWithSpecialties()
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+func (vetRouter *VetRouter) addNewVet(c *gin.Context) <span class="cov0" title="0">{
+        var vetRequest Request
+        err := c.ShouldBindJSON(&amp;vetRequest)
+        if err != nil </span><span class="cov0" title="0">{
+                vetRouter.logger.Errorf("Unable to Unmarshal JSON: %s", err.Error())
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">newVet, err := vetRouter.service.Create(vetRequest.ToVet(&amp;vetRequest))
+        c.JSON(http.StatusCreated, newVet)</span>
+}
+
+func (vetRouter *VetRouter) updateVet(c *gin.Context) <span class="cov0" title="0">{
+        var vetRequest Request
+        id, _ := strconv.Atoi(c.Param("id"))
+        err := c.ShouldBindJSON(&amp;vetRequest)
+
+        if err != nil </span><span class="cov0" title="0">{
+                vetRouter.logger.Error("Unable to Unmarshal JSON: %s", err.Error())
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">vetRequest.ID = id
+        newVet, err := vetRouter.service.Update(vetRequest.ToVet(&amp;vetRequest))
+        c.JSON(http.StatusCreated, newVet)</span>
+}
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package vet
+
+import (
+        "github.com/qiangxue/go-restful-api/pkg/log"
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+)
+
+type Servicer interface {
+        GetVetById(id int) (*Response, error)
+        GetVetByLastName(lastName string) ([]Response, error)
+        GetAllVets() ([]Response, error)
+        GetAllVetsWithSpecialties() ([]Response, error)
+        Create(vet *repository.Vet) (*Response, error)
+        Update(vet *repository.Vet) (*Response, error)
+}
+
+type Service struct {
+        logger     log.Logger
+        repository repository.VetRepositorier
+}
+
+func NewVetService(logger log.Logger, repository repository.VetRepositorier) *Service <span class="cov8" title="1">{
+        return &amp;Service{logger: logger, repository: repository}
+}</span>
+
+func (service *Service) GetVetById(id int) (*Response, error) <span class="cov8" title="1">{
+        getvet, err := service.repository.FindById(id)
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("fails to retrieve vet by id: %d", id)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromVet(getvet)
+        return response, nil</span>
+}
+
+func (service *Service) GetVetByLastName(lastName string) ([]Response, error) <span class="cov8" title="1">{
+        vets, err := service.repository.FindByLastName(lastName)
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("fail to retrieve the vets by last name: %v, errors: %v", lastName, err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return FromVets(vets), nil</span>
+}
+
+func (service *Service) GetAllVets() ([]Response, error) <span class="cov0" title="0">{
+        vets, err := service.repository.FindAll()
+
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("fail to retrieve all vets, errors: %v", err.Error())
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">service.logger.Infof("counts of all vets: %d", len(vets))
+        return FromVets(vets), nil</span>
+}
+
+func (service *Service) GetAllVetsWithSpecialties() ([]Response, error) <span class="cov0" title="0">{
+        vets, err := service.repository.FindAllPreload()
+
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("fail to retrieve all vets, errors: %v", err.Error())
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">service.logger.Infof("counts of all vets: %d", len(vets))
+        return FromVets(vets), nil</span>
+}
+
+func (service *Service) Create(vet *repository.Vet) (*Response, error) <span class="cov0" title="0">{
+        service.logger.Infof("Create new vet: %v", vet)
+        newVet, err := service.repository.Insert(vet)
+
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("insert new vet failed: %v", err.Error())
+                return &amp;Response{}, err
+        }</span>
+
+        <span class="cov0" title="0">response := &amp;Response{}
+        response.FromVet(newVet)
+        return response, nil</span>
+}
+
+func (service *Service) Update(vet *repository.Vet) (*Response, error) <span class="cov0" title="0">{
+        service.logger.Infof("update vet: %v", vet)
+        updatedVet, err := service.repository.Update(vet)
+
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("Update vet failed: %v", err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">response := &amp;Response{}
+        response.FromVet(updatedVet)
+        return response, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">// Code generated by mockery v2.42.2. DO NOT EDIT.
+
+package visit
+
+import mock "github.com/stretchr/testify/mock"
+
+// MockServicer is an autogenerated mock type for the Servicer type
+type MockServicer struct {
+        mock.Mock
+}
+
+type MockServicer_Expecter struct {
+        mock *mock.Mock
+}
+
+func (_m *MockServicer) EXPECT() *MockServicer_Expecter <span class="cov0" title="0">{
+        return &amp;MockServicer_Expecter{mock: &amp;_m.Mock}
+}</span>
+
+// getAllVisits provides a mock function with given fields:
+func (_m *MockServicer) getAllVisits() ([]Response, error) <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for getAllVisits")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func() ([]Response, error)); ok </span><span class="cov0" title="0">{
+                return rf()
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func() []Response); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Response)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+                r1 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockServicer_getAllVisits_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'getAllVisits'
+type MockServicer_getAllVisits_Call struct {
+        *mock.Call
+}
+
+// getAllVisits is a helper method to define mock.On call
+func (_e *MockServicer_Expecter) getAllVisits() *MockServicer_getAllVisits_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_getAllVisits_Call{Call: _e.mock.On("getAllVisits")}
+}</span>
+
+func (_c *MockServicer_getAllVisits_Call) Run(run func()) *MockServicer_getAllVisits_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run()
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_getAllVisits_Call) Return(_a0 []Response, _a1 error) *MockServicer_getAllVisits_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_getAllVisits_Call) RunAndReturn(run func() ([]Response, error)) *MockServicer_getAllVisits_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// getVisitById provides a mock function with given fields: id
+func (_m *MockServicer) getVisitById(id int) (*Response, error) <span class="cov8" title="1">{
+        ret := _m.Called(id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for getVisitById")</span>
+        }
+
+        <span class="cov8" title="1">var r0 *Response
+        var r1 error
+        if rf, ok := ret.Get(0).(func(int) (*Response, error)); ok </span><span class="cov0" title="0">{
+                return rf(id)
+        }</span>
+        <span class="cov8" title="1">if rf, ok := ret.Get(0).(func(int) *Response); ok </span><span class="cov0" title="0">{
+                r0 = rf(id)
+        }</span> else<span class="cov8" title="1"> {
+                if ret.Get(0) != nil </span><span class="cov8" title="1">{
+                        r0 = ret.Get(0).(*Response)
+                }</span>
+        }
+
+        <span class="cov8" title="1">if rf, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(id)
+        }</span> else<span class="cov8" title="1"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov8" title="1">return r0, r1</span>
+}
+
+// MockServicer_getVisitById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'getVisitById'
+type MockServicer_getVisitById_Call struct {
+        *mock.Call
+}
+
+// getVisitById is a helper method to define mock.On call
+//   - id int
+func (_e *MockServicer_Expecter) getVisitById(id interface{}) *MockServicer_getVisitById_Call <span class="cov0" title="0">{
+        return &amp;MockServicer_getVisitById_Call{Call: _e.mock.On("getVisitById", id)}
+}</span>
+
+func (_c *MockServicer_getVisitById_Call) Run(run func(id int)) *MockServicer_getVisitById_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(int))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockServicer_getVisitById_Call) Return(_a0 *Response, _a1 error) *MockServicer_getVisitById_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockServicer_getVisitById_Call) RunAndReturn(run func(int) (*Response, error)) *MockServicer_getVisitById_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// NewMockServicer creates a new instance of MockServicer. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockServicer(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *MockServicer <span class="cov0" title="0">{
+        mock := &amp;MockServicer{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package visit
+
+import (
+        "github.com/rhtran/gin-petclinic-service/internal/api/pet"
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+        "time"
+)
+
+type Response struct {
+        ID          int          `json:"id"`
+        VisitDate   time.Time    `json:"visitDate"`
+        Description string       `json:"description"`
+        PetResponse pet.Response `json:"pet"`
+}
+
+func (vr *Response) FromVisit(visit *repository.Visit) <span class="cov8" title="1">{
+        vr.ID = visit.ID
+        vr.VisitDate = visit.VisitDate
+        vr.Description = visit.Description
+        vr.PetResponse = pet.Response{}
+        vr.PetResponse.FromPet(&amp;visit.Pet)
+}</span>
+
+func FromVisits(visits []repository.Visit) []Response <span class="cov0" title="0">{
+        visitResponses := make([]Response, len(visits))
+        for i, v := range visits </span><span class="cov0" title="0">{
+                visitResponses[i].FromVisit(&amp;v)
+        }</span>
+        <span class="cov0" title="0">return visitResponses</span>
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package visit
+
+import (
+        "github.com/rhtran/gin-petclinic-service/middleware/errors"
+        "net/http"
+        "strconv"
+
+        "github.com/gin-gonic/gin"
+        "github.com/qiangxue/go-restful-api/pkg/log"
+)
+
+type VisitRouter struct {
+        logger  log.Logger
+        service Servicer
+}
+
+func NewVisitRouter(logger log.Logger, service Servicer) *VisitRouter <span class="cov8" title="1">{
+        return &amp;VisitRouter{logger, service}
+}</span>
+
+func (visitRouter *VisitRouter) VisitRegister(router *gin.RouterGroup) <span class="cov8" title="1">{
+        router.GET(":id", visitRouter.visitById)
+}</span>
+
+func (visitRouter *VisitRouter) visitById(c *gin.Context) <span class="cov8" title="1">{
+        pathID := c.Param("id")
+        if pathID == "all" </span><span class="cov0" title="0">{
+                visitRouter.allVisits(c)
+                return
+        }</span>
+
+        <span class="cov8" title="1">id, err := strconv.Atoi(pathID)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))
+                return
+        }</span>
+
+        <span class="cov8" title="1">response, err := visitRouter.service.getVisitById(id)
+        if err != nil </span><span class="cov0" title="0">{
+
+                c.JSON(http.StatusInternalServerError, errors.InternalServerError(err.Error()))
+                return
+        }</span>
+
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
+}
+
+func (visitRouter *VisitRouter) allVisits(c *gin.Context) <span class="cov0" title="0">{
+        response, err := visitRouter.service.getAllVisits()
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package visit
+
+import (
+        "github.com/qiangxue/go-restful-api/pkg/log"
+        "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+)
+
+type Servicer interface {
+        getVisitById(id int) (*Response, error)
+        getAllVisits() ([]Response, error)
+}
+
+type Service struct {
+        logger     log.Logger
+        repository repository.VisitRepositorier
+}
+
+func NewVisitService(logger log.Logger, repository repository.VisitRepositorier) *Service <span class="cov8" title="1">{
+        return &amp;Service{logger: logger, repository: repository}
+}</span>
+
+func (service *Service) getVisitById(id int) (*Response, error) <span class="cov8" title="1">{
+        visit, err := service.repository.FindById(id)
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("fails to retrieve visit by id: %d", id)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromVisit(visit)
+        return response, nil</span>
+}
+
+func (service *Service) getAllVisits() ([]Response, error) <span class="cov0" title="0">{
+        visits, err := service.repository.FindAll()
+
+        if err != nil </span><span class="cov0" title="0">{
+                service.logger.Errorf("fail to retrieve all visits, errors: %v", err.Error())
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">service.logger.Infof("counts of all visits: %d", len(visits))
+        return FromVisits(visits), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package errors
+
+import (
+        "database/sql"
+        "fmt"
+        "net/http"
+        "runtime/debug"
+
+        "github.com/qiangxue/go-restful-api/pkg/log"
+
+        routing "github.com/go-ozzo/ozzo-routing/v2"
+        validation "github.com/go-ozzo/ozzo-validation/v4"
+)
+
+// Handler creates a middleware that handles panics and errors encountered during HTTP request processing.
+func Handler(logger log.Logger) routing.Handler <span class="cov8" title="1">{
+        return func(c *routing.Context) (err error) </span><span class="cov8" title="1">{
+                defer func() </span><span class="cov8" title="1">{
+                        l := logger.With(c.Request.Context())
+                        if e := recover(); e != nil </span><span class="cov8" title="1">{
+                                var ok bool
+                                if err, ok = e.(error); !ok </span><span class="cov8" title="1">{
+                                        err = fmt.Errorf("%v", e)
+                                }</span>
+
+                                <span class="cov8" title="1">l.Errorf("recovered from panic (%v): %s", err, debug.Stack())</span>
+                        }
+
+                        <span class="cov8" title="1">if err != nil </span><span class="cov8" title="1">{
+                                res := buildErrorResponse(err)
+                                if res.StatusCode() == http.StatusInternalServerError </span><span class="cov8" title="1">{
+                                        l.Errorf("encountered internal server error: %v", err)
+                                }</span>
+                                <span class="cov8" title="1">c.Response.WriteHeader(res.StatusCode())
+                                if err = c.Write(res); err != nil </span><span class="cov0" title="0">{
+                                        l.Errorf("failed writing error response: %v", err)
+                                }</span>
+                                <span class="cov8" title="1">c.Abort() // skip any pending handlers since an error has occurred
+                                err = nil</span> // return nil because the error is already handled
+                        }
+                }()
+                <span class="cov8" title="1">return c.Next()</span>
+        }
+}
+
+// buildErrorResponse builds an error response from an error.
+func buildErrorResponse(err error) ErrorResponse <span class="cov8" title="1">{
+        switch err.(type) </span>{
+        case ErrorResponse:<span class="cov8" title="1">
+                return err.(ErrorResponse)</span>
+        case validation.Errors:<span class="cov8" title="1">
+                return InvalidInput(err.(validation.Errors))</span>
+        case routing.HTTPError:<span class="cov8" title="1">
+                switch err.(routing.HTTPError).StatusCode() </span>{
+                case http.StatusNotFound:<span class="cov8" title="1">
+                        return NotFound("")</span>
+                default:<span class="cov8" title="1">
+                        return ErrorResponse{
+                                Status:  err.(routing.HTTPError).StatusCode(),
+                                Message: err.Error(),
+                        }</span>
+                }
+        default:<span class="cov8" title="1">
+                if err == sql.ErrNoRows </span><span class="cov8" title="1">{
+                        return NotFound("")
+                }</span>
+                <span class="cov8" title="1">return InternalServerError("")</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package errors
+
+import (
+        "net/http"
+        "sort"
+        "unicode"
+
+        "github.com/go-playground/validator/v10"
+
+        validation "github.com/go-ozzo/ozzo-validation/v4"
+)
+
+// ErrorResponse is the response that represents an error.
+type ErrorResponse struct {
+        Status  int         `json:"status"`
+        Message string      `json:"message"`
+        Details interface{} `json:"details,omitempty"`
+}
+
+// Error is required by the error interface.
+func (e ErrorResponse) Error() string <span class="cov8" title="1">{
+        return e.Message
+}</span>
+
+// StatusCode is required by routing.HTTPError interface.
+func (e ErrorResponse) StatusCode() int <span class="cov8" title="1">{
+        return e.Status
+}</span>
+
+// InternalServerError creates a new error response representing an internal server error (HTTP 500)
+func InternalServerError(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "We encountered an error while processing your request."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusInternalServerError,
+                Message: msg,
+        }</span>
+}
+
+// NotFound creates a new error response representing a resource-not-found error (HTTP 404)
+func NotFound(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "The requested resource was not found."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusNotFound,
+                Message: msg,
+        }</span>
+}
+
+// Unauthorized creates a new error response representing an authentication/authorization failure (HTTP 401)
+func Unauthorized(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "You are not authenticated to perform the requested action."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusUnauthorized,
+                Message: msg,
+        }</span>
+}
+
+// Forbidden creates a new error response representing an authorization failure (HTTP 403)
+func Forbidden(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "You are not authorized to perform the requested action."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusForbidden,
+                Message: msg,
+        }</span>
+}
+
+// BadRequest creates a new error response representing a bad request (HTTP 400)
+func BadRequest(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "Your request is in a bad format."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusBadRequest,
+                Message: msg,
+        }</span>
+}
+
+// BadRequest creates a new error response representing a bad request (HTTP 400)
+func BadRequestWithDetails(err error) ErrorResponse <span class="cov0" title="0">{
+        errors, _ := err.(validator.ValidationErrors)
+        e := make(map[string]string)
+        for _, err := range errors </span><span class="cov0" title="0">{
+                e[lcFirst(err.Field())] = err.Tag()
+        }</span>
+
+        <span class="cov0" title="0">return ErrorResponse{
+                Status:  http.StatusBadRequest,
+                Message: err.Error(),
+                Details: e,
+        }</span>
+}
+
+// lowercase the first letter of the word
+func lcFirst(s string) string <span class="cov0" title="0">{
+        if len(s) &gt; 0 </span><span class="cov0" title="0">{
+                for i, v := range s </span><span class="cov0" title="0">{
+                        return string(unicode.ToLower(v)) + s[i+1:]
+                }</span>
+        }
+        <span class="cov0" title="0">return s</span>
+}
+
+type invalidField struct {
+        Field string `json:"field"`
+        Error string `json:"error"`
+}
+
+// InvalidInput creates a new error response representing a data validation error (HTTP 400).
+func InvalidInput(errs validation.Errors) ErrorResponse <span class="cov8" title="1">{
+        var details []invalidField
+        var fields []string
+        for field := range errs </span><span class="cov8" title="1">{
+                fields = append(fields, field)
+        }</span>
+        <span class="cov8" title="1">sort.Strings(fields)
+        for _, field := range fields </span><span class="cov8" title="1">{
+                details = append(details, invalidField{
+                        Field: field,
+                        Error: errs[field].Error(),
+                })
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusBadRequest,
+                Message: "There is some problem with the data you submitted.",
+                Details: details,
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file28" style="display: none">package dbase
+
+import (
+        "github.com/rhtran/gin-petclinic-service/app"
+        "time"
+
+        "github.com/qiangxue/go-restful-api/pkg/log"
+        "gorm.io/driver/postgres"
+        "gorm.io/gorm"
+        "gorm.io/gorm/logger"
+)
+
+type Postgres struct {
+}
+
+// PgConnect
+// Create connection pooling using GORM postgres driver.
+func PgConnect() *gorm.DB <span class="cov0" title="0">{
+        db, err := gorm.Open(postgres.Open(app.Config.Database.Postgres.Dsn), &amp;gorm.Config{
+                Logger: logger.Default.LogMode(logger.Info),
+                //NamingStrategy: schema.NamingStrategy{SingularTable: true},
+        })
+        if err != nil </span><span class="cov0" title="0">{
+                log.New().Error("Error connecting Postgres database: %v", err)
+                panic(err)</span>
+        }
+
+        // connection pooling configuration
+        <span class="cov0" title="0">sqlDB, _ := db.DB()
+        sqlDB.SetMaxIdleConns(app.Config.Database.MaxIdleConns)
+        sqlDB.SetMaxOpenConns(app.Config.Database.MaxOpenConns)
+        sqlDB.SetConnMaxIdleTime(time.Duration(app.Config.Database.MaxIdleTime) * time.Second)
+
+        return db</span>
+}
+</pre>
+		
+		<pre class="file" id="file29" style="display: none">package ds
+
+import (
+        "github.com/rhtran/gin-petclinic-service/app"
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+)
+
+type HttpServer struct {
+        r *gin.Engine
+}
+
+func NewHttpServer(r *gin.Engine) *HttpServer <span class="cov0" title="0">{
+        return &amp;HttpServer{
+                r: r,
+        }
+}</span>
+
+// HttpRouter is a method on the HttpServer struct that sets up and returns a new http.Server instance.
+// The http.Server instance uses the gin.Engine instance from the HttpServer struct to handle HTTP requests.
+func (httpSrv *HttpServer) HttpRouter() *http.Server <span class="cov0" title="0">{
+        srv := &amp;http.Server{
+                Addr:    app.Config.Server.HttpPort,
+                Handler: httpSrv.r,
+        }
+
+        return srv
+}</span>
+</pre>
+		
+		<pre class="file" id="file30" style="display: none">// Code generated by mockery v2.42.2. DO NOT EDIT.
+
+package repository
+
+import mock "github.com/stretchr/testify/mock"
+
+// MockOwnerRepositorier is an autogenerated mock type for the OwnerRepositorier type
+type MockOwnerRepositorier struct {
+        mock.Mock
+}
+
+type MockOwnerRepositorier_Expecter struct {
+        mock *mock.Mock
+}
+
+func (_m *MockOwnerRepositorier) EXPECT() *MockOwnerRepositorier_Expecter <span class="cov0" title="0">{
+        return &amp;MockOwnerRepositorier_Expecter{mock: &amp;_m.Mock}
+}</span>
+
+// FindAll provides a mock function with given fields:
+func (_m *MockOwnerRepositorier) FindAll() ([]Owner, error) <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindAll")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Owner
+        var r1 error
+        if rf, ok := ret.Get(0).(func() ([]Owner, error)); ok </span><span class="cov0" title="0">{
+                return rf()
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func() []Owner); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Owner)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+                r1 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockOwnerRepositorier_FindAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAll'
+type MockOwnerRepositorier_FindAll_Call struct {
+        *mock.Call
+}
+
+// FindAll is a helper method to define mock.On call
+func (_e *MockOwnerRepositorier_Expecter) FindAll() *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
+        return &amp;MockOwnerRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
+}</span>
+
+func (_c *MockOwnerRepositorier_FindAll_Call) Run(run func()) *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run()
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockOwnerRepositorier_FindAll_Call) Return(_a0 []Owner, _a1 error) *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockOwnerRepositorier_FindAll_Call) RunAndReturn(run func() ([]Owner, error)) *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// FindAllWithPets provides a mock function with given fields:
+func (_m *MockOwnerRepositorier) FindAllWithPets() ([]Owner, error) <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindAllWithPets")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Owner
+        var r1 error
+        if rf, ok := ret.Get(0).(func() ([]Owner, error)); ok </span><span class="cov0" title="0">{
+                return rf()
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func() []Owner); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Owner)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+                r1 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockOwnerRepositorier_FindAllWithPets_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAllWithPets'
+type MockOwnerRepositorier_FindAllWithPets_Call struct {
+        *mock.Call
+}
+
+// FindAllWithPets is a helper method to define mock.On call
+func (_e *MockOwnerRepositorier_Expecter) FindAllWithPets() *MockOwnerRepositorier_FindAllWithPets_Call <span class="cov0" title="0">{
+        return &amp;MockOwnerRepositorier_FindAllWithPets_Call{Call: _e.mock.On("FindAllWithPets")}
+}</span>
+
+func (_c *MockOwnerRepositorier_FindAllWithPets_Call) Run(run func()) *MockOwnerRepositorier_FindAllWithPets_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run()
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockOwnerRepositorier_FindAllWithPets_Call) Return(_a0 []Owner, _a1 error) *MockOwnerRepositorier_FindAllWithPets_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockOwnerRepositorier_FindAllWithPets_Call) RunAndReturn(run func() ([]Owner, error)) *MockOwnerRepositorier_FindAllWithPets_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// FindById provides a mock function with given fields: id
+func (_m *MockOwnerRepositorier) FindById(id int) (*Owner, error) <span class="cov0" title="0">{
+        ret := _m.Called(id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindById")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Owner
+        var r1 error
+        if rf, ok := ret.Get(0).(func(int) (*Owner, error)); ok </span><span class="cov0" title="0">{
+                return rf(id)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(int) *Owner); ok </span><span class="cov0" title="0">{
+                r0 = rf(id)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Owner)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(id)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockOwnerRepositorier_FindById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindById'
+type MockOwnerRepositorier_FindById_Call struct {
+        *mock.Call
+}
+
+// FindById is a helper method to define mock.On call
+//   - id int
+func (_e *MockOwnerRepositorier_Expecter) FindById(id interface{}) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
+        return &amp;MockOwnerRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
+}</span>
+
+func (_c *MockOwnerRepositorier_FindById_Call) Run(run func(id int)) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(int))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockOwnerRepositorier_FindById_Call) Return(_a0 *Owner, _a1 error) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockOwnerRepositorier_FindById_Call) RunAndReturn(run func(int) (*Owner, error)) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// FindByLastName provides a mock function with given fields: lastName
+func (_m *MockOwnerRepositorier) FindByLastName(lastName string) ([]Owner, error) <span class="cov0" title="0">{
+        ret := _m.Called(lastName)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindByLastName")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Owner
+        var r1 error
+        if rf, ok := ret.Get(0).(func(string) ([]Owner, error)); ok </span><span class="cov0" title="0">{
+                return rf(lastName)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(string) []Owner); ok </span><span class="cov0" title="0">{
+                r0 = rf(lastName)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Owner)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(lastName)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockOwnerRepositorier_FindByLastName_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindByLastName'
+type MockOwnerRepositorier_FindByLastName_Call struct {
+        *mock.Call
+}
+
+// FindByLastName is a helper method to define mock.On call
+//   - lastName string
+func (_e *MockOwnerRepositorier_Expecter) FindByLastName(lastName interface{}) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+        return &amp;MockOwnerRepositorier_FindByLastName_Call{Call: _e.mock.On("FindByLastName", lastName)}
+}</span>
+
+func (_c *MockOwnerRepositorier_FindByLastName_Call) Run(run func(lastName string)) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(string))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockOwnerRepositorier_FindByLastName_Call) Return(_a0 []Owner, _a1 error) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockOwnerRepositorier_FindByLastName_Call) RunAndReturn(run func(string) ([]Owner, error)) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// Insert provides a mock function with given fields: owner
+func (_m *MockOwnerRepositorier) Insert(owner *Owner) (*Owner, error) <span class="cov0" title="0">{
+        ret := _m.Called(owner)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Insert")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Owner
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*Owner) (*Owner, error)); ok </span><span class="cov0" title="0">{
+                return rf(owner)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(*Owner) *Owner); ok </span><span class="cov0" title="0">{
+                r0 = rf(owner)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Owner)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(*Owner) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(owner)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockOwnerRepositorier_Insert_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Insert'
+type MockOwnerRepositorier_Insert_Call struct {
+        *mock.Call
+}
+
+// Insert is a helper method to define mock.On call
+//   - owner *Owner
+func (_e *MockOwnerRepositorier_Expecter) Insert(owner interface{}) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
+        return &amp;MockOwnerRepositorier_Insert_Call{Call: _e.mock.On("Insert", owner)}
+}</span>
+
+func (_c *MockOwnerRepositorier_Insert_Call) Run(run func(owner *Owner)) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*Owner))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockOwnerRepositorier_Insert_Call) Return(_a0 *Owner, _a1 error) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockOwnerRepositorier_Insert_Call) RunAndReturn(run func(*Owner) (*Owner, error)) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// Update provides a mock function with given fields: owner
+func (_m *MockOwnerRepositorier) Update(owner *Owner) (*Owner, error) <span class="cov0" title="0">{
+        ret := _m.Called(owner)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Update")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Owner
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*Owner) (*Owner, error)); ok </span><span class="cov0" title="0">{
+                return rf(owner)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(*Owner) *Owner); ok </span><span class="cov0" title="0">{
+                r0 = rf(owner)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Owner)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(*Owner) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(owner)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockOwnerRepositorier_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
+type MockOwnerRepositorier_Update_Call struct {
+        *mock.Call
+}
+
+// Update is a helper method to define mock.On call
+//   - owner *Owner
+func (_e *MockOwnerRepositorier_Expecter) Update(owner interface{}) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
+        return &amp;MockOwnerRepositorier_Update_Call{Call: _e.mock.On("Update", owner)}
+}</span>
+
+func (_c *MockOwnerRepositorier_Update_Call) Run(run func(owner *Owner)) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*Owner))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockOwnerRepositorier_Update_Call) Return(_a0 *Owner, _a1 error) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockOwnerRepositorier_Update_Call) RunAndReturn(run func(*Owner) (*Owner, error)) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// NewMockOwnerRepositorier creates a new instance of MockOwnerRepositorier. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockOwnerRepositorier(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *MockOwnerRepositorier <span class="cov0" title="0">{
+        mock := &amp;MockOwnerRepositorier{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file31" style="display: none">// Code generated by mockery v2.42.2. DO NOT EDIT.
+
+package repository
+
+import mock "github.com/stretchr/testify/mock"
+
+// MockPetRepositorier is an autogenerated mock type for the PetRepositorier type
+type MockPetRepositorier struct {
+        mock.Mock
+}
+
+type MockPetRepositorier_Expecter struct {
+        mock *mock.Mock
+}
+
+func (_m *MockPetRepositorier) EXPECT() *MockPetRepositorier_Expecter <span class="cov0" title="0">{
+        return &amp;MockPetRepositorier_Expecter{mock: &amp;_m.Mock}
+}</span>
+
+// FindById provides a mock function with given fields: id
+func (_m *MockPetRepositorier) FindById(id int) (*Pet, error) <span class="cov0" title="0">{
+        ret := _m.Called(id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindById")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Pet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(int) (*Pet, error)); ok </span><span class="cov0" title="0">{
+                return rf(id)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(int) *Pet); ok </span><span class="cov0" title="0">{
+                r0 = rf(id)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Pet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(id)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockPetRepositorier_FindById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindById'
+type MockPetRepositorier_FindById_Call struct {
+        *mock.Call
+}
+
+// FindById is a helper method to define mock.On call
+//   - id int
+func (_e *MockPetRepositorier_Expecter) FindById(id interface{}) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
+        return &amp;MockPetRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
+}</span>
+
+func (_c *MockPetRepositorier_FindById_Call) Run(run func(id int)) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(int))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockPetRepositorier_FindById_Call) Return(_a0 *Pet, _a1 error) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockPetRepositorier_FindById_Call) RunAndReturn(run func(int) (*Pet, error)) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// FindByName provides a mock function with given fields: name
+func (_m *MockPetRepositorier) FindByName(name string) ([]Pet, error) <span class="cov0" title="0">{
+        ret := _m.Called(name)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindByName")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Pet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(string) ([]Pet, error)); ok </span><span class="cov0" title="0">{
+                return rf(name)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(string) []Pet); ok </span><span class="cov0" title="0">{
+                r0 = rf(name)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Pet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(name)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockPetRepositorier_FindByName_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindByName'
+type MockPetRepositorier_FindByName_Call struct {
+        *mock.Call
+}
+
+// FindByName is a helper method to define mock.On call
+//   - name string
+func (_e *MockPetRepositorier_Expecter) FindByName(name interface{}) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
+        return &amp;MockPetRepositorier_FindByName_Call{Call: _e.mock.On("FindByName", name)}
+}</span>
+
+func (_c *MockPetRepositorier_FindByName_Call) Run(run func(name string)) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(string))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockPetRepositorier_FindByName_Call) Return(_a0 []Pet, _a1 error) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockPetRepositorier_FindByName_Call) RunAndReturn(run func(string) ([]Pet, error)) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// Insert provides a mock function with given fields: pet
+func (_m *MockPetRepositorier) Insert(pet *Pet) (*Pet, error) <span class="cov0" title="0">{
+        ret := _m.Called(pet)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Insert")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Pet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*Pet) (*Pet, error)); ok </span><span class="cov0" title="0">{
+                return rf(pet)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(*Pet) *Pet); ok </span><span class="cov0" title="0">{
+                r0 = rf(pet)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Pet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(*Pet) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(pet)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockPetRepositorier_Insert_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Insert'
+type MockPetRepositorier_Insert_Call struct {
+        *mock.Call
+}
+
+// Insert is a helper method to define mock.On call
+//   - pet *Pet
+func (_e *MockPetRepositorier_Expecter) Insert(pet interface{}) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
+        return &amp;MockPetRepositorier_Insert_Call{Call: _e.mock.On("Insert", pet)}
+}</span>
+
+func (_c *MockPetRepositorier_Insert_Call) Run(run func(pet *Pet)) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*Pet))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockPetRepositorier_Insert_Call) Return(_a0 *Pet, _a1 error) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockPetRepositorier_Insert_Call) RunAndReturn(run func(*Pet) (*Pet, error)) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// Update provides a mock function with given fields: pet
+func (_m *MockPetRepositorier) Update(pet *Pet) (*Pet, error) <span class="cov0" title="0">{
+        ret := _m.Called(pet)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Update")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Pet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*Pet) (*Pet, error)); ok </span><span class="cov0" title="0">{
+                return rf(pet)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(*Pet) *Pet); ok </span><span class="cov0" title="0">{
+                r0 = rf(pet)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Pet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(*Pet) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(pet)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockPetRepositorier_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
+type MockPetRepositorier_Update_Call struct {
+        *mock.Call
+}
+
+// Update is a helper method to define mock.On call
+//   - pet *Pet
+func (_e *MockPetRepositorier_Expecter) Update(pet interface{}) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
+        return &amp;MockPetRepositorier_Update_Call{Call: _e.mock.On("Update", pet)}
+}</span>
+
+func (_c *MockPetRepositorier_Update_Call) Run(run func(pet *Pet)) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*Pet))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockPetRepositorier_Update_Call) Return(_a0 *Pet, _a1 error) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockPetRepositorier_Update_Call) RunAndReturn(run func(*Pet) (*Pet, error)) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// NewMockPetRepositorier creates a new instance of MockPetRepositorier. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockPetRepositorier(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *MockPetRepositorier <span class="cov0" title="0">{
+        mock := &amp;MockPetRepositorier{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file32" style="display: none">// Code generated by mockery v2.42.2. DO NOT EDIT.
+
+package repository
+
+import mock "github.com/stretchr/testify/mock"
+
+// MockVetRepositorier is an autogenerated mock type for the VetRepositorier type
+type MockVetRepositorier struct {
+        mock.Mock
+}
+
+type MockVetRepositorier_Expecter struct {
+        mock *mock.Mock
+}
+
+func (_m *MockVetRepositorier) EXPECT() *MockVetRepositorier_Expecter <span class="cov0" title="0">{
+        return &amp;MockVetRepositorier_Expecter{mock: &amp;_m.Mock}
+}</span>
+
+// FindAll provides a mock function with given fields:
+func (_m *MockVetRepositorier) FindAll() ([]Vet, error) <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindAll")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Vet
+        var r1 error
+        if rf, ok := ret.Get(0).(func() ([]Vet, error)); ok </span><span class="cov0" title="0">{
+                return rf()
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func() []Vet); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Vet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+                r1 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockVetRepositorier_FindAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAll'
+type MockVetRepositorier_FindAll_Call struct {
+        *mock.Call
+}
+
+// FindAll is a helper method to define mock.On call
+func (_e *MockVetRepositorier_Expecter) FindAll() *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
+        return &amp;MockVetRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
+}</span>
+
+func (_c *MockVetRepositorier_FindAll_Call) Run(run func()) *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run()
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockVetRepositorier_FindAll_Call) Return(_a0 []Vet, _a1 error) *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockVetRepositorier_FindAll_Call) RunAndReturn(run func() ([]Vet, error)) *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// FindAllPreload provides a mock function with given fields:
+func (_m *MockVetRepositorier) FindAllPreload() ([]Vet, error) <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindAllPreload")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Vet
+        var r1 error
+        if rf, ok := ret.Get(0).(func() ([]Vet, error)); ok </span><span class="cov0" title="0">{
+                return rf()
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func() []Vet); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Vet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+                r1 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockVetRepositorier_FindAllPreload_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAllPreload'
+type MockVetRepositorier_FindAllPreload_Call struct {
+        *mock.Call
+}
+
+// FindAllPreload is a helper method to define mock.On call
+func (_e *MockVetRepositorier_Expecter) FindAllPreload() *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
+        return &amp;MockVetRepositorier_FindAllPreload_Call{Call: _e.mock.On("FindAllPreload")}
+}</span>
+
+func (_c *MockVetRepositorier_FindAllPreload_Call) Run(run func()) *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run()
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockVetRepositorier_FindAllPreload_Call) Return(_a0 []Vet, _a1 error) *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockVetRepositorier_FindAllPreload_Call) RunAndReturn(run func() ([]Vet, error)) *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// FindById provides a mock function with given fields: id
+func (_m *MockVetRepositorier) FindById(id int) (*Vet, error) <span class="cov0" title="0">{
+        ret := _m.Called(id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindById")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Vet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(int) (*Vet, error)); ok </span><span class="cov0" title="0">{
+                return rf(id)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(int) *Vet); ok </span><span class="cov0" title="0">{
+                r0 = rf(id)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Vet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(id)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockVetRepositorier_FindById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindById'
+type MockVetRepositorier_FindById_Call struct {
+        *mock.Call
+}
+
+// FindById is a helper method to define mock.On call
+//   - id int
+func (_e *MockVetRepositorier_Expecter) FindById(id interface{}) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
+        return &amp;MockVetRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
+}</span>
+
+func (_c *MockVetRepositorier_FindById_Call) Run(run func(id int)) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(int))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockVetRepositorier_FindById_Call) Return(_a0 *Vet, _a1 error) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockVetRepositorier_FindById_Call) RunAndReturn(run func(int) (*Vet, error)) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// FindByLastName provides a mock function with given fields: lastName
+func (_m *MockVetRepositorier) FindByLastName(lastName string) ([]Vet, error) <span class="cov0" title="0">{
+        ret := _m.Called(lastName)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindByLastName")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Vet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(string) ([]Vet, error)); ok </span><span class="cov0" title="0">{
+                return rf(lastName)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(string) []Vet); ok </span><span class="cov0" title="0">{
+                r0 = rf(lastName)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Vet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(lastName)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockVetRepositorier_FindByLastName_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindByLastName'
+type MockVetRepositorier_FindByLastName_Call struct {
+        *mock.Call
+}
+
+// FindByLastName is a helper method to define mock.On call
+//   - lastName string
+func (_e *MockVetRepositorier_Expecter) FindByLastName(lastName interface{}) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+        return &amp;MockVetRepositorier_FindByLastName_Call{Call: _e.mock.On("FindByLastName", lastName)}
+}</span>
+
+func (_c *MockVetRepositorier_FindByLastName_Call) Run(run func(lastName string)) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(string))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockVetRepositorier_FindByLastName_Call) Return(_a0 []Vet, _a1 error) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockVetRepositorier_FindByLastName_Call) RunAndReturn(run func(string) ([]Vet, error)) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// Insert provides a mock function with given fields: vet
+func (_m *MockVetRepositorier) Insert(vet *Vet) (*Vet, error) <span class="cov0" title="0">{
+        ret := _m.Called(vet)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Insert")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Vet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*Vet) (*Vet, error)); ok </span><span class="cov0" title="0">{
+                return rf(vet)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(*Vet) *Vet); ok </span><span class="cov0" title="0">{
+                r0 = rf(vet)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Vet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(*Vet) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(vet)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockVetRepositorier_Insert_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Insert'
+type MockVetRepositorier_Insert_Call struct {
+        *mock.Call
+}
+
+// Insert is a helper method to define mock.On call
+//   - vet *Vet
+func (_e *MockVetRepositorier_Expecter) Insert(vet interface{}) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
+        return &amp;MockVetRepositorier_Insert_Call{Call: _e.mock.On("Insert", vet)}
+}</span>
+
+func (_c *MockVetRepositorier_Insert_Call) Run(run func(vet *Vet)) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*Vet))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockVetRepositorier_Insert_Call) Return(_a0 *Vet, _a1 error) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockVetRepositorier_Insert_Call) RunAndReturn(run func(*Vet) (*Vet, error)) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// Update provides a mock function with given fields: vet
+func (_m *MockVetRepositorier) Update(vet *Vet) (*Vet, error) <span class="cov0" title="0">{
+        ret := _m.Called(vet)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Update")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Vet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*Vet) (*Vet, error)); ok </span><span class="cov0" title="0">{
+                return rf(vet)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(*Vet) *Vet); ok </span><span class="cov0" title="0">{
+                r0 = rf(vet)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Vet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(*Vet) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(vet)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockVetRepositorier_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
+type MockVetRepositorier_Update_Call struct {
+        *mock.Call
+}
+
+// Update is a helper method to define mock.On call
+//   - vet *Vet
+func (_e *MockVetRepositorier_Expecter) Update(vet interface{}) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
+        return &amp;MockVetRepositorier_Update_Call{Call: _e.mock.On("Update", vet)}
+}</span>
+
+func (_c *MockVetRepositorier_Update_Call) Run(run func(vet *Vet)) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*Vet))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockVetRepositorier_Update_Call) Return(_a0 *Vet, _a1 error) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockVetRepositorier_Update_Call) RunAndReturn(run func(*Vet) (*Vet, error)) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// NewMockVetRepositorier creates a new instance of MockVetRepositorier. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockVetRepositorier(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *MockVetRepositorier <span class="cov0" title="0">{
+        mock := &amp;MockVetRepositorier{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file33" style="display: none">// Code generated by mockery v2.42.2. DO NOT EDIT.
+
+package repository
+
+import mock "github.com/stretchr/testify/mock"
+
+// MockVisitRepositorier is an autogenerated mock type for the VisitRepositorier type
+type MockVisitRepositorier struct {
+        mock.Mock
+}
+
+type MockVisitRepositorier_Expecter struct {
+        mock *mock.Mock
+}
+
+func (_m *MockVisitRepositorier) EXPECT() *MockVisitRepositorier_Expecter <span class="cov0" title="0">{
+        return &amp;MockVisitRepositorier_Expecter{mock: &amp;_m.Mock}
+}</span>
+
+// FindAll provides a mock function with given fields:
+func (_m *MockVisitRepositorier) FindAll() ([]Visit, error) <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindAll")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []Visit
+        var r1 error
+        if rf, ok := ret.Get(0).(func() ([]Visit, error)); ok </span><span class="cov0" title="0">{
+                return rf()
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func() []Visit); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]Visit)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+                r1 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockVisitRepositorier_FindAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAll'
+type MockVisitRepositorier_FindAll_Call struct {
+        *mock.Call
+}
+
+// FindAll is a helper method to define mock.On call
+func (_e *MockVisitRepositorier_Expecter) FindAll() *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
+        return &amp;MockVisitRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
+}</span>
+
+func (_c *MockVisitRepositorier_FindAll_Call) Run(run func()) *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run()
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockVisitRepositorier_FindAll_Call) Return(_a0 []Visit, _a1 error) *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockVisitRepositorier_FindAll_Call) RunAndReturn(run func() ([]Visit, error)) *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// FindById provides a mock function with given fields: id
+func (_m *MockVisitRepositorier) FindById(id int) (*Visit, error) <span class="cov0" title="0">{
+        ret := _m.Called(id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for FindById")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *Visit
+        var r1 error
+        if rf, ok := ret.Get(0).(func(int) (*Visit, error)); ok </span><span class="cov0" title="0">{
+                return rf(id)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(int) *Visit); ok </span><span class="cov0" title="0">{
+                r0 = rf(id)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*Visit)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(id)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// MockVisitRepositorier_FindById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindById'
+type MockVisitRepositorier_FindById_Call struct {
+        *mock.Call
+}
+
+// FindById is a helper method to define mock.On call
+//   - id int
+func (_e *MockVisitRepositorier_Expecter) FindById(id interface{}) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
+        return &amp;MockVisitRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
+}</span>
+
+func (_c *MockVisitRepositorier_FindById_Call) Run(run func(id int)) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(int))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockVisitRepositorier_FindById_Call) Return(_a0 *Visit, _a1 error) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockVisitRepositorier_FindById_Call) RunAndReturn(run func(int) (*Visit, error)) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// NewMockVisitRepositorier creates a new instance of MockVisitRepositorier. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockVisitRepositorier(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *MockVisitRepositorier <span class="cov0" title="0">{
+        mock := &amp;MockVisitRepositorier{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file34" style="display: none">package repository
+
+import (
+        "github.com/qiangxue/go-restful-api/pkg/log"
+        "gorm.io/gorm"
+        "gorm.io/gorm/clause"
+)
+
+type OwnerRepositorier interface {
+        FindById(id int) (*Owner, error)
+        FindByLastName(lastName string) ([]Owner, error)
+        FindAll() ([]Owner, error)
+        FindAllWithPets() ([]Owner, error)
+        Insert(owner *Owner) (*Owner, error)
+        Update(owner *Owner) (*Owner, error)
+}
+
+// OwnerRepository searches owner from the database
+type OwnerRepository struct {
+        logger log.Logger
+        pg     *gorm.DB
+}
+
+func NewOwnerRepository(logger log.Logger, pg *gorm.DB) *OwnerRepository <span class="cov8" title="1">{
+        return &amp;OwnerRepository{
+                logger: logger,
+                pg:     pg,
+        }
+}</span>
+
+// FindById
+// find the owner by id
+//
+//        SELECT * FROM "pets" WHERE "pets"."owner_id" = 1 AND "pets"."deleted_at" IS NULL
+//        SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
+//        SELECT * FROM "owners" WHERE "owners"."id" = 1 AND "owners"."deleted_at" IS NULL ORDER BY "owners"."id" LIMIT 1
+func (repository *OwnerRepository) FindById(id int) (*Owner, error) <span class="cov8" title="1">{
+        repository.logger.Infof("search owner by id: %v", id)
+
+        var owner Owner
+        // Pets.Type - Nested Preloading (Eager Loading)
+        err := repository.pg.Preload("Pets.Type").First(&amp;owner, id).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to find owner by id: %v, err: %v", id, err.Error)
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return &amp;owner, err</span>
+}
+
+// FindByLastName
+// find owner by last name
+//
+// SELECT * FROM "pets" WHERE "pets"."owner_id" = 3 AND "pets"."deleted_at" IS NULL
+// SELECT * FROM "types" WHERE "types"."id" = 2 AND "types"."deleted_at" IS NULL
+// SELECT * FROM "owners" WHERE last_name = 'Rodriquez' AND "owners"."deleted_at" IS NULL
+func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, error) <span class="cov8" title="1">{
+        repository.logger.Infof("Search owner by last name: %v", lastName)
+
+        // Pets.Type - Nested Preloading (Eager Loading)
+        var owners []Owner
+        err := repository.pg.Preload("Pets.Type").Where("last_name = ?", lastName).Find(&amp;owners).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to find owners by last name: %v, err: %v", lastName, err.Error)
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return owners, err</span>
+}
+
+/*
+Find all owners
+SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
+*/
+func (repository *OwnerRepository) FindAll() ([]Owner, error) <span class="cov0" title="0">{
+        repository.logger.Info("get list of owners")
+
+        var owners []Owner
+        // not needed to preload for all owners - will be a performance if get large result.
+        err := repository.pg.Find(&amp;owners).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to find all owners, err: %v", err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return owners, err</span>
+}
+
+/*
+Find all owners with pets and its nested associations.
+
+SELECT * FROM "pets" WHERE "pets"."owner_id" IN (1,2,3,4,5,6,7,8,9,10) AND "pets"."deleted_at" IS NULL
+SELECT * FROM "types" WHERE "types"."id" IN (1,6,2,3,4,5) AND "types"."deleted_at" IS NULL
+SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
+*/
+func (repository *OwnerRepository) FindAllWithPets() ([]Owner, error) <span class="cov0" title="0">{
+        repository.logger.Info("get list of owners with pets")
+
+        var owners []Owner
+        /*
+         clause.Associations won’t preload nested associations, but can use it with Nested Preloading together
+        */
+        err := repository.pg.Preload("Pets.Type").Preload(clause.Associations).Find(&amp;owners).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to find all owners with pets, err: %v", err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return owners, err</span>
+}
+
+func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) <span class="cov0" title="0">{
+        repository.logger.Infof("insert a new owner: %v", owner)
+
+        err := repository.pg.Create(&amp;owner).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to insert new owner, err: %v", err.Error)
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return owner, err</span>
+}
+
+func (repository *OwnerRepository) Update(owner *Owner) (*Owner, error) <span class="cov0" title="0">{
+        repository.logger.Infof("update owner id: %v", owner.ID)
+
+        // Omit the column name from update...
+        err := repository.pg.Omit("created_at").Save(&amp;owner).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to update owner, err: %v", err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return owner, err</span>
+}
+</pre>
+		
+		<pre class="file" id="file35" style="display: none">package repository
+
+import (
+        "github.com/qiangxue/go-restful-api/pkg/log"
+        "gorm.io/gorm"
+)
+
+type PetRepositorier interface {
+        FindById(id int) (*Pet, error)
+        FindByName(name string) ([]Pet, error)
+        Insert(pet *Pet) (*Pet, error)
+        Update(pet *Pet) (*Pet, error)
+}
+
+// PetRepository searches pet from the database
+type PetRepository struct {
+        logger log.Logger
+        pg     *gorm.DB
+}
+
+func NewPetRepository(logger log.Logger, pg *gorm.DB) *PetRepository <span class="cov8" title="1">{
+        return &amp;PetRepository{
+                logger: logger,
+                pg:     pg,
+        }
+}</span>
+
+/*
+Join query reduces into 1 query by joining 2 tables together through LEFT JOIN.
+
+SELECT "pets"."id","pets"."created_at","pets"."updated_at","pets"."deleted_at","pets"."name","pets"."birth_date",
+
+        "pets"."type_id","pets"."owner_id","Type"."id" AS "Type__id","Type"."created_at" AS "Type__created_at",
+        "Type"."updated_at" AS "Type__updated_at","Type"."deleted_at" AS "Type__deleted_at","Type"."name" AS "Type__name"
+        FROM "pets" LEFT JOIN "types" "Type" ON "pets"."type_id" = "Type"."id"
+        WHERE pets.id = 2 AND "pets"."deleted_at" IS NULL ORDER BY "pets"."id" LIMIT 1
+*/
+func (repository *PetRepository) FindById(id int) (*Pet, error) <span class="cov8" title="1">{
+        repository.logger.Infof("Search pet by id: %v", id)
+
+        var pet Pet
+        result := repository.pg.Joins("Type").Where("pets.id = ?", id).First(&amp;pet)
+        return &amp;pet, result.Error
+}</span>
+
+/*
+SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
+SELECT * FROM "pets" WHERE name = 'Leo' AND "pets"."deleted_at" IS NULL
+*/
+func (repository *PetRepository) FindByName(name string) ([]Pet, error) <span class="cov8" title="1">{
+        repository.logger.Infof("Search pet by name: %v", name)
+
+        var pets []Pet
+        result := repository.pg.Preload("Type").Where("name = ?", name).Find(&amp;pets)
+        return pets, result.Error
+}</span>
+
+func (repository *PetRepository) Insert(pet *Pet) (*Pet, error) <span class="cov0" title="0">{
+        repository.logger.Infof("insert a new pet: %v", pet.Name)
+
+        err := repository.pg.Create(&amp;pet).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Error("fails to insert new pet, err: %v", err.Error)
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return pet, err</span>
+}
+
+func (repository *PetRepository) Update(pet *Pet) (*Pet, error) <span class="cov0" title="0">{
+        repository.logger.Infof("update vet id: %v", pet.ID)
+
+        // Omit the column name from update...
+        err := repository.pg.Omit("created_at").Save(&amp;pet).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Error("fails to update pet, err: %v", err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return pet, err</span>
+}
+</pre>
+		
+		<pre class="file" id="file36" style="display: none">package test
+
+import (
+        "bytes"
+        "net/http"
+        "net/http/httptest"
+        "strings"
+        "testing"
+
+        "github.com/stretchr/testify/assert"
+)
+
+// APITestCase represents the data needed to describe an API test case.
+type APITestCase struct {
+        Name         string
+        Method, URL  string
+        Body         string
+        Header       http.Header
+        WantStatus   int
+        WantResponse string
+}
+
+// Endpoint tests an HTTP endpoint using the given APITestCase spec.
+func Endpoint(t *testing.T, router http.Handler, tc APITestCase) <span class="cov8" title="1">{
+        t.Run(tc.Name, func(t *testing.T) </span><span class="cov8" title="1">{
+                req, _ := http.NewRequest(tc.Method, tc.URL, bytes.NewBufferString(tc.Body))
+                if tc.Header != nil </span><span class="cov0" title="0">{
+                        req.Header = tc.Header
+                }</span>
+                <span class="cov8" title="1">res := httptest.NewRecorder()
+                if req.Header.Get("Content-Type") == "" </span><span class="cov8" title="1">{
+                        req.Header.Set("Content-Type", "application/json")
+                }</span>
+                <span class="cov8" title="1">router.ServeHTTP(res, req)
+                assert.Equal(t, tc.WantStatus, res.Code, "status mismatch")
+                if tc.WantResponse != "" </span><span class="cov8" title="1">{
+                        pattern := strings.Trim(tc.WantResponse, "*")
+                        if pattern != tc.WantResponse </span><span class="cov0" title="0">{
+                                assert.Contains(t, res.Body.String(), pattern, "response mismatch")
+                        }</span> else<span class="cov8" title="1"> {
+                                assert.JSONEq(t, tc.WantResponse, res.Body.String(), "response mismatch")
+                        }</span>
+                }
+        })
+}
+</pre>
+		
+		<pre class="file" id="file37" style="display: none">package test
+
+import (
+        "testing"
+
+        "github.com/pressly/goose"
+
+        embeddedpostgres "github.com/fergusstrange/embedded-postgres"
+        "gorm.io/driver/postgres"
+        "gorm.io/gorm"
+)
+
+func Connect() (*gorm.DB, error) <span class="cov8" title="1">{
+        return gorm.Open(postgres.Open("host=localhost port=5433 user=postgres password=postgres dbname=postgres sslmode=disable"), &amp;gorm.Config{})
+}</span>
+
+func PgStart(t *testing.T, dir string) *embeddedpostgres.EmbeddedPostgres <span class="cov8" title="1">{
+        postgresql := embeddedpostgres.NewDatabase(embeddedpostgres.
+                DefaultConfig().Port(5433))
+
+        if err := postgresql.Start(); err != nil </span><span class="cov0" title="0">{
+                t.Fatal(err)
+        }</span>
+
+        <span class="cov8" title="1">db, err := Connect()
+        if err != nil </span><span class="cov0" title="0">{
+                t.Fatal(err)
+        }</span>
+
+        <span class="cov8" title="1">sqlDB, _ := db.DB()
+        if err := goose.Up(sqlDB, dir); err != nil </span><span class="cov0" title="0">{
+                t.Fatal(err)
+        }</span>
+
+        <span class="cov8" title="1">return postgresql</span>
+}
+</pre>
+		
+		<pre class="file" id="file38" style="display: none">package test
+
+import (
+        "github.com/rhtran/gin-petclinic-service/middleware/errors"
+        "net/http"
+        "net/http/httptest"
+
+        "github.com/qiangxue/go-restful-api/pkg/accesslog"
+        "github.com/qiangxue/go-restful-api/pkg/log"
+
+        routing "github.com/go-ozzo/ozzo-routing/v2"
+        "github.com/go-ozzo/ozzo-routing/v2/content"
+        "github.com/go-ozzo/ozzo-routing/v2/cors"
+)
+
+// MockRoutingContext creates a routing.Conext for testing handlers.
+func MockRoutingContext(req *http.Request) (*routing.Context, *httptest.ResponseRecorder) <span class="cov0" title="0">{
+        res := httptest.NewRecorder()
+        if req.Header.Get("Content-Type") == "" </span><span class="cov0" title="0">{
+                req.Header.Set("Content-Type", "application/json")
+        }</span>
+        <span class="cov0" title="0">ctx := routing.NewContext(res, req)
+        ctx.SetDataWriter(&amp;content.JSONDataWriter{})
+        return ctx, res</span>
+}
+
+// MockRouter creates a routing.Router for testing APIs.
+func MockRouter(logger log.Logger) *routing.Router <span class="cov0" title="0">{
+        router := routing.New()
+        router.Use(
+                accesslog.Handler(logger),
+                errors.Handler(logger),
+                content.TypeNegotiator(content.JSON),
+                cors.Handler(cors.AllowAll),
+        )
+        return router
+}</span>
+</pre>
+		
+		<pre class="file" id="file39" style="display: none">package repository
+
+import (
+        "github.com/qiangxue/go-restful-api/pkg/log"
+        "gorm.io/gorm"
+)
+
+type VetRepositorier interface {
+        FindById(id int) (*Vet, error)
+        FindByLastName(lastName string) ([]Vet, error)
+        FindAll() ([]Vet, error)
+        FindAllPreload() ([]Vet, error)
+        Insert(vet *Vet) (*Vet, error)
+        Update(vet *Vet) (*Vet, error)
+}
+
+// VetRepository searches vet from the database
+type VetRepository struct {
+        logger log.Logger
+        pg     *gorm.DB
+}
+
+func NewVetRepository(logger log.Logger, pg *gorm.DB) *VetRepository <span class="cov8" title="1">{
+        return &amp;VetRepository{
+                logger: logger,
+                pg:     pg,
+        }
+}</span>
+
+/*
+Many-to-Many relation vets &lt;-- vet_specialties --&gt; specialties
+Preload - eagerly loading the specialties relation and hence,
+3 queries are executed.
+SELECT * FROM "vet_specialties" WHERE "vet_specialties"."vet_id" = 2
+SELECT * FROM "specialties" WHERE "specialties"."id" = 1 AND "specialties"."deleted_at" IS NULL
+SELECT * FROM "vets" WHERE "vets"."id" = 2 AND "vets"."deleted_at" IS NULL ORDER BY "vets"."id" LIMIT 1
+*/
+func (repository *VetRepository) FindById(id int) (*Vet, error) <span class="cov8" title="1">{
+        repository.logger.Infof("Search vet by id: %v", id)
+
+        var vet Vet
+        err := repository.pg.Preload("Specialties").First(&amp;vet, id).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to find vet by id: %v, err: %v", id, err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return &amp;vet, err</span>
+}
+
+/*
+SELECT * FROM "vet_specialties" WHERE "vet_specialties"."vet_id" = 5
+SELECT * FROM "specialties" WHERE "specialties"."id" = 1 AND "specialties"."deleted_at" IS NULL
+SELECT * FROM "vets" WHERE last_name = 'Stevens' AND "vets"."deleted_at" IS NULL
+*/
+func (repository *VetRepository) FindByLastName(lastName string) ([]Vet, error) <span class="cov8" title="1">{
+        repository.logger.Infof("Search vet by last name: %v", lastName)
+
+        var vets []Vet
+        err := repository.pg.Preload("Specialties").Where("last_name = ?", lastName).Find(&amp;vets).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to find vet by last name: %v, err: %v", lastName, err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return vets, nil</span>
+}
+
+/*
+SELECT * FROM "vets" WHERE "vets"."deleted_at" IS NULL
+*/
+func (repository *VetRepository) FindAll() ([]Vet, error) <span class="cov0" title="0">{
+        repository.logger.Info("get all vets")
+
+        var vets []Vet
+        err := repository.pg.Find(&amp;vets).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to find all vets, err: %v", err.Error)
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return vets, err</span>
+}
+
+/*
+Expect there would be n + 1 queries executed just like in Java Hibernate.  Surprisedly,
+only 3 queries actually executed.
+
+        SELECT * FROM "vet_specialties" WHERE "vet_specialties"."vet_id" IN (1,2,3,4,5,6)
+        SELECT * FROM "specialties" WHERE "specialties"."id" IN (1,2,3) AND "specialties"."deleted_at" IS NULL
+        SELECT * FROM "vets" WHERE "vets"."deleted_at" IS NULL
+*/
+func (repository *VetRepository) FindAllPreload() ([]Vet, error) <span class="cov0" title="0">{
+        repository.logger.Info("get all vets with relations preloaded")
+
+        var vets []Vet
+        err := repository.pg.Preload("Specialties").Find(&amp;vets).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to find all vets, err: %v", err.Error)
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return vets, err</span>
+}
+
+func (repository *VetRepository) Insert(vet *Vet) (*Vet, error) <span class="cov0" title="0">{
+        repository.logger.Infof("insert a new vet: %v", vet)
+
+        err := repository.pg.Create(&amp;vet).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to insert new vet, err: %v", err.Error)
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return vet, err</span>
+}
+
+func (repository *VetRepository) Update(vet *Vet) (*Vet, error) <span class="cov0" title="0">{
+        repository.logger.Infof("update vet id: %v", vet.ID)
+
+        // Omit the column name from update...
+        err := repository.pg.Omit("created_at").Save(&amp;vet).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to update vet, err: %v", err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return vet, err</span>
+}
+</pre>
+		
+		<pre class="file" id="file40" style="display: none">package repository
+
+import (
+        "github.com/qiangxue/go-restful-api/pkg/log"
+        "gorm.io/gorm"
+)
+
+type VisitRepositorier interface {
+        FindById(id int) (*Visit, error)
+        FindAll() ([]Visit, error)
+}
+
+// VisitRepository searches vet from the database
+type VisitRepository struct {
+        logger log.Logger
+        pg     *gorm.DB
+}
+
+func NewVisitRepository(logger log.Logger, pg *gorm.DB) *VisitRepository <span class="cov8" title="1">{
+        return &amp;VisitRepository{
+                logger: logger,
+                pg:     pg,
+        }
+}</span>
+
+/*
+SELECT * FROM "pets" WHERE "pets"."id" = 8 AND "pets"."deleted_at" IS NULL
+SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
+SELECT * FROM "visits" WHERE "visits"."id" = 2 AND "visits"."deleted_at" IS NULL ORDER BY "visits"."id" LIMIT 1
+*/
+func (repository *VisitRepository) FindById(id int) (*Visit, error) <span class="cov8" title="1">{
+        repository.logger.Infof("Search visit by id: %v", id)
+
+        var visit Visit
+        err := repository.pg.Preload("Pet.Type").First(&amp;visit, id).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to find visit by id: %v, err: %v", id, err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return &amp;visit, err</span>
+}
+
+/*
+Find all visits
+SELECT * FROM "pets" WHERE "pets"."id" IN (7,8) AND "pets"."deleted_at" IS NULL
+SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
+SELECT * FROM "visits" WHERE "visits"."deleted_at" IS NULL
+*/
+func (repository *VisitRepository) FindAll() ([]Visit, error) <span class="cov0" title="0">{
+        repository.logger.Info("get list of visits")
+
+        var visits []Visit
+        // not needed to preload for all visits - will be a performance if get large result.
+        err := repository.pg.Preload("Pet.Type").Find(&amp;visits).Error
+        if err != nil </span><span class="cov0" title="0">{
+                repository.logger.Errorf("fails to find all visits, err: %v", err.Error)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return visits, err</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="56" errors="3">
+	<testsuite name="github.com/rhtran/gin-petclinic-service/app" tests="11" failures="0" errors="0" id="0" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+		<testcase name="TestAppInfoConfigValidation" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestAppInfoConfigValidation/ValidAppInfoConfig" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingName" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingDescription" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingVersion" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithValidHttpPort" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithEmptyHttpPort" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithInvalidHttpPort" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortMissingColon" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortMissingColonAndChars" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortWithChars" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+	</testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/cmd" tests="0" failures="0" errors="0" id="1" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/docs" tests="0" failures="0" errors="0" id="2" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api" tests="0" failures="0" errors="0" id="3" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/health" tests="1" failures="0" errors="1" id="4" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+		<testcase name="[build failed]" classname="github.com/rhtran/gin-petclinic-service/internal/api/health" time="0.000">
+			<error message="Build error"><![CDATA[internal/api/health/mock_check_servicer_test.go:8:6: MockCheckServicer redeclared in this block
+	internal/api/health/mock_check_servicer.go:8:6: other declaration of MockCheckServicer
+internal/api/health/mock_check_servicer_test.go:12:6: MockCheckServicer_Expecter redeclared in this block
+	internal/api/health/mock_check_servicer.go:12:6: other declaration of MockCheckServicer_Expecter
+internal/api/health/mock_check_servicer_test.go:16:30: method MockCheckServicer.EXPECT already declared at internal/api/health/mock_check_servicer.go:16:30
+internal/api/health/mock_check_servicer_test.go:21:30: method MockCheckServicer.check already declared at internal/api/health/mock_check_servicer.go:21:30
+internal/api/health/mock_check_servicer_test.go:51:6: MockCheckServicer_check_Call redeclared in this block
+	internal/api/health/mock_check_servicer.go:51:6: other declaration of MockCheckServicer_check_Call
+internal/api/health/mock_check_servicer_test.go:56:39: method MockCheckServicer_Expecter.check already declared at internal/api/health/mock_check_servicer.go:56:39
+internal/api/health/mock_check_servicer_test.go:60:41: method MockCheckServicer_check_Call.Run already declared at internal/api/health/mock_check_servicer.go:60:41
+internal/api/health/mock_check_servicer_test.go:67:41: method MockCheckServicer_check_Call.Return already declared at internal/api/health/mock_check_servicer.go:67:41
+internal/api/health/mock_check_servicer_test.go:72:41: method MockCheckServicer_check_Call.RunAndReturn already declared at internal/api/health/mock_check_servicer.go:72:41
+internal/api/health/mock_check_servicer_test.go:79:6: NewMockCheckServicer redeclared in this block
+	internal/api/health/mock_check_servicer.go:79:6: other declaration of NewMockCheckServicer
+internal/api/health/mock_check_servicer_test.go:72:41: too many errors]]></error>
+		</testcase>
+	</testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/info" tests="1" failures="0" errors="1" id="5" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+		<testcase name="[build failed]" classname="github.com/rhtran/gin-petclinic-service/internal/api/info" time="0.000">
+			<error message="Build error"><![CDATA[internal/api/info/mock_ip_servicer_test.go:12:6: MockIPServicer redeclared in this block
+	internal/api/info/mock_ip_servicer.go:12:6: other declaration of MockIPServicer
+internal/api/info/mock_ip_servicer_test.go:16:6: MockIPServicer_Expecter redeclared in this block
+	internal/api/info/mock_ip_servicer.go:16:6: other declaration of MockIPServicer_Expecter
+internal/api/info/mock_ip_servicer_test.go:20:27: method MockIPServicer.EXPECT already declared at internal/api/info/mock_ip_servicer.go:20:27
+internal/api/info/mock_ip_servicer_test.go:25:27: method MockIPServicer.lookupIP already declared at internal/api/info/mock_ip_servicer.go:25:27
+internal/api/info/mock_ip_servicer_test.go:55:6: MockIPServicer_lookupIP_Call redeclared in this block
+	internal/api/info/mock_ip_servicer.go:55:6: other declaration of MockIPServicer_lookupIP_Call
+internal/api/info/mock_ip_servicer_test.go:84:6: NewMockIPServicer redeclared in this block
+	internal/api/info/mock_ip_servicer.go:84:6: other declaration of NewMockIPServicer
+internal/api/info/mock_servicer_test.go:8:6: MockServicer redeclared in this block
+	internal/api/info/mock_servicer.go:8:6: other declaration of MockServicer
+internal/api/info/mock_servicer_test.go:12:6: MockServicer_Expecter redeclared in this block
+	internal/api/info/mock_servicer.go:12:6: other declaration of MockServicer_Expecter
+internal/api/info/mock_servicer_test.go:51:6: MockServicer_getAppInfo_Call redeclared in this block
+	internal/api/info/mock_servicer.go:51:6: other declaration of MockServicer_getAppInfo_Call
+internal/api/info/mock_servicer_test.go:79:6: NewMockServicer redeclared in this block
+	internal/api/info/mock_servicer.go:79:6: other declaration of NewMockServicer
+internal/api/info/mock_ip_servicer_test.go:25:27: too many errors]]></error>
+		</testcase>
+	</testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/service" tests="0" failures="0" errors="0" id="6" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/owner" tests="6" failures="0" errors="0" id="7" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+		<testcase name="Test_ownerById" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000"></testcase>
+		<testcase name="Test_ownerById/Get_Owner_By_ID" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000">
+			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |       106.5µs |                 | GET      "/v1/owners/1"]]></system-out>
+		</testcase>
+		<testcase name="Test_OwnerByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000"></testcase>
+		<testcase name="Test_OwnerByLastName/Get_Owner_By_Last_Name" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000">
+			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |      50.042µs |                 | GET      "/v1/owners?last-name=Ward"]]></system-out>
+		</testcase>
+		<testcase name="Test_getById" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000">
+			<system-out><![CDATA[{"level":"info","ts":1713170645.300829,"caller":"owner/owner_service.go:27","msg":"retrieve owner by id: 1","function":"Test_getById"}]]></system-out>
+		</testcase>
+		<testcase name="Test_getByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000">
+			<system-out><![CDATA[{"level":"info","ts":1713170645.301214,"caller":"owner/owner_service.go:40","msg":"retrieve owners by last name: DiCaprio","function":"Test_getByLastName"}]]></system-out>
+		</testcase>
+	</testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/pet" tests="4" failures="0" errors="0" id="8" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+		<testcase name="Test_PetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet" time="0.000">
+			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |     139.125µs |                 | GET      "/v1/pets/1"]]></system-out>
+		</testcase>
+		<testcase name="Test_PetByName" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet" time="0.000">
+			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |      122.25µs |                 | GET      "/v1/pets?name=Charles"]]></system-out>
+		</testcase>
+		<testcase name="Test_GetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet" time="0.000">
+			<system-out><![CDATA[{"level":"info","ts":1713170645.185819,"caller":"pet/pet_service.go:25","msg":"retrieve pet by id: %v1","function":"Test_GetById"}]]></system-out>
+		</testcase>
+		<testcase name="Test_GetByName" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet" time="0.000">
+			<system-out><![CDATA[{"level":"info","ts":1713170645.1860962,"caller":"pet/pet_service.go:38","msg":"retrieve pet by name: %vLeo","function":"Test_GetByName"}]]></system-out>
+		</testcase>
+	</testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/vet" tests="4" failures="0" errors="0" id="9" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+		<testcase name="Test_VetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet" time="0.000">
+			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |     210.708µs |                 | GET      "/v1/vets/1"]]></system-out>
+		</testcase>
+		<testcase name="Test_VetByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet" time="0.000">
+			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |      41.875µs |                 | GET      "/v1/vets?last-name=Ward"]]></system-out>
+		</testcase>
+		<testcase name="Test_GetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet" time="0.000"></testcase>
+		<testcase name="Test_GetByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet" time="0.000"></testcase>
+	</testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/middleware" tests="1" failures="0" errors="1" id="10" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+		<testcase name="[build failed]" classname="github.com/rhtran/gin-petclinic-service/middleware" time="0.000">
+			<error message="Build error"><![CDATA[middleware/mock_authen_servicer_test.go:11:6: MockAuthenServicer redeclared in this block
+	middleware/mock_authen_servicer.go:11:6: other declaration of MockAuthenServicer
+middleware/mock_authen_servicer_test.go:15:6: MockAuthenServicer_Expecter redeclared in this block
+	middleware/mock_authen_servicer.go:15:6: other declaration of MockAuthenServicer_Expecter
+middleware/mock_authen_servicer_test.go:19:31: method MockAuthenServicer.EXPECT already declared at middleware/mock_authen_servicer.go:19:31
+middleware/mock_authen_servicer_test.go:24:31: method MockAuthenServicer.RedirectURL already declared at middleware/mock_authen_servicer.go:24:31
+middleware/mock_authen_servicer_test.go:29:6: MockAuthenServicer_RedirectURL_Call redeclared in this block
+	middleware/mock_authen_servicer.go:29:6: other declaration of MockAuthenServicer_RedirectURL_Call
+middleware/mock_authen_servicer_test.go:35:40: method MockAuthenServicer_Expecter.RedirectURL already declared at middleware/mock_authen_servicer.go:35:40
+middleware/mock_authen_servicer_test.go:57:31: method MockAuthenServicer.Verify already declared at middleware/mock_authen_servicer.go:57:31
+middleware/mock_authen_servicer_test.go:75:6: MockAuthenServicer_Verify_Call redeclared in this block
+	middleware/mock_authen_servicer.go:75:6: other declaration of MockAuthenServicer_Verify_Call
+middleware/mock_authen_servicer_test.go:81:40: method MockAuthenServicer_Expecter.Verify already declared at middleware/mock_authen_servicer.go:81:40
+middleware/mock_authen_servicer_test.go:104:6: NewMockAuthenServicer redeclared in this block
+	middleware/mock_authen_servicer.go:104:6: other declaration of NewMockAuthenServicer
+middleware/mock_authen_servicer_test.go:81:40: too many errors]]></error>
+		</testcase>
+	</testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/pkg/dbase" tests="0" failures="0" errors="0" id="11" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/pkg/ds" tests="0" failures="0" errors="0" id="12" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/visit" tests="3" failures="0" errors="0" id="13" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+		<testcase name="Test_VisitById" classname="github.com/rhtran/gin-petclinic-service/internal/api/visit" time="0.000"></testcase>
+		<testcase name="Test_VisitById/Get_Visit_By_ID" classname="github.com/rhtran/gin-petclinic-service/internal/api/visit" time="0.000">
+			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |       111.5µs |                 | GET      "/v1/visits/1"]]></system-out>
+		</testcase>
+		<testcase name="Test_GetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/visit" time="0.000"></testcase>
+	</testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/middleware/errors" tests="14" failures="0" errors="0" id="14" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+		<testcase name="TestHandler" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestHandler/normal_processing" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestHandler/error_processing" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestHandler/HTTP_error_processing" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestHandler/panic_processing" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="Test_buildErrorResponse" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestErrorResponse_Error" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestErrorResponse_StatusCode" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestInternalServerError" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestNotFound" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestUnauthorized" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestForbidden" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestBadRequest" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+		<testcase name="TestInvalidInput" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+	</testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/pkg/infra/repository/test" tests="0" failures="0" errors="0" id="15" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:24-07:00"></testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/pkg/model" tests="0" failures="0" errors="0" id="16" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:24-07:00"></testsuite>
+	<testsuite name="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" tests="11" failures="0" errors="0" id="17" hostname="ml0227784" time="29.900" timestamp="2024-04-15T02:09:24-07:00">
+		<testcase name="TestOwnerRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="7.740">
+			<system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
+This user must also own the server process.
+
+The database cluster will be initialized with this locale configuration:
+  provider:    libc
+  LC_COLLATE:  C
+  LC_CTYPE:    UTF-8
+  LC_MESSAGES: C
+  LC_MONETARY: C
+  LC_NUMERIC:  C
+  LC_TIME:     C
+The default database encoding has accordingly been set to "UTF8".
+initdb: could not find suitable text search configuration for locale "UTF-8"
+The default text search configuration will be set to "simple".
+
+Data page checksums are disabled.
+
+creating directory /Users/ryyt/.embedded-postgres-go/extracted/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... America/Los_Angeles
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    /Users/ryyt/.embedded-postgres-go/extracted/bin/pg_ctl -D /Users/ryyt/.embedded-postgres-go/extracted/data -l logfile start
+
+waiting for server to start....2024-04-15 01:44:13.236 PDT [62833] LOG:  starting PostgreSQL 16.2 on x86_64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2024-04-15 01:44:13.243 PDT [62833] LOG:  listening on IPv6 address "::1", port 5433
+2024-04-15 01:44:13.243 PDT [62833] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2024-04-15 01:44:13.244 PDT [62833] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2024-04-15 01:44:13.247 PDT [62836] LOG:  database system was shut down at 2024-04-15 01:44:12 PDT
+2024-04-15 01:44:13.250 PDT [62833] LOG:  database system is ready to accept connections
+ done
+server started
+2024/04/15 01:44:13 OK    2020092012000_petclinic.sql
+2024/04/15 01:44:13 goose: no migrations to run. current version: 2020092012000]]></system-out>
+		</testcase>
+		<testcase name="TestOwnerRepoTestSuite/Test_FindById" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.010">
+			<system-out><![CDATA[{"level":"info","ts":1713170653.4151318,"caller":"repository/owner_repository.go:38","msg":"search owner by id: 2","version":"owner_repository_test"}
+{"level":"info","ts":1713170653.419786,"caller":"repository/owner_repository.go:38","msg":"search owner by id: 5","version":"owner_repository_test"}]]></system-out>
+		</testcase>
+		<testcase name="TestOwnerRepoTestSuite/Test_FindByLastName" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
+			<system-out><![CDATA[{"level":"info","ts":1713170653.4202602,"caller":"repository/owner_repository.go:57","msg":"Search owner by last name: Coleman","version":"owner_repository_test"}
+{"level":"info","ts":1713170653.422664,"caller":"repository/owner_repository.go:57","msg":"Search owner by last name: Schroeder","version":"owner_repository_test"}
+2024-04-15 01:44:13.353 PDT [62841] ERROR:  relation "goose_db_version" does not exist at character 36
+2024-04-15 01:44:13.353 PDT [62841] STATEMENT:  SELECT version_id, is_applied from goose_db_version ORDER BY id DESC
+waiting for server to shut down...2024-04-15 01:44:13.434 PDT [62833] LOG:  received fast shutdown request
+.2024-04-15 01:44:13.435 PDT [62833] LOG:  aborting any active transactions
+2024-04-15 01:44:13.435 PDT [62842] FATAL:  terminating connection due to administrator command
+2024-04-15 01:44:13.435 PDT [62841] FATAL:  terminating connection due to administrator command
+2024-04-15 01:44:13.438 PDT [62833] LOG:  background worker "logical replication launcher" (PID 62839) exited with exit code 1
+2024-04-15 01:44:13.439 PDT [62834] LOG:  shutting down
+2024-04-15 01:44:13.439 PDT [62834] LOG:  checkpoint starting: shutdown immediate
+2024-04-15 01:44:13.455 PDT [62834] LOG:  checkpoint complete: wrote 119 buffers (0.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.011 s, sync=0.004 s, total=0.017 s; sync files=76, longest=0.001 s, average=0.001 s; distance=361 kB, estimate=361 kB; lsn=0/155E580, redo lsn=0/155E580
+2024-04-15 01:44:13.458 PDT [62833] LOG:  database system is shut down
+ done
+server stopped]]></system-out>
+		</testcase>
+		<testcase name="TestPetRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="7.320">
+			<system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
+This user must also own the server process.
+
+The database cluster will be initialized with this locale configuration:
+  provider:    libc
+  LC_COLLATE:  C
+  LC_CTYPE:    UTF-8
+  LC_MESSAGES: C
+  LC_MONETARY: C
+  LC_NUMERIC:  C
+  LC_TIME:     C
+The default database encoding has accordingly been set to "UTF8".
+initdb: could not find suitable text search configuration for locale "UTF-8"
+The default text search configuration will be set to "simple".
+
+Data page checksums are disabled.
+
+creating directory /Users/ryyt/.embedded-postgres-go/extracted/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... America/Los_Angeles
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    /Users/ryyt/.embedded-postgres-go/extracted/bin/pg_ctl -D /Users/ryyt/.embedded-postgres-go/extracted/data -l logfile start
+
+waiting for server to start....2024-04-15 01:44:20.582 PDT [62874] LOG:  starting PostgreSQL 16.2 on x86_64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2024-04-15 01:44:20.587 PDT [62874] LOG:  listening on IPv6 address "::1", port 5433
+2024-04-15 01:44:20.587 PDT [62874] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2024-04-15 01:44:20.588 PDT [62874] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2024-04-15 01:44:20.591 PDT [62877] LOG:  database system was shut down at 2024-04-15 01:44:20 PDT
+2024-04-15 01:44:20.594 PDT [62874] LOG:  database system is ready to accept connections
+ done
+server started
+2024/04/15 01:44:20 OK    2020092012000_petclinic.sql
+2024/04/15 01:44:20 goose: no migrations to run. current version: 2020092012000]]></system-out>
+		</testcase>
+		<testcase name="TestPetRepoTestSuite/Test_FindById" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
+			<system-out><![CDATA[{"level":"info","ts":1713170660.7487428,"caller":"repository/pet_repository.go:39","msg":"Search pet by id: 1","version":"pet_repository_test"}
+{"level":"info","ts":1713170660.7517922,"caller":"repository/pet_repository.go:39","msg":"Search pet by id: 2","version":"pet_repository_test"}]]></system-out>
+		</testcase>
+		<testcase name="TestPetRepoTestSuite/Test_FindByName" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
+			<system-out><![CDATA[{"level":"info","ts":1713170660.752084,"caller":"repository/pet_repository.go:51","msg":"Search pet by name: Leo","version":"pet_repository_test"}
+{"level":"info","ts":1713170660.753075,"caller":"repository/pet_repository.go:51","msg":"Search pet by name: Basil","version":"pet_repository_test"}
+2024-04-15 01:44:20.695 PDT [62882] ERROR:  relation "goose_db_version" does not exist at character 36
+2024-04-15 01:44:20.695 PDT [62882] STATEMENT:  SELECT version_id, is_applied from goose_db_version ORDER BY id DESC
+waiting for server to shut down...2024-04-15 01:44:20.759 PDT [62874] LOG:  received fast shutdown request
+.2024-04-15 01:44:20.759 PDT [62874] LOG:  aborting any active transactions
+2024-04-15 01:44:20.759 PDT [62883] FATAL:  terminating connection due to administrator command
+2024-04-15 01:44:20.759 PDT [62882] FATAL:  terminating connection due to administrator command
+2024-04-15 01:44:20.760 PDT [62874] LOG:  background worker "logical replication launcher" (PID 62880) exited with exit code 1
+2024-04-15 01:44:20.762 PDT [62875] LOG:  shutting down
+2024-04-15 01:44:20.762 PDT [62875] LOG:  checkpoint starting: shutdown immediate
+2024-04-15 01:44:20.773 PDT [62875] LOG:  checkpoint complete: wrote 119 buffers (0.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.003 s, total=0.011 s; sync files=76, longest=0.001 s, average=0.001 s; distance=361 kB, estimate=361 kB; lsn=0/155E580, redo lsn=0/155E580
+2024-04-15 01:44:20.775 PDT [62874] LOG:  database system is shut down
+ done
+server stopped]]></system-out>
+		</testcase>
+		<testcase name="TestVetRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="7.370">
+			<system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
+This user must also own the server process.
+
+The database cluster will be initialized with this locale configuration:
+  provider:    libc
+  LC_COLLATE:  C
+  LC_CTYPE:    UTF-8
+  LC_MESSAGES: C
+  LC_MONETARY: C
+  LC_NUMERIC:  C
+  LC_TIME:     C
+The default database encoding has accordingly been set to "UTF8".
+initdb: could not find suitable text search configuration for locale "UTF-8"
+The default text search configuration will be set to "simple".
+
+Data page checksums are disabled.
+
+creating directory /Users/ryyt/.embedded-postgres-go/extracted/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... America/Los_Angeles
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    /Users/ryyt/.embedded-postgres-go/extracted/bin/pg_ctl -D /Users/ryyt/.embedded-postgres-go/extracted/data -l logfile start
+
+waiting for server to start....2024-04-15 01:44:27.924 PDT [62899] LOG:  starting PostgreSQL 16.2 on x86_64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2024-04-15 01:44:27.930 PDT [62899] LOG:  listening on IPv6 address "::1", port 5433
+2024-04-15 01:44:27.930 PDT [62899] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2024-04-15 01:44:27.931 PDT [62899] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2024-04-15 01:44:27.934 PDT [62902] LOG:  database system was shut down at 2024-04-15 01:44:27 PDT
+2024-04-15 01:44:27.938 PDT [62899] LOG:  database system is ready to accept connections
+ done
+server started
+2024/04/15 01:44:28 OK    2020092012000_petclinic.sql
+2024/04/15 01:44:28 goose: no migrations to run. current version: 2020092012000]]></system-out>
+		</testcase>
+		<testcase name="TestVetRepoTestSuite/Test_FindById" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.010">
+			<system-out><![CDATA[{"level":"info","ts":1713170668.112606,"caller":"repository/vet_repository.go:39","msg":"Search vet by id: 1","version":"vet_repository_test"}
+{"level":"info","ts":1713170668.1168199,"caller":"repository/vet_repository.go:39","msg":"Search vet by id: 2","version":"vet_repository_test"}]]></system-out>
+		</testcase>
+		<testcase name="TestVetRepoTestSuite/Test_FindByLastName" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
+			<system-out><![CDATA[{"level":"info","ts":1713170668.118489,"caller":"repository/vet_repository.go:57","msg":"Search vet by last name: Carter","version":"vet_repository_test"}
+{"level":"info","ts":1713170668.120219,"caller":"repository/vet_repository.go:57","msg":"Search vet by last name: Leary","version":"vet_repository_test"}
+2024-04-15 01:44:28.036 PDT [62907] ERROR:  relation "goose_db_version" does not exist at character 36
+2024-04-15 01:44:28.036 PDT [62907] STATEMENT:  SELECT version_id, is_applied from goose_db_version ORDER BY id DESC
+waiting for server to shut down...2024-04-15 01:44:28.131 PDT [62899] LOG:  received fast shutdown request
+.2024-04-15 01:44:28.132 PDT [62899] LOG:  aborting any active transactions
+2024-04-15 01:44:28.132 PDT [62908] FATAL:  terminating connection due to administrator command
+2024-04-15 01:44:28.132 PDT [62907] FATAL:  terminating connection due to administrator command
+2024-04-15 01:44:28.136 PDT [62899] LOG:  background worker "logical replication launcher" (PID 62905) exited with exit code 1
+2024-04-15 01:44:28.136 PDT [62900] LOG:  shutting down
+2024-04-15 01:44:28.137 PDT [62900] LOG:  checkpoint starting: shutdown immediate
+2024-04-15 01:44:28.156 PDT [62900] LOG:  checkpoint complete: wrote 119 buffers (0.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.013 s, sync=0.004 s, total=0.020 s; sync files=76, longest=0.001 s, average=0.001 s; distance=361 kB, estimate=361 kB; lsn=0/155E588, redo lsn=0/155E588
+2024-04-15 01:44:28.160 PDT [62899] LOG:  database system is shut down
+ done
+server stopped]]></system-out>
+		</testcase>
+		<testcase name="TestVisitRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="7.450">
+			<system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
+This user must also own the server process.
+
+The database cluster will be initialized with this locale configuration:
+  provider:    libc
+  LC_COLLATE:  C
+  LC_CTYPE:    UTF-8
+  LC_MESSAGES: C
+  LC_MONETARY: C
+  LC_NUMERIC:  C
+  LC_TIME:     C
+The default database encoding has accordingly been set to "UTF8".
+initdb: could not find suitable text search configuration for locale "UTF-8"
+The default text search configuration will be set to "simple".
+
+Data page checksums are disabled.
+
+creating directory /Users/ryyt/.embedded-postgres-go/extracted/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... America/Los_Angeles
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    /Users/ryyt/.embedded-postgres-go/extracted/bin/pg_ctl -D /Users/ryyt/.embedded-postgres-go/extracted/data -l logfile start
+
+waiting for server to start....2024-04-15 01:44:35.387 PDT [62961] LOG:  starting PostgreSQL 16.2 on x86_64-apple-darwin20.6.0, compiled by Apple clang version 12.0.5 (clang-1205.0.22.9), 64-bit
+2024-04-15 01:44:35.393 PDT [62961] LOG:  listening on IPv6 address "::1", port 5433
+2024-04-15 01:44:35.393 PDT [62961] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2024-04-15 01:44:35.394 PDT [62961] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2024-04-15 01:44:35.396 PDT [62964] LOG:  database system was shut down at 2024-04-15 01:44:35 PDT
+2024-04-15 01:44:35.399 PDT [62961] LOG:  database system is ready to accept connections
+ done
+server started
+2024/04/15 01:44:35 OK    2020092012000_petclinic.sql
+2024/04/15 01:44:35 goose: no migrations to run. current version: 2020092012000]]></system-out>
+		</testcase>
+		<testcase name="TestVisitRepoTestSuite/Test_FindById" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
+			<system-out><![CDATA[{"level":"info","ts":1713170675.566777,"caller":"repository/visit_repository.go:32","msg":"Search visit by id: 2","version":"visit_repository_test"}
+{"level":"info","ts":1713170675.5706408,"caller":"repository/visit_repository.go:32","msg":"Search visit by id: 1","version":"visit_repository_test"}
+2024-04-15 01:44:35.505 PDT [62969] ERROR:  relation "goose_db_version" does not exist at character 36
+2024-04-15 01:44:35.505 PDT [62969] STATEMENT:  SELECT version_id, is_applied from goose_db_version ORDER BY id DESC
+waiting for server to shut down...2024-04-15 01:44:35.579 PDT [62961] LOG:  received fast shutdown request
+2024-04-15 01:44:35.580 PDT [62961] LOG:  aborting any active transactions
+.2024-04-15 01:44:35.580 PDT [62970] FATAL:  terminating connection due to administrator command
+2024-04-15 01:44:35.581 PDT [62969] FATAL:  terminating connection due to administrator command
+2024-04-15 01:44:35.584 PDT [62961] LOG:  background worker "logical replication launcher" (PID 62967) exited with exit code 1
+2024-04-15 01:44:35.585 PDT [62962] LOG:  shutting down
+2024-04-15 01:44:35.585 PDT [62962] LOG:  checkpoint starting: shutdown immediate
+2024-04-15 01:44:35.597 PDT [62962] LOG:  checkpoint complete: wrote 119 buffers (0.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.007 s, sync=0.004 s, total=0.013 s; sync files=76, longest=0.001 s, average=0.001 s; distance=361 kB, estimate=361 kB; lsn=0/155E580, redo lsn=0/155E580
+2024-04-15 01:44:35.601 PDT [62961] LOG:  database system is shut down
+ done
+server stopped]]></system-out>
+		</testcase>
+	</testsuite>
+</testsuites>

@@ -1,0 +1,30 @@
+# app info
+appInfo:
+    name: "Pet Clinic"
+    description: "Golang Pet Clinic Service"
+    version: "1.0.0"
+
+# server port
+server:
+    httpPort: ":8443"
+    certFile: "cmd/certs/myCA.pem"
+    keyFile: "cmd/certs/myCA-without-passphrase.key"
+
+database:
+    sqlite:
+        driver: sqlite3
+        dsn: pet-clinic.sqlite
+    postgres:
+        driver: postgres
+        dsn: user=postgres password=mysecretpassword host=localhost port=5432 dbname=pet_clinic sslmode=disable
+    maxIdleConns: 0
+    maxOpenConns: 5
+    maxIdleTime: 60
+
+okta:
+    oauth2:
+        url: https://dev-293522.okta.com/oauth2/default/v1/token
+        issuer: https://dev-293522.okta.com/oauth2/default
+        audience: api://default
+        clientId: 0oa195geobixtjAhP4x7
+        scopes: ${scopes}
