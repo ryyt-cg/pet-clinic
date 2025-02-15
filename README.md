@@ -27,8 +27,24 @@ The goal of this project is to create a pet clinic API was written in Spring usi
 
 
 ## Spring Pet Clinic Wireframe
-![Spring Pet Clinic Wireframe](./spring-petclinic/spring-petclinic-wireframe.png)
-![01-home-page.png](pet-clinic-page-screnshots/01-home-page.png)
-![02-find-owners.png](pet-clinic-page-screnshots/02-find-owners.png)
-![03-owner-page.png](pet-clinic-page-screnshots/03-owner-page.png)
-![05-add-owner-page.png](pet-clinic-page-screnshots/05-add-owner-page.png)
+
+| Page              | Description                                                                                                                                 | Page Screenshot                                                            |   
+|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| Home Page         | This is Pet Clinic Home Page to display the pet photos.  This page will not invoke any API. Click on pet image to display Search Owner Page | ![01-home-page.png](pet-clinic-page-screnshots/01-home-page.png)           |
+| Search Owner Page |                                                                                                                                             | ![02-find-owners.png](pet-clinic-page-screnshots/02-find-owners.png)       |
+|                   |                                                                                                                                             | ![02-find-owners.png](pet-clinic-page-screnshots/02-find-owners.png)       |
+|                   |                                                                                                                                             | ![03-owner-page.png](pet-clinic-page-screnshots/03-owner-page.png)         |
+|                   |                                                                                                                                             | ![05-add-owner-page.png](pet-clinic-page-screnshots/05-add-owner-page.png) |
+|                   |                                                                                                                                             |                                                                            |
+|                   |                                                                                                                                             |                                                                            |
+|                   |                                                                                                                                             |                                                                            |
+|                   |                                                                                                                                             |                                                                            |
+|                   |                                                                                                                                             |                                                                            |
+
+
+
+
+
+
+
+
