@@ -3,11 +3,10 @@ package errors
 import (
 	"database/sql"
 	"fmt"
+	"github.com/rhtran/gin-petclinic-service/pkg/log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"github.com/qiangxue/go-restful-api/pkg/log"
 
 	routing "github.com/go-ozzo/ozzo-routing/v2"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
