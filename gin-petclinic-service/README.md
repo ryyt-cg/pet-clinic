@@ -41,6 +41,7 @@ openssl rsa -in myCA.key -out myCA-without-passphrase.key
 | /info    | GET    | Show the app info             |
 | /metrics | GET    | Out of the box metrics        |
 
+
 ## API Endpoints:
 
 | Path          | Method | Description           |
@@ -50,6 +51,25 @@ openssl rsa -in myCA.key -out myCA-without-passphrase.key
 | /v1/owner/:id | GET    | Get pet's owner by id |
 
 ---
+## Steps to run the application
+Pre-requisite: Install the following tools:
+* goose
+```shell
+brew install goose
+````
+
+1. create a database and tables
+```shell
+goose -dir migrations/sqlite up
+```
+
+2. Run the application
+```shell
+go run cmd/server.go
+```
+
+
+
 
 ## Mockery
 Mockery is a tool used to generate mock implementations of Go interfaces. It is useful when you are writing unit tests for your code and you need to mock the dependencies of the code under test.
@@ -86,17 +106,7 @@ go install go.uber.org/mock/mockgen@latest
 mockgen -version
 ```
 
-## Steps to run the application
 
-1. create a database and tables
-```shell
-goose -dir migrations/sqlite up
-```
-
-2. Run the application
-```shell
-go run cmd/server.go
-```
 
 ## Swagger
 Swagger is a tool that can help you design, build, document, and consume RESTful web services. It is a specification for describing, producing, consuming, and visualizing RESTful web services.

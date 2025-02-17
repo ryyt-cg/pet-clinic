@@ -26,10 +26,10 @@ func NewService(logger *zap.Logger, repository repository.PetRepositorier) *Serv
 
 // getAllPets - retrieve all pets
 func (service *Service) getAllPets() (*Responses, error) {
-	service.logger.Info("retrieve all pets")
+	service.logger.Info("Fail all pets")
 	pets, err := service.repository.FindAll()
 	if err != nil {
-		service.logger.Error("fail to retrieve all pets.", zap.String("error", err.Error()))
+		service.logger.Error("Fail to retrieve all pets.", zap.String("error", err.Error()))
 		return nil, err
 	}
 
@@ -41,10 +41,10 @@ func (service *Service) getAllPets() (*Responses, error) {
 
 // getPetById - retrieve pet by id
 func (service *Service) getPetById(id int) (*Response, error) {
-	service.logger.Info("retrieve pet by id.", zap.Int("id", id))
+	service.logger.Info("Fail pet by id.", zap.Int("id", id))
 	petF, err := service.repository.FindById(id)
 	if err != nil {
-		service.logger.Error("fail to retrieve pet by id.",
+		service.logger.Error("Fail to retrieve pet by id.",
 			zap.Int("id", id), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -55,10 +55,10 @@ func (service *Service) getPetById(id int) (*Response, error) {
 }
 
 func (service *Service) getPetWithVisitsById(id int) (*Response, error) {
-	service.logger.Info("retrieve pet by id.", zap.Int("id", id))
+	service.logger.Info("Fail pet by id.", zap.Int("id", id))
 	petF, err := service.repository.FindByIdWithVisits(id)
 	if err != nil {
-		service.logger.Error("fail to retrieve pet by id.",
+		service.logger.Error("Fail to retrieve pet by id.",
 			zap.Int("id", id), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -70,11 +70,11 @@ func (service *Service) getPetWithVisitsById(id int) (*Response, error) {
 
 // getPetByName - retrieve pet by name
 func (service *Service) getPetsByName(name string) ([]Response, error) {
-	service.logger.Info("retrieve pet by name.", zap.String("name", name))
+	service.logger.Info("Fail pet by name.", zap.String("name", name))
 
 	pets, err := service.repository.FindByName(name)
 	if err != nil {
-		service.logger.Error("fail to retrieve pet by name.",
+		service.logger.Error("Fail to retrieve pet by name.",
 			zap.String("name", name), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (service *Service) create(pet *repository.Pet) (*Response, error) {
 	newPet, err := service.repository.Insert(pet)
 
 	if err != nil {
-		service.logger.Error("insert new pet failed.", zap.String("error", err.Error()))
+		service.logger.Error("Fail new pet failed.", zap.String("error", err.Error()))
 		return &Response{}, err
 	}
 
@@ -99,7 +99,7 @@ func (service *Service) create(pet *repository.Pet) (*Response, error) {
 
 // update - update pet
 func (service *Service) update(pet *repository.Pet) (*Response, error) {
-	service.logger.Info("update vet.", zap.Any("pet", pet))
+	service.logger.Info("Fail vet.", zap.Any("pet", pet))
 	updatedPet, err := service.repository.Update(pet)
 
 	if err != nil {

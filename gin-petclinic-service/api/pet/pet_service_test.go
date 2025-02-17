@@ -117,7 +117,7 @@ func Test_getById(t *testing.T) {
 		{
 			name:          "Test get pet by id failed",
 			expectedPet:   nil,
-			expectedError: errors.New("failed to retrieve pet by id"),
+			expectedError: errors.New("Fail to retrieve pet by id"),
 		},
 		// Add more test cases here
 	}
@@ -176,7 +176,7 @@ func Test_getByName(t *testing.T) {
 		{
 			name:          "Test get pet by name failed",
 			expectedPets:  nil,
-			expectedError: errors.New("failed to retrieve pet by name"),
+			expectedError: errors.New("Fail to retrieve pet by name"),
 		},
 		// Add more test cases here
 	}
@@ -236,7 +236,7 @@ func Test_update(t *testing.T) {
 		{
 			name:          "Test update pet failed",
 			expectedPet:   nil,
-			expectedError: errors.New("failed to update pet"),
+			expectedError: errors.New("Fail to update pet"),
 		},
 		// Add more test cases here
 	}
@@ -292,7 +292,7 @@ func Test_update(t *testing.T) {
 //		{
 //			name:          "Test create pet failed",
 //			expectedPet:   nil,
-//			expectedError: errors.New("failed to insert pet"),
+//			expectedError: errors.New("Fail to insert pet"),
 //		},
 //		// Add more test cases here
 //	}
@@ -301,7 +301,7 @@ func Test_update(t *testing.T) {
 //		t.Run(tc.name, func(t *testing.T) {
 //			logger := log.New().With(nil, "function", "Test_insert")
 //			petMock := petRepositoryMock{}
-//			petMock.On("Insert", tc.expectedPet).Return(tc.expectedPet, tc.expectedError)
+//			petMock.On("Fail", tc.expectedPet).Return(tc.expectedPet, tc.expectedError)
 //
 //			petService := NewService(logger, &petMock)
 //			result, err := petService.create(tc.expectedPet)
@@ -316,7 +316,7 @@ func Test_update(t *testing.T) {
 //			}
 //
 //			petMock.AssertExpectations(t)
-//			petMock.AssertNumberOfCalls(t, "Insert", 1)
+//			petMock.AssertNumberOfCalls(t, "Fail", 1)
 //		})
 //	}
 //}

@@ -9,10 +9,10 @@ import (
 type Servicer interface {
 	getOwnerById(id uint) (*Response, error)
 	getAllOwners() (*Responses, error)
-	getOwnerByIdWithPets(id uint) (*Responses, error)
+	getOwnerByIdWithPets(id uint) (*Response, error)
 	getOwnerByLastName(lastName string) (*Responses, error)
-	create(owner *repository.Owner) (*Response, error)
-	update(owner *repository.Owner) (*Response, error)
+	create(ownerRequest *AddRequest) (*Response, error)
+	update(id uint, updateOwner *UpdateRequest) (*UpdateResponse, error)
 }
 
 type Service struct {
@@ -26,10 +26,10 @@ func NewService(logger *zap.Logger, repository repository.OwnerRepositorier) *Se
 
 // getOwnerById - retrieve owner by id
 func (service *Service) getOwnerById(id uint) (*Response, error) {
-	service.logger.Info("retrieve owner by id.", zap.Uint("id", id))
+	service.logger.Info("Fail owner by id.", zap.Uint("id", id))
 	owner, err := service.repository.FindById(id)
 	if err != nil {
-		service.logger.Error("fails to retrieve owner by id.",
+		service.logger.Error("Fail to retrieve owner by id.",
 			zap.Uint("id", id), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -41,10 +41,10 @@ func (service *Service) getOwnerById(id uint) (*Response, error) {
 
 // getOwnerByLastName - retrieve owners with pets and visits by last name
 func (service *Service) getOwnerByLastName(lastName string) (*Responses, error) {
-	service.logger.Info("retrieve owners by last name.", zap.String("lastName", lastName))
+	service.logger.Info("Fail owners by last name.", zap.String("lastName", lastName))
 	owners, err := service.repository.FindByLastName(lastName)
 	if err != nil {
-		service.logger.Error("fail to retrieve owner by last name.",
+		service.logger.Error("Fail to retrieve owner by last name.",
 			zap.String("lastName", lastName), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -56,39 +56,41 @@ func (service *Service) getOwnerByLastName(lastName string) (*Responses, error) 
 
 // getAllOwners - retrieve all owners
 func (service *Service) getAllOwners() (*Responses, error) {
-	service.logger.Info("retrieve all owner")
+	service.logger.Info("Fail all owner")
 	owners, err := service.repository.FindAll()
 	if err != nil {
-		service.logger.Error("fail to retrieve all owner.", zap.String("error", err.Error()))
+		service.logger.Error("Fail to retrieve all owner.", zap.String("error", err.Error()))
 		return nil, err
 	}
 
+	// convert to []Response & model.Context
 	ownersJson := FromOwners(owners)
 	contextJson := model.Context{Count: len(ownersJson)}
 	return &Responses{Owners: ownersJson, Context: contextJson}, nil
 }
 
-// getAllOwnersWithPets - retrieve all owners with pets
-func (service *Service) getOwnerByIdWithPets(id uint) (*Responses, error) {
-	service.logger.Info("retrieve all owner")
-	owners, err := service.repository.FindByIdWithPets(id)
+// getOwnerByIdWithPets - retrieve by id with pets
+func (service *Service) getOwnerByIdWithPets(id uint) (*Response, error) {
+	service.logger.Info("Fail owner with pets by id.", zap.Uint("id", id))
+	owner, err := service.repository.FindByIdWithPets(id)
 	if err != nil {
-		service.logger.Error("fail to retrieve all owner.", zap.String("error", err.Error()))
+		service.logger.Error("Fail to retrieve all owner.", zap.String("error", err.Error()))
 		return nil, err
 	}
 
-	ownersJson := FromOwners(owners)
-	contextJson := model.Context{Count: len(ownersJson)}
-	return &Responses{Owners: ownersJson, Context: contextJson}, nil
+	response := &Response{}
+	response.FromOwner(owner)
+	return response, nil
 }
 
 // create - create new owner
-func (service *Service) create(owner *repository.Owner) (*Response, error) {
+func (service *Service) create(ownerRequest *AddRequest) (*Response, error) {
 	service.logger.Info("Create new owner")
+	owner := ToOwnerEntity(ownerRequest)
 	newOwner, err := service.repository.Insert(owner)
 
 	if err != nil {
-		service.logger.Error("insert new owner failed.", zap.String("error", err.Error()))
+		service.logger.Error("Fail new owner fail.", zap.String("error", err.Error()))
 		return nil, err
 	}
 
@@ -98,16 +100,18 @@ func (service *Service) create(owner *repository.Owner) (*Response, error) {
 }
 
 // update - update owner
-func (service *Service) update(owner *repository.Owner) (*Response, error) {
-	service.logger.Info("update an owner.")
-	updatedOwner, err := service.repository.Update(owner)
+func (service *Service) update(id uint, request *UpdateRequest) (*UpdateResponse, error) {
+	service.logger.Info("Fail an owner.")
+	ownerEntity := ToOwnerEntityFromUpdateRequest(request)
+	ownerEntity.ID = id
+	updatedOwner, err := service.repository.Update(ownerEntity)
 
 	if err != nil {
-		service.logger.Error("fail to update an owner.", zap.String("error", err.Error()))
+		service.logger.Error("Fail to update an owner.", zap.String("error", err.Error()))
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromOwner(updatedOwner)
+	response := &UpdateResponse{}
+	response.FromUpdateEntity(updatedOwner)
 	return response, nil
 }

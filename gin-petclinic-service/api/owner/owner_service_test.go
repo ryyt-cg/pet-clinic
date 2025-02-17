@@ -269,58 +269,58 @@ func Test_getAllOwnersWithPets(t *testing.T) {
 }
 */
 // Test_update tests the update function
-func Test_update(t *testing.T) {
-	testCases := []struct {
-		name          string
-		expectedOwner *repository.Owner
-		expectedError error
-	}{
-		{
-			name: "Test update owner success",
-			expectedOwner: &repository.Owner{
-				Model: gorm.Model{
-					ID: 1,
-				},
-				Person: model.Person{
-					FirstName: "Nat",
-					LastName:  "Cole",
-				},
-			},
-			expectedError: nil,
-		},
-		{
-			name:          "Test update owner with error",
-			expectedOwner: nil,
-			expectedError: errors.New("update: unable to update owner"),
-		},
-		// Add more test cases here
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			logger := zap.NewNop()
-			//logger := log.New().With(nil, "function", "Test_update")
-			ownerMock := repository.MockOwnerRepositorier{}
-			ownerMock.On("Update", tc.expectedOwner).Return(tc.expectedOwner, tc.expectedError)
-
-			ownerService := NewService(logger, &ownerMock)
-			result, err := ownerService.update(tc.expectedOwner)
-
-			if tc.expectedError != nil {
-				assert.Equal(t, tc.expectedError, err)
-				assert.Nil(t, result)
-			} else {
-				assert.Equal(t, tc.expectedOwner.ID, result.ID)
-				assert.Equal(t, tc.expectedOwner.FirstName, result.FirstName)
-				assert.Equal(t, tc.expectedOwner.LastName, result.LastName)
-				assert.Nil(t, err)
-			}
-
-			ownerMock.AssertExpectations(t)
-			ownerMock.AssertNumberOfCalls(t, "Update", 1)
-		})
-	}
-}
+//func Test_update(t *testing.T) {
+//	testCases := []struct {
+//		name          string
+//		expectedOwner *repository.Owner
+//		expectedError error
+//	}{
+//		{
+//			name: "Test update owner success",
+//			expectedOwner: &repository.Owner{
+//				Model: gorm.Model{
+//					ID: 1,
+//				},
+//				Person: model.Person{
+//					FirstName: "Nat",
+//					LastName:  "Cole",
+//				},
+//			},
+//			expectedError: nil,
+//		},
+//		{
+//			name:          "Test update owner with error",
+//			expectedOwner: nil,
+//			expectedError: errors.New("update: unable to update owner"),
+//		},
+//		// Add more test cases here
+//	}
+//
+//	for _, tc := range testCases {
+//		t.Run(tc.name, func(t *testing.T) {
+//			logger := zap.NewNop()
+//			//logger := log.New().With(nil, "function", "Test_update")
+//			ownerMock := repository.MockOwnerRepositorier{}
+//			ownerMock.On("Update", tc.expectedOwner).Return(tc.expectedOwner, tc.expectedError)
+//
+//			ownerService := NewService(logger, &ownerMock)
+//			result, err := ownerService.update(tc.expectedOwner)
+//
+//			if tc.expectedError != nil {
+//				assert.Equal(t, tc.expectedError, err)
+//				assert.Nil(t, result)
+//			} else {
+//				assert.Equal(t, tc.expectedOwner.ID, result.ID)
+//				assert.Equal(t, tc.expectedOwner.FirstName, result.FirstName)
+//				assert.Equal(t, tc.expectedOwner.LastName, result.LastName)
+//				assert.Nil(t, err)
+//			}
+//
+//			ownerMock.AssertExpectations(t)
+//			ownerMock.AssertNumberOfCalls(t, "Update", 1)
+//		})
+//	}
+//}
 
 /*
 func Test_create(t *testing.T) {

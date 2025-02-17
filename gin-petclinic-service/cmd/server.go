@@ -37,7 +37,7 @@ func loadConfig() {
 
 	// load application configurations
 	if err := app.LoadConfig("./config"); err != nil {
-		logger.Fatal("failed to load application configuration.",
+		logger.Fatal("Fail to load application configuration.",
 			zap.String("error", err.Error()))
 	}
 
@@ -45,7 +45,7 @@ func loadConfig() {
 	var err error
 	sqlite, err = dbase.SqliteConnect()
 	if err != nil {
-		logger.Fatal("failed to connect the database.",
+		logger.Fatal("Fail to connect the database.",
 			zap.String("error", err.Error()))
 		//os.Exit(-1)
 	}
@@ -145,7 +145,7 @@ func main() {
 	})
 
 	if err := g.Wait(); err != nil {
-		logger.Fatal("fail to run http server.", zap.String("error", err.Error()))
+		logger.Fatal("Fail to run http server.", zap.String("error", err.Error()))
 		os.Exit(-1)
 	}
 }

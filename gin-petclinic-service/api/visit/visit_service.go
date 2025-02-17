@@ -24,7 +24,7 @@ func NewService(logger *zap.Logger, repository repository.VisitRepositorier) *Se
 func (service *Service) getVisitById(id int) (*Response, error) {
 	visit, err := service.repository.FindById(id)
 	if err != nil {
-		service.logger.Error("fails to retrieve visit by id.",
+		service.logger.Error("Fail to retrieve visit by id.",
 			zap.Int("id", id), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func (service *Service) getAllVisits() ([]Response, error) {
 	visits, err := service.repository.FindAll()
 
 	if err != nil {
-		service.logger.Error("fail to retrieve all visits.", zap.String("error", err.Error()))
+		service.logger.Error("Fail to retrieve all visits.", zap.String("error", err.Error()))
 		return nil, err
 	}
 	service.logger.Info("counts of all visits", zap.Int("count", len(visits)))
@@ -49,7 +49,7 @@ func (service *Service) create(request *Request) (*Response, error) {
 	visitEntity := ToVisit(request)
 	newVisit, err := service.repository.Insert(visitEntity)
 	if err != nil {
-		service.logger.Error("fail to create visit.", zap.String("error", err.Error()))
+		service.logger.Error("Fail to create visit.", zap.String("error", err.Error()))
 		return nil, err
 	}
 
@@ -63,7 +63,7 @@ func (service *Service) update(request *Request) (*Response, error) {
 	visitEntity.ID = uint(request.ID)
 	updatedVisit, err := service.repository.Update(visitEntity)
 	if err != nil {
-		service.logger.Error("fail to update visit.", zap.String("error", err.Error()))
+		service.logger.Error("Fail to update visit.", zap.String("error", err.Error()))
 		return nil, err
 	}
 

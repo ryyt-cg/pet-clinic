@@ -2,24 +2,35 @@
 
 There are 4 projects in this repository
 
-| Project Name             | Language | Status      |
-|--------------------------|----------|-------------|
-| spring-petclinic         | Java     | cloned      |
-| kotlin-petclinic         | Kotlin   | cloned      |
-| gin-petclinic-service    | Go       | in-progress |
-| wire-petclinic-service   | Go       | not-started |
-| fx-petclinic-service     | Go       | not-started |
-| sam-petclinic-go-service | Go       | not-started |
+| Project Name                                     | Language | Status      |
+|--------------------------------------------------|----------|-------------|
+| spring-petclinic                                 | Java     | cloned      |
+| kotlin-petclinic                                 | Kotlin   | cloned      |
+| [gin-petclinic-service](./gin-petclinic-service) | Go       | in-progress |
+| wire-petclinic-service                           | Go       | not-started |
+| fx-petclinic-service                             | Go       | not-started |
+| sam-petclinic-go-service                         | Go       | not-started |
 
 
 ## Goal
 The goal of this project is to create a pet clinic API was written in Spring using different languages and frameworks. The API should have the following endpoints:
 
-- GET /owners
-- GET /owners/{id}
-- POST /owners
-- PUT /owners/{id}
-- DELETE /owners/{id}
+| Endpoint                         | Description                |
+|----------------------------------|----------------------------|
+| GET /owners?last-name={lastName} | Search owners by last name |
+| POST /owners                     | Add new owner              |
+| PUT /owners/{id}                 | Update owner               |
+|                                  |                            |
+|                                  |                            |
+|                                  |                            |
+|                                  |                            |
+|                                  |                            |
+|                                  |                            |
+|                                  |                            |
+|                                  |                            |
+|                                  |                            |
+
+
 - GET /pets
 - GET /pets/{id}
 - POST /pets
@@ -28,18 +39,18 @@ The goal of this project is to create a pet clinic API was written in Spring usi
 
 ## Spring Pet Clinic Wireframe
 
-| Page              | Description                                                                                                                                 | Page Screenshot                                                            |   
-|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| Home Page         | This is Pet Clinic Home Page to display the pet photos.  This page will not invoke any API. Click on pet image to display Search Owner Page | ![01-home-page.png](pet-clinic-page-screnshots/01-home-page.png)           |
-| Search Owner Page |                                                                                                                                             | ![02-find-owners.png](pet-clinic-page-screnshots/02-find-owners.png)       |
-|                   |                                                                                                                                             | ![02-find-owners.png](pet-clinic-page-screnshots/02-find-owners.png)       |
-|                   |                                                                                                                                             | ![03-owner-page.png](pet-clinic-page-screnshots/03-owner-page.png)         |
-|                   |                                                                                                                                             | ![05-add-owner-page.png](pet-clinic-page-screnshots/05-add-owner-page.png) |
-|                   |                                                                                                                                             |                                                                            |
-|                   |                                                                                                                                             |                                                                            |
-|                   |                                                                                                                                             |                                                                            |
-|                   |                                                                                                                                             |                                                                            |
-|                   |                                                                                                                                             |                                                                            |
+| Page              | Description                                                                                                                                 | Endpoints                        | Page Screenshot                                                              |   
+|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------|------------------------------------------------------------------------------|
+| Home Page         | This is Pet Clinic Home Page to display the pet photos.  This page will not invoke any API. Click on pet image to display Search Owner Page |                                  | ![01-home-page.png](pet-clinic-page-screnshots/01-home-page.png)             |
+| Search Owner Page | Search Owner Page provides a Last Name text box to search owner(s) by last name.                                                            | GET /owners?last-name={lastname} | ![02-find-owners.png](pet-clinic-page-screnshots/02-find-owners.png)         |
+|                   |                                                                                                                                             |                                  | ![02-find-owners.png](pet-clinic-page-screnshots/02-find-owners.png)         |
+|                   |                                                                                                                                             |                                  | ![03-owner-page.png](pet-clinic-page-screnshots/03-owner-page.png)           |
+|                   |                                                                                                                                             | POST /owners                     | ![05-add-owner-page.png](pet-clinic-page-screnshots/05-add-owner-page.png)   |
+|                   |                                                                                                                                             |                                  | ![05-update-pet-page.png](pet-clinic-page-screnshots/05-update-pet-page.png) |
+|                   |                                                                                                                                             |                                  | ![06-add-visit-page.png](pet-clinic-page-screnshots/06-add-visit-page.png)   |
+|                   |                                                                                                                                             |                                  | ![07-update-pet-page.png](pet-clinic-page-screnshots/07-update-pet-page.png) |
+|                   |                                                                                                                                             |                                  | ![08-error-page.png](pet-clinic-page-screnshots/08-error-page.png)           |
+|                   |                                                                                                                                             |                                  |                                                                              |
 
 
 

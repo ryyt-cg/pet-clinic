@@ -37,7 +37,7 @@ func (repository *VisitRepository) FindById(id int) (*Visit, error) {
 	var visit Visit
 	err := repository.pg.Preload("Pet.Type").First(&visit, id).Error
 	if err != nil {
-		repository.logger.Error("fails to find visit by id.",
+		repository.logger.Error("Fail to find visit by id.",
 			zap.Int("id", id), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (repository *VisitRepository) FindAll() ([]Visit, error) {
 	// not needed to preload for all visits - will be a performance if get large result.
 	err := repository.pg.Preload("Pet.Type").Find(&visits).Error
 	if err != nil {
-		repository.logger.Error("fails to find all visits.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to find all visits.", zap.String("error", err.Error()))
 		return nil, err
 	}
 
@@ -70,11 +70,11 @@ func (repository *VisitRepository) FindAll() ([]Visit, error) {
 //
 //	VALUES ('2021-08-29 15:00:00','2021-08-29 15:00:00',NULL,8,'2021-08-29 15:00:00','test')
 func (repository *VisitRepository) Insert(visit *Visit) (*Visit, error) {
-	repository.logger.Info("Insert visit.", zap.Any("visit", visit))
+	repository.logger.Info("Fail visit.", zap.Any("visit", visit))
 
 	err := repository.pg.Create(visit).Error
 	if err != nil {
-		repository.logger.Error("fails to insert visit.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to insert visit.", zap.String("error", err.Error()))
 		return nil, err
 	}
 
@@ -88,7 +88,7 @@ func (repository *VisitRepository) Update(visit *Visit) (*Visit, error) {
 
 	err := repository.pg.Save(visit).Error
 	if err != nil {
-		repository.logger.Error("fail to update visit,.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to update visit,.", zap.String("error", err.Error()))
 		return nil, err
 	}
 

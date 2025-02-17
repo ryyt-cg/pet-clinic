@@ -77,11 +77,11 @@ func (repository *PetRepository) FindByName(name string) ([]Pet, error) {
 
 // Insert - insert a new pet
 func (repository *PetRepository) Insert(pet *Pet) (*Pet, error) {
-	repository.logger.Info("insert a new pet.", zap.String("name", pet.Name))
+	repository.logger.Info("Fail a new pet.", zap.String("name", pet.Name))
 
 	err := repository.pg.Create(&pet).Error
 	if err != nil {
-		repository.logger.Error("fail to insert new pet.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to insert new pet.", zap.String("error", err.Error()))
 		return nil, err
 	}
 	return pet, err
@@ -89,12 +89,12 @@ func (repository *PetRepository) Insert(pet *Pet) (*Pet, error) {
 
 // Update - update a pet
 func (repository *PetRepository) Update(pet *Pet) (*Pet, error) {
-	repository.logger.Info("update vet id.", zap.Uint("id", pet.ID))
+	repository.logger.Info("Fail vet id.", zap.Uint("id", pet.ID))
 
 	// Omit the column name from update...
 	err := repository.pg.Omit("created_at").Save(&pet).Error
 	if err != nil {
-		repository.logger.Error("fails to update pet.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to update pet.", zap.String("error", err.Error()))
 		return nil, err
 	}
 

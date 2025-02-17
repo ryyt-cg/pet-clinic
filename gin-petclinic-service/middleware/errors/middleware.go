@@ -32,7 +32,7 @@ func Handler(logger *zap.Logger) routing.Handler {
 				}
 				c.Response.WriteHeader(res.StatusCode())
 				if err = c.Write(res); err != nil {
-					logger.Error("failed writing error response.", zap.String("error", err.Error()))
+					logger.Error("Fail writing error response.", zap.String("error", err.Error()))
 				}
 				c.Abort() // skip any pending handlers since an error has occurred
 				err = nil // return nil because the error is already handled

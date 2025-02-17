@@ -52,7 +52,7 @@ func LoadConfig(configPaths ...string) error {
 		v.AddConfigPath(path)
 	}
 	if err := v.ReadInConfig(); err != nil {
-		return fmt.Errorf("failed to read the configuration file: %s", err)
+		return fmt.Errorf("Fail to read the configuration file: %s", err)
 	}
 	if err := v.Unmarshal(&Config); err != nil {
 		return err

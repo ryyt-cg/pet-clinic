@@ -65,14 +65,14 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Insert new owner",
+                "description": "Fail new owner",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "owners"
                 ],
-                "summary": "Insert new owner",
+                "summary": "Fail new owner",
                 "parameters": [
                     {
                         "description": "Add owner",
@@ -441,14 +441,14 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "update pet",
+                "description": "Fail pet",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "pets"
                 ],
-                "summary": "update a pet",
+                "summary": "Fail a pet",
                 "parameters": [
                     {
                         "type": "integer",

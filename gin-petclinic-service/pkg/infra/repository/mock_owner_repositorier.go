@@ -133,23 +133,23 @@ func (_c *MockOwnerRepositorier_FindById_Call) RunAndReturn(run func(uint) (*Own
 }
 
 // FindByIdWithPets provides a mock function with given fields: id
-func (_m *MockOwnerRepositorier) FindByIdWithPets(id uint) ([]Owner, error) {
+func (_m *MockOwnerRepositorier) FindByIdWithPets(id uint) (*Owner, error) {
 	ret := _m.Called(id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for FindByIdWithPets")
 	}
 
-	var r0 []Owner
+	var r0 *Owner
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uint) ([]Owner, error)); ok {
+	if rf, ok := ret.Get(0).(func(uint) (*Owner, error)); ok {
 		return rf(id)
 	}
-	if rf, ok := ret.Get(0).(func(uint) []Owner); ok {
+	if rf, ok := ret.Get(0).(func(uint) *Owner); ok {
 		r0 = rf(id)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]Owner)
+			r0 = ret.Get(0).(*Owner)
 		}
 	}
 
@@ -180,12 +180,12 @@ func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) Run(run func(id uint)) *M
 	return _c
 }
 
-func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) Return(_a0 []Owner, _a1 error) *MockOwnerRepositorier_FindByIdWithPets_Call {
+func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) Return(_a0 *Owner, _a1 error) *MockOwnerRepositorier_FindByIdWithPets_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) RunAndReturn(run func(uint) ([]Owner, error)) *MockOwnerRepositorier_FindByIdWithPets_Call {
+func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) RunAndReturn(run func(uint) (*Owner, error)) *MockOwnerRepositorier_FindByIdWithPets_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -286,7 +286,7 @@ type MockOwnerRepositorier_Insert_Call struct {
 // Insert is a helper method to define mock.On call
 //   - owner *Owner
 func (_e *MockOwnerRepositorier_Expecter) Insert(owner interface{}) *MockOwnerRepositorier_Insert_Call {
-	return &MockOwnerRepositorier_Insert_Call{Call: _e.mock.On("Insert", owner)}
+	return &MockOwnerRepositorier_Insert_Call{Call: _e.mock.On("Fail", owner)}
 }
 
 func (_c *MockOwnerRepositorier_Insert_Call) Run(run func(owner *Owner)) *MockOwnerRepositorier_Insert_Call {

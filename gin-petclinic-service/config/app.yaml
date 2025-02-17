@@ -17,7 +17,7 @@ database:
     postgres:
         driver: postgres
         dsn: user=postgres password=mysecretpassword host=localhost port=5432 dbname=pet_clinic sslmode=disable
-    maxIdleConns: 0
+    maxIdleConns: 1
     maxOpenConns: 5
     maxIdleTime: 60
 

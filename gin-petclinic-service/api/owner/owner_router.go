@@ -24,14 +24,14 @@ func NewRouter(logger *zap.Logger, service Servicer) *Router {
 // Register registers the router to the gin engine
 func (r *Router) Register(routerGroup *gin.RouterGroup) {
 	routerGroup.GET("all", r.allOwners)
-	routerGroup.GET(":id", r.OwnerById)
+	routerGroup.GET(":id", r.ownerById)
 	routerGroup.GET(":id/pets", r.ownerByIdWithPets)
 	routerGroup.GET("", r.ownersByLastName)
 	routerGroup.POST("", r.addNewOwner)
 	routerGroup.PUT(":id", r.updateOwner)
 }
 
-// OwnerById  get owner by ID
+// ownerById  get owner by ID
 // @Tags		owners
 // @Summary		Search owner by ID
 //
@@ -43,12 +43,12 @@ func (r *Router) Register(routerGroup *gin.RouterGroup) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/owners/{id} [get]
-func (r *Router) OwnerById(c *gin.Context) {
+func (r *Router) ownerById(c *gin.Context) {
 	pathID := c.Param("id")
 
 	id, err := strconv.Atoi(pathID)
 	if err != nil {
-		r.logger.Error("Unable to convert ID to int.", zap.String("error", err.Error()))
+		r.logger.Error("Fail to convert ID to int.", zap.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
@@ -56,12 +56,12 @@ func (r *Router) OwnerById(c *gin.Context) {
 	response, err := r.service.getOwnerById(uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			r.logger.Error("Owner not found.", zap.Int("id", id), zap.String("error", err.Error()))
+			r.logger.Error("Found no Owner.", zap.Int("id", id), zap.String("error", err.Error()))
 			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
 			return
 		}
 
-		r.logger.Error("Unable to get owner by ID.", zap.Int("id", id), zap.String("error", err.Error()))
+		r.logger.Error("Fail to get owner by ID.", zap.Int("id", id), zap.String("error", err.Error()))
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
@@ -84,15 +84,15 @@ func (r *Router) ownersByLastName(c *gin.Context) {
 	lastName := c.Query("last-name")
 	response, err := r.service.getOwnerByLastName(lastName)
 	if err != nil {
-		r.logger.Error("Unable to get owner by last name.",
+		r.logger.Error("Fail to get owner by last name.",
 			zap.String("lastName", lastName), zap.String("error", err.Error()))
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
 
 	if response.Context.Count == 0 {
-		r.logger.Error("No owners found with last name.", zap.String("lastName", lastName))
-		c.JSON(http.StatusNotFound, resterr.NotFound("No owners found with last name: "+lastName))
+		r.logger.Error("Find no owners with this last name.", zap.String("lastName", lastName))
+		c.JSON(http.StatusNotFound, resterr.NotFound("Find no owner with last name: "+lastName))
 		return
 	}
 
@@ -109,18 +109,18 @@ func (r *Router) ownersByLastName(c *gin.Context) {
 // @Success		200	{object}	Responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
-// @Router		/owners/all [get]
+// @Router		/owners/all		[get]
 func (r *Router) allOwners(c *gin.Context) {
 	responses, err := r.service.getAllOwners()
 	if err != nil {
-		r.logger.Error("Unable to get all owners.", zap.String("error", err.Error()))
+		r.logger.Error("Fail to get all owners.", zap.String("error", err.Error()))
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
 
 	if responses.Context.Count == 0 {
-		r.logger.Warn("No owners found.")
-		c.JSON(http.StatusNotFound, resterr.NotFound("No owners found"))
+		r.logger.Warn("Find no owner.")
+		c.JSON(http.StatusNotFound, resterr.NotFound("Find no owner"))
 		return
 	}
 
@@ -144,27 +144,27 @@ func (r *Router) ownerByIdWithPets(c *gin.Context) {
 
 	id, err := strconv.Atoi(pathID)
 	if err != nil {
-		r.logger.Error("Unable to convert ID to int.", zap.String("error", err.Error()))
+		r.logger.Error("Fail to convert ID to int.", zap.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
 
-	responses, err := r.service.getOwnerByIdWithPets(uint(id))
+	response, err := r.service.getOwnerByIdWithPets(uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			r.logger.Warn("Owner not found.",
+			r.logger.Warn("Find no owner.",
 				zap.Int("id", id), zap.String("error", err.Error()))
 			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
 			return
 		}
 
-		r.logger.Error("Unable to get owner by ID.",
+		r.logger.Error("Fail to get owner by ID.",
 			zap.Int("id", id), zap.String("error", err.Error()))
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
 
-	c.JSON(http.StatusOK, responses)
+	c.JSON(http.StatusOK, response)
 }
 
 // addNewOwner - add new owner
@@ -182,14 +182,14 @@ func (r *Router) addNewOwner(c *gin.Context) {
 	var ownerRequest AddRequest
 	err := c.ShouldBindJSON(&ownerRequest)
 	if err != nil {
-		r.logger.Error("Unable to Unmarshal JSON.", zap.String("error", err.Error()))
+		r.logger.Error("Fail to Unmarshal JSON.", zap.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
 
-	newOwner, err := r.service.create(ToOwnerEntity(&ownerRequest))
+	newOwner, err := r.service.create(&ownerRequest)
 	if err != nil {
-		r.logger.Error("Unable to create new owner.", zap.String("error", err.Error()))
+		r.logger.Error("Fail to create new owner.", zap.String("error", err.Error()))
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
@@ -213,27 +213,25 @@ func (r *Router) updateOwner(c *gin.Context) {
 	var ownerRequest UpdateRequest
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		r.logger.Warn("Unable to convert ID to int.", zap.String("error", err.Error()))
+		r.logger.Warn("Fail to convert ID to int.", zap.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
 
 	err = c.ShouldBindJSON(&ownerRequest)
 	if err != nil {
-		r.logger.Error("Unable to Unmarshal JSON.", zap.String("error", err.Error()))
+		r.logger.Error("Fail to Unmarshal JSON.", zap.String("error", err.Error()))
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
 
-	ownerEntity := ToOwnerEntityFromUpdateRequest(&ownerRequest)
-	ownerEntity.ID = uint(id)
-	updatedOwner, err := r.service.update(ownerEntity)
+	updatedOwner, err := r.service.update(uint(id), &ownerRequest)
 	if err != nil {
-		r.logger.Error("Unable to update owner.",
-			zap.Uint("id", ownerEntity.ID), zap.String("error", err.Error()))
+		r.logger.Error("Fail to update owner.",
+			zap.Int("id", id), zap.String("error", err.Error()))
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
 
-	c.JSON(http.StatusCreated, updatedOwner)
+	c.JSON(http.StatusOK, updatedOwner)
 }

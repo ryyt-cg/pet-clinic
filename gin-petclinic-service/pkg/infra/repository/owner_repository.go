@@ -11,7 +11,7 @@ type OwnerRepositorier interface {
 	FindById(id uint) (*Owner, error)
 	FindByLastName(lastName string) ([]Owner, error)
 	FindAll() ([]Owner, error)
-	FindByIdWithPets(id uint) ([]Owner, error)
+	FindByIdWithPets(id uint) (*Owner, error)
 	Insert(owner *Owner) (*Owner, error)
 	Update(owner *Owner) (*Owner, error)
 }
@@ -43,7 +43,7 @@ func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
 	// Pets.Type - Nested Preloading (Eager Loading)
 	err := repository.pg.First(&owner, id).Error
 	if err != nil {
-		repository.logger.Error("fails to find owner by id.",
+		repository.logger.Error("Fail to find owner by id.",
 			zap.Uint("id", id), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -52,9 +52,6 @@ func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
 
 // FindByLastName - find owner by last name
 //
-// SELECT * FROM "pets" WHERE "pets"."owner_id" = 3 AND "pets"."deleted_at" IS NULL
-// SELECT * FROM `visits` WHERE `visits`.`pet_id` = 6 AND `visits`.`deleted_at` IS NULL
-// SELECT * FROM "types" WHERE "types"."id" = 2 AND "types"."deleted_at" IS NULL
 // SELECT * FROM "owners" WHERE last_name = 'Rodriquez' AND "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, error) {
 	repository.logger.Info("Search owner by last name",
@@ -62,9 +59,9 @@ func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, err
 
 	// Pets.Type - Nested Preloading (Eager Loading)
 	var owners []Owner
-	err := repository.pg.Preload("Pets.Type").Preload("Pets.Visits").Where("last_name = ?", lastName).Find(&owners).Error
+	err := repository.pg.Where("last_name = ?", lastName).Find(&owners).Error
 	if err != nil {
-		repository.logger.Error("fail to find owners by last name.",
+		repository.logger.Error("Fail to find owners by last name.",
 			zap.String("lastName", lastName), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -82,7 +79,7 @@ func (repository *OwnerRepository) FindAll() ([]Owner, error) {
 	// SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
 	err := repository.pg.Find(&owners).Error
 	if err != nil {
-		repository.logger.Error("fail to find all owners", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to find all owners", zap.String("error", err.Error()))
 		return nil, err
 	}
 
@@ -94,20 +91,20 @@ func (repository *OwnerRepository) FindAll() ([]Owner, error) {
 // SELECT * FROM "pets" WHERE "pets"."owner_id" IN (1,2,3,4,5,6,7,8,9,10) AND "pets"."deleted_at" IS NULL
 // SELECT * FROM "types" WHERE "types"."id" IN (1,6,2,3,4,5) AND "types"."deleted_at" IS NULL
 // SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
-func (repository *OwnerRepository) FindByIdWithPets(id uint) ([]Owner, error) {
+func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
 	repository.logger.Info("get list of owners with pets")
 
-	var owners []Owner
+	var owner Owner
 	/*
 	 clause.Associations won’t preload nested associations, but can use it with Nested Preloading together
 	*/
-	err := repository.pg.Preload("Pets.Type").Preload("Pets.Visits").Preload(clause.Associations).First(&owners, id).Error
+	err := repository.pg.Preload("Pets.Type").Preload("Pets.Visits").Preload(clause.Associations).First(&owner, id).Error
 	if err != nil {
-		repository.logger.Error("fail to find all owners with pets.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to find owners with pets by id.", zap.String("error", err.Error()))
 		return nil, err
 	}
 
-	return owners, nil
+	return &owner, nil
 }
 
 // Insert - insert a new owner
@@ -115,14 +112,14 @@ func (repository *OwnerRepository) FindByIdWithPets(id uint) ([]Owner, error) {
 //
 //	VALUES ('George','Franklin','110 W. Liberty St.','Madison','6085551023','2021-09-26 15:00:00','2021-09-26 15:00:00')
 func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) {
-	repository.logger.Info("insert a new owner.", zap.Any("owner", owner))
+	repository.logger.Info("Fail a new owner.", zap.Any("owner", owner))
 	now := time.Now()
 	owner.UpdatedAt = now
 	owner.CreatedAt = now
 
 	err := repository.pg.Create(&owner).Error
 	if err != nil {
-		repository.logger.Error("fail to insert new owner", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to insert new owner", zap.String("error", err.Error()))
 		return nil, err
 	}
 	return owner, nil
@@ -131,13 +128,13 @@ func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) {
 // Update - update the owner
 // UPDATE "owners" SET "first_name" = 'George', "last_name" = 'Franklin', "address" = '110 W. Liberty St.',
 func (repository *OwnerRepository) Update(owner *Owner) (*Owner, error) {
-	repository.logger.Info("update owner", zap.Uint("id", owner.ID))
+	repository.logger.Info("Fail owner", zap.Uint("id", owner.ID))
 	owner.UpdatedAt = time.Now()
 
 	// Omit the column name from update...
 	err := repository.pg.Omit("created_at").Save(&owner).Error
 	if err != nil {
-		repository.logger.Error("fail to update owner.",
+		repository.logger.Error("Fail to update owner.",
 			zap.Uint("id", owner.ID), zap.String("error", err.Error()))
 		return nil, err
 	}

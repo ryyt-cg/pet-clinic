@@ -37,7 +37,7 @@ func (repository *VetRepository) FindAllSpecialties() ([]Specialty, error) {
 	var specialties []Specialty
 	err := repository.pg.Find(&specialties).Error
 	if err != nil {
-		repository.logger.Error("fail to find all specialties.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to find all specialties.", zap.String("error", err.Error()))
 		return nil, err
 	}
 	return specialties, err
@@ -58,7 +58,7 @@ func (repository *VetRepository) FindById(id int) (*Vet, error) {
 	var vet Vet
 	err := repository.pg.First(&vet, id).Error
 	if err != nil {
-		repository.logger.Error("fail to find vet by id.",
+		repository.logger.Error("Fail to find vet by id.",
 			zap.Int("id", id), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func (repository *VetRepository) FindByIdWithSpecialties(id int) (*Vet, error) {
 	var vet Vet
 	err := repository.pg.Preload("Specialties").First(&vet, id).Error
 	if err != nil {
-		repository.logger.Error("fails to find vet by id.",
+		repository.logger.Error("Fail to find vet by id.",
 			zap.Int("id", id), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func (repository *VetRepository) FindByLastName(lastName string) ([]Vet, error) 
 	var vets []Vet
 	err := repository.pg.Preload("Specialties").Where("last_name = ?", lastName).Find(&vets).Error
 	if err != nil {
-		repository.logger.Error("fail to find vet by last name.",
+		repository.logger.Error("Fail to find vet by last name.",
 			zap.String("lastName", lastName), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (repository *VetRepository) FindAll() ([]Vet, error) {
 	var vets []Vet
 	err := repository.pg.Find(&vets).Error
 	if err != nil {
-		repository.logger.Error("fail to find all vets.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to find all vets.", zap.String("error", err.Error()))
 		return nil, err
 	}
 	return vets, err
@@ -129,7 +129,7 @@ func (repository *VetRepository) FindAllPreload() ([]Vet, error) {
 	var vets []Vet
 	err := repository.pg.Preload("Specialties").Find(&vets).Error
 	if err != nil {
-		repository.logger.Error("fails to find all vets.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to find all vets.", zap.String("error", err.Error()))
 		return nil, err
 	}
 	return vets, err
@@ -140,11 +140,11 @@ func (repository *VetRepository) FindAllPreload() ([]Vet, error) {
 //
 //	VALUES ('James','Carter','2021-07-25 15:00:00','2021-07-25 15:00:00') RETURN
 func (repository *VetRepository) Insert(vet *Vet) (*Vet, error) {
-	repository.logger.Info("insert a new vet.", zap.Any("vet", vet))
+	repository.logger.Info("Fail a new vet.", zap.Any("vet", vet))
 
 	err := repository.pg.Create(&vet).Error
 	if err != nil {
-		repository.logger.Error("fail to insert new vet.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to insert new vet.", zap.String("error", err.Error()))
 		return nil, err
 	}
 	return vet, err
@@ -153,12 +153,12 @@ func (repository *VetRepository) Insert(vet *Vet) (*Vet, error) {
 // Update - update vet
 // UPDATE "vets" SET "first_name" = 'James', "last_name" = 'Carter' WHERE "id" = 1
 func (repository *VetRepository) Update(vet *Vet) (*Vet, error) {
-	repository.logger.Info("update vet id.", zap.Uint("id", vet.ID))
+	repository.logger.Info("Fail vet id.", zap.Uint("id", vet.ID))
 
 	// Omit the column name from update...
 	err := repository.pg.Omit("created_at").Save(&vet).Error
 	if err != nil {
-		repository.logger.Error("fails to update vet.", zap.String("error", err.Error()))
+		repository.logger.Error("Fail to update vet.", zap.String("error", err.Error()))
 		return nil, err
 	}
 

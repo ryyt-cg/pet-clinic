@@ -170,7 +170,7 @@ type MockVisitRepositorier_Insert_Call struct {
 // Insert is a helper method to define mock.On call
 //   - visit *Visit
 func (_e *MockVisitRepositorier_Expecter) Insert(visit interface{}) *MockVisitRepositorier_Insert_Call {
-	return &MockVisitRepositorier_Insert_Call{Call: _e.mock.On("Insert", visit)}
+	return &MockVisitRepositorier_Insert_Call{Call: _e.mock.On("Fail", visit)}
 }
 
 func (_c *MockVisitRepositorier_Insert_Call) Run(run func(visit *Visit)) *MockVisitRepositorier_Insert_Call {
