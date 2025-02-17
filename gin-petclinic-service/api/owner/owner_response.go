@@ -6,6 +6,11 @@ import (
 	"github.com/rhtran/gin-petclinic-service/pkg/model"
 )
 
+// Owner Responses - A collection of responses (output contracts) for the owner API.
+// 1. Composes the validation functions to enforce the input contracts.
+// 2. Composes the transformation functions to transform the input contracts into the domain model.
+// 3. Composes the error handling functions to handle the errors.
+
 // UpdateResponse - owner add/update response
 type UpdateResponse struct {
 	ID        uint   `json:"id"`

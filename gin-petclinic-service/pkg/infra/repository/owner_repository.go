@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+// OwnerRepositorier - owner repository interface
+// It composes the interfaces to interact with the database
 type OwnerRepositorier interface {
 	FindById(id uint) (*Owner, error)
 	FindByLastName(lastName string) ([]Owner, error)

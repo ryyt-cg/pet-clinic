@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// Servicer - owner service interface
 type Servicer interface {
 	getOwnerById(id uint) (*Response, error)
 	getAllOwners() (*Responses, error)
