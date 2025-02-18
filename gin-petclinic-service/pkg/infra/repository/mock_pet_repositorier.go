@@ -286,7 +286,7 @@ type MockPetRepositorier_Insert_Call struct {
 // Insert is a helper method to define mock.On call
 //   - pet *Pet
 func (_e *MockPetRepositorier_Expecter) Insert(pet interface{}) *MockPetRepositorier_Insert_Call {
-	return &MockPetRepositorier_Insert_Call{Call: _e.mock.On("Fail", pet)}
+	return &MockPetRepositorier_Insert_Call{Call: _e.mock.On("Insert", pet)}
 }
 
 func (_c *MockPetRepositorier_Insert_Call) Run(run func(pet *Pet)) *MockPetRepositorier_Insert_Call {

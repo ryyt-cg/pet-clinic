@@ -286,7 +286,7 @@ type MockOwnerRepositorier_Insert_Call struct {
 // Insert is a helper method to define mock.On call
 //   - owner *Owner
 func (_e *MockOwnerRepositorier_Expecter) Insert(owner interface{}) *MockOwnerRepositorier_Insert_Call {
-	return &MockOwnerRepositorier_Insert_Call{Call: _e.mock.On("Fail", owner)}
+	return &MockOwnerRepositorier_Insert_Call{Call: _e.mock.On("Insert", owner)}
 }
 
 func (_c *MockOwnerRepositorier_Insert_Call) Run(run func(owner *Owner)) *MockOwnerRepositorier_Insert_Call {
