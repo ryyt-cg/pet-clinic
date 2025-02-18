@@ -2,6 +2,7 @@ package owner
 
 import (
 	"github.com/rhtran/gin-petclinic-service/api/pet"
+	"github.com/rhtran/gin-petclinic-service/middleware/errors"
 	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
 	"github.com/rhtran/gin-petclinic-service/pkg/model"
 )
@@ -46,6 +47,11 @@ type Response struct {
 type Responses struct {
 	Context model.Context `json:"context"`
 	Owners  []Response    `json:"owners"`
+}
+
+type exceptionResponse struct {
+	Code          int                  `json:"code"`
+	ErrorResponse errors.ErrorResponse `json:"error"`
 }
 
 func (or *Response) FromOwner(owner *repository.Owner) {

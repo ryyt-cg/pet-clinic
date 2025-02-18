@@ -1,12 +1,16 @@
 package owner
 
 import (
-	"encoding/json"
+	"errors"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/rhtran/gin-petclinic-service/api/pet"
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository/test"
+	resterr "github.com/rhtran/gin-petclinic-service/middleware/errors"
 	"github.com/rhtran/gin-petclinic-service/pkg/model"
+	"github.com/rhtran/gin-petclinic-service/pkg/test"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 	"net/http"
+	"strconv"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -20,30 +24,79 @@ func setupRouter() *gin.Engine {
 }
 
 func Test_ownerById(t *testing.T) {
-	//logger := log.New().With(nil, "function", "Test_ownerById")
 	logger, _ := zap.NewProduction()
-	ownerMock := MockServicer{}
+	logger.Info("Owner by ID endpoint", zap.String("function", "Test_ownerById"))
 
 	ownerResponse := &Response{
 		ID:        1,
 		FirstName: "Nat",
 		LastName:  "Cole",
+		Address:   "1234 Elm St",
+		City:      "New York",
+		Telephone: "1234567890",
 	}
 
-	ownerMock.On("getOwnerById", uint(1)).Return(ownerResponse, nil)
-	ownerRouter := NewRouter(logger, &ownerMock)
+	_, convErr := strconv.Atoi("a1")
 
-	r := setupRouter()
-	v1 := r.Group("/v1")
-	ownerRouter.Register(v1.Group("/owners"))
-
-	tc1, _ := json.Marshal(ownerResponse)
-
-	tests := []test.APITestCase{
-		{"Get Owner By ID", "GET", "/v1/owners/1", "", nil, http.StatusOK, string(tc1)},
+	testCases := []struct {
+		url           string
+		name          string
+		expectedOwner *Response
+		expectedError error
+		status        int
+		jsonResponse  string
+	}{
+		{
+			url:           "/v1/owners/1",
+			name:          "Test getting owner by ID",
+			expectedOwner: ownerResponse,
+			expectedError: nil,
+			status:        http.StatusOK,
+			jsonResponse:  test.JsonString(ownerResponse),
+		},
+		{
+			url:           "/v1/owners/1",
+			name:          "Test finding no owner",
+			expectedOwner: nil,
+			expectedError: gorm.ErrRecordNotFound,
+			status:        http.StatusNotFound,
+			jsonResponse:  test.JsonString(resterr.NotFound(gorm.ErrRecordNotFound.Error())),
+		},
+		{
+			url:           "/v1/owners/1",
+			name:          "Test get owner by ID with error",
+			expectedOwner: nil,
+			expectedError: errors.New("unexpected error occurred"),
+			status:        http.StatusInternalServerError,
+			jsonResponse:  test.JsonString(resterr.InternalServerError("unexpected error occurred")),
+		},
+		{
+			url:           "/v1/owners/a1",
+			name:          "Test get owner by ID with invalid ID",
+			expectedOwner: nil,
+			expectedError: convErr,
+			status:        http.StatusBadRequest,
+			jsonResponse:  test.JsonString(resterr.BadRequestWithDetails(convErr)),
+		},
 	}
-	for _, tc := range tests {
-		test.Endpoint(t, r, tc)
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			ownerMock := MockServicer{}
+			ownerMock.On("getOwnerById", uint(1)).Return(tc.expectedOwner, tc.expectedError)
+			ownerRouter := NewRouter(logger, &ownerMock)
+
+			r := setupRouter()
+			v1 := r.Group("/v1")
+			ownerRouter.Register(v1.Group("/owners"))
+
+			tests := []test.APITestCase{
+				{"Get Owner By ID", "GET", tc.url, "", nil, tc.status, tc.jsonResponse},
+			}
+			for _, tc := range tests {
+				test.Endpoint(t, r, tc)
+			}
+		})
 	}
 }
 
@@ -79,7 +132,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 	v1 := r.Group("/v1")
 	ownerRouter.Register(v1.Group("/owners"))
 
-	tc1, _ := json.Marshal(ownerResponse)
+	tc1, _ := jsoniter.Marshal(ownerResponse)
 
 	tests := []test.APITestCase{
 		{"Get Owner with Pets By ID ", "GET", "/v1/owners/1/pets", "", nil, http.StatusOK, string(tc1)},
@@ -117,7 +170,7 @@ func Test_OwnerByLastName(t *testing.T) {
 	v1 := r.Group("/v1")
 	ownerRouter.Register(v1.Group("/owners"))
 
-	tc1, _ := json.Marshal(ownersResponse)
+	tc1, _ := jsoniter.Marshal(ownersResponse)
 
 	tests := []test.APITestCase{
 		{"Get Owner By Last Name", "GET", "/v1/owners?last-name=Ward", "", nil, http.StatusOK, string(tc1)},
@@ -129,8 +182,7 @@ func Test_OwnerByLastName(t *testing.T) {
 
 func Test_AllOwners(t *testing.T) {
 	logger, _ := zap.NewProduction()
-	//logger := log.New().With(nil, "function", "TestAllOwners")
-	ownerMock := MockServicer{}
+	logger.Info("All owner endpoint", zap.String("function", "TestAllOwners"))
 
 	ownersResponse := &Responses{
 		Context: model.Context{Count: 2},
@@ -153,20 +205,58 @@ func Test_AllOwners(t *testing.T) {
 		},
 	}
 
-	ownerMock.On("getAllOwners").Return(ownersResponse, nil)
-	ownerRouter := NewRouter(logger, &ownerMock)
-
-	r := setupRouter()
-	v1 := r.Group("/v1")
-	ownerRouter.Register(v1.Group("/owners"))
-
-	tc1, _ := json.Marshal(ownersResponse)
-
-	tests := []test.APITestCase{
-		{"Get All Owners", "GET", "/v1/owners/all", "", nil, http.StatusOK, string(tc1)},
+	noOwnersFoundResponse := &Responses{
+		Context: model.Context{Count: 0},
+		Owners:  []Response{},
 	}
-	for _, tc := range tests {
-		test.Endpoint(t, r, tc)
+
+	testCases := []struct {
+		name           string
+		expectedOwners *Responses
+		expectedError  error
+		status         int
+		jsonResponse   string
+	}{
+		{
+			name:           "Test getting all owners",
+			expectedOwners: ownersResponse,
+			expectedError:  nil,
+			status:         http.StatusOK,
+			jsonResponse:   test.JsonString(ownersResponse),
+		},
+		{
+			name:           "Test finding no owner",
+			expectedOwners: noOwnersFoundResponse,
+			expectedError:  nil,
+			status:         http.StatusNotFound,
+			jsonResponse:   test.JsonString(resterr.NotFound("Find no owner")),
+		},
+		{
+			name:           "Test get all owners with error",
+			expectedOwners: nil,
+			expectedError:  errors.New("unexpected error occurred"),
+			status:         http.StatusInternalServerError,
+			jsonResponse:   test.JsonString(resterr.InternalServerError("unexpected error occurred")),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			ownerMock := MockServicer{}
+			ownerMock.On("getAllOwners").Return(tc.expectedOwners, tc.expectedError)
+			ownerRouter := NewRouter(logger, &ownerMock)
+
+			r := setupRouter()
+			v1 := r.Group("/v1")
+			ownerRouter.Register(v1.Group("/owners"))
+
+			tests := []test.APITestCase{
+				{"Get All Owners", "GET", "/v1/owners/all", "", nil, tc.status, tc.jsonResponse},
+			}
+			for _, tc := range tests {
+				test.Endpoint(t, r, tc)
+			}
+		})
 	}
 }
 
@@ -198,7 +288,7 @@ func Test_CreateOwner(t *testing.T) {
 	v1 := r.Group("/v1")
 	ownerRouter.Register(v1.Group("/owners"))
 
-	tc1, _ := json.Marshal(owner)
+	tc1, _ := jsoniter.Marshal(owner)
 
 	tests := []test.APITestCase{
 		{"Create Owner", "POST", "/v1/owners", `{"id":1,"firstName":"Nat","lastName":"Cole","address":"1234 Elm St","city":"New York","telephone":"1234567890"}`, nil, http.StatusCreated, string(tc1)},
@@ -223,7 +313,7 @@ func Test_UpdateOwner(t *testing.T) {
 		Telephone: "1234567890",
 	}
 
-	requestBoday, _ := json.Marshal(ownerRequest)
+	requestBoday, _ := jsoniter.Marshal(ownerRequest)
 
 	owner := &UpdateResponse{
 		ID:        1,
@@ -241,7 +331,7 @@ func Test_UpdateOwner(t *testing.T) {
 	v1 := r.Group("/v1")
 	ownerRouter.Register(v1.Group("/owners"))
 
-	tc1, _ := json.Marshal(owner)
+	tc1, _ := jsoniter.Marshal(owner)
 	tests := []test.APITestCase{
 		{"Update Owner", "PUT", "/v1/owners/1", string(requestBoday), nil, http.StatusOK, string(tc1)},
 	}

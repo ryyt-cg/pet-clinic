@@ -1,7 +1,7 @@
 package vet
 
 import (
-	"encoding/json"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
 	"go.uber.org/zap"
 	"net/http"
@@ -117,7 +117,7 @@ func Test_VetById(t *testing.T) {
 
 	// unmarshal to Vet struct for asserts.
 	actualVet := &repository.Vet{}
-	json.Unmarshal(w.Body.Bytes(), actualVet)
+	jsoniter.Unmarshal(w.Body.Bytes(), actualVet)
 	assert.Equal(t, vetResponse.ID, actualVet.ID)
 	assert.Equal(t, vetResponse.FirstName, actualVet.FirstName)
 	assert.Equal(t, vetResponse.LastName, actualVet.LastName)
@@ -153,7 +153,7 @@ func Test_VetByLastName(t *testing.T) {
 
 	// unmarshal to Vet struct for asserts.
 	actualVetResponses := make([]Response, 1)
-	json.Unmarshal(w.Body.Bytes(), &actualVetResponses)
+	jsoniter.Unmarshal(w.Body.Bytes(), &actualVetResponses)
 
 	assert.Equal(t, vetResponse.ID, actualVetResponses[0].ID)
 	assert.Equal(t, vetResponse.FirstName, actualVetResponses[0].FirstName)

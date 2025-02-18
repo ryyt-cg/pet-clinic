@@ -17,6 +17,7 @@ type Router struct {
 	service Servicer
 }
 
+// NewRouter - Owner Router constructor
 func NewRouter(logger *zap.Logger, service Servicer) *Router {
 	return &Router{logger, service}
 }
