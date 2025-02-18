@@ -134,7 +134,7 @@ func (repository *OwnerRepository) Update(owner *Owner) (*Owner, error) {
 	owner.UpdatedAt = time.Now()
 
 	// Omit the column name from update...
-	err := repository.pg.Omit("created_at").Save(&owner).Error
+	err := repository.pg.Omit("created_at").Updates(&owner).Error
 	if err != nil {
 		repository.logger.Error("Fail to update owner.",
 			zap.Uint("id", owner.ID), zap.String("error", err.Error()))
