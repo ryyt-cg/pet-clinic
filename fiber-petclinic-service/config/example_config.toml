@@ -1,0 +1,5 @@
+httpPort = 2222
+
+[auth]
+user = "yaml-user"
+pass = "yaml-pass"

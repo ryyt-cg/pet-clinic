@@ -2,18 +2,18 @@
 
 There are 4 projects in this repository
 
-| Project Name                                     | Language | Status      |
-|--------------------------------------------------|----------|-------------|
-| spring-petclinic                                 | Java     | cloned      |
-| kotlin-petclinic                                 | Kotlin   | cloned      |
-| [gin-petclinic-service](./gin-petclinic-service) | Go       | in-progress |
-| wire-petclinic-service                           | Go       | not-started |
-| fx-petclinic-service                             | Go       | not-started |
-| sam-petclinic-go-service                         | Go       | not-started |
+| Project Name                                        | Language | Status      |
+|-----------------------------------------------------|----------|-------------|
+| spring-petclinic                                    | Java     | cloned      |
+| kotlin-petclinic                                    | Kotlin   | cloned      |
+| [axum-petclinic-service](./axum-petclinic-service)  | Rust     | in-progress |
+| [fiber-petclinic-service](./fiber-petclinic-service) | Go       | in-progress |
+| [gin-petclinic-service](./gin-petclinic-service)    | Go       | in-progress |
+
 
 
 ## Goal
-The goal of this project is to create a pet clinic API was written in Spring using different languages and frameworks. The API should have the following endpoints:
+The goal of this repository is to implement a pet clinic API was written in Spring using different languages and frameworks. The API will have the following endpoints:
 
 | Endpoint                         | Description                |
 |----------------------------------|----------------------------|

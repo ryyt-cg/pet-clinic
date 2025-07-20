@@ -68,9 +68,6 @@ goose -dir migrations/sqlite up
 go run cmd/server.go
 ```
 
-
-
-
 ## Mockery
 Mockery is a tool used to generate mock implementations of Go interfaces. It is useful when you are writing unit tests for your code and you need to mock the dependencies of the code under test.
 
@@ -139,10 +136,6 @@ import (
 ````
 
 **_NOTE:_** You need to import `_ "your_project/docs"` to ensure that the docs are generated and available at runtime.
-
-
-
-
 
 
 

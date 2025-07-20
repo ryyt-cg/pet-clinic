@@ -50,8 +50,6 @@ func loadConfig() {
 		//os.Exit(-1)
 	}
 
-	//ctx, client, err := okta.NewClient(context.TODO(), okta.WithOrgUrl("https://dev-293522.okta.com/"), okta.WithToken("{apiToken}"))
-
 	// Creates a router without any middleware by default
 	r = gin.New()
 

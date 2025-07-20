@@ -301,39 +301,34 @@ In main.rs, replace the owner module with the following code.
 ```
 
 
-
-
-
 ## List of example repositories
 
-| Description                           | Link                                                  |
-|---------------------------------------|-------------------------------------------------------|
-| Error handling in Rust - a Deep Dive  | https://www.lpalmieri.com/posts/error-handling-rust/  |
-| zero-to-production in Rust            | https://github.com/jeastham1993/zero-to-production-rust |
-|                                       | https://github.com/LukeMathWalker/zero-to-production  |
-| http client - reqwest                 | https://www.youtube.com/watch?v=j9MsMYz9hBw&t=656s    |
-|                                       |                                                       |
-|                                       |                                                       |
-| Shelter Project - Base microservice   | https://github.com/sapati/shelter-project/tree/ep-12  |
-| Clean Architecture                    | https://github.com/MSC29/clean-architecture-rust      |
-| Fullstack clean architecture          | https://github.com/flosse/clean-architecture-with-rust |
+| Description                           | Link                                                                               |
+|---------------------------------------|------------------------------------------------------------------------------------|
+| Error handling in Rust - a Deep Dive  | https://www.lpalmieri.com/posts/error-handling-rust/                               |
+| zero-to-production in Rust            | https://github.com/jeastham1993/zero-to-production-rust                            |
+|                                       | https://github.com/LukeMathWalker/zero-to-production                               |
+| http client - reqwest                 | https://www.youtube.com/watch?v=j9MsMYz9hBw&t=656s                                 |
+|                                       |                                                                                    |
+| Shelter Project - Base microservice   | https://github.com/sapati/shelter-project/tree/ep-12                               |
+| Clean Architecture                    | https://github.com/MSC29/clean-architecture-rust                                   |
+| Fullstack clean architecture          | https://github.com/flosse/clean-architecture-with-rust                             |
 | Hexagonal Architecture                | https://jameseastham.co.uk/post/software-development/hexagaonal-architecture-rust/ |
-| Clean and scalable architecture       | https://kerkour.com/rust-web-application-clean-architecture |
-| Black Hat                             | https://github.com/skerkour/black-hat-rust            |
-|                                       |                                                       |
-| Polymorphism with Traits              | https://www.youtube.com/watch?v=CHRNj5oubwc           |
-| Implement Rust Traits                 | https://youtube.com/watch?v=Lrayq0UW7nA               |
-| Dynamic Dispatch                      | https://www.youtube.com/watch?v=3biW5NkNnrk&t=455s    |
-| Store Data onthe Heap with Box        | https://www.youtube.com/watch?v=br6nGvqT48w           |
-| Axum Diesel real world                | https://github.com/Quentin-Piot/axum-diesel-real-world/tree/master |
-| Stock Metrics                         | https://github.com/yuk1ty/stock-metrics               |
-| Mock multiple impls of generic struct | https://github.com/asomers/mockall/issues/271         |
-| Jeremy Chone Github                   | https://github.com/jeremychone?tab=repositories       |
-|                                       |   |
-|                                       |     |
-| CRUD API                              | https://www.youtube.com/watch?v=NJsTgmayHZY&t=556s    |
-| Error Handler Patterns                | https://www.youtube.com/watch?v=f82wn-1DPas           |
-|                                       |https://www.youtube.com/watch?v=kHxjiTv8r18|
+| Clean and scalable architecture       | https://kerkour.com/rust-web-application-clean-architecture                        |
+| Black Hat                             | https://github.com/skerkour/black-hat-rust                                         |
+|                                       |                                                                                    |
+| Polymorphism with Traits              | https://www.youtube.com/watch?v=CHRNj5oubwc                                        |
+| Implement Rust Traits                 | https://youtube.com/watch?v=Lrayq0UW7nA                                            |
+| Dynamic Dispatch                      | https://www.youtube.com/watch?v=3biW5NkNnrk&t=455s                                 |
+| Store Data on the Heap with Box       | https://www.youtube.com/watch?v=br6nGvqT48w                                        |
+| Axum Diesel real world                | https://github.com/Quentin-Piot/axum-diesel-real-world/tree/master                 |
+| Stock Metrics                         | https://github.com/yuk1ty/stock-metrics                                            |
+| Mock multiple impls of generic struct | https://github.com/asomers/mockall/issues/271                                      |
+| Jeremy Chone Github                   | https://github.com/jeremychone?tab=repositories                                    |
+|                                       |                                                                                    |
+| CRUD API                              | https://www.youtube.com/watch?v=NJsTgmayHZY&t=556s                                 |
+| Error Handler Patterns                | https://www.youtube.com/watch?v=f82wn-1DPas                                        |
+|                                       | https://www.youtube.com/watch?v=kHxjiTv8r18                                        |
 
 
 https://github.com/krojew/springtime/tree/master/springtime-web-axum

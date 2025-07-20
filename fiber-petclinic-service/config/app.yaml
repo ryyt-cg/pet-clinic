@@ -1,0 +1,31 @@
+appInfo:
+    name: "Go Fiber App"
+    description: "Use Go Fiber to build a web application"
+    version: "1.0.0"
+
+circuitBreaker:
+    failureThreshold: 3
+    timeout: 5
+    successThreshold: 2
+
+databases:
+    primary:
+        driver: "sqlite3"
+        host: "file::memory:?cache=shared"
+#    secondary:
+#        driver: "postgres"
+#        host: "localhost"
+#        port: 5432
+#        username: "postgres"
+#        password: "postgres"
+#        connectionPool:
+#            maxOpenConns: 10
+#            maxIdleConns: 5
+#            connMaxLifetime: "30s"
+
+server:
+    baseURL: "/api/gof"
+    host: localhost
+    httpPort: ":8090"
+    logLevel: "info"
+

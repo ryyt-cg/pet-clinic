@@ -1,6 +1,6 @@
 module github.com/rhtran/gin-petclinic-service
 
-go 1.23.2
+go 1.24.5
 
 require (
 	github.com/fergusstrange/embedded-postgres v1.28.0
