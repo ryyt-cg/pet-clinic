@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"fiber-petclinic-service/pkg/model"
+	"fiber-petclinic-service/pkg/repository/model"
 	"fiber-petclinic-service/pkg/test"
 	"go.uber.org/zap"
 	"gorm.io/gorm"

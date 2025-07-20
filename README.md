@@ -2,33 +2,32 @@
 
 There are 4 projects in this repository
 
-| Project Name                                        | Language | Status      |
-|-----------------------------------------------------|----------|-------------|
-| spring-petclinic                                    | Java     | cloned      |
-| kotlin-petclinic                                    | Kotlin   | cloned      |
-| [axum-petclinic-service](./axum-petclinic-service)  | Rust     | in-progress |
+| Project Name                                         | Language | Status      |
+|------------------------------------------------------|----------|-------------|
+| spring-petclinic                                     | Java     | cloned      |
+| kotlin-petclinic                                     | Kotlin   | cloned      |
+| [axum-petclinic-service](./axum-petclinic-service)   | Rust     | in-progress |
 | [fiber-petclinic-service](./fiber-petclinic-service) | Go       | in-progress |
-| [gin-petclinic-service](./gin-petclinic-service)    | Go       | in-progress |
-
+| [gin-petclinic-service](./gin-petclinic-service)     | Go       | in-progress |
 
 
 ## Goal
-The goal of this repository is to implement a pet clinic API was written in Spring using different languages and frameworks. The API will have the following endpoints:
+The goal of this repository is to implement a pet clinic API in different languages and frameworks. These are endpoints:
 
-| Endpoint                         | Description                |
-|----------------------------------|----------------------------|
-| GET /owners?last-name={lastName} | Search owners by last name |
-| POST /owners                     | Add new owner              |
-| PUT /owners/{id}                 | Update owner               |
-|                                  |                            |
-|                                  |                            |
-|                                  |                            |
-|                                  |                            |
-|                                  |                            |
-|                                  |                            |
-|                                  |                            |
-|                                  |                            |
-|                                  |                            |
+| Method | Endpoint                     | Description                |
+|--------|------------------------------|----------------------------|
+| GET    | /owners?last-name={lastName} | Search owners by last name |
+| POST   | /owners                      | Add new owner              |
+| PUT    | /owners/{id}                 | Update owner               |
+|        |                              |                            |
+|        |                              |                            |
+|        |                              |                            |
+|        |                              |                            |
+|        |                              |                            |
+|        |                              |                            |
+|        |                              |                            |
+|        |                              |                            |
+|        |                              |                            |
 
 
 - GET /pets

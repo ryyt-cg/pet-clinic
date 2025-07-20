@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"fiber-petclinic-service/pkg/model"
+	"fiber-petclinic-service/pkg/repository/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

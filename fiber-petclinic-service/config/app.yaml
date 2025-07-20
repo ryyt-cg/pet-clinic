@@ -24,8 +24,8 @@ databases:
 #            connMaxLifetime: "30s"
 
 server:
-    baseURL: "/api/gof"
+    baseURL: "/api/pet-clinic"
     host: localhost
-    httpPort: ":8090"
+    httpPort: ":8091"
     logLevel: "info"
 
