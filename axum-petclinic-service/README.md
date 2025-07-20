@@ -303,47 +303,45 @@ In main.rs, replace the owner module with the following code.
 
 ## List of example repositories
 
-| Description                           | Link                                                                               |
-|---------------------------------------|------------------------------------------------------------------------------------|
-| Error handling in Rust - a Deep Dive  | https://www.lpalmieri.com/posts/error-handling-rust/                               |
-| zero-to-production in Rust            | https://github.com/jeastham1993/zero-to-production-rust                            |
-|                                       | https://github.com/LukeMathWalker/zero-to-production                               |
-| http client - reqwest                 | https://www.youtube.com/watch?v=j9MsMYz9hBw&t=656s                                 |
-|                                       |                                                                                    |
-| Shelter Project - Base microservice   | https://github.com/sapati/shelter-project/tree/ep-12                               |
-| Clean Architecture                    | https://github.com/MSC29/clean-architecture-rust                                   |
-| Fullstack clean architecture          | https://github.com/flosse/clean-architecture-with-rust                             |
-| Hexagonal Architecture                | https://jameseastham.co.uk/post/software-development/hexagaonal-architecture-rust/ |
-| Clean and scalable architecture       | https://kerkour.com/rust-web-application-clean-architecture                        |
-| Black Hat                             | https://github.com/skerkour/black-hat-rust                                         |
-|                                       |                                                                                    |
-| Polymorphism with Traits              | https://www.youtube.com/watch?v=CHRNj5oubwc                                        |
-| Implement Rust Traits                 | https://youtube.com/watch?v=Lrayq0UW7nA                                            |
-| Dynamic Dispatch                      | https://www.youtube.com/watch?v=3biW5NkNnrk&t=455s                                 |
-| Store Data on the Heap with Box       | https://www.youtube.com/watch?v=br6nGvqT48w                                        |
-| Axum Diesel real world                | https://github.com/Quentin-Piot/axum-diesel-real-world/tree/master                 |
-| Stock Metrics                         | https://github.com/yuk1ty/stock-metrics                                            |
-| Mock multiple impls of generic struct | https://github.com/asomers/mockall/issues/271                                      |
-| Jeremy Chone Github                   | https://github.com/jeremychone?tab=repositories                                    |
-|                                       |                                                                                    |
-| CRUD API                              | https://www.youtube.com/watch?v=NJsTgmayHZY&t=556s                                 |
-| Error Handler Patterns                | https://www.youtube.com/watch?v=f82wn-1DPas                                        |
-|                                       | https://www.youtube.com/watch?v=kHxjiTv8r18                                        |
+| Description                             | Link                                                                                                     |
+|-----------------------------------------|----------------------------------------------------------------------------------------------------------|
+| Error handling in Rust - a Deep Dive    | https://www.lpalmieri.com/posts/error-handling-rust/                                                     |
+| zero-to-production in Rust - serverless | https://github.com/jeastham1993/zero-to-production-rust                                                  |
+| zero-to-production in Rust              | https://github.com/LukeMathWalker/zero-to-production                                                     |
+| http client - reqwest                   | https://www.youtube.com/watch?v=j9MsMYz9hBw&t=656s                                                       |
+|                                         |                                                                                                          |
+| Shelter Project - Base microservice     | https://github.com/sapati/shelter-project/tree/ep-12                                                     |
+| Clean Architecture                      | https://github.com/MSC29/clean-architecture-rust                                                         |
+| Fullstack clean architecture            | https://github.com/flosse/clean-architecture-with-rust                                                   |
+| Hexagonal Architecture                  | https://jameseastham.co.uk/post/software-development/hexagaonal-architecture-rust/                       |
+| Clean and scalable architecture         | https://kerkour.com/rust-web-application-clean-architecture                                              |
+| Black Hat                               | https://github.com/skerkour/black-hat-rust                                                               |
+|                                         |                                                                                                          |
+| Polymorphism with Traits                | https://www.youtube.com/watch?v=CHRNj5oubwc                                                              |
+| Implement Rust Traits                   | https://youtube.com/watch?v=Lrayq0UW7nA                                                                  |
+| Dynamic Dispatch                        | https://www.youtube.com/watch?v=3biW5NkNnrk&t=455s                                                       |
+| Store Data on the Heap with Box         | https://www.youtube.com/watch?v=br6nGvqT48w                                                              |
+| Axum Diesel real world                  | https://github.com/Quentin-Piot/axum-diesel-real-world/tree/master                                       |
+| Stock Metrics                           | https://github.com/yuk1ty/stock-metrics                                                                  |
+| Mock multiple impls of generic struct   | https://github.com/asomers/mockall/issues/271                                                            |
+| Jeremy Chone Github                     | https://github.com/jeremychone?tab=repositories                                                          |
+|                                         |                                                                                                          |
+| CRUD API                                | https://www.youtube.com/watch?v=NJsTgmayHZY&t=556s                                                       |
+| Error Handler Patterns                  | https://www.youtube.com/watch?v=f82wn-1DPas                                                              |
+| 4 levels of Rust error handling         | https://www.youtube.com/watch?v=kHxjiTv8r18                                                              |
+| Testability: OOP Design in Rust         | https://audunhalland.github.io/blog/testability-reimagining-oop-design-patterns-in-rust/                 |
+| Audun Halland Blog                      | https://audunhalland.github.io/blog/                                                                     |
+| Route Handler in Axum                   | https://github.com/tokio-rs/axum/discussions/358                                                         |
+| real world Axum SQLX                    | https://github.com/launchbadge/realworld-axum-sqlx                                                       |
+| DI and error in Rust using Axum         | https://stackoverflow.com/questions/76497219/handling-dependency-injection-and-errors-in-rust-using-axum |
+|                                         |                                                                                                          |
 
 
-https://github.com/krojew/springtime/tree/master/springtime-web-axum
 
-https://www.reddit.com/r/rust/comments/15c68sk/seeking_guidance_on_writing_a_rust_api_with_ddd/
 
-https://stackoverflow.com/questions/76497219/handling-dependency-injection-and-errors-in-rust-using-axum
 
-https://users.rust-lang.org/t/realworld-axum-sqlx-refactoring-and-unit-testing-for-an-even-more-real-world/97607/3
 
-https://github.com/brannan/realworld-axum-sqlx/tree/main
 
-https://github.com/tokio-rs/axum/discussions/358
 
-https://audunhalland.github.io/blog/
 
-https://audunhalland.github.io/blog/testability-reimagining-oop-design-patterns-in-rust/
 

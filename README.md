@@ -38,7 +38,7 @@ The goal of this repository is to implement a pet clinic API in different langua
 
 ## Spring Pet Clinic Wireframe
 
-| Page              | Description                                                                                                                                 | Endpoints                        | Page Screenshot                                                              |   
+| Page              | Description                                                                                                                                 | Endpoints                        | Page Screenshot                                                              |
 |-------------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------|------------------------------------------------------------------------------|
 | Home Page         | This is Pet Clinic Home Page to display the pet photos.  This page will not invoke any API. Click on pet image to display Search Owner Page |                                  | ![01-home-page.png](pet-clinic-page-screnshots/01-home-page.png)             |
 | Search Owner Page | Search Owner Page provides a Last Name text box to search owner(s) by last name.                                                            | GET /owners?last-name={lastname} | ![02-find-owners.png](pet-clinic-page-screnshots/02-find-owners.png)         |
