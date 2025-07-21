@@ -1,28 +1,25 @@
 package visit
 
 import (
-	"fiber-petclinic-service/pkg/errors"
-	"go.uber.org/zap"
-	"net/http"
+	resterr "fiber-petclinic-service/pkg/errors"
+	"github.com/gofiber/fiber/v2"
+	"github.com/rs/zerolog/log"
 	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 type Router struct {
-	logger  *zap.Logger
 	service Servicer
 }
 
-func NewRouter(logger *zap.Logger, service Servicer) *Router {
-	return &Router{logger, service}
+func NewRouter(service Servicer) *Router {
+	return &Router{service}
 }
 
-func (r *Router) Register(router *gin.RouterGroup) {
-	router.GET("/all", r.allVisits)
-	router.GET(":id", r.visitById)
-	router.POST("", r.addNewVisit)
-	router.PUT(":id", r.updateVisit)
+func (r *Router) Register(router fiber.Router) {
+	router.Get("/all", r.allVisits)
+	router.Get(":id", r.visitById)
+	router.Post("", r.addNewVisit)
+	router.Put(":id", r.updateVisit)
 }
 
 // visitById - get visit by ID
@@ -37,22 +34,22 @@ func (r *Router) Register(router *gin.RouterGroup) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/visits/{id} 	[get]
-func (r *Router) visitById(c *gin.Context) {
-	pathID := c.Param("id")
+func (r *Router) visitById(c *fiber.Ctx) error {
+	strID := c.Params("id")
+	log.Info().Str("id", strID).Msg("Visit by id.")
 
-	id, err := strconv.Atoi(pathID)
+	id, err := c.ParamsInt("id")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))
-		return
+		log.Error().Err(err).Str("id", strID).Msg("Invalid visit ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	response, err := r.service.getVisitById(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errors.InternalServerError(err.Error()))
-		return
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	c.JSON(http.StatusOK, response)
+	return c.Status(fiber.StatusOK).JSON(response)
 }
 
 // allVisits - get all visits
@@ -65,29 +62,34 @@ func (r *Router) visitById(c *gin.Context) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/visits/all		[get]
-func (r *Router) allVisits(c *gin.Context) {
-	response, err := r.service.getAllVisits()
+func (r *Router) allVisits(c *fiber.Ctx) error {
+	log.Info().Msg("All visits.")
+	responses, err := r.service.getAllVisits()
 	if err != nil {
-		return
+		log.Error().Err(err).Msg("Fail to get all visits.")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	c.JSON(http.StatusOK, response)
+	//if responses.Context.Count == 0 {
+	//	log.Warn().Msg("Find no visit.")
+	//	return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Find no visit"))
+	//}
+
+	return c.Status(fiber.StatusOK).JSON(responses)
 }
 
-func (r *Router) addNewVisit(c *gin.Context) {
+func (r *Router) addNewVisit(c *fiber.Ctx) error {
 	var visit Request
-	if err := c.ShouldBindJSON(&visit); err != nil {
-		c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))
-		return
+	if err := c.BodyParser(&visit); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	response, err := r.service.create(&visit)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errors.InternalServerError(err.Error()))
-		return
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	c.JSON(http.StatusCreated, response)
+	return c.Status(fiber.StatusCreated).JSON(response)
 }
 
 // updateVisit - update visit
@@ -102,25 +104,22 @@ func (r *Router) addNewVisit(c *gin.Context) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/visits/{id} 	[put]
-func (r *Router) updateVisit(c *gin.Context) {
+func (r *Router) updateVisit(c *fiber.Ctx) error {
 	var visit Request
-	if err := c.ShouldBindJSON(&visit); err != nil {
-		c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))
-		return
+	if err := c.BodyParser(&visit); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))
-		return
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	visit.ID = id
 	response, err := r.service.update(&visit)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errors.InternalServerError(err.Error()))
-		return
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	c.JSON(http.StatusOK, response)
+	return c.Status(fiber.StatusOK).JSON(response)
 }

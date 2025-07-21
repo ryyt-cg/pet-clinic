@@ -18,26 +18,24 @@ type VetRepositorier interface {
 
 // VetRepository searches vet from the database
 type VetRepository struct {
-	logger *zap.Logger
-	pg     *gorm.DB
+	pg *gorm.DB
 }
 
-func NewVetRepository(logger *zap.Logger, pg *gorm.DB) *VetRepository {
+func NewVetRepository(pg *gorm.DB) *VetRepository {
 	return &VetRepository{
-		logger: logger,
-		pg:     pg,
+		pg: pg,
 	}
 }
 
 // FindAllSpecialties - retrieve all veterinarian's specialties
 // SELECT * FROM "specialties" WHERE "specialties"."deleted_at" IS NULL
 func (repository *VetRepository) FindAllSpecialties() ([]Specialty, error) {
-	repository.logger.Info("get all specialties")
+	log.Info("get all specialties")
 
 	var specialties []Specialty
 	err := repository.pg.Find(&specialties).Error
 	if err != nil {
-		repository.logger.Error("Fail to find all specialties.", zap.String("error", err.Error()))
+		log.Error("Fail to find all specialties.", zap.String("error", err.Error()))
 		return nil, err
 	}
 	return specialties, err
@@ -53,12 +51,12 @@ SELECT * FROM "specialties" WHERE "specialties"."id" = 1 AND "specialties"."dele
 SELECT * FROM "vets" WHERE "vets"."id" = 2 AND "vets"."deleted_at" IS NULL ORDER BY "vets"."id" LIMIT 1
 */
 func (repository *VetRepository) FindById(id int) (*Vet, error) {
-	repository.logger.Info("Search vet by id.", zap.Int("id", id))
+	log.Info("Search vet by id.", zap.Int("id", id))
 
 	var vet Vet
 	err := repository.pg.First(&vet, id).Error
 	if err != nil {
-		repository.logger.Error("Fail to find vet by id.",
+		log.Error("Fail to find vet by id.",
 			zap.Int("id", id), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -67,12 +65,12 @@ func (repository *VetRepository) FindById(id int) (*Vet, error) {
 }
 
 func (repository *VetRepository) FindByIdWithSpecialties(id int) (*Vet, error) {
-	repository.logger.Info("Search vet by id.", zap.Int("id", id))
+	log.Info("Search vet by id.", zap.Int("id", id))
 
 	var vet Vet
 	err := repository.pg.Preload("Specialties").First(&vet, id).Error
 	if err != nil {
-		repository.logger.Error("Fail to find vet by id.",
+		log.Error("Fail to find vet by id.",
 			zap.Int("id", id), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -85,12 +83,12 @@ func (repository *VetRepository) FindByIdWithSpecialties(id int) (*Vet, error) {
 // SELECT * FROM "specialties" WHERE "specialties"."id" = 1 AND "specialties"."deleted_at" IS NULL
 // SELECT * FROM "vets" WHERE last_name = 'Stevens' AND "vets"."deleted_at" IS NULL
 func (repository *VetRepository) FindByLastName(lastName string) ([]Vet, error) {
-	repository.logger.Info("Search vet by last name.", zap.String("lastName", lastName))
+	log.Info("Search vet by last name.", zap.String("lastName", lastName))
 
 	var vets []Vet
 	err := repository.pg.Preload("Specialties").Where("last_name = ?", lastName).Find(&vets).Error
 	if err != nil {
-		repository.logger.Error("Fail to find vet by last name.",
+		log.Error("Fail to find vet by last name.",
 			zap.String("lastName", lastName), zap.String("error", err.Error()))
 		return nil, err
 	}
@@ -103,12 +101,12 @@ FindAll
 SELECT * FROM "vets" WHERE "vets"."deleted_at" IS NULL
 */
 func (repository *VetRepository) FindAll() ([]Vet, error) {
-	repository.logger.Info("get all vets")
+	log.Info("get all vets")
 
 	var vets []Vet
 	err := repository.pg.Find(&vets).Error
 	if err != nil {
-		repository.logger.Error("Fail to find all vets.", zap.String("error", err.Error()))
+		log.Error("Fail to find all vets.", zap.String("error", err.Error()))
 		return nil, err
 	}
 	return vets, err
@@ -124,12 +122,12 @@ only 3 queries actually executed.
 	SELECT * FROM "vets" WHERE "vets"."deleted_at" IS NULL
 */
 func (repository *VetRepository) FindAllPreload() ([]Vet, error) {
-	repository.logger.Info("get all vets with relations preloaded.")
+	log.Info("get all vets with relations preloaded.")
 
 	var vets []Vet
 	err := repository.pg.Preload("Specialties").Find(&vets).Error
 	if err != nil {
-		repository.logger.Error("Fail to find all vets.", zap.String("error", err.Error()))
+		log.Error("Fail to find all vets.", zap.String("error", err.Error()))
 		return nil, err
 	}
 	return vets, err
@@ -140,11 +138,11 @@ func (repository *VetRepository) FindAllPreload() ([]Vet, error) {
 //
 //	VALUES ('James','Carter','2021-07-25 15:00:00','2021-07-25 15:00:00') RETURN
 func (repository *VetRepository) Insert(vet *Vet) (*Vet, error) {
-	repository.logger.Info("Fail a new vet.", zap.Any("vet", vet))
+	log.Info("Fail a new vet.", zap.Any("vet", vet))
 
 	err := repository.pg.Create(&vet).Error
 	if err != nil {
-		repository.logger.Error("Fail to insert new vet.", zap.String("error", err.Error()))
+		log.Error("Fail to insert new vet.", zap.String("error", err.Error()))
 		return nil, err
 	}
 	return vet, err
@@ -153,12 +151,12 @@ func (repository *VetRepository) Insert(vet *Vet) (*Vet, error) {
 // Update - update vet
 // UPDATE "vets" SET "first_name" = 'James', "last_name" = 'Carter' WHERE "id" = 1
 func (repository *VetRepository) Update(vet *Vet) (*Vet, error) {
-	repository.logger.Info("Fail vet id.", zap.Uint("id", vet.ID))
+	log.Info("Fail vet id.", zap.Uint("id", vet.ID))
 
 	// Omit the column name from update...
 	err := repository.pg.Omit("created_at").Save(&vet).Error
 	if err != nil {
-		repository.logger.Error("Fail to update vet.", zap.String("error", err.Error()))
+		log.Error("Fail to update vet.", zap.String("error", err.Error()))
 		return nil, err
 	}
 

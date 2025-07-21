@@ -13,7 +13,7 @@ type Sqlite struct {
 
 func (s *Sqlite) Connect(ctx context.Context) (*gorm.DB, error) {
 
-	db, err := gorm.Open(sqlite.Open(app.Config.Databases["primary"].Host), &gorm.Config{
+	db, err := gorm.Open(sqlite.Open(app.Config.Databases["primary"].Name), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 		// NamingStrategy: schema.NamingStrategy{SingularTable: true},
 

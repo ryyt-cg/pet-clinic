@@ -1,4 +1,4 @@
-module github.com/rhtran/gin-petclinic-service
+module fiber-petclinic-service
 
 go 1.24.5
 

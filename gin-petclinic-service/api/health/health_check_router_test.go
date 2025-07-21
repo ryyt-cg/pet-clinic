@@ -1,7 +1,7 @@
 package health
 
 import (
-	"github.com/rhtran/gin-petclinic-service/pkg/test"
+	"fiber-petclinic-service/pkg/test"
 	"go.uber.org/zap"
 	"net/http"
 	"testing"

@@ -5,33 +5,28 @@ import (
 	"fiber-petclinic-service/api"
 	resterr "fiber-petclinic-service/pkg/errors"
 	"fiber-petclinic-service/pkg/repository/model"
-	"go.uber.org/zap"
-	"net/http"
-	"strconv"
-
+	"github.com/gofiber/fiber/v2"
+	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-
-	"github.com/gin-gonic/gin"
 )
 
 type Router struct {
-	logger  *zap.Logger
 	service Servicer
 }
 
 // NewRouter - create new router
-func NewRouter(logger *zap.Logger, service Servicer) *Router {
-	return &Router{logger, service}
+func NewRouter(service Servicer) *Router {
+	return &Router{service}
 }
 
 // Register - register routes
-func (router *Router) Register(routerGroup *gin.RouterGroup) {
-	routerGroup.GET("all", router.getAll)
-	routerGroup.GET(":id", router.getById)
-	routerGroup.GET(":id/visits", router.getWithVisitsById)
-	routerGroup.GET("", router.getByQueryParam)
-	routerGroup.POST("", router.create)
-	routerGroup.PUT(":id", router.update)
+func (router *Router) Register(route fiber.Router) {
+	route.Get("all", router.getAll)
+	route.Get(":id", router.getById)
+	route.Get(":id/visits", router.getWithVisitsById)
+	route.Get("", router.getByQueryParam)
+	route.Post("", router.create)
+	route.Put(":id", router.update)
 }
 
 // allPets - retrieve all pets
@@ -44,15 +39,16 @@ func (router *Router) Register(routerGroup *gin.RouterGroup) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets/all 		[get]
-func (router *Router) getAll(c *gin.Context) {
+func (router *Router) getAll(c *fiber.Ctx) error {
+	log.Info().Msg("GET all pets")
 	responses, err := router.service.getAllPets()
 	if err != nil {
-		router.logger.Error("Unable to get all pets.", zap.String("error", err.Error()))
-		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
-		return
+		log.Error().Err(err).Msg("Unable to get all pets.")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+
 	}
 
-	c.JSON(http.StatusOK, responses)
+	return c.Status(fiber.StatusOK).JSON(responses)
 }
 
 // petById - retrieve pet by id
@@ -66,27 +62,27 @@ func (router *Router) getAll(c *gin.Context) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets/{id} 		[get]
-func (router *Router) getById(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+func (router *Router) getById(c *fiber.Ctx) error {
+	strID := c.Params("id")
+	log.Info().Str("id", strID).Msg("GET pet by ID")
+
+	id, err := c.ParamsInt("id")
 	if err != nil {
-		router.logger.Error("Unable to convert to number.", zap.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
-		return
+		log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid pet ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	response, err := router.service.getPetById(id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			router.logger.Error("find no pet by this id.", zap.String("error", err.Error()))
-			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
-			return
+			log.Error().Err(err).Msg("find no pet by this id.")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
 		}
-		router.logger.Error("Unable to get pet by id.", zap.String("error", err.Error()))
-		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
-		return
+		log.Error().Err(err).Msg("Unable to get pet by id.")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	c.JSON(http.StatusOK, response)
+	return c.Status(fiber.StatusOK).JSON(response)
 }
 
 // petWithVisitsById - get pet with visits by id
@@ -101,27 +97,27 @@ func (router *Router) getById(c *gin.Context) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets/{id}/visits 		[get]
-func (router *Router) getWithVisitsById(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+func (router *Router) getWithVisitsById(c *fiber.Ctx) error {
+	strID := c.Params("id")
+	log.Info().Str("id", strID).Msg("GET pet with visits by ID")
+
+	id, err := c.ParamsInt("id")
 	if err != nil {
-		router.logger.Error("Unable to convert to number.", zap.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
-		return
+		log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid pet ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	response, err := router.service.getPetWithVisitsById(id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			router.logger.Error("find no pet by this id.", zap.String("error", err.Error()))
-			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
-			return
+			log.Error().Err(err).Msg("find no pet by this id.")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
 		}
-		router.logger.Error("Unable to get pet by id.", zap.String("error", err.Error()))
-		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
-		return
+		log.Error().Err(err).Msg("Unable to get pet by id.")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	c.JSON(http.StatusOK, response)
+	return c.Status(fiber.StatusOK).JSON(response)
 }
 
 // petByQueryParam -
@@ -136,31 +132,28 @@ func (router *Router) getWithVisitsById(c *gin.Context) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets 			[get]
-func (router *Router) getByQueryParam(c *gin.Context) {
+func (router *Router) getByQueryParam(c *fiber.Ctx) error {
 	var nameParam api.NameParam
-	err := c.BindQuery(&nameParam)
+	err := c.BodyParser(&nameParam)
 	if err != nil {
-		router.logger.Error("Unable to bind query param.", zap.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
-		return
+		log.Error().Err(err).Msg("Unable to bind query param.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	router.getByName(c, nameParam)
+	return router.getByName(c, nameParam)
 }
 
 // petByName - get pet by name
-func (router *Router) getByName(c *gin.Context, param api.NameParam) {
+func (router *Router) getByName(c *fiber.Ctx, param api.NameParam) error {
 	pets, err := router.service.getPetsByName(param.Name)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(""))
-		return
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(""))
 	}
 
 	if len(pets) == 0 {
-		router.logger.Error("find no pet by this name", zap.String("name", param.Name))
-		c.JSON(http.StatusNotFound, resterr.NotFound("No pets found with name: "+param.Name))
-		return
+		log.Warn().Str("name", param.Name).Msg("find no pet by this name")
+		return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No pets found with name: " + param.Name))
 	}
 
 	responses := Responses{
@@ -169,7 +162,7 @@ func (router *Router) getByName(c *gin.Context, param api.NameParam) {
 		},
 		Pets: pets,
 	}
-	c.JSON(http.StatusOK, responses)
+	return c.Status(fiber.StatusOK).JSON(responses)
 }
 
 // addNewPet - add new pet
@@ -184,18 +177,18 @@ func (router *Router) getByName(c *gin.Context, param api.NameParam) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets	 		[post]
-func (router *Router) create(c *gin.Context) {
+func (router *Router) create(c *fiber.Ctx) error {
+	log.Info().Msg("Add a new pet.")
 	var request Request
-	err := c.ShouldBind(&request)
+	err := c.BodyParser(&request)
+
 	if err != nil {
-		router.logger.Error("Unable to Unmarshal JSON.", zap.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
-		return
+		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	router.logger.Info("Add a new pet.", zap.String("name", request.Name))
 	petResponse, err := router.service.create(ToPet(&request))
-	c.JSON(http.StatusCreated, petResponse)
+	return c.Status(fiber.StatusCreated).JSON(petResponse)
 }
 
 // updatePet - update pet
@@ -211,32 +204,34 @@ func (router *Router) create(c *gin.Context) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets/{id}	 	[put]
-func (router *Router) update(c *gin.Context) {
+func (router *Router) update(c *fiber.Ctx) error {
+	log.Info().Msg("Update a new pet.")
 	var request Request
-	id, err := strconv.Atoi(c.Param("id"))
+
+	strID := c.Params("id")
+	log.Info().Str("id", strID).Msg("GET pet by ID")
+
+	id, err := c.ParamsInt("id")
 	if err != nil {
-		router.logger.Error("Unable to convert to number.", zap.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
-		return
+		log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid pet ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	err = c.ShouldBind(&request)
+	err = c.BodyParser(&request)
 	if err != nil {
-		router.logger.Error("Unable to Unmarshal JSON.", zap.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
-		return
+		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	router.logger.Info("Update a pet.", zap.String("name", request.Name))
+	log.Info().Str("name", request.Name).Msg("Update a pet.")
 	petEntity := ToPet(&request)
 	petEntity.ID = uint(id)
 	petResponse, err := router.service.update(petEntity)
 
 	if err != nil {
-		router.logger.Error("Unable to update pet.", zap.String("error", err.Error()))
-		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
-		return
+		log.Error().Err(err).Msg("Unable to update pet.")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	c.JSON(http.StatusCreated, petResponse)
+	return c.Status(fiber.StatusOK).JSON(petResponse)
 }

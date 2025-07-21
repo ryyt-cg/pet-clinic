@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"go.uber.org/zap"
+	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"time"
@@ -20,13 +20,13 @@ type OwnerRepositorier interface {
 
 // OwnerRepository searches owner from the database
 type OwnerRepository struct {
-	pg *gorm.DB
+	db *gorm.DB
 }
 
 // NewOwnerRepository - OwnerRepository factory
-func NewOwnerRepository(pg *gorm.DB) *OwnerRepository {
+func NewOwnerRepository(db *gorm.DB) *OwnerRepository {
 	return &OwnerRepository{
-		pg: pg,
+		db: db,
 	}
 }
 
@@ -37,14 +37,13 @@ func NewOwnerRepository(pg *gorm.DB) *OwnerRepository {
 // SELECT * FROM "types" WHERE "types"."id" = 2 AND "types"."deleted_at" IS NULL
 // SELECT * FROM "owners" WHERE "owners"."id" = 1 AND "owners"."deleted_at" IS NULL ORDER BY "owners"."id" LIMIT 1
 func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
-	repository.logger.Info("search owner by id.", zap.Uint("id", id))
+	log.Debug().Uint("id", id).Msg("search owner by id.")
 
 	var owner Owner
 	// Pets.Type - Nested Preloading (Eager Loading)
-	err := repository.pg.First(&owner, id).Error
+	err := repository.db.First(&owner, id).Error
 	if err != nil {
-		repository.logger.Error("Fail to find owner by id.",
-			zap.Uint("id", id), zap.String("error", err.Error()))
+		log.Error().Uint("id", id).Msg("Fail to find owner by id.")
 		return nil, err
 	}
 	return &owner, nil
@@ -54,15 +53,13 @@ func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
 //
 // SELECT * FROM "owners" WHERE last_name = 'Rodriquez' AND "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, error) {
-	repository.logger.Info("Search owner by last name",
-		zap.String("lastName", lastName))
+	log.Debug().Str("lastName", lastName).Msg("Search owner by last name")
 
 	// Pets.Type - Nested Preloading (Eager Loading)
 	var owners []Owner
-	err := repository.pg.Where("last_name = ?", lastName).Find(&owners).Error
+	err := repository.db.Where("last_name = ?", lastName).Find(&owners).Error
 	if err != nil {
-		repository.logger.Error("Fail to find owners by last name.",
-			zap.String("lastName", lastName), zap.String("error", err.Error()))
+		log.Error().Err(err).Str("lastName", lastName).Msg("Fail to find owners by last name.")
 		return nil, err
 	}
 
@@ -72,14 +69,14 @@ func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, err
 // FindAll
 // SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindAll() ([]Owner, error) {
-	repository.logger.Info("get list of owners")
+	log.Debug().Msg("get list of owners")
 
 	var owners []Owner
 	// Get all owners
 	// SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
-	err := repository.pg.Find(&owners).Error
+	err := repository.db.Find(&owners).Error
 	if err != nil {
-		repository.logger.Error("Fail to find all owners", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to find all owners")
 		return nil, err
 	}
 
@@ -92,15 +89,15 @@ func (repository *OwnerRepository) FindAll() ([]Owner, error) {
 // SELECT * FROM "types" WHERE "types"."id" IN (1,6,2,3,4,5) AND "types"."deleted_at" IS NULL
 // SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
-	repository.logger.Info("get list of owners with pets")
+	log.Debug().Msg("get list of owners with pets")
 
 	var owner Owner
 	/*
 	 clause.Associations won’t preload nested associations, but can use it with Nested Preloading together
 	*/
-	err := repository.pg.Preload("Pets.Type").Preload("Pets.Visits").Preload(clause.Associations).First(&owner, id).Error
+	err := repository.db.Preload("Pets.Type").Preload("Pets.Visits").Preload(clause.Associations).First(&owner, id).Error
 	if err != nil {
-		repository.logger.Error("Fail to find owners with pets by id.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to find owners with pets by id.")
 		return nil, err
 	}
 
@@ -112,14 +109,14 @@ func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
 //
 //	VALUES ('George','Franklin','110 W. Liberty St.','Madison','6085551023','2021-09-26 15:00:00','2021-09-26 15:00:00')
 func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) {
-	repository.logger.Info("Fail a new owner.", zap.Any("owner", owner))
+	log.Debug().Any("owner", owner).Msg("Fail a new owner.")
 	now := time.Now()
 	owner.UpdatedAt = now
 	owner.CreatedAt = now
 
-	err := repository.pg.Create(&owner).Error
+	err := repository.db.Create(&owner).Error
 	if err != nil {
-		repository.logger.Error("Fail to insert new owner", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to insert new owner")
 		return nil, err
 	}
 	return owner, nil
@@ -128,14 +125,13 @@ func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) {
 // Update - update the owner
 // UPDATE "owners" SET "first_name" = 'George', "last_name" = 'Franklin', "address" = '110 W. Liberty St.',
 func (repository *OwnerRepository) Update(owner *Owner) (*Owner, error) {
-	repository.logger.Info("Fail owner", zap.Uint("id", owner.ID))
+	log.Debug().Uint("id", owner.ID).Msg("Fail owner")
 	owner.UpdatedAt = time.Now()
 
 	// Omit the column name from update...
-	err := repository.pg.Omit("created_at").Updates(&owner).Error
+	err := repository.db.Omit("created_at").Updates(&owner).Error
 	if err != nil {
-		repository.logger.Error("Fail to update owner.",
-			zap.Uint("id", owner.ID), zap.String("error", err.Error()))
+		log.Error().Err(err).Uint("id", owner.ID).Msg("Fail to update owner.")
 		return nil, err
 	}
 

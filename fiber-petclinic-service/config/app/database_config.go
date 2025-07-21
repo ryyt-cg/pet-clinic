@@ -3,10 +3,10 @@ package app
 type DatabaseConfig struct {
 	Driver         string               `yaml:"driver" validate:"required"`
 	Host           string               `yaml:"host" validate:"required"`
-	Port           int                  `yaml:"port" validate:"required"`
+	Port           int                  `yaml:"port"`
 	Name           string               `yaml:"name" validate:"required"`
-	Username       string               `yaml:"username" validate:"required"`
-	Password       string               `yaml:"password" validate:"required"`
+	Username       string               `yaml:"username"`
+	Password       string               `yaml:"password"`
 	ConnectionPool ConnectionPoolConfig `yaml:"connectionPool"`
 }
 

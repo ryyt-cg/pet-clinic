@@ -1,7 +1,7 @@
 package info
 
 import (
-	"github.com/rhtran/gin-petclinic-service/config/app"
+	"fiber-petclinic-service/config/app"
 	"go.uber.org/zap"
 )
 

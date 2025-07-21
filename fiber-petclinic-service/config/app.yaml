@@ -10,12 +10,13 @@ circuitBreaker:
 
 databases:
     primary:
-        driver: "sqlite3"
-        host: "pet-clinic.sqlite"
+        driver: sqlite3
+        host: localhost
+        name: pet-clinic.sqlite
         connectionPool:
             maxOpenConnection: 10
             maxIdleConnection: 5
-            connMaxLifetime: 30
+            maxIdleTime: 30
 
 server:
     baseURL: "/api/pet-clinic"

@@ -1,7 +1,7 @@
 package owner
 
 import (
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+	"fiber-petclinic-service/pkg/infra/repository"
 	"github.com/rhtran/gin-petclinic-service/pkg/model"
 )
 

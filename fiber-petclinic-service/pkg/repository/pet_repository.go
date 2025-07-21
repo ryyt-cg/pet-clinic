@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"go.uber.org/zap"
+	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
 
@@ -16,22 +16,20 @@ type PetRepositorier interface {
 
 // PetRepository searches pet from the database
 type PetRepository struct {
-	logger *zap.Logger
-	pg     *gorm.DB
+	db *gorm.DB
 }
 
-func NewPetRepository(logger *zap.Logger, pg *gorm.DB) *PetRepository {
+func NewPetRepository(db *gorm.DB) *PetRepository {
 	return &PetRepository{
-		logger: logger,
-		pg:     pg,
+		db: db,
 	}
 }
 
 func (repository *PetRepository) FindAll() ([]Pet, error) {
-	repository.logger.Info("Retrieve all pets")
+	log.Debug().Msg("Retrieve all pets")
 
 	var pets []Pet
-	result := repository.pg.Find(&pets)
+	result := repository.db.Find(&pets)
 	return pets, result.Error
 }
 
@@ -47,18 +45,18 @@ SELECT "pets"."id","pets"."created_at","pets"."updated_at","pets"."deleted_at","
 	WHERE pets.id = 2 AND "pets"."deleted_at" IS NULL ORDER BY "pets"."id" LIMIT 1
 */
 func (repository *PetRepository) FindById(id int) (*Pet, error) {
-	repository.logger.Info("Search pet by id.", zap.Int("id", id))
+	log.Debug().Int("id", id).Msg("Search pet by id.")
 
 	var pet Pet
-	result := repository.pg.Joins("Type").Where("pets.id = ?", id).First(&pet)
+	result := repository.db.Joins("Type").Where("pets.id = ?", id).First(&pet)
 	return &pet, result.Error
 }
 
 func (repository *PetRepository) FindByIdWithVisits(id int) (*Pet, error) {
-	repository.logger.Info("Search pet by id.", zap.Int("id", id))
+	log.Debug().Int("id", id).Msg("Search pet by id.")
 
 	var pet Pet
-	result := repository.pg.Joins("Type").Preload("Visits").Where("pets.id = ?", id).First(&pet)
+	result := repository.db.Joins("Type").Preload("Visits").Where("pets.id = ?", id).First(&pet)
 	return &pet, result.Error
 }
 
@@ -68,20 +66,20 @@ SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
 SELECT * FROM "pets" WHERE name = 'Leo' AND "pets"."deleted_at" IS NULL
 */
 func (repository *PetRepository) FindByName(name string) ([]Pet, error) {
-	repository.logger.Info("Search pet by name.", zap.String("name", name))
+	log.Debug().Str("name", name).Msg("Search pet by name.")
 
 	var pets []Pet
-	result := repository.pg.Preload("Type").Where("name = ?", name).Find(&pets)
+	result := repository.db.Preload("Type").Where("name = ?", name).Find(&pets)
 	return pets, result.Error
 }
 
 // Insert - insert a new pet
 func (repository *PetRepository) Insert(pet *Pet) (*Pet, error) {
-	repository.logger.Info("Fail a new pet.", zap.String("name", pet.Name))
+	log.Debug().Str("name", pet.Name).Msg("Insert a new pet.")
 
-	err := repository.pg.Create(&pet).Error
+	err := repository.db.Create(&pet).Error
 	if err != nil {
-		repository.logger.Error("Fail to insert new pet.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to insert new pet.")
 		return nil, err
 	}
 	return pet, err
@@ -89,12 +87,12 @@ func (repository *PetRepository) Insert(pet *Pet) (*Pet, error) {
 
 // Update - update a pet
 func (repository *PetRepository) Update(pet *Pet) (*Pet, error) {
-	repository.logger.Info("Fail vet id.", zap.Uint("id", pet.ID))
+	log.Debug().Uint("id", pet.ID).Msg("Fail vet id.")
 
 	// Omit the column name from update...
-	err := repository.pg.Omit("created_at").Save(&pet).Error
+	err := repository.db.Omit("created_at").Save(&pet).Error
 	if err != nil {
-		repository.logger.Error("Fail to update pet.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to update pet.")
 		return nil, err
 	}
 

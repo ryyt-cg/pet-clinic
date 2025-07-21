@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	"fiber-petclinic-service/api/author"
 	"fiber-petclinic-service/api/info"
+	"fiber-petclinic-service/api/owner"
+	"fiber-petclinic-service/api/pet"
 	"fiber-petclinic-service/config/app"
 	"fiber-petclinic-service/pkg/dbase"
 	"fiber-petclinic-service/pkg/repository"
@@ -16,7 +17,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"time"
 )
@@ -30,7 +30,7 @@ var (
 // Instantiate fiber router and middlewares
 func loadConfig() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	log.Info().Msg("Go Fiber 01 starts")
+	log.Info().Msg("Go Fiber Pet Clinic starts")
 
 	// load application configurations
 	if err := app.LoadConfig("./config"); err != nil {
@@ -52,8 +52,9 @@ func loadConfig() {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 
+	var err error
 	sqlDB := dbase.Sqlite{}
-	sqlite, err := sqlDB.Connect(context.Background())
+	sqlite, err = sqlDB.Connect(context.Background())
 	if err != nil {
 		log.Fatal().Err(err).Msg("Fail to connect the database.")
 	}
@@ -93,13 +94,15 @@ func loadComponents() {
 	infoService := info.NewService()
 	infoRouter := info.NewRouter(infoService)
 
-	authorService := author.NewService()
-	authorRouter := author.NewRouter(authorService)
-
 	// Owner
 	ownerRepository := repository.NewOwnerRepository(sqlite)
 	ownerService := owner.NewService(ownerRepository)
 	ownerRouter := owner.NewRouter(ownerService)
+
+	// Pet
+	petRepository := repository.NewPetRepository(sqlite)
+	petService := pet.NewService(petRepository)
+	petRouter := pet.NewRouter(petService)
 
 	// create a new group for the /api/gof endpoint
 	home := fiberApp.Group(app.Config.Server.BaseURL)
@@ -109,7 +112,8 @@ func loadComponents() {
 	// create a new group for the /api/gof/v1 endpoint
 	v1 := fiberApp.Group(app.Config.Server.BaseURL + "/v1")
 	// Register the author router to the v1 group
-	authorRouter.Register(v1.Group("/authors"))
+	ownerRouter.Register(v1.Group("/owners"))
+	petRouter.Register(v1.Group("/pets"))
 }
 
 func main() {
