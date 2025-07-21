@@ -172,7 +172,7 @@ func (r *Router) addNewOwner(c *fiber.Ctx) error {
 	var ownerRequest AddRequest
 	err := c.BodyParser(&ownerRequest)
 	if err != nil {
-		log.Error().Err(err).Msg("Fail to Unmarshal JSON.")
+		log.Error().Err(err).Msg("Fail to Unmarshal owner JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
@@ -210,7 +210,7 @@ func (r *Router) updateOwner(c *fiber.Ctx) error {
 	var ownerRequest UpdateRequest
 	err = c.BodyParser(&ownerRequest)
 	if err != nil {
-		log.Error().Err(err).Msg("Fail to Unmarshal JSON.")
+		log.Error().Err(err).Msg("Fail to Unmarshal owner JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 

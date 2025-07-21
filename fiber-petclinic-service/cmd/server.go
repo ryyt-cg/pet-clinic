@@ -5,6 +5,8 @@ import (
 	"fiber-petclinic-service/api/info"
 	"fiber-petclinic-service/api/owner"
 	"fiber-petclinic-service/api/pet"
+	"fiber-petclinic-service/api/vet"
+	"fiber-petclinic-service/api/visit"
 	"fiber-petclinic-service/config/app"
 	"fiber-petclinic-service/pkg/dbase"
 	"fiber-petclinic-service/pkg/repository"
@@ -104,6 +106,16 @@ func loadComponents() {
 	petService := pet.NewService(petRepository)
 	petRouter := pet.NewRouter(petService)
 
+	// Vet
+	vetRepository := repository.NewVetRepository(sqlite)
+	vetService := vet.NewService(vetRepository)
+	vetRouter := vet.NewRouter(vetService)
+
+	// Visit
+	visitRepository := repository.NewVisitRepository(sqlite)
+	visitService := visit.NewService(visitRepository)
+	visitRouter := visit.NewRouter(visitService)
+
 	// create a new group for the /api/gof endpoint
 	home := fiberApp.Group(app.Config.Server.BaseURL)
 	// Register the info router to the home group
@@ -114,6 +126,8 @@ func loadComponents() {
 	// Register the author router to the v1 group
 	ownerRouter.Register(v1.Group("/owners"))
 	petRouter.Register(v1.Group("/pets"))
+	vetRouter.Register(v1.Group("/vets"))
+	visitRouter.Register(v1.Group("/visits"))
 }
 
 func main() {

@@ -4,13 +4,10 @@ import (
 	"errors"
 	resterr "fiber-petclinic-service/pkg/errors"
 	"github.com/gofiber/fiber/v2"
-	"go.uber.org/zap"
-	"net/http"
+	"github.com/rs/zerolog/log"
 	"strconv"
 
 	"gorm.io/gorm"
-
-	"github.com/gin-gonic/gin"
 )
 
 type Router struct {
@@ -23,67 +20,70 @@ func NewRouter(service Servicer) *Router {
 
 // Register
 // register vet endpoints
-func (vetRouter *Router) Register(router *gin.RouterGroup) {
-	router.GET("specialties", vetRouter.allSpecialties)
-	router.GET("all", vetRouter.allVets)
-	router.GET(":id", vetRouter.vetById)
-	router.GET(":id/specialties", vetRouter.getVetByIdWithSpecialties)
-	router.GET("", vetRouter.vetByParam)
-	router.POST("", vetRouter.create)
-	router.PUT(":id", vetRouter.update)
+func (vetRouter *Router) Register(route fiber.Router) {
+	route.Get("specialties", vetRouter.allSpecialties)
+	route.Get("all", vetRouter.allVets)
+	route.Get(":id", vetRouter.vetById)
+	route.Get(":id/specialties", vetRouter.getVetByIdWithSpecialties)
+	//route.Get("", vetRouter.vetByParam)
+	route.Post("", vetRouter.create)
+	route.Put(":id", vetRouter.update)
 }
 
 // allSpecialties - retrieve all specialties
 
 func (vetRouter *Router) allSpecialties(c *fiber.Ctx) error {
-	response, err := vetRouter.service.getAllSpecialties()
+	log.Info().Msg("Retrieving all specialties")
+	responses, err := vetRouter.service.getAllSpecialties()
 	if err != nil {
-		return
+		log.Error().Err(err).Msg("Unable to get all specialties.")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	c.JSON(http.StatusOK, response)
+	return c.Status(fiber.StatusOK).JSON(responses)
 }
 
 // vetById - retrieve vet by id
-func (vetRouter *Router) vetById(c *fiber.Ctx) {
-	pathID := c.Param("id")
+func (vetRouter *Router) vetById(c *fiber.Ctx) error {
+	pathID := c.Params("id")
 
 	id, err := strconv.Atoi(pathID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
-		return
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	response, err := vetRouter.service.getVetById(id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
-			return
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
 		}
 
-		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
-		return
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	c.JSON(http.StatusOK, response)
+	return c.Status(fiber.StatusOK).JSON(response)
 }
 
-func (vetRouter *Router) vetByParam(c *fiber.Ctx) {
-	lastName := c.Query("last-name")
-
-	vetRouter.vetByLastName(c, lastName)
-	return
-}
+//func (vetRouter *Router) vetByParam(c *fiber.Ctx) error {
+//	var nameParam api.NameParam
+//	err := c.BodyParser(&nameParam)
+//	if err != nil {
+//		log.Error().Err(err).Msg("Unable to bind query param.")
+//		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+//	}
+//
+//	return vetRouter.byLastName(c, nameParam)
+//}
 
 // vetByLastName - retrieve vet by last name
-func (vetRouter *Router) vetByLastName(c *fiber.Ctx, lastName string) {
-	response, err := vetRouter.service.getVetByLastName(lastName)
-	if err != nil {
-		return
-	}
-
-	c.JSON(http.StatusOK, response)
-}
+//func (vetRouter *Router) byLastName(c *fiber.Ctx, param api.NameParam) error {
+//	response, err := vetRouter.service.getVetByLastName(param.Name)
+//	if err != nil {
+//		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+//	}
+//
+//	c.JSON(http.StatusOK, response)
+//}
 
 // AllVets - retrieve all vets
 // @Tags	vets
@@ -96,66 +96,84 @@ func (vetRouter *Router) vetByLastName(c *fiber.Ctx, lastName string) {
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/vets/all 		[get]
-func (vetRouter *Router) allVets(c *fiber.Ctx) {
-	response, err := vetRouter.service.getAllVets()
+func (vetRouter *Router) allVets(c *fiber.Ctx) error {
+	log.Info().Msg("Retrieving all vets.")
+	responses, err := vetRouter.service.getAllVets()
 	if err != nil {
-		return
+		log.Error().Err(err).Msg("Fail to get all vets.")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+
 	}
 
-	c.JSON(http.StatusOK, response)
+	if responses.Context.Count == 0 {
+		log.Warn().Msg("Find no vet.")
+		return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Find no vet"))
+	}
+
+	return c.Status(fiber.StatusOK).JSON(responses)
 }
 
 // AllVetsWithSpecialties - retrieve all vets with specialties
-func (vetRouter *Router) getVetByIdWithSpecialties(c *fiber.Ctx) {
-	pathID := c.Param("id")
+func (vetRouter *Router) getVetByIdWithSpecialties(c *fiber.Ctx) error {
+	strID := c.Params("id")
+	log.Info().Str("id", strID).Msg("GET vet with specialties by ID")
+	id, err := c.ParamsInt("id")
 
-	id, err := strconv.Atoi(pathID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
-		return
+		log.Error().Err(err).Str("id", strID).Msg("Invalid vet ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	response, err := vetRouter.service.getVetByIdWithSpecialties(id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
-			return
+			log.Error().Err(err).Int("id", id).Msg("Found no vet.")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
 		}
 
-		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
-		return
+		log.Error().Err(err).Int("id", id).Msg("Fail to get vet with specialties by ID.")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	c.JSON(http.StatusOK, response)
+	return c.Status(fiber.StatusOK).JSON(response)
 }
 
 // addNewVet - add new vet
-func (vetRouter *Router) create(c *fiber.Ctx) {
+func (vetRouter *Router) create(c *fiber.Ctx) error {
 	var vetRequest Request
-	err := c.ShouldBindJSON(&vetRequest)
+	err := c.BodyParser(&vetRequest)
 	if err != nil {
-		log.Error("Unable to Unmarshal JSON.", zap.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
-		return
+		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	newVet, err := vetRouter.service.create(ToVet(&vetRequest))
-	c.JSON(http.StatusCreated, newVet)
+	if err != nil {
+		log.Error().Err(err).Msg("Unable to create new vet.")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+	}
+	return c.Status(fiber.StatusCreated).JSON(newVet)
 }
 
-func (vetRouter *Router) update(c *fiber.Ctx) {
+func (vetRouter *Router) update(c *fiber.Ctx) error {
 	var vetRequest Request
-	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
-	err := c.ShouldBindJSON(&vetRequest)
+	id, _ := strconv.ParseUint(c.Params("id"), 10, 64)
+	err := c.BodyParser(&vetRequest)
 
 	if err != nil {
-		log.Error("Unable to Unmarshal JSON.", zap.String("error", err.Error()))
-		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
-		return
+		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	vetEntity := ToVet(&vetRequest)
 	vetEntity.ID = uint(id)
 	newVet, err := vetRouter.service.update(vetEntity)
-	c.JSON(http.StatusCreated, newVet)
+	if err != nil {
+		log.Error().Err(err).Msg("Unable to update vet.")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Vet not found with ID: " + c.Params("id")))
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+	}
+	return c.Status(fiber.StatusOK).JSON(newVet)
 }

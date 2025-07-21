@@ -2,16 +2,17 @@ package vet
 
 import (
 	"fiber-petclinic-service/pkg/repository"
-	"go.uber.org/zap"
+	"fiber-petclinic-service/pkg/repository/model"
+	"github.com/rs/zerolog/log"
 )
 
 type Servicer interface {
 	getAllSpecialties() (*specialtiesResponse, error)
 	getVetById(id int) (*Response, error)
 	getVetByIdWithSpecialties(id int) (*Response, error)
-	getVetByLastName(lastName string) ([]Response, error)
-	getAllVets() ([]Response, error)
-	getAllVetsWithSpecialties() ([]Response, error)
+	getVetByLastName(lastName string) (*Responses, error)
+	getAllVets() (*Responses, error)
+	getAllVetsWithSpecialties() (*Responses, error)
 	create(vet *repository.Vet) (*Response, error)
 	update(vet *repository.Vet) (*Response, error)
 }
@@ -28,7 +29,7 @@ func NewService(repository repository.VetRepositorier) *Service {
 func (service *Service) getAllSpecialties() (*specialtiesResponse, error) {
 	specialties, err := service.repository.FindAllSpecialties()
 	if err != nil {
-		log.Error("Fail to retrieve all specialties.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to retrieve all specialties.")
 		return nil, err
 	}
 
@@ -43,8 +44,7 @@ func (service *Service) getAllSpecialties() (*specialtiesResponse, error) {
 func (service *Service) getVetById(id int) (*Response, error) {
 	vet, err := service.repository.FindById(id)
 	if err != nil {
-		log.Error("Fail to retrieve vet by id.",
-			zap.Int("id", id), zap.String("error", err.Error()))
+		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve vet by id.")
 		return nil, err
 	}
 
@@ -56,8 +56,7 @@ func (service *Service) getVetById(id int) (*Response, error) {
 func (service *Service) getVetByIdWithSpecialties(id int) (*Response, error) {
 	vet, err := service.repository.FindByIdWithSpecialties(id)
 	if err != nil {
-		log.Error("Fail to retrieve vet by id with specialties",
-			zap.Int("id", id), zap.String("error", err.Error()))
+		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve vet by id with specialties")
 		return nil, err
 	}
 
@@ -66,47 +65,53 @@ func (service *Service) getVetByIdWithSpecialties(id int) (*Response, error) {
 	return response, nil
 }
 
-func (service *Service) getVetByLastName(lastName string) ([]Response, error) {
+func (service *Service) getVetByLastName(lastName string) (*Responses, error) {
 	vets, err := service.repository.FindByLastName(lastName)
 	if err != nil {
-		log.Error("Fail to retrieve the vets by last name.",
-			zap.String("lastName", lastName), zap.String("error", err.Error()))
+		log.Error().Err(err).Str("lastName", lastName).Msg("Fail to retrieve the vets by last name.")
 		return nil, err
 	}
 
-	return FromVets(vets), nil
+	vetsJson := FromVets(vets)
+	contextJson := model.Context{Count: len(vetsJson)}
+	return &Responses{Vets: vetsJson, Context: contextJson}, nil
 }
 
 // getAllVets - retrieve all vets
-func (service *Service) getAllVets() ([]Response, error) {
+func (service *Service) getAllVets() (*Responses, error) {
 	vets, err := service.repository.FindAll()
 
 	if err != nil {
-		log.Error("Fail to retrieve all vets.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to retrieve all vets.")
 		return nil, err
 	}
-	log.Info("counts of all vets")
-	return FromVets(vets), nil
+	log.Debug().Msg("counts of all vets")
+
+	vetsJson := FromVets(vets)
+	contextJson := model.Context{Count: len(vetsJson)}
+	return &Responses{Vets: vetsJson, Context: contextJson}, nil
 }
 
-func (service *Service) getAllVetsWithSpecialties() ([]Response, error) {
+func (service *Service) getAllVetsWithSpecialties() (*Responses, error) {
 	vets, err := service.repository.FindAllPreload()
 
 	if err != nil {
-		log.Error("Fail to retrieve all vets.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to retrieve all vets.")
 		return nil, err
 	}
-	log.Info("counts of all vets.", zap.Int("count", len(vets)))
-	return FromVets(vets), nil
+	log.Debug().Int("count", len(vets)).Msg("counts of all vets.")
+	vetsJson := FromVets(vets)
+	contextJson := model.Context{Count: len(vetsJson)}
+	return &Responses{Vets: vetsJson, Context: contextJson}, nil
 }
 
 // create - create new vet
 func (service *Service) create(vet *repository.Vet) (*Response, error) {
-	log.Info("Create new vet.", zap.Any("vet", vet))
+	log.Info().Any("vet", vet).Msg("Create new vet.")
 	newVet, err := service.repository.Insert(vet)
 
 	if err != nil {
-		log.Error("Fail new vet failed.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail new vet failed.")
 		return &Response{}, err
 	}
 
@@ -117,11 +122,11 @@ func (service *Service) create(vet *repository.Vet) (*Response, error) {
 
 // update - update vet
 func (service *Service) update(vet *repository.Vet) (*Response, error) {
-	log.Info("Fail vet.", zap.Any("vet", vet))
+	log.Info().Any("vet", vet).Msg("Update a vet.")
 	updatedVet, err := service.repository.Update(vet)
 
 	if err != nil {
-		log.Error("Update vet failed.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Update vet failed.")
 		return nil, err
 	}
 

@@ -148,7 +148,7 @@ func (router *Router) getByName(c *fiber.Ctx, param api.NameParam) error {
 	pets, err := router.service.getPetsByName(param.Name)
 
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(""))
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
 	if len(pets) == 0 {

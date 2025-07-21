@@ -2,30 +2,29 @@ package visit
 
 import (
 	"fiber-petclinic-service/pkg/repository"
-	"go.uber.org/zap"
+	"fiber-petclinic-service/pkg/repository/model"
+	"github.com/rs/zerolog/log"
 )
 
 type Servicer interface {
 	getVisitById(id int) (*Response, error)
-	getAllVisits() ([]Response, error)
+	getAllVisits() (*Responses, error)
 	create(visit *Request) (*Response, error)
 	update(visit *Request) (*Response, error)
 }
 
 type Service struct {
-	logger     *zap.Logger
 	repository repository.VisitRepositorier
 }
 
-func NewService(logger *zap.Logger, repository repository.VisitRepositorier) *Service {
-	return &Service{logger: logger, repository: repository}
+func NewService(repository repository.VisitRepositorier) *Service {
+	return &Service{repository: repository}
 }
 
 func (service *Service) getVisitById(id int) (*Response, error) {
 	visit, err := service.repository.FindById(id)
 	if err != nil {
-		service.logger.Error("Fail to retrieve visit by id.",
-			zap.Int("id", id), zap.String("error", err.Error()))
+		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve visit by id.")
 		return nil, err
 	}
 
@@ -34,22 +33,26 @@ func (service *Service) getVisitById(id int) (*Response, error) {
 	return response, nil
 }
 
-func (service *Service) getAllVisits() ([]Response, error) {
+func (service *Service) getAllVisits() (*Responses, error) {
 	visits, err := service.repository.FindAll()
 
 	if err != nil {
-		service.logger.Error("Fail to retrieve all visits.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to retrieve all visits.")
 		return nil, err
 	}
-	service.logger.Info("counts of all visits", zap.Int("count", len(visits)))
-	return FromVisits(visits), nil
+	log.Debug().Int("count", len(visits)).Msg("counts of all visits")
+
+	// convert to []Response & model.Context
+	visitsJson := FromVisits(visits)
+	contextJson := model.Context{Count: len(visitsJson)}
+	return &Responses{Visits: visitsJson, Context: contextJson}, nil
 }
 
 func (service *Service) create(request *Request) (*Response, error) {
 	visitEntity := ToVisit(request)
 	newVisit, err := service.repository.Insert(visitEntity)
 	if err != nil {
-		service.logger.Error("Fail to create visit.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to create visit.")
 		return nil, err
 	}
 
@@ -63,7 +66,7 @@ func (service *Service) update(request *Request) (*Response, error) {
 	visitEntity.ID = uint(request.ID)
 	updatedVisit, err := service.repository.Update(visitEntity)
 	if err != nil {
-		service.logger.Error("Fail to update visit.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to update visit.")
 		return nil, err
 	}
 

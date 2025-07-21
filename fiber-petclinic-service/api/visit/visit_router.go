@@ -4,7 +4,6 @@ import (
 	resterr "fiber-petclinic-service/pkg/errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
-	"strconv"
 )
 
 type Router struct {
@@ -70,17 +69,19 @@ func (r *Router) allVisits(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	//if responses.Context.Count == 0 {
-	//	log.Warn().Msg("Find no visit.")
-	//	return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Find no visit"))
-	//}
+	if responses.Context.Count == 0 {
+		log.Warn().Msg("Find no visit.")
+		return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Find no visit"))
+	}
 
 	return c.Status(fiber.StatusOK).JSON(responses)
 }
 
 func (r *Router) addNewVisit(c *fiber.Ctx) error {
+	log.Info().Msg("Post a new visit.")
 	var visit Request
 	if err := c.BodyParser(&visit); err != nil {
+		log.Error().Err(err).Msg("Fail to Unmarshal visit JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
@@ -105,19 +106,24 @@ func (r *Router) addNewVisit(c *fiber.Ctx) error {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/visits/{id} 	[put]
 func (r *Router) updateVisit(c *fiber.Ctx) error {
+	log.Info().Msg("Update a visit.")
+	strID := c.Params("id")
+
 	var visit Request
 	if err := c.BodyParser(&visit); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	id, err := strconv.Atoi(c.Params("id"))
+	id, err := c.ParamsInt("id")
 	if err != nil {
+		log.Error().Err(err).Str("id", strID).Msg("Invalid visit ID")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	visit.ID = id
 	response, err := r.service.update(&visit)
 	if err != nil {
+		log.Error().Err(err).Msg("Fail to update visit.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 

@@ -2,6 +2,7 @@ package vet
 
 import (
 	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/pkg/repository/model"
 	"gorm.io/gorm"
 )
 
@@ -11,6 +12,7 @@ type specialtyResponse struct {
 }
 
 type specialtiesResponse struct {
+	Context     model.Context       `json:"context"`
 	Specialties []specialtyResponse `json:"specialties"`
 }
 
