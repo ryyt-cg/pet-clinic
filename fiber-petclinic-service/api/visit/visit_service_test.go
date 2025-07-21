@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fiber-petclinic-service/pkg/repository"
 	"github.com/stretchr/testify/assert"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"testing"
 )
@@ -36,12 +35,10 @@ func Test_getById(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			logger := zap.NewNop()
-			//logger := log.New().With(nil, "function", "Test_getById")
 			visitMock := repository.MockVisitRepositorier{}
 
 			visitMock.On("FindById", 1).Return(tc.expectedVisit, tc.expectedError)
-			visitService := NewService(logger, &visitMock)
+			visitService := NewService(&visitMock)
 			result, err := visitService.getVisitById(1)
 
 			if tc.expectedError != nil {
@@ -98,11 +95,10 @@ func Test_getAllVisits(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			//logger := log.New().With(nil, "function", "Test_getAllVisits")
-			logger := zap.NewNop()
 			visitMock := repository.MockVisitRepositorier{}
 
 			visitMock.On("FindAll").Return(tc.expectedVisits, tc.expectedError)
-			visitService := NewService(logger, &visitMock)
+			visitService := NewService(&visitMock)
 			result, err := visitService.getAllVisits()
 
 			if tc.expectedError != nil {

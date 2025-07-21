@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
-	"github.com/rhtran/gin-petclinic-service/config/app"
+	"gin-petclinic-service/config/app"
 	"go.uber.org/zap"
 	"net/http"
 	"strings"

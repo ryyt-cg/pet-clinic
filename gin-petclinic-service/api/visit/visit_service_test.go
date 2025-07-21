@@ -2,7 +2,7 @@ package visit
 
 import (
 	"errors"
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/infra/repository"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"gorm.io/gorm"

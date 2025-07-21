@@ -1,8 +1,8 @@
 package test
 
 import (
-	"github.com/rhtran/gin-petclinic-service/middleware/errors"
-	"github.com/rhtran/gin-petclinic-service/pkg/accesslog"
+	"gin-petclinic-service/middleware/errors"
+	"gin-petclinic-service/pkg/accesslog"
 	"go.uber.org/zap"
 	"net/http"
 	"net/http/httptest"

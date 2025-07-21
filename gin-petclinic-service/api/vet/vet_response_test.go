@@ -1,8 +1,8 @@
 package vet
 
 import (
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
-	"github.com/rhtran/gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/model"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
 	"testing"

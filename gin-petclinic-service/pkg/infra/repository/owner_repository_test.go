@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/rhtran/gin-petclinic-service/pkg/model"
-	"github.com/rhtran/gin-petclinic-service/pkg/test"
+	"gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/test"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"testing"

@@ -1,10 +1,10 @@
 package owner
 
 import (
-	"github.com/rhtran/gin-petclinic-service/api/pet"
-	"github.com/rhtran/gin-petclinic-service/middleware/errors"
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
-	"github.com/rhtran/gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/api/pet"
+	"gin-petclinic-service/middleware/errors"
+	"gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/model"
 )
 
 // Owner Responses - A collection of responses (output contracts) for the owner API.

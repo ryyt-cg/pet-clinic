@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/rhtran/gin-petclinic-service/pkg/test"
+	"gin-petclinic-service/pkg/test"
 	"go.uber.org/zap"
 	"testing"
 

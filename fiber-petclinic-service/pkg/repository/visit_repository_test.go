@@ -2,7 +2,6 @@ package repository
 
 import (
 	"fiber-petclinic-service/pkg/test"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"testing"
 
@@ -43,9 +42,7 @@ func getVisitRepository(t *testing.T) *VisitRepository {
 		t.Fatal(err)
 	}
 
-	//logger := log.New().With(nil, "version", "visit_repository_test")
-	logger := zap.NewNop()
-	return NewVisitRepository(logger, db)
+	return NewVisitRepository(db)
 }
 
 func (suite *VisitRepoTestSuite) Test_FindById() {

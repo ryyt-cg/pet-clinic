@@ -1,8 +1,8 @@
 package vet
 
 import (
+	"gin-petclinic-service/pkg/infra/repository"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
 	"go.uber.org/zap"
 	"net/http"
 	"net/http/httptest"

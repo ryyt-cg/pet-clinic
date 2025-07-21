@@ -1,6 +1,9 @@
 build:
 	go build -o bin/fiber-petclinic-service server.go
 
+mock:
+	mockery --all
+
 mac-build:
 	GOOS=darwin GOARCH=amd64 go build -o bin//fiber-petclinic-service main.go
 

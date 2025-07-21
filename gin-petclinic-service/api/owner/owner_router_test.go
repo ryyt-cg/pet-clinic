@@ -2,10 +2,10 @@ package owner
 
 import (
 	"errors"
-	"github.com/rhtran/gin-petclinic-service/api/pet"
-	resterr "github.com/rhtran/gin-petclinic-service/middleware/errors"
-	"github.com/rhtran/gin-petclinic-service/pkg/model"
-	"github.com/rhtran/gin-petclinic-service/pkg/test"
+	"gin-petclinic-service/api/pet"
+	resterr "gin-petclinic-service/middleware/errors"
+	"gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/test"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"net/http"

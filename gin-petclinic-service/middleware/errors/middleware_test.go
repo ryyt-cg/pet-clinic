@@ -3,7 +3,7 @@ package errors
 import (
 	"database/sql"
 	"fmt"
-	"github.com/rhtran/gin-petclinic-service/pkg/log"
+	"gin-petclinic-service/pkg/log"
 	"net/http"
 	"net/http/httptest"
 	"testing"

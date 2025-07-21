@@ -3,7 +3,6 @@ package repository
 import (
 	model2 "fiber-petclinic-service/pkg/repository/model"
 	"fiber-petclinic-service/pkg/test"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"testing"
 
@@ -44,9 +43,7 @@ func getVetRepository(t *testing.T) *VetRepository {
 		t.Fatal(err)
 	}
 
-	logger := zap.NewNop()
-	//logger := log.New().With(nil, "version", "vet_repository_test")
-	return NewVetRepository(logger, db)
+	return NewVetRepository(db)
 }
 
 func (suite *VetRepoTestSuite) Test_FindById() {

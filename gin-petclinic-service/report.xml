@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites tests="56" errors="3">
-	<testsuite name="github.com/rhtran/gin-petclinic-service/app" tests="11" failures="0" errors="0" id="0" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
-		<testcase name="TestAppInfoConfigValidation" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestAppInfoConfigValidation/ValidAppInfoConfig" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingName" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingDescription" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingVersion" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithValidHttpPort" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithEmptyHttpPort" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithInvalidHttpPort" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortMissingColon" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortMissingColonAndChars" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortWithChars" classname="github.com/rhtran/gin-petclinic-service/app" time="0.000"></testcase>
+	<testsuite name="gin-petclinic-service/app" tests="11" failures="0" errors="0" id="0" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+		<testcase name="TestAppInfoConfigValidation" classname="gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestAppInfoConfigValidation/ValidAppInfoConfig" classname="gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingName" classname="gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingDescription" classname="gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingVersion" classname="gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithValidHttpPort" classname="gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithEmptyHttpPort" classname="gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithInvalidHttpPort" classname="gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortMissingColon" classname="gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortMissingColonAndChars" classname="gin-petclinic-service/app" time="0.000"></testcase>
+		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortWithChars" classname="gin-petclinic-service/app" time="0.000"></testcase>
 	</testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/cmd" tests="0" failures="0" errors="0" id="1" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/docs" tests="0" failures="0" errors="0" id="2" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api" tests="0" failures="0" errors="0" id="3" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/health" tests="1" failures="0" errors="1" id="4" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+	<testsuite name="gin-petclinic-service/cmd" tests="0" failures="0" errors="0" id="1" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+	<testsuite name="gin-petclinic-service/docs" tests="0" failures="0" errors="0" id="2" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+	<testsuite name="gin-petclinic-service/internal/api" tests="0" failures="0" errors="0" id="3" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+	<testsuite name="gin-petclinic-service/internal/api/health" tests="1" failures="0" errors="1" id="4" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
 		<testcase name="[build failed]" classname="github.com/rhtran/gin-petclinic-service/internal/api/health" time="0.000">
 			<error message="Build error"><![CDATA[internal/api/health/mock_check_servicer_test.go:8:6: MockCheckServicer redeclared in this block
 	internal/api/health/mock_check_servicer.go:8:6: other declaration of MockCheckServicer

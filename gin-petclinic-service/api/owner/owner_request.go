@@ -1,8 +1,8 @@
 package owner
 
 import (
-	"fiber-petclinic-service/pkg/infra/repository"
-	"github.com/rhtran/gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/model"
 )
 
 // Owner Requests - A collection of requests (input contracts) for the owner API

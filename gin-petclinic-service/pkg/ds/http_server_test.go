@@ -1,8 +1,8 @@
 package ds
 
 import (
+	"gin-petclinic-service/config/app"
 	"github.com/gin-gonic/gin"
-	"github.com/rhtran/gin-petclinic-service/config/app"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

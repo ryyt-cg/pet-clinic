@@ -1,7 +1,7 @@
 package visit
 
 import (
-	"github.com/rhtran/gin-petclinic-service/middleware/errors"
+	"gin-petclinic-service/middleware/errors"
 	"go.uber.org/zap"
 	"net/http"
 	"strconv"

@@ -2,7 +2,7 @@ package pet
 
 import (
 	"encoding/json"
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/infra/repository"
 	"go.uber.org/zap"
 	"net/http"
 	"net/http/httptest"
@@ -141,7 +141,7 @@ func Test_PetsByName(t *testing.T) {
 	// unmarshal to Pet struct for asserts.
 	actualPetResponses := make([]Response, 1)
 	json.Unmarshal(w.Body.Bytes(), &actualPetResponses)
-	
+
 	assert.Equal(t, petRespopnse.ID, actualPetResponses[0].ID)
 	assert.Equal(t, petRespopnse.Name, actualPetResponses[0].Name)
 }

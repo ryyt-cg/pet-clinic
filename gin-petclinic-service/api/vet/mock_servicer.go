@@ -3,7 +3,7 @@
 package vet
 
 import (
-	repository "github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+	repository "gin-petclinic-service/pkg/infra/repository"
 	mock "github.com/stretchr/testify/mock"
 )
 

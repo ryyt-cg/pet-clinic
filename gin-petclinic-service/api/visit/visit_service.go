@@ -1,7 +1,7 @@
 package visit
 
 import (
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/infra/repository"
 	"go.uber.org/zap"
 )
 

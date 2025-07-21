@@ -1,20 +1,20 @@
 package main
 
 import (
+	"gin-petclinic-service/api/health"
+	"gin-petclinic-service/api/info"
+	"gin-petclinic-service/api/owner"
+	"gin-petclinic-service/api/pet"
+	"gin-petclinic-service/api/vet"
+	"gin-petclinic-service/api/visit"
+	"gin-petclinic-service/config/app"
+	_ "gin-petclinic-service/docs"
+	"gin-petclinic-service/middleware"
+	"gin-petclinic-service/pkg/dbase"
+	"gin-petclinic-service/pkg/ds"
+	"gin-petclinic-service/pkg/infra/repository"
 	"github.com/gin-contrib/location"
 	"github.com/gin-gonic/gin"
-	health2 "github.com/rhtran/gin-petclinic-service/api/health"
-	info2 "github.com/rhtran/gin-petclinic-service/api/info"
-	owner2 "github.com/rhtran/gin-petclinic-service/api/owner"
-	pet2 "github.com/rhtran/gin-petclinic-service/api/pet"
-	vet2 "github.com/rhtran/gin-petclinic-service/api/vet"
-	visit2 "github.com/rhtran/gin-petclinic-service/api/visit"
-	"github.com/rhtran/gin-petclinic-service/config/app"
-	_ "github.com/rhtran/gin-petclinic-service/docs"
-	"github.com/rhtran/gin-petclinic-service/middleware"
-	"github.com/rhtran/gin-petclinic-service/pkg/dbase"
-	"github.com/rhtran/gin-petclinic-service/pkg/ds"
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
@@ -67,32 +67,32 @@ func loadConfig() {
 // Component initialization
 func loadComponents() {
 	logger.Info("Component initialization starts")
-	healthCheckService := health2.NewService(logger)
-	healthCheckRouter := health2.NewRouter(healthCheckService, logger)
+	healthCheckService := health.NewService(logger)
+	healthCheckRouter := health.NewRouter(healthCheckService, logger)
 
-	infoService := info2.NewService(logger)
-	ipService := info2.NewIPService(logger)
-	infoRouter := info2.NewRouter(logger, infoService, ipService)
+	infoService := info.NewService(logger)
+	ipService := info.NewIPService(logger)
+	infoRouter := info.NewRouter(logger, infoService, ipService)
 
 	// Owner
 	ownerRepository := repository.NewOwnerRepository(logger, sqlite)
-	ownerService := owner2.NewService(logger, ownerRepository)
-	ownerRouter := owner2.NewRouter(logger, ownerService)
+	ownerService := owner.NewService(logger, ownerRepository)
+	ownerRouter := owner.NewRouter(logger, ownerService)
 
 	// Pet
 	petRepository := repository.NewPetRepository(logger, sqlite)
-	petService := pet2.NewService(logger, petRepository)
-	petRouter := pet2.NewRouter(logger, petService)
+	petService := pet.NewService(logger, petRepository)
+	petRouter := pet.NewRouter(logger, petService)
 
 	// Vet
 	vetRepository := repository.NewVetRepository(logger, sqlite)
-	vetService := vet2.NewService(logger, vetRepository)
-	vetRouter := vet2.NewRouter(logger, vetService)
+	vetService := vet.NewService(logger, vetRepository)
+	vetRouter := vet.NewRouter(logger, vetService)
 
 	// Visit
 	visitRepository := repository.NewVisitRepository(logger, sqlite)
-	visitService := visit2.NewService(logger, visitRepository)
-	visitRouter := visit2.NewRouter(logger, visitService)
+	visitService := visit.NewService(logger, visitRepository)
+	visitRouter := visit.NewRouter(logger, visitService)
 
 	//authenService := service.NewAuthenService(logger)
 

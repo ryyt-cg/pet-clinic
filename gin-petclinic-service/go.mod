@@ -1,4 +1,4 @@
-module fiber-petclinic-service
+module gin-petclinic-service
 
 go 1.24.5
 
@@ -11,6 +11,7 @@ require (
 	github.com/go-playground/validator/v10 v10.22.1
 	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/google/uuid v1.4.0
+	github.com/json-iterator/go v1.1.12
 	github.com/okta/okta-jwt-verifier-golang v1.3.1
 	github.com/pressly/goose v2.7.0+incompatible
 	github.com/spf13/viper v1.19.0
@@ -56,7 +57,6 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
-	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/lestrrat-go/backoff/v2 v2.0.8 // indirect

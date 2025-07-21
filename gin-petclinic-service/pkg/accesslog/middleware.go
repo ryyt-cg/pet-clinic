@@ -2,9 +2,9 @@
 package accesslog
 
 import (
+	"gin-petclinic-service/pkg/log"
 	routing "github.com/go-ozzo/ozzo-routing/v2"
 	"github.com/go-ozzo/ozzo-routing/v2/access"
-	"github.com/rhtran/gin-petclinic-service/pkg/log"
 	"go.uber.org/zap"
 	"net/http"
 )

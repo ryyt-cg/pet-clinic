@@ -1,7 +1,7 @@
 package dbase
 
 import (
-	"github.com/rhtran/gin-petclinic-service/config/app"
+	"gin-petclinic-service/config/app"
 	"go.uber.org/zap"
 	"gorm.io/gorm/logger"
 	"time"

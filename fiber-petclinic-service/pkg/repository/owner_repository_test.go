@@ -3,7 +3,6 @@ package repository
 import (
 	"fiber-petclinic-service/pkg/repository/model"
 	"fiber-petclinic-service/pkg/test"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"testing"
 
@@ -44,9 +43,7 @@ func getOwnerRepository(t *testing.T) *OwnerRepository {
 		t.Fatal(err)
 	}
 
-	//logger := log.New().With(nil, "version", "owner_repository_test")
-	logger := zap.NewNop()
-	return NewOwnerRepository(logger, db)
+	return NewOwnerRepository(db)
 }
 
 func (suite *OwnerRepoTestSuite) Test_FindById() {

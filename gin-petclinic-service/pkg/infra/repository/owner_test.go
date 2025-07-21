@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/rhtran/gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

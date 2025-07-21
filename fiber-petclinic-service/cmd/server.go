@@ -94,7 +94,8 @@ func loadConfig() {
 
 func loadComponents() {
 	infoService := info.NewService()
-	infoRouter := info.NewRouter(infoService)
+	ipService := info.NewIPService()
+	infoRouter := info.NewRouter(infoService, ipService)
 
 	// Owner
 	ownerRepository := repository.NewOwnerRepository(sqlite)

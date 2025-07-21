@@ -1,9 +1,9 @@
 package vet
 
 import (
+	"gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/model"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
-	"github.com/rhtran/gin-petclinic-service/pkg/model"
 )
 
 type Request struct {

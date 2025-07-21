@@ -1,7 +1,7 @@
 package dbase
 
 import (
-	"github.com/rhtran/gin-petclinic-service/config/app"
+	"gin-petclinic-service/config/app"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

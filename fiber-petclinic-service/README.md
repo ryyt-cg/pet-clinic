@@ -14,10 +14,8 @@ This example inherits every feature from fiber-petclinic-service example.  It ha
 - `GET /api/gof/health`: Health check endpoint
 - `GET /api/gof/metrics`: Prometheus metrics endpoint
 - `GET /api/gof/monitor`: Monitor Page
-- `GET /api/gof/info`: Application information endpoint
-- `GET /api/gof/v1/authors/:id`: Get author by ID
-- `GET /api/gof/v1/authors/names/:name`: Get author by name
-- `GET /api/gof/v1/authors/?name=:name`: Get author by name with query parameter
+- `GET /api/pet-clinic/info`: Application information endpoint
+- `GET /api/pet-clinic/v1/owners/:id`: Get owner by ID
 
 ## Load Testing
 - Using Grafana k6 for load testing.
@@ -64,5 +62,9 @@ There are several configuration options available, such as:
 7. Advanced: Multiple Circuit Breakers fo r Different Services
 
 I recommend reading the [official documentation](https://docs.gofiber.io/contrib/circuitbreaker/) for more details and examples. In this example, I have implemented a basic circuit breaker that applies to all routes.
+
+### Unit Tests
+[Test Driven Design](UNIT_TEST.md) Documentation is available in the `UNIT_TEST.md` file. It includes instructions on how to set up and run unit tests, as well as how to use Mockery for mocking dependencies.
+
 
 

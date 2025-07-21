@@ -2,7 +2,7 @@ package visit
 
 import (
 	"encoding/json"
-	"github.com/rhtran/gin-petclinic-service/pkg/test"
+	"gin-petclinic-service/pkg/test"
 	"go.uber.org/zap"
 	"net/http"
 	"testing"

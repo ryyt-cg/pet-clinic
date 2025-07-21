@@ -1,7 +1,7 @@
 package ds
 
 import (
-	"github.com/rhtran/gin-petclinic-service/config/app"
+	"gin-petclinic-service/config/app"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

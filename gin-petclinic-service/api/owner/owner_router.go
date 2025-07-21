@@ -2,7 +2,7 @@ package owner
 
 import (
 	"errors"
-	resterr "github.com/rhtran/gin-petclinic-service/middleware/errors"
+	resterr "gin-petclinic-service/middleware/errors"
 	"go.uber.org/zap"
 	"net/http"
 	"strconv"

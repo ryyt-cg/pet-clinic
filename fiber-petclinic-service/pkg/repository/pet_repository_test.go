@@ -2,7 +2,6 @@ package repository
 
 import (
 	"fiber-petclinic-service/pkg/test"
-	"go.uber.org/zap"
 	"testing"
 
 	embeddedpostgres "github.com/fergusstrange/embedded-postgres"
@@ -43,9 +42,7 @@ func getPetRepository(t *testing.T) *PetRepository {
 		t.Fatal(err)
 	}
 
-	//logger := log.New().With(nil, "version", "pet_repository_test")
-	logger := zap.NewNop()
-	return NewPetRepository(logger, db)
+	return NewPetRepository(db)
 }
 
 func (suite *PetRepoTestSuite) Test_FindById() {

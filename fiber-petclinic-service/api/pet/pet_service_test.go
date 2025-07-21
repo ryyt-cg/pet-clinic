@@ -2,9 +2,8 @@ package pet
 
 import (
 	"errors"
-	"go.uber.org/zap"
+	"fiber-petclinic-service/pkg/repository"
 	"gorm.io/gorm"
-	"petclinic-service/pkg/infra/repository"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -124,12 +123,10 @@ func Test_getById(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			//logger := log.New().With(nil, "function", "Test_getById")
-			logger := zap.NewNop()
 			petMock := petRepositoryMock{}
 			petMock.On("FindById", 1).Return(tc.expectedPet, tc.expectedError)
 
-			petService := NewService(logger, &petMock)
+			petService := NewService(&petMock)
 			result, err := petService.getPetById(1)
 
 			if tc.expectedError != nil {
@@ -184,11 +181,10 @@ func Test_getByName(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			//logger := log.New().With(nil, "function", "Test_getByName")
-			logger := zap.NewNop()
 			petMock := petRepositoryMock{}
 			petMock.On("FindByName", "Leo").Return(tc.expectedPets, tc.expectedError)
 
-			petService := NewService(logger, &petMock)
+			petService := NewService(&petMock)
 			result, err := petService.getPetsByName("Leo")
 
 			if tc.expectedError != nil {
@@ -244,11 +240,10 @@ func Test_update(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			//logger := log.New().With(nil, "function", "Test_update")
-			logger := zap.NewNop()
 			petMock := petRepositoryMock{}
 			petMock.On("Update", tc.expectedPet).Return(tc.expectedPet, tc.expectedError)
 
-			petService := NewService(logger, &petMock)
+			petService := NewService(&petMock)
 			result, err := petService.update(tc.expectedPet)
 
 			if tc.expectedError != nil {

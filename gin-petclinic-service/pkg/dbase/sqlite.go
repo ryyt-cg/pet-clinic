@@ -1,7 +1,7 @@
 package dbase
 
 import (
-	"github.com/rhtran/gin-petclinic-service/config/app"
+	"gin-petclinic-service/config/app"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

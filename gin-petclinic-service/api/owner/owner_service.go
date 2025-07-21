@@ -1,8 +1,8 @@
 package owner
 
 import (
-	"github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
-	"github.com/rhtran/gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/model"
 	"go.uber.org/zap"
 )
 
