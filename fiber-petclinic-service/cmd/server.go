@@ -1,9 +1,12 @@
 package main
 
 import (
+	"context"
 	"fiber-petclinic-service/api/author"
 	"fiber-petclinic-service/api/info"
 	"fiber-petclinic-service/config/app"
+	"fiber-petclinic-service/pkg/dbase"
+	"fiber-petclinic-service/pkg/repository"
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/contrib/circuitbreaker"
 	"github.com/gofiber/fiber/v2"
@@ -13,11 +16,14 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"go.uber.org/zap"
+	"gorm.io/gorm"
 	"time"
 )
 
 var (
 	fiberApp *fiber.App
+	sqlite   *gorm.DB
 )
 
 // Instantiate zerolog
@@ -45,6 +51,13 @@ func loadConfig() {
 	default:
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
+
+	sqlDB := dbase.Sqlite{}
+	sqlite, err := sqlDB.Connect(context.Background())
+	if err != nil {
+		log.Fatal().Err(err).Msg("Fail to connect the database.")
+	}
+
 	// Create a new Fiber instance
 	fiberApp = fiber.New()
 
@@ -82,6 +95,11 @@ func loadComponents() {
 
 	authorService := author.NewService()
 	authorRouter := author.NewRouter(authorService)
+
+	// Owner
+	ownerRepository := repository.NewOwnerRepository(sqlite)
+	ownerService := owner.NewService(ownerRepository)
+	ownerRouter := owner.NewRouter(ownerService)
 
 	// create a new group for the /api/gof endpoint
 	home := fiberApp.Group(app.Config.Server.BaseURL)

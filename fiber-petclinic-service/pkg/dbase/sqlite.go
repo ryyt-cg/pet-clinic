@@ -11,9 +11,9 @@ import (
 type Sqlite struct {
 }
 
-func Connect(ctx context.Context) (*gorm.DB, error) {
+func (s *Sqlite) Connect(ctx context.Context) (*gorm.DB, error) {
 
-	db, err := gorm.Open(sqlite.Open(app.Config.Database.Sqlite.Dsn), &gorm.Config{
+	db, err := gorm.Open(sqlite.Open(app.Config.Databases["primary"].Host), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 		// NamingStrategy: schema.NamingStrategy{SingularTable: true},
 

@@ -10,6 +10,12 @@ windows-build:
 linux-build:
 	GOOS=linux GOARCH=amd64 go build -o bin//fiber-petclinic-service main.go
 
+goose-sqlite-up:
+	goose -dir migrations/sqlite sqlite3 pet-clinic.sqlite up
+
+goose-sqlite-down:
+	goose -dir migrations/sqlite sqlite3 pet-clinic.sqlite down
+
 run:
 	go run cmd/main.go
 

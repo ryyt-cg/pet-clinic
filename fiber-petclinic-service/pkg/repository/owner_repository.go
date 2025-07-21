@@ -20,15 +20,13 @@ type OwnerRepositorier interface {
 
 // OwnerRepository searches owner from the database
 type OwnerRepository struct {
-	logger *zap.Logger
-	pg     *gorm.DB
+	pg *gorm.DB
 }
 
 // NewOwnerRepository - OwnerRepository factory
-func NewOwnerRepository(logger *zap.Logger, pg *gorm.DB) *OwnerRepository {
+func NewOwnerRepository(pg *gorm.DB) *OwnerRepository {
 	return &OwnerRepository{
-		logger: logger,
-		pg:     pg,
+		pg: pg,
 	}
 }
 

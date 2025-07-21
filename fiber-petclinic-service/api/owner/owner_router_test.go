@@ -2,10 +2,12 @@ package owner
 
 import (
 	"errors"
+	resterr "fiber-petclinic-service/Pkg/errors"
 	"fiber-petclinic-service/api/pet"
-	resterr "fiber-petclinic-service/middleware/errors"
-	"fiber-petclinic-service/pkg/model"
+	"fiber-petclinic-service/pkg/repository/model"
 	"fiber-petclinic-service/pkg/test"
+	"github.com/gofiber/fiber/v2"
+	"github.com/rs/zerolog/log"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"net/http"
@@ -16,15 +18,14 @@ import (
 )
 
 // config the gin engine for testing purpose
-func setupRouter() *gin.Engine {
+func setupRouter() *fiber.App {
 	gin.SetMode(gin.TestMode)
-	r := gin.Default()
+	r := fiber.New()
 	return r
 }
 
 func Test_ownerById(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("Owner by ID endpoint", zap.String("function", "Test_ownerById"))
+	log.Info().Str("function", "Test_ownerById").Msg("Owner by ID endpoint")
 
 	ownerResponse := &Response{
 		ID:        1,
@@ -73,7 +74,7 @@ func Test_ownerById(t *testing.T) {
 			expectedOwner: nil,
 			expectedError: strconv.ErrSyntax,
 			status:        http.StatusBadRequest,
-			jsonResponse:  test.JsonString(resterr.BadRequestWithDetails(errors.New("strconv.Atoi: parsing \"a1\": invalid syntax"))),
+			jsonResponse:  test.JsonString(resterr.BadRequest(errors.New("strconv.Atoi: parsing \"a1\": invalid syntax"))),
 		},
 	}
 
@@ -81,7 +82,7 @@ func Test_ownerById(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ownerMock := MockServicer{}
 			ownerMock.On("getOwnerById", uint(1)).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerRouter := NewRouter(&ownerMock)
 
 			r := setupRouter()
 			v1 := r.Group("/v1")
@@ -187,7 +188,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 			expectedOwner: nil,
 			expectedError: convErr,
 			status:        http.StatusBadRequest,
-			jsonResponse:  test.JsonString(resterr.BadRequestWithDetails(convErr)),
+			jsonResponse:  test.JsonString(resterr.BadRequest(convErr.Error())),
 		},
 	}
 
@@ -279,7 +280,7 @@ func Test_OwnerByLastName(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ownerMock := MockServicer{}
 			ownerMock.On("getOwnerByLastName", tc.queryParam).Return(tc.expectedOwners, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerRouter := NewRouter(&ownerMock)
 
 			r := setupRouter()
 			v1 := r.Group("/v1")
@@ -425,7 +426,7 @@ func Test_CreateOwner(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ownerMock := MockServicer{}
 			ownerMock.On("create", tc.request).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerRouter := NewRouter(&ownerMock)
 
 			r := setupRouter()
 			v1 := r.Group("/v1")
@@ -490,7 +491,7 @@ func Test_UpdateOwner(t *testing.T) {
 			expectedOwner: nil,
 			expectedError: strconv.ErrSyntax,
 			status:        http.StatusBadRequest,
-			jsonResponse:  test.JsonString(resterr.BadRequestWithDetails(errors.New("strconv.Atoi: parsing \"a1\": invalid syntax"))),
+			jsonResponse:  test.JsonString(resterr.BadRequest(errors.New("strconv.Atoi: parsing \"a1\": invalid syntax"))),
 		},
 		{
 			name:          "Test update owner with error",
@@ -519,7 +520,7 @@ func Test_UpdateOwner(t *testing.T) {
 			ownerMock := MockServicer{}
 			id, _ := strconv.Atoi(tc.requestID)
 			ownerMock.On("update", uint(id), tc.request).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerRouter := NewRouter(&ownerMock)
 
 			r := setupRouter()
 			v1 := r.Group("/v1")

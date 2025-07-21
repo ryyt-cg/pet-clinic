@@ -2,18 +2,15 @@ package owner
 
 import (
 	"errors"
-	"fiber-petclinic-service/pkg/infra/repository"
-	"fiber-petclinic-service/pkg/model"
+	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/pkg/repository/model"
 	"github.com/stretchr/testify/assert"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"testing"
 )
 
 // Test_getById tests the getOwnerById function
 func Test_getById(t *testing.T) {
-	logger := zap.NewNop()
-	//logger := log.New().With(nil, "function", "Test_getById")
 	ownerMock := repository.MockOwnerRepositorier{}
 	owner := &repository.Owner{
 		Model: gorm.Model{
@@ -26,7 +23,7 @@ func Test_getById(t *testing.T) {
 	}
 	ownerMock.On("FindById", 1).Return(owner, nil)
 
-	ownerService := NewService(logger, &ownerMock)
+	ownerService := NewService(&ownerMock)
 	result, err := ownerService.getOwnerById(1)
 	ownerMock.AssertExpectations(t)
 	ownerMock.AssertNumberOfCalls(t, "FindById", 1)
@@ -39,13 +36,11 @@ func Test_getById(t *testing.T) {
 
 // Test_getById_withError tests the getOwnerById function with an error
 func Test_getById_withError(t *testing.T) {
-	logger := zap.NewNop()
-	//logger := log.New().With(nil, "function", "Test_getById")
 	ownerMock := repository.MockOwnerRepositorier{}
 	err := errors.New("getById: unable to find owner by id")
 	ownerMock.On("FindById", 1).Return(nil, err)
 
-	ownerService := NewService(logger, &ownerMock)
+	ownerService := NewService(&ownerMock)
 	result, err := ownerService.getOwnerById(1)
 	ownerMock.AssertExpectations(t)
 	ownerMock.AssertNumberOfCalls(t, "FindById", 1)

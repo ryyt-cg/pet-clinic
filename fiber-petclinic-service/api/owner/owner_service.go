@@ -1,9 +1,9 @@
 package owner
 
 import (
-	"fiber-petclinic-service/pkg/infra/repository"
-	"fiber-petclinic-service/pkg/model"
-	"go.uber.org/zap"
+	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/pkg/repository/model"
+	"github.com/rs/zerolog/log"
 )
 
 // Servicer - owner service interface
@@ -17,21 +17,19 @@ type Servicer interface {
 }
 
 type Service struct {
-	logger     *zap.Logger
 	repository repository.OwnerRepositorier
 }
 
-func NewService(logger *zap.Logger, repository repository.OwnerRepositorier) *Service {
-	return &Service{logger: logger, repository: repository}
+func NewService(repository repository.OwnerRepositorier) *Service {
+	return &Service{repository: repository}
 }
 
 // getOwnerById - retrieve owner by id
 func (service *Service) getOwnerById(id uint) (*Response, error) {
-	service.logger.Info("Fail owner by id.", zap.Uint("id", id))
+	log.Debug().Uint("id", id).Msg("Get owner by id.")
 	owner, err := service.repository.FindById(id)
 	if err != nil {
-		service.logger.Error("Fail to retrieve owner by id.",
-			zap.Uint("id", id), zap.String("error", err.Error()))
+		log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve owner by id.")
 		return nil, err
 	}
 
@@ -42,11 +40,11 @@ func (service *Service) getOwnerById(id uint) (*Response, error) {
 
 // getOwnerByLastName - retrieve owners with pets and visits by last name
 func (service *Service) getOwnerByLastName(lastName string) (*Responses, error) {
-	service.logger.Info("Fail owners by last name.", zap.String("lastName", lastName))
+	log.Debug().Str("lastName", lastName).Msg("Get owners by last name.")
 	owners, err := service.repository.FindByLastName(lastName)
+
 	if err != nil {
-		service.logger.Error("Fail to retrieve owner by last name.",
-			zap.String("lastName", lastName), zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to retrieve owner by last name.")
 		return nil, err
 	}
 
@@ -57,10 +55,10 @@ func (service *Service) getOwnerByLastName(lastName string) (*Responses, error) 
 
 // getAllOwners - retrieve all owners
 func (service *Service) getAllOwners() (*Responses, error) {
-	service.logger.Info("Fail all owner")
+	log.Debug().Msg("Get all owner")
 	owners, err := service.repository.FindAll()
 	if err != nil {
-		service.logger.Error("Fail to retrieve all owner.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to retrieve all owner.")
 		return nil, err
 	}
 
@@ -72,10 +70,10 @@ func (service *Service) getAllOwners() (*Responses, error) {
 
 // getOwnerByIdWithPets - retrieve by id with pets
 func (service *Service) getOwnerByIdWithPets(id uint) (*Response, error) {
-	service.logger.Info("Fail owner with pets by id.", zap.Uint("id", id))
+	log.Debug().Uint("id", id).Msg("Fail owner with pets by id.")
 	owner, err := service.repository.FindByIdWithPets(id)
 	if err != nil {
-		service.logger.Error("Fail to retrieve all owner.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to retrieve all owner.")
 		return nil, err
 	}
 
@@ -86,12 +84,12 @@ func (service *Service) getOwnerByIdWithPets(id uint) (*Response, error) {
 
 // create - create new owner
 func (service *Service) create(ownerRequest *AddRequest) (*Response, error) {
-	service.logger.Info("Create new owner")
+	log.Debug().Msg("Create new owner")
 	owner := ToOwnerEntity(ownerRequest)
 	newOwner, err := service.repository.Insert(owner)
 
 	if err != nil {
-		service.logger.Error("Fail new owner fail.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail new owner fail.")
 		return nil, err
 	}
 
@@ -102,13 +100,13 @@ func (service *Service) create(ownerRequest *AddRequest) (*Response, error) {
 
 // update - update owner
 func (service *Service) update(id uint, request *UpdateRequest) (*UpdateResponse, error) {
-	service.logger.Info("Fail an owner.")
+	log.Debug().Msg("Fail an owner.")
 	ownerEntity := ToOwnerEntityFromUpdateRequest(request)
 	ownerEntity.ID = id
 	updatedOwner, err := service.repository.Update(ownerEntity)
 
 	if err != nil {
-		service.logger.Error("Fail to update an owner.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to update an owner.")
 		return nil, err
 	}
 

@@ -2,8 +2,8 @@ package owner
 
 import (
 	"fiber-petclinic-service/api/pet"
-	"fiber-petclinic-service/pkg/infra/repository"
-	"fiber-petclinic-service/pkg/model"
+	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/pkg/repository/model"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
 	"testing"
