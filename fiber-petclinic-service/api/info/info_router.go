@@ -27,10 +27,10 @@ func (infoRouter *Router) Register(router fiber.Router) {
 
 // appInfo	Show app info
 func (infoRouter *Router) appInfo(c *fiber.Ctx) error {
-	log.Debug().Str("appInfo", "appInfo").Msg("Fetching app info")
+	log.Info().Msg("Fetching app info")
 	result, err := infoRouter.infoService.getAppInfo()
 
-	ips, err := infoRouter.ipService.LookupIP(app.Config.Server.Host)
+	ips, err := infoRouter.ipService.lookupIP(app.Config.Server.Host)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to lookup IP address")
 		result.Ip = "Unknown host"

@@ -76,7 +76,7 @@ func (router *Router) getById(c *fiber.Ctx) error {
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Error().Err(err).Msg("find no pet by this id.")
-			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Pet not found"))
 		}
 		log.Error().Err(err).Msg("Unable to get pet by id.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))

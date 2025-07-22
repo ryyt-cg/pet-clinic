@@ -19,15 +19,15 @@ Add vektra mockery to go mod
 go get github.com/vektra/mockery/v3
 ```
 
-**Creating mock function/interface**<br/>
-```yaml
-with-expecter: true
-mockname: "Mock{{.InterfaceName}}"
-inpackage: true
-case: underscore
+**Initialize mockery**<br/>
+```bash
+mockery init <module-name>
 ```
+This command will create .mockery.yaml file in the root of your module. This file contains the configuration for mockery.
+
 Run this command to generate the mock files
 ```shell
-mockery --all
+mockery
+```
 
 
