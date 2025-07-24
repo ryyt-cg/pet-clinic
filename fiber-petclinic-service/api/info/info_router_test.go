@@ -95,4 +95,5 @@ func Test_appInfo(t *testing.T) {
 
 	assert.Equal(t, info.AppName, actualInfoResponse.AppName)
 	assert.Equal(t, info.Ip, actualInfoResponse.Ip)
+	assert.Equal(t, info.Version, actualInfoResponse.Version)
 }
