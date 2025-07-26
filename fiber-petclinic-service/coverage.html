@@ -1,0 +1,1129 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>pet: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">fiber-petclinic-service/api/pet/pet_request.go (0.0%)</option>
+				
+				<option value="file1">fiber-petclinic-service/api/pet/pet_response.go (100.0%)</option>
+				
+				<option value="file2">fiber-petclinic-service/api/pet/pet_router.go (25.3%)</option>
+				
+				<option value="file3">fiber-petclinic-service/api/pet/pet_service.go (48.9%)</option>
+				
+				<option value="file4">fiber-petclinic-service/cmd/server.go (0.0%)</option>
+				
+				<option value="file5">fiber-petclinic-service/config/app/config.go (0.0%)</option>
+				
+				<option value="file6">fiber-petclinic-service/pkg/errors/response.go (100.0%)</option>
+				
+				<option value="file7">fiber-petclinic-service/pkg/pagination/pages.go (100.0%)</option>
+				
+				<option value="file8">fiber-petclinic-service/pkg/test/api.go (0.0%)</option>
+				
+				<option value="file9">fiber-petclinic-service/pkg/test/embedded_postgres.go (0.0%)</option>
+				
+				<option value="file10">fiber-petclinic-service/pkg/test/etl.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package pet
+
+import (
+        "fiber-petclinic-service/pkg/repository"
+        "time"
+)
+
+type Request struct {
+        Name      string `json:"name" binding:"required"`
+        Birthdate string `json:"birthdate" binding:"required"`
+        TypeID    int    `json:"typeID" binding:"required"`
+        OwnerID   int    `json:"ownerID" binding:"required"`
+}
+
+type AddRequest struct {
+        Name      string `json:"name" binding:"required"`
+        Birthdate string `json:"birthdate" binding:"required"`
+        TypeID    int    `json:"typeID" binding:"required"`
+        OwnerID   int    `json:"ownerID" binding:"required"`
+}
+
+type UpdateRequest struct {
+        ID        uint   `json:"id" binding:"required"`
+        Name      string `json:"name" binding:"required"`
+        Birthdate string `json:"birthdate" binding:"required"`
+        TypeID    int    `json:"typeID" binding:"required"`
+        OwnerID   int    `json:"ownerID" binding:"required"`
+}
+
+func ToPet(petRequest *Request) *repository.Pet <span class="cov0" title="0">{
+        birthday, _ := time.Parse(time.DateOnly, petRequest.Birthdate)
+        return &amp;repository.Pet{
+                Name:      petRequest.Name,
+                Birthdate: birthday,
+                TypeID:    petRequest.TypeID,
+                OwnerID:   petRequest.OwnerID,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package pet
+
+import (
+        "fiber-petclinic-service/api/visit"
+        "fiber-petclinic-service/pkg/repository"
+        "fiber-petclinic-service/pkg/repository/model"
+        "time"
+)
+
+type Response struct {
+        ID        uint             `json:"id"`
+        Name      string           `json:"name"`
+        Birthdate string           `json:"birthdate"`
+        Type      string           `json:"type"`
+        Visits    []visit.Response `json:"visits,omitempty"`
+}
+
+type Responses struct {
+        Context model.Context `json:"context"`
+        Pets    []Response    `json:"pets"`
+}
+
+type UpdateResponse struct {
+        ID        uint   `json:"id"`
+        Name      string `json:"name"`
+        Birthdate string `json:"birthdate"`
+        TypeID    uint   `json:"typeID"`
+        OwnerID   uint   `json:"ownerID"`
+}
+
+type AddResponse struct {
+        ID        uint   `json:"id"`
+        Name      string `json:"name"`
+        Birthdate string `json:"birthdate"`
+        TypeID    uint   `json:"typeID"`
+        OwnerID   uint   `json:"ownerID"`
+}
+
+func (pr *Response) FromPet(pet *repository.Pet) <span class="cov8" title="1">{
+        pr.ID = pet.ID
+        pr.Name = pet.Name
+        pr.Birthdate = pet.Birthdate.Format(time.DateOnly)
+        pr.Type = pet.Type.Name
+        pr.Visits = visit.FromVisits(pet.Visits)
+}</span>
+
+func FromPets(pets []repository.Pet) []Response <span class="cov8" title="1">{
+        petResponses := make([]Response, len(pets))
+        for i, v := range pets </span><span class="cov8" title="1">{
+                petResponses[i].FromPet(&amp;v)
+        }</span>
+        <span class="cov8" title="1">return petResponses</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package pet
+
+import (
+        "errors"
+        "fiber-petclinic-service/api"
+        resterr "fiber-petclinic-service/pkg/errors"
+        "fiber-petclinic-service/pkg/repository/model"
+        "github.com/gofiber/fiber/v2"
+        "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
+)
+
+type Router struct {
+        service Servicer
+}
+
+// NewRouter - create new router
+func NewRouter(service Servicer) *Router <span class="cov8" title="1">{
+        return &amp;Router{service}
+}</span>
+
+// Register - register routes
+func (router *Router) Register(route fiber.Router) <span class="cov8" title="1">{
+        route.Get("all", router.getAll)
+        route.Get(":id", router.getById)
+        route.Get(":id/visits", router.getWithVisitsById)
+        route.Get("", router.getByQueryParam)
+        route.Post("", router.create)
+        route.Put(":id", router.update)
+}</span>
+
+// allPets - retrieve all pets
+// @Tags                pets
+// @Summary        List all pets
+//
+// @Description        Get all pets
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets/all                 [get]
+func (router *Router) getAll(c *fiber.Ctx) error <span class="cov0" title="0">{
+        log.Info().Msg("GET all pets")
+        responses, err := router.service.getAllPets()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to get all pets.")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+
+        }</span>
+
+        <span class="cov0" title="0">return c.Status(fiber.StatusOK).JSON(responses)</span>
+}
+
+// petById - retrieve pet by id
+// @Tags                pets
+// @Summary                Get pet by ID
+//
+// @Description        Get pet by ID
+// @Param                id        path        int        true        "Pet ID"
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets/{id}                 [get]
+func (router *Router) getById(c *fiber.Ctx) error <span class="cov8" title="1">{
+        strID := c.Params("id")
+        log.Info().Str("id", strID).Msg("GET pet by ID")
+
+        id, err := c.ParamsInt("id")
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid pet ID")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">response, err := router.service.getPetById(id)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Msg("find no pet by this id.")
+                        return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Pet not found"))
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Unable to get pet by id.")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))</span>
+        }
+
+        <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(response)</span>
+}
+
+// petWithVisitsById - get pet with visits by id
+// @Tags                pets
+// @Summary                Get pet with visits by ID
+//
+// @Description        Get pet with visits by ID
+// @Param                id        path        int        true        "Pet ID"
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                400        {object}        errors.ErrorResponse
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets/{id}/visits                 [get]
+func (router *Router) getWithVisitsById(c *fiber.Ctx) error <span class="cov0" title="0">{
+        strID := c.Params("id")
+        log.Info().Str("id", strID).Msg("GET pet with visits by ID")
+
+        id, err := c.ParamsInt("id")
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid pet ID")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov0" title="0">response, err := router.service.getPetWithVisitsById(id)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        log.Error().Err(err).Msg("find no pet by this id.")
+                        return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
+                }</span>
+                <span class="cov0" title="0">log.Error().Err(err).Msg("Unable to get pet by id.")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))</span>
+        }
+
+        <span class="cov0" title="0">return c.Status(fiber.StatusOK).JSON(response)</span>
+}
+
+// petByQueryParam -
+// @Tags                pets
+// @Summary                Get pet by name
+//
+// @Description        Get pet by name
+// @Param                name        query        string        true        "Pet Name"
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets                         [get]
+func (router *Router) getByQueryParam(c *fiber.Ctx) error <span class="cov0" title="0">{
+        var nameParam api.NameParam
+        err := c.BodyParser(&amp;nameParam)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to bind query param.")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov0" title="0">return router.getByName(c, nameParam)</span>
+}
+
+// petByName - get pet by name
+func (router *Router) getByName(c *fiber.Ctx, param api.NameParam) error <span class="cov0" title="0">{
+        pets, err := router.service.getPetsByName(param.Name)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+        }</span>
+
+        <span class="cov0" title="0">if len(pets) == 0 </span><span class="cov0" title="0">{
+                log.Warn().Str("name", param.Name).Msg("find no pet by this name")
+                return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No pets found with name: " + param.Name))
+        }</span>
+
+        <span class="cov0" title="0">responses := Responses{
+                Context: model.Context{
+                        Count: len(pets),
+                },
+                Pets: pets,
+        }
+        return c.Status(fiber.StatusOK).JSON(responses)</span>
+}
+
+// addNewPet - add new pet
+// @Tags                pets
+// @Summary                Add a new pet
+//
+// @Description        Add a new pet
+// @Param                Request        body        AddRequest        true        "Add pet"
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                400        {object}        errors.ErrorResponse
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets                         [post]
+func (router *Router) create(c *fiber.Ctx) error <span class="cov0" title="0">{
+        log.Info().Msg("Add a new pet.")
+        var request Request
+        err := c.BodyParser(&amp;request)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov0" title="0">petResponse, err := router.service.create(ToPet(&amp;request))
+        return c.Status(fiber.StatusCreated).JSON(petResponse)</span>
+}
+
+// updatePet - update pet
+// @Tags                pets
+// @Summary                update a pet
+//
+// @Description        update pet
+// @Param                id        path        int        true        "Pet ID"
+// @Param                Request        body        UpdateRequest        true        "Update pet"
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                400        {object}        errors.ErrorResponse
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets/{id}                 [put]
+func (router *Router) update(c *fiber.Ctx) error <span class="cov0" title="0">{
+        log.Info().Msg("Update a new pet.")
+        var request Request
+
+        strID := c.Params("id")
+        log.Info().Str("id", strID).Msg("GET pet by ID")
+
+        id, err := c.ParamsInt("id")
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid pet ID")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov0" title="0">err = c.BodyParser(&amp;request)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov0" title="0">log.Info().Str("name", request.Name).Msg("Update a pet.")
+        petEntity := ToPet(&amp;request)
+        petEntity.ID = uint(id)
+        petResponse, err := router.service.update(petEntity)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to update pet.")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+        }</span>
+
+        <span class="cov0" title="0">return c.Status(fiber.StatusOK).JSON(petResponse)</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package pet
+
+import (
+        "fiber-petclinic-service/pkg/repository"
+        "fiber-petclinic-service/pkg/repository/model"
+        "github.com/rs/zerolog/log"
+)
+
+type Servicer interface {
+        getAllPets() (*Responses, error)
+        getPetById(id int) (*Response, error)
+        getPetWithVisitsById(id int) (*Response, error)
+        getPetsByName(name string) ([]Response, error)
+        create(pet *repository.Pet) (*Response, error)
+        update(pet *repository.Pet) (*Response, error)
+}
+
+type Service struct {
+        repository repository.PetRepositorier
+}
+
+func NewService(repository repository.PetRepositorier) *Service <span class="cov8" title="1">{
+        return &amp;Service{repository: repository}
+}</span>
+
+// getAllPets - retrieve all pets
+func (service *Service) getAllPets() (*Responses, error) <span class="cov0" title="0">{
+        log.Debug().Msg("Retrieve all pets")
+        pets, err := service.repository.FindAll()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Fail to retrieve all pets.")
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">petResponses := FromPets(pets)
+
+        contextJson := model.Context{Count: len(petResponses)}
+        return &amp;Responses{Pets: petResponses, Context: contextJson}, nil</span>
+}
+
+// getPetById - retrieve pet by id
+func (service *Service) getPetById(id int) (*Response, error) <span class="cov8" title="1">{
+        log.Debug().Int("id", id).Msg("Retrieve pet by id.")
+        petF, err := service.repository.FindById(id)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Int("id", id).Msg("Fail to retrieve pet by id.")
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromPet(petF)
+        return response, nil</span>
+}
+
+func (service *Service) getPetWithVisitsById(id int) (*Response, error) <span class="cov0" title="0">{
+        log.Debug().Int("id", id).Msg("Retrieve pet by id.")
+        petF, err := service.repository.FindByIdWithVisits(id)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Int("id", id).Msg("Fail to retrieve pet by id.")
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">response := &amp;Response{}
+        response.FromPet(petF)
+        return response, nil</span>
+}
+
+// getPetByName - retrieve pet by name
+func (service *Service) getPetsByName(name string) ([]Response, error) <span class="cov8" title="1">{
+        log.Debug().Str("name", name).Msg("Fail pet by name.")
+
+        pets, err := service.repository.FindByName(name)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Str("name", name).Msg("Fail to retrieve pet by name.")
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return FromPets(pets), nil</span>
+}
+
+// create - create new pet
+func (service *Service) create(pet *repository.Pet) (*Response, error) <span class="cov0" title="0">{
+        log.Debug().Str("name", pet.Name).Msg("Create new pet.")
+        newPet, err := service.repository.Insert(pet)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Fail new pet failed.")
+                return &amp;Response{}, err
+        }</span>
+
+        <span class="cov0" title="0">response := &amp;Response{}
+        response.FromPet(newPet)
+        return response, nil</span>
+}
+
+// update - update pet
+func (service *Service) update(pet *repository.Pet) (*Response, error) <span class="cov8" title="1">{
+        log.Info().Any("pet", pet).Msg("Update a vet.")
+        updatedPet, err := service.repository.Update(pet)
+
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Fail to Update pet.")
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromPet(updatedPet)
+        return response, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package main
+
+import (
+        "context"
+        "fiber-petclinic-service/api/info"
+        "fiber-petclinic-service/api/owner"
+        "fiber-petclinic-service/api/pet"
+        "fiber-petclinic-service/api/vet"
+        "fiber-petclinic-service/api/visit"
+        "fiber-petclinic-service/config/app"
+        "fiber-petclinic-service/pkg/dbase"
+        "fiber-petclinic-service/pkg/repository"
+        "github.com/ansrivas/fiberprometheus/v2"
+        "github.com/gofiber/contrib/circuitbreaker"
+        "github.com/gofiber/fiber/v2"
+        "github.com/gofiber/fiber/v2/middleware/healthcheck"
+        "github.com/gofiber/fiber/v2/middleware/monitor"
+        "github.com/gofiber/fiber/v2/middleware/recover"
+        "github.com/gofiber/fiber/v2/middleware/requestid"
+        "github.com/rs/zerolog"
+        "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
+        "time"
+)
+
+var (
+        fiberApp *fiber.App
+        sqlite   *gorm.DB
+)
+
+// Instantiate zerolog
+// Instantiate fiber router and middlewares
+func loadConfig() <span class="cov0" title="0">{
+        zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+        log.Info().Msg("Go Fiber Pet Clinic starts")
+
+        // load application configurations
+        if err := app.LoadConfig("./config"); err != nil </span><span class="cov0" title="0">{
+                log.Fatal().Err(err).
+                        Msg("Fail to load application configuration.")
+        }</span>
+
+        // Set the log level based on the configuration
+        <span class="cov0" title="0">switch app.Config.Server.LogLevel </span>{
+        case "debug":<span class="cov0" title="0">
+                zerolog.SetGlobalLevel(zerolog.DebugLevel)</span>
+        case "info":<span class="cov0" title="0">
+                zerolog.SetGlobalLevel(zerolog.InfoLevel)</span>
+        case "warn":<span class="cov0" title="0">
+                zerolog.SetGlobalLevel(zerolog.WarnLevel)</span>
+        case "error":<span class="cov0" title="0">
+                zerolog.SetGlobalLevel(zerolog.ErrorLevel)</span>
+        default:<span class="cov0" title="0">
+                zerolog.SetGlobalLevel(zerolog.InfoLevel)</span>
+        }
+
+        <span class="cov0" title="0">var err error
+        sqlDB := dbase.Sqlite{}
+        sqlite, err = sqlDB.Connect(context.Background())
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal().Err(err).Msg("Fail to connect the database.")
+        }</span>
+
+        // Create a new Fiber instance
+        <span class="cov0" title="0">fiberApp = fiber.New()
+
+        prometheus := fiberprometheus.New("fiber-petclinic-service")
+        prometheus.RegisterAt(fiberApp, app.Config.Server.BaseURL+"/metrics")
+        prometheus.SetSkipPaths([]string{"/ping"}) // Optional: Remove some paths from metrics
+        fiberApp.Use(prometheus.Middleware)
+
+        // Monitor
+        fiberApp.Get(app.Config.Server.BaseURL+"/monitor", monitor.New(monitor.Config{Title: "fiber-petclinic-service Monitor"}))
+
+        cb := circuitbreaker.New(circuitbreaker.Config{
+                FailureThreshold: app.Config.CircuitBreaker.FailureThreshold,
+                Timeout:          time.Duration(app.Config.CircuitBreaker.Timeout) * time.Second,
+                SuccessThreshold: app.Config.CircuitBreaker.SuccessThreshold,
+        })
+
+        fiberApp.Use(circuitbreaker.Middleware(cb))
+        // Middleware for Enforcing Accept only application/json requests
+        fiberApp.Use(func(c *fiber.Ctx) error </span><span class="cov0" title="0">{
+                if offer := c.Accepts(fiber.MIMEApplicationJSON); offer == "" </span><span class="cov0" title="0">{
+                        return c.Status(fiber.StatusNotAcceptable).SendString("Only application/json is accepted.")
+                }</span>
+                <span class="cov0" title="0">return c.Next()</span>
+        })
+        // Apply global middlewares
+        <span class="cov0" title="0">fiberApp.Use(healthcheck.New())
+        fiberApp.Use(recover.New())   // Recover from panics and continue
+        fiberApp.Use(requestid.New())</span> // Generate a unique request ID for each request
+}
+
+func loadComponents() <span class="cov0" title="0">{
+        infoService := info.NewService()
+        ipService := info.NewIPService()
+        infoRouter := info.NewRouter(infoService, ipService)
+
+        // Owner
+        ownerRepository := repository.NewOwnerRepository(sqlite)
+        ownerService := owner.NewService(ownerRepository)
+        ownerRouter := owner.NewRouter(ownerService)
+
+        // Pet
+        petRepository := repository.NewPetRepository(sqlite)
+        petService := pet.NewService(petRepository)
+        petRouter := pet.NewRouter(petService)
+
+        // Vet
+        vetRepository := repository.NewVetRepository(sqlite)
+        vetService := vet.NewService(vetRepository)
+        vetRouter := vet.NewRouter(vetService)
+
+        // Visit
+        visitRepository := repository.NewVisitRepository(sqlite)
+        visitService := visit.NewService(visitRepository)
+        visitRouter := visit.NewRouter(visitService)
+
+        // create a new group for the /api/gof endpoint
+        home := fiberApp.Group(app.Config.Server.BaseURL)
+        // Register the info router to the home group
+        infoRouter.Register(home.Group("/info"))
+
+        // create a new group for the /api/gof/v1 endpoint
+        v1 := fiberApp.Group(app.Config.Server.BaseURL + "/v1")
+        // Register the author router to the v1 group
+        ownerRouter.Register(v1.Group("/owners"))
+        petRouter.Register(v1.Group("/pets"))
+        vetRouter.Register(v1.Group("/vets"))
+        visitRouter.Register(v1.Group("/visits"))
+}</span>
+
+func main() <span class="cov0" title="0">{
+        loadConfig()
+        loadComponents()
+
+        // Start the server on port 3000
+        err := fiberApp.Listen(app.Config.Server.HttpPort)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal().Err(err).Msg("Failed to start the server")
+                return
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package app
+
+import (
+        "fmt"
+        "github.com/cristalhq/aconfig"
+        "github.com/cristalhq/aconfig/aconfigyaml"
+        "github.com/go-playground/validator/v10"
+        "os"
+        "strings"
+)
+
+// Config stores the application-wide configurations
+var (
+        Config   AppConfig
+        validate *validator.Validate
+)
+
+type AppConfig struct {
+        AppInfo        AppInfoConfig             `yaml:"appInfo" validate:"required"`
+        CircuitBreaker CircuitBreakerConfig      `yaml:"circuitBreaker" validate:"required"`
+        Databases      map[string]DatabaseConfig `yaml:"databases" validate:"required"`
+        Server         ServerConfig              `yaml:"server" validate:"required"`
+}
+
+// Validate all config required values are populated.
+func (config AppConfig) Validate() error <span class="cov0" title="0">{
+        validate = validator.New(validator.WithRequiredStructEnabled())
+
+        if err := validate.Struct(config.AppInfo); err != nil </span><span class="cov0" title="0">{
+                panic(err.Error())</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+// LoadConfig loads configuration from the given list of paths and populates it into the Config variable.
+// The configuration file(s) should be named as app.yaml.
+func LoadConfig(configPath string) error <span class="cov0" title="0">{
+        env := strings.ToUpper(os.Getenv("ENV"))
+        configFile := configPath + "/" + getConfigFile(env) + ".yaml"
+
+        loader := aconfig.LoaderFor(&amp;Config, aconfig.Config{
+                SkipFlags: true,
+                Files:     []string{configFile},
+                FileDecoders: map[string]aconfig.FileDecoder{
+                        ".yaml": aconfigyaml.New(), // Register the YAML decoder
+                },
+        })
+        if err := loader.Load(); err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to load configuration file %s: %w", configFile, err)
+        }</span>
+
+        <span class="cov0" title="0">return Config.Validate()</span>
+}
+
+func getConfigFile(env string) string <span class="cov0" title="0">{
+        switch env </span>{
+        case "PRD":<span class="cov0" title="0">
+                return "app-prd"</span>
+        case "DEV":<span class="cov0" title="0">
+                return "app-dev"</span>
+        default:<span class="cov0" title="0">
+                return "app"</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package errors
+
+import (
+        validation "github.com/go-ozzo/ozzo-validation/v4"
+        "net/http"
+        "sort"
+)
+
+// ErrorResponse is the response that represents an error.
+type ErrorResponse struct {
+        Status  int         `json:"status"`
+        Message string      `json:"message"`
+        Details interface{} `json:"details,omitempty"`
+}
+
+// Error is required by the error interface.
+func (e ErrorResponse) Error() string <span class="cov8" title="1">{
+        return e.Message
+}</span>
+
+// StatusCode is required by routing.HTTPError interface.
+func (e ErrorResponse) StatusCode() int <span class="cov8" title="1">{
+        return e.Status
+}</span>
+
+// InternalServerError creates a new error response representing an internal server error (HTTP 500)
+func InternalServerError(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "We encountered an error while processing your request."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusInternalServerError,
+                Message: msg,
+        }</span>
+}
+
+// NotFound creates a new error response representing a resource-not-found error (HTTP 404)
+func NotFound(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "The requested resource was not found."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusNotFound,
+                Message: msg,
+        }</span>
+}
+
+// Unauthorized creates a new error response representing an authentication/authorization failure (HTTP 401)
+func Unauthorized(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "You are not authenticated to perform the requested action."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusUnauthorized,
+                Message: msg,
+        }</span>
+}
+
+// Forbidden creates a new error response representing an authorization failure (HTTP 403)
+func Forbidden(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "You are not authorized to perform the requested action."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusForbidden,
+                Message: msg,
+        }</span>
+}
+
+// BadRequest creates a new error response representing a bad request (HTTP 400)
+func BadRequest(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "Your request is in a bad format."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusBadRequest,
+                Message: msg,
+        }</span>
+}
+
+type invalidField struct {
+        Field string `json:"field"`
+        Error string `json:"error"`
+}
+
+// InvalidInput creates a new error response representing a data validation error (HTTP 400).
+func InvalidInput(errs validation.Errors) ErrorResponse <span class="cov8" title="1">{
+        var details []invalidField
+        var fields []string
+        for field := range errs </span><span class="cov8" title="1">{
+                fields = append(fields, field)
+        }</span>
+        <span class="cov8" title="1">sort.Strings(fields)
+        for _, field := range fields </span><span class="cov8" title="1">{
+                details = append(details, invalidField{
+                        Field: field,
+                        Error: errs[field].Error(),
+                })
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusBadRequest,
+                Message: "There is some problem with the data you submitted.",
+                Details: details,
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">// Package pagination provides support for pagination requests and responses.
+package pagination
+
+import (
+        "fmt"
+        "net/http"
+        "strconv"
+        "strings"
+)
+
+var (
+        // DefaultPageSize specifies the default page size
+        DefaultPageSize = 100
+        // MaxPageSize specifies the maximum page size
+        MaxPageSize = 1000
+        // PageVar specifies the query parameter name for page number
+        PageVar = "page"
+        // PageSizeVar specifies the query parameter name for page size
+        PageSizeVar = "per_page"
+)
+
+// Pages represents a paginated list of data items.
+type Pages struct {
+        Page       int         `json:"page"`
+        PerPage    int         `json:"per_page"`
+        PageCount  int         `json:"page_count"`
+        TotalCount int         `json:"total_count"`
+        Items      interface{} `json:"items"`
+}
+
+// New creates a new Pages instance.
+// The page parameter is 1-based and refers to the current page index/number.
+// The perPage parameter refers to the number of items on each page.
+// And the total parameter specifies the total number of data items.
+// If total is less than 0, it means total is unknown.
+func New(page, perPage, total int) *Pages <span class="cov8" title="1">{
+        if perPage &lt;= 0 </span><span class="cov8" title="1">{
+                perPage = DefaultPageSize
+        }</span>
+        <span class="cov8" title="1">if perPage &gt; MaxPageSize </span><span class="cov8" title="1">{
+                perPage = MaxPageSize
+        }</span>
+        <span class="cov8" title="1">pageCount := -1
+        if total &gt;= 0 </span><span class="cov8" title="1">{
+                pageCount = (total + perPage - 1) / perPage
+                if page &gt; pageCount </span><span class="cov8" title="1">{
+                        page = pageCount
+                }</span>
+        }
+        <span class="cov8" title="1">if page &lt; 1 </span><span class="cov8" title="1">{
+                page = 1
+        }</span>
+
+        <span class="cov8" title="1">return &amp;Pages{
+                Page:       page,
+                PerPage:    perPage,
+                TotalCount: total,
+                PageCount:  pageCount,
+        }</span>
+}
+
+// NewFromRequest creates a Pages object using the query parameters found in the given HTTP request.
+// count stands for the total number of items. Use -1 if this is unknown.
+func NewFromRequest(req *http.Request, count int) *Pages <span class="cov8" title="1">{
+        page := parseInt(req.URL.Query().Get(PageVar), 1)
+        perPage := parseInt(req.URL.Query().Get(PageSizeVar), DefaultPageSize)
+        return New(page, perPage, count)
+}</span>
+
+// parseInt parses a string into an integer. If parsing is failed, defaultValue will be returned.
+func parseInt(value string, defaultValue int) int <span class="cov8" title="1">{
+        if value == "" </span><span class="cov8" title="1">{
+                return defaultValue
+        }</span>
+        <span class="cov8" title="1">if result, err := strconv.Atoi(value); err == nil </span><span class="cov8" title="1">{
+                return result
+        }</span>
+        <span class="cov8" title="1">return defaultValue</span>
+}
+
+// Offset returns the OFFSET value that can be used in a SQL statement.
+func (p *Pages) Offset() int <span class="cov8" title="1">{
+        return (p.Page - 1) * p.PerPage
+}</span>
+
+// Limit returns the LIMIT value that can be used in a SQL statement.
+func (p *Pages) Limit() int <span class="cov8" title="1">{
+        return p.PerPage
+}</span>
+
+// BuildLinkHeader returns an HTTP header containing the links about the pagination.
+func (p *Pages) BuildLinkHeader(baseURL string, defaultPerPage int) string <span class="cov8" title="1">{
+        links := p.BuildLinks(baseURL, defaultPerPage)
+        header := ""
+        if links[0] != "" </span><span class="cov8" title="1">{
+                header += fmt.Sprintf("&lt;%v&gt;; rel=\"first\", ", links[0])
+                header += fmt.Sprintf("&lt;%v&gt;; rel=\"prev\"", links[1])
+        }</span>
+        <span class="cov8" title="1">if links[2] != "" </span><span class="cov8" title="1">{
+                if header != "" </span><span class="cov8" title="1">{
+                        header += ", "
+                }</span>
+                <span class="cov8" title="1">header += fmt.Sprintf("&lt;%v&gt;; rel=\"next\"", links[2])
+                if links[3] != "" </span><span class="cov8" title="1">{
+                        header += fmt.Sprintf(", &lt;%v&gt;; rel=\"last\"", links[3])
+                }</span>
+        }
+        <span class="cov8" title="1">return header</span>
+}
+
+// BuildLinks returns the first, prev, next, and last links corresponding to the pagination.
+// A link could be an empty string if it is not needed.
+// For example, if the pagination is at the first page, then both first and prev links
+// will be empty.
+func (p *Pages) BuildLinks(baseURL string, defaultPerPage int) [4]string <span class="cov8" title="1">{
+        var links [4]string
+        pageCount := p.PageCount
+        page := p.Page
+        if pageCount &gt;= 0 &amp;&amp; page &gt; pageCount </span><span class="cov8" title="1">{
+                page = pageCount
+        }</span>
+        <span class="cov8" title="1">if strings.Contains(baseURL, "?") </span><span class="cov8" title="1">{
+                baseURL += "&amp;"
+        }</span> else<span class="cov8" title="1"> {
+                baseURL += "?"
+        }</span>
+        <span class="cov8" title="1">if page &gt; 1 </span><span class="cov8" title="1">{
+                links[0] = fmt.Sprintf("%v%v=%v", baseURL, PageVar, 1)
+                links[1] = fmt.Sprintf("%v%v=%v", baseURL, PageVar, page-1)
+        }</span>
+        <span class="cov8" title="1">if pageCount &gt;= 0 &amp;&amp; page &lt; pageCount </span><span class="cov8" title="1">{
+                links[2] = fmt.Sprintf("%v%v=%v", baseURL, PageVar, page+1)
+                links[3] = fmt.Sprintf("%v%v=%v", baseURL, PageVar, pageCount)
+        }</span> else<span class="cov8" title="1"> if pageCount &lt; 0 </span><span class="cov8" title="1">{
+                links[2] = fmt.Sprintf("%v%v=%v", baseURL, PageVar, page+1)
+        }</span>
+        <span class="cov8" title="1">if perPage := p.PerPage; perPage != defaultPerPage </span><span class="cov8" title="1">{
+                for i := 0; i &lt; 4; i++ </span><span class="cov8" title="1">{
+                        if links[i] != "" </span><span class="cov8" title="1">{
+                                links[i] += fmt.Sprintf("&amp;%v=%v", PageSizeVar, perPage)
+                        }</span>
+                }
+        }
+
+        <span class="cov8" title="1">return links</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package test
+
+import (
+        "bytes"
+        "net/http"
+        "net/http/httptest"
+        "strings"
+        "testing"
+
+        "github.com/stretchr/testify/assert"
+)
+
+// APITestCase represents the data needed to describe an API test case.
+type APITestCase struct {
+        Name         string
+        Method, URL  string
+        Body         string
+        Header       http.Header
+        WantStatus   int
+        WantResponse string
+}
+
+// Endpoint tests an HTTP endpoint using the given APITestCase spec.
+func Endpoint(t *testing.T, router http.Handler, tc APITestCase) <span class="cov0" title="0">{
+        t.Run(tc.Name, func(t *testing.T) </span><span class="cov0" title="0">{
+                req, _ := http.NewRequest(tc.Method, tc.URL, bytes.NewBufferString(tc.Body))
+                if tc.Header != nil </span><span class="cov0" title="0">{
+                        req.Header = tc.Header
+                }</span>
+                <span class="cov0" title="0">res := httptest.NewRecorder()
+                if req.Header.Get("Content-Type") == "" </span><span class="cov0" title="0">{
+                        req.Header.Set("Content-Type", "application/json")
+                }</span>
+                <span class="cov0" title="0">router.ServeHTTP(res, req)
+                assert.Equal(t, tc.WantStatus, res.Code, "status mismatch")
+                if tc.WantResponse != "" </span><span class="cov0" title="0">{
+                        pattern := strings.Trim(tc.WantResponse, "*")
+                        if pattern != tc.WantResponse </span><span class="cov0" title="0">{
+                                assert.Contains(t, res.Body.String(), pattern, "response mismatch")
+                        }</span> else<span class="cov0" title="0"> {
+                                assert.JSONEq(t, tc.WantResponse, res.Body.String(), "response mismatch")
+                        }</span>
+                }
+        })
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package test
+
+import (
+        "testing"
+
+        "github.com/pressly/goose"
+
+        embeddedpostgres "github.com/fergusstrange/embedded-postgres"
+        "gorm.io/driver/postgres"
+        "gorm.io/gorm"
+)
+
+func Connect() (*gorm.DB, error) <span class="cov0" title="0">{
+        return gorm.Open(postgres.Open("host=localhost port=5433 user=postgres password=postgres dbname=postgres sslmode=disable"), &amp;gorm.Config{})
+}</span>
+
+func PgStart(t *testing.T, dir string) *embeddedpostgres.EmbeddedPostgres <span class="cov0" title="0">{
+        postgresql := embeddedpostgres.NewDatabase(embeddedpostgres.
+                DefaultConfig().Port(5433))
+
+        if err := postgresql.Start(); err != nil </span><span class="cov0" title="0">{
+                t.Fatal(err)
+        }</span>
+
+        <span class="cov0" title="0">db, err := Connect()
+        if err != nil </span><span class="cov0" title="0">{
+                t.Fatal(err)
+        }</span>
+
+        <span class="cov0" title="0">sqlDB, _ := db.DB()
+        if err := goose.Up(sqlDB, dir); err != nil </span><span class="cov0" title="0">{
+                t.Fatal(err)
+        }</span>
+
+        <span class="cov0" title="0">return postgresql</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package test
+
+import jsoniter "github.com/json-iterator/go"
+
+func JsonString(obj interface{}) string <span class="cov0" title="0">{
+        b, _ := jsoniter.Marshal(obj)
+        return string(b)
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

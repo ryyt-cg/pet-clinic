@@ -2,8 +2,8 @@ package vet
 
 import (
 	"errors"
-	resterr "gin-petclinic-service/middleware/errors"
-	"go.uber.org/zap"
+	resterr "gin-petclinic-service/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"strconv"
 
@@ -13,12 +13,11 @@ import (
 )
 
 type Router struct {
-	logger  *zap.Logger
 	service Servicer
 }
 
-func NewRouter(logger *zap.Logger, service Servicer) *Router {
-	return &Router{logger, service}
+func NewRouter(service Servicer) *Router {
+	return &Router{service}
 }
 
 // Register
@@ -36,8 +35,10 @@ func (vetRouter *Router) Register(router *gin.RouterGroup) {
 // allSpecialties - retrieve all specialties
 
 func (vetRouter *Router) allSpecialties(c *gin.Context) {
+	log.Info().Msg("get all specialties")
 	response, err := vetRouter.service.getAllSpecialties()
 	if err != nil {
+		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
 
@@ -79,6 +80,7 @@ func (vetRouter *Router) vetByParam(c *gin.Context) {
 func (vetRouter *Router) vetByLastName(c *gin.Context, lastName string) {
 	response, err := vetRouter.service.getVetByLastName(lastName)
 	if err != nil {
+		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
 
@@ -134,7 +136,7 @@ func (vetRouter *Router) create(c *gin.Context) {
 	var vetRequest Request
 	err := c.ShouldBindJSON(&vetRequest)
 	if err != nil {
-		vetRouter.logger.Error("Unable to Unmarshal JSON.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
@@ -149,7 +151,7 @@ func (vetRouter *Router) update(c *gin.Context) {
 	err := c.ShouldBindJSON(&vetRequest)
 
 	if err != nil {
-		vetRouter.logger.Error("Unable to Unmarshal JSON.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}

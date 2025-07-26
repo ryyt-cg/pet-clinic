@@ -4,6 +4,7 @@ import (
 	"fiber-petclinic-service/api/visit"
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
+	"time"
 )
 
 type Response struct {
@@ -38,7 +39,7 @@ type AddResponse struct {
 func (pr *Response) FromPet(pet *repository.Pet) {
 	pr.ID = pet.ID
 	pr.Name = pet.Name
-	pr.Birthdate = pet.Birthdate
+	pr.Birthdate = pet.Birthdate.Format(time.DateOnly)
 	pr.Type = pet.Type.Name
 	pr.Visits = visit.FromVisits(pet.Visits)
 }

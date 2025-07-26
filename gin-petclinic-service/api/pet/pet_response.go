@@ -2,8 +2,8 @@ package pet
 
 import (
 	"gin-petclinic-service/api/visit"
-	"gin-petclinic-service/pkg/infra/repository"
 	"gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/repository"
 )
 
 type Response struct {

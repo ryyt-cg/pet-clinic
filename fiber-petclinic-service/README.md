@@ -1,4 +1,4 @@
-# Fiber 02 Example
+# Fiber Pet Clinic Service
 This example inherits every feature from fiber-petclinic-service example.  It has a circuit breaker middleware to handle service failures gracefully.
 
 ## Features

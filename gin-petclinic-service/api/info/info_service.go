@@ -2,7 +2,7 @@ package info
 
 import (
 	"gin-petclinic-service/config/app"
-	"go.uber.org/zap"
+	"github.com/rs/zerolog/log"
 )
 
 type Servicer interface {
@@ -10,11 +10,10 @@ type Servicer interface {
 }
 
 type Service struct {
-	logger *zap.Logger
 }
 
-func NewService(logger *zap.Logger) *Service {
-	return &Service{logger}
+func NewService() *Service {
+	return &Service{}
 }
 
 func (service *Service) getAppInfo() (*Info, error) {
@@ -25,6 +24,6 @@ func (service *Service) getAppInfo() (*Info, error) {
 		Version:     app.Config.AppInfo.Version,
 	}
 
-	service.logger.Info("app info", zap.Any("info", info))
+	log.Debug().Any("info", info).Msg("app info")
 	return info, nil
 }

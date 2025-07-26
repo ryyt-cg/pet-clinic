@@ -2,6 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
+	"time"
 )
 
 // Visit
@@ -9,7 +10,7 @@ import (
 // entity:model visit
 type Visit struct {
 	gorm.Model
-	VisitDate   string
+	VisitDate   time.Time
 	Description string
 	PetID       int
 	Pet         Pet

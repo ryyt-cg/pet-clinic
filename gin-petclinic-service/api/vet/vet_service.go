@@ -1,8 +1,8 @@
 package vet
 
 import (
-	"gin-petclinic-service/pkg/infra/repository"
-	"go.uber.org/zap"
+	repository2 "gin-petclinic-service/pkg/repository"
+	"github.com/rs/zerolog/log"
 )
 
 type Servicer interface {
@@ -12,24 +12,23 @@ type Servicer interface {
 	getVetByLastName(lastName string) ([]Response, error)
 	getAllVets() ([]Response, error)
 	getAllVetsWithSpecialties() ([]Response, error)
-	create(vet *repository.Vet) (*Response, error)
-	update(vet *repository.Vet) (*Response, error)
+	create(vet *repository2.Vet) (*Response, error)
+	update(vet *repository2.Vet) (*Response, error)
 }
 
 type Service struct {
-	logger     *zap.Logger
-	repository repository.VetRepositorier
+	repository repository2.VetRepositorier
 }
 
-func NewService(logger *zap.Logger, repository repository.VetRepositorier) *Service {
-	return &Service{logger: logger, repository: repository}
+func NewService(repository repository2.VetRepositorier) *Service {
+	return &Service{repository: repository}
 }
 
 // getAllSpecialties - retrieve all specialties
 func (service *Service) getAllSpecialties() (*specialtiesResponse, error) {
 	specialties, err := service.repository.FindAllSpecialties()
 	if err != nil {
-		service.logger.Error("Fail to retrieve all specialties.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to retrieve all specialties.")
 		return nil, err
 	}
 
@@ -44,8 +43,7 @@ func (service *Service) getAllSpecialties() (*specialtiesResponse, error) {
 func (service *Service) getVetById(id int) (*Response, error) {
 	vet, err := service.repository.FindById(id)
 	if err != nil {
-		service.logger.Error("Fail to retrieve vet by id.",
-			zap.Int("id", id), zap.String("error", err.Error()))
+		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve vet by id.")
 		return nil, err
 	}
 
@@ -57,8 +55,7 @@ func (service *Service) getVetById(id int) (*Response, error) {
 func (service *Service) getVetByIdWithSpecialties(id int) (*Response, error) {
 	vet, err := service.repository.FindByIdWithSpecialties(id)
 	if err != nil {
-		service.logger.Error("Fail to retrieve vet by id with specialties",
-			zap.Int("id", id), zap.String("error", err.Error()))
+		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve vet by id with specialties")
 		return nil, err
 	}
 
@@ -70,8 +67,7 @@ func (service *Service) getVetByIdWithSpecialties(id int) (*Response, error) {
 func (service *Service) getVetByLastName(lastName string) ([]Response, error) {
 	vets, err := service.repository.FindByLastName(lastName)
 	if err != nil {
-		service.logger.Error("Fail to retrieve the vets by last name.",
-			zap.String("lastName", lastName), zap.String("error", err.Error()))
+		log.Error().Err(err).Str("lastName", lastName).Msg("Fail to retrieve the vets by last name.")
 		return nil, err
 	}
 
@@ -83,10 +79,10 @@ func (service *Service) getAllVets() ([]Response, error) {
 	vets, err := service.repository.FindAll()
 
 	if err != nil {
-		service.logger.Error("Fail to retrieve all vets.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to retrieve all vets.")
 		return nil, err
 	}
-	service.logger.Info("counts of all vets")
+	log.Debug().Msg("counts of all vets")
 	return FromVets(vets), nil
 }
 
@@ -94,20 +90,20 @@ func (service *Service) getAllVetsWithSpecialties() ([]Response, error) {
 	vets, err := service.repository.FindAllPreload()
 
 	if err != nil {
-		service.logger.Error("Fail to retrieve all vets.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail to retrieve all vets.")
 		return nil, err
 	}
-	service.logger.Info("counts of all vets.", zap.Int("count", len(vets)))
+	log.Debug().Int("count", len(vets)).Msg("counts of all vets.")
 	return FromVets(vets), nil
 }
 
 // create - create new vet
-func (service *Service) create(vet *repository.Vet) (*Response, error) {
-	service.logger.Info("Create new vet.", zap.Any("vet", vet))
+func (service *Service) create(vet *repository2.Vet) (*Response, error) {
+	log.Debug().Any("vet", vet).Msg("Create new vet.")
 	newVet, err := service.repository.Insert(vet)
 
 	if err != nil {
-		service.logger.Error("Fail new vet failed.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Fail new vet failed.")
 		return &Response{}, err
 	}
 
@@ -117,12 +113,12 @@ func (service *Service) create(vet *repository.Vet) (*Response, error) {
 }
 
 // update - update vet
-func (service *Service) update(vet *repository.Vet) (*Response, error) {
-	service.logger.Info("Fail vet.", zap.Any("vet", vet))
+func (service *Service) update(vet *repository2.Vet) (*Response, error) {
+	log.Debug().Any("vet", vet).Msg("Fail vet.")
 	updatedVet, err := service.repository.Update(vet)
 
 	if err != nil {
-		service.logger.Error("Update vet failed.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Update vet failed.")
 		return nil, err
 	}
 

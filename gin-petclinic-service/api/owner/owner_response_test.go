@@ -2,15 +2,15 @@ package owner
 
 import (
 	"gin-petclinic-service/api/pet"
-	"gin-petclinic-service/pkg/infra/repository"
 	"gin-petclinic-service/pkg/model"
+	repository2 "gin-petclinic-service/pkg/repository"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
 	"testing"
 )
 
 func TestResponseFromOwner(t *testing.T) {
-	owner := &repository.Owner{
+	owner := &repository2.Owner{
 		Model: gorm.Model{
 			ID: 1,
 		},
@@ -21,7 +21,7 @@ func TestResponseFromOwner(t *testing.T) {
 		Address:   "123 Main St",
 		City:      "Anytown",
 		Telephone: "1234567890",
-		Pets:      []repository.Pet{},
+		Pets:      []repository2.Pet{},
 	}
 
 	response := &Response{}
@@ -37,7 +37,7 @@ func TestResponseFromOwner(t *testing.T) {
 }
 
 func TestFromOwners(t *testing.T) {
-	owners := []repository.Owner{
+	owners := []repository2.Owner{
 		{
 			Model: gorm.Model{ID: 1},
 			Person: model.Person{
@@ -47,7 +47,7 @@ func TestFromOwners(t *testing.T) {
 			Address:   "123 Main St",
 			City:      "Anytown",
 			Telephone: "1234567890",
-			Pets:      []repository.Pet{},
+			Pets:      []repository2.Pet{},
 		},
 		{
 			Model: gorm.Model{ID: 2},
@@ -56,7 +56,7 @@ func TestFromOwners(t *testing.T) {
 			Address:   "456 Main St",
 			City:      "Anytown",
 			Telephone: "0987654321",
-			Pets:      []repository.Pet{},
+			Pets:      []repository2.Pet{},
 		},
 	}
 

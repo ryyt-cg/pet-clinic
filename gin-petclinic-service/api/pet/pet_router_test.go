@@ -2,7 +2,7 @@ package pet
 
 import (
 	"encoding/json"
-	"gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/repository"
 	"go.uber.org/zap"
 	"net/http"
 	"net/http/httptest"

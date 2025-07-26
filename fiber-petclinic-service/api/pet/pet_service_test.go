@@ -5,6 +5,7 @@ import (
 	"fiber-petclinic-service/pkg/repository"
 	"gorm.io/gorm"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -103,7 +104,7 @@ func Test_getById(t *testing.T) {
 					ID: 1,
 				},
 				Name:      "Nash",
-				Birthdate: "2014-10-07",
+				Birthdate: time.Date(2014, 10, 07, 0, 0, 0, 0, time.UTC),
 				Type: repository.Type{
 					Model: gorm.Model{
 						ID: 1,
@@ -159,7 +160,7 @@ func Test_getByName(t *testing.T) {
 						ID: 1,
 					},
 					Name:      "Leo",
-					Birthdate: "2017-07-02",
+					Birthdate: time.Date(2017, 07, 02, 0, 0, 0, 0, time.UTC),
 					Type: repository.Type{
 						Model: gorm.Model{
 							ID: 2,
@@ -219,7 +220,7 @@ func Test_update(t *testing.T) {
 					ID: 1,
 				},
 				Name:      "Leo",
-				Birthdate: "2017-07-02",
+				Birthdate: time.Date(2017, 7, 02, 0, 0, 0, 0, time.UTC),
 				Type: repository.Type{
 					Model: gorm.Model{
 						ID: 2,

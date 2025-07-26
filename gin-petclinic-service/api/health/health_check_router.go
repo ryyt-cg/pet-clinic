@@ -1,7 +1,6 @@
 package health
 
 import (
-	"go.uber.org/zap"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,11 +8,10 @@ import (
 
 type CheckRouter struct {
 	healthCheckService Servicer
-	logger             *zap.Logger
 }
 
-func NewRouter(healthCheckService Servicer, logger *zap.Logger) *CheckRouter {
-	return &CheckRouter{healthCheckService, logger}
+func NewRouter(healthCheckService Servicer) *CheckRouter {
+	return &CheckRouter{healthCheckService}
 }
 
 // Register registers the router to the gin engine

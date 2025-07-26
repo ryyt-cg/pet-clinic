@@ -1,8 +1,8 @@
 package vet
 
 import (
-	"gin-petclinic-service/pkg/infra/repository"
 	"gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/repository"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 

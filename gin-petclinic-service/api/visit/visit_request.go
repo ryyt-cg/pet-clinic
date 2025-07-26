@@ -1,7 +1,7 @@
 package visit
 
 import (
-	"gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/repository"
 )
 
 type Request struct {

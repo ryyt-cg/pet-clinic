@@ -1,19 +1,14 @@
 package health
 
-import (
-	"go.uber.org/zap"
-)
-
 type Servicer interface {
 	check() (*Check, error)
 }
 
 type CheckService struct {
-	logger *zap.Logger
 }
 
-func NewService(logger *zap.Logger) *CheckService {
-	return &CheckService{logger}
+func NewService() *CheckService {
+	return &CheckService{}
 }
 
 // check

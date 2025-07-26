@@ -1,8 +1,8 @@
 package owner
 
 import (
-	"gin-petclinic-service/pkg/infra/repository"
 	"gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/repository"
 )
 
 // Owner Requests - A collection of requests (input contracts) for the owner API

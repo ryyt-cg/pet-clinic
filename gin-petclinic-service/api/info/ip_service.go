@@ -1,7 +1,6 @@
 package info
 
 import (
-	"go.uber.org/zap"
 	"net"
 )
 
@@ -11,11 +10,10 @@ type IPServicer interface {
 }
 
 type IPService struct {
-	logger *zap.Logger
 }
 
-func NewIPService(logger *zap.Logger) *IPService {
-	return &IPService{logger}
+func NewIPService() *IPService {
+	return &IPService{}
 }
 
 func (service *IPService) lookupIP(host string) ([]net.IP, error) {

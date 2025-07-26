@@ -2,6 +2,7 @@ package visit
 
 import (
 	"fiber-petclinic-service/pkg/repository"
+	"time"
 )
 
 type Request struct {
@@ -25,8 +26,9 @@ type UpdateRequest struct {
 }
 
 func ToVisit(request *Request) *repository.Visit {
+	visitDate, _ := time.Parse(time.DateOnly, request.VisitDate)
 	return &repository.Visit{
-		VisitDate:   request.VisitDate,
+		VisitDate:   visitDate,
 		Description: request.Description,
 		PetID:       request.PetID,
 	}

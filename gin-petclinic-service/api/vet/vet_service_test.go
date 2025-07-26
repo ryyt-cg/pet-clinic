@@ -2,8 +2,8 @@ package vet
 
 import (
 	"errors"
-	"gin-petclinic-service/pkg/infra/repository"
 	"gin-petclinic-service/pkg/model"
+	repository2 "gin-petclinic-service/pkg/repository"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"testing"
@@ -15,12 +15,12 @@ import (
 func Test_getById(t *testing.T) {
 	testCases := []struct {
 		name          string
-		expectedVet   *repository.Vet
+		expectedVet   *repository2.Vet
 		expectedError error
 	}{
 		{
 			name: "get vet by id",
-			expectedVet: &repository.Vet{
+			expectedVet: &repository2.Vet{
 				Person: model.Person{
 					FirstName: "Nat",
 					LastName:  "Cole",
@@ -39,7 +39,7 @@ func Test_getById(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			logger := zap.NewNop()
-			vetMock := repository.MockVetRepositorier{}
+			vetMock := repository2.MockVetRepositorier{}
 
 			vetMock.On("FindById", 1).Return(tc.expectedVet, tc.expectedError)
 			vetService := NewService(logger, &vetMock)
@@ -65,12 +65,12 @@ func Test_getById(t *testing.T) {
 func Test_getByLastName(t *testing.T) {
 	testCases := []struct {
 		name          string
-		expectedVets  []repository.Vet
+		expectedVets  []repository2.Vet
 		expectedError error
 	}{
 		{
 			name: "get vet by last name",
-			expectedVets: []repository.Vet{
+			expectedVets: []repository2.Vet{
 				{
 					Model: gorm.Model{
 						ID: 1,
@@ -93,7 +93,7 @@ func Test_getByLastName(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			logger := zap.NewNop()
-			vetMock := repository.MockVetRepositorier{}
+			vetMock := repository2.MockVetRepositorier{}
 			vetMock.On("FindByLastName", "DiCaprio").Return(tc.expectedVets, tc.expectedError)
 
 			vetService := NewService(logger, &vetMock)

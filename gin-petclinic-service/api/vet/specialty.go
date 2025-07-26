@@ -1,7 +1,7 @@
 package vet
 
 import (
-	"gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/repository"
 	"gorm.io/gorm"
 )
 

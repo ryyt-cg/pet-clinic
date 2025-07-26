@@ -3,9 +3,9 @@ package pet
 import (
 	"errors"
 	"gin-petclinic-service/api"
-	resterr "gin-petclinic-service/middleware/errors"
+	resterr "gin-petclinic-service/pkg/errors"
 	"gin-petclinic-service/pkg/model"
-	"go.uber.org/zap"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"strconv"
 
@@ -15,13 +15,12 @@ import (
 )
 
 type Router struct {
-	logger  *zap.Logger
 	service Servicer
 }
 
 // NewRouter - create new router
-func NewRouter(logger *zap.Logger, service Servicer) *Router {
-	return &Router{logger, service}
+func NewRouter(service Servicer) *Router {
+	return &Router{service}
 }
 
 // Register - register routes
@@ -45,9 +44,10 @@ func (router *Router) Register(routerGroup *gin.RouterGroup) {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets/all 		[get]
 func (router *Router) getAll(c *gin.Context) {
+	log.Info().Msg("Retrieve all pets")
 	responses, err := router.service.getAllPets()
 	if err != nil {
-		router.logger.Error("Unable to get all pets.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to get all pets.")
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
@@ -67,9 +67,10 @@ func (router *Router) getAll(c *gin.Context) {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets/{id} 		[get]
 func (router *Router) getById(c *gin.Context) {
+	log.Info().Msg("Retrieve pet by id")
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		router.logger.Error("Unable to convert to number.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to convert to number.")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
@@ -77,11 +78,11 @@ func (router *Router) getById(c *gin.Context) {
 	response, err := router.service.getPetById(id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			router.logger.Error("find no pet by this id.", zap.String("error", err.Error()))
+			log.Error().Err(err).Int("id", id).Msg("find no pet by this id.")
 			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
 			return
 		}
-		router.logger.Error("Unable to get pet by id.", zap.String("error", err.Error()))
+		log.Error().Err(err).Int("id", id).Msg("Unable to get pet by id.")
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
@@ -104,7 +105,7 @@ func (router *Router) getById(c *gin.Context) {
 func (router *Router) getWithVisitsById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		router.logger.Error("Unable to convert to number.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to convert to number.")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
@@ -112,11 +113,11 @@ func (router *Router) getWithVisitsById(c *gin.Context) {
 	response, err := router.service.getPetWithVisitsById(id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			router.logger.Error("find no pet by this id.", zap.String("error", err.Error()))
+			log.Error().Err(err).Msg("find no pet by this id.")
 			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
 			return
 		}
-		router.logger.Error("Unable to get pet by id.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to get pet by id.")
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
@@ -140,7 +141,7 @@ func (router *Router) getByQueryParam(c *gin.Context) {
 	var nameParam api.NameParam
 	err := c.BindQuery(&nameParam)
 	if err != nil {
-		router.logger.Error("Unable to bind query param.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to bind query param.")
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
@@ -158,7 +159,7 @@ func (router *Router) getByName(c *gin.Context, param api.NameParam) {
 	}
 
 	if len(pets) == 0 {
-		router.logger.Error("find no pet by this name", zap.String("name", param.Name))
+		log.Error().Err(err).Str("name", param.Name).Msg("find no pet by this name")
 		c.JSON(http.StatusNotFound, resterr.NotFound("No pets found with name: "+param.Name))
 		return
 	}
@@ -188,12 +189,12 @@ func (router *Router) create(c *gin.Context) {
 	var request Request
 	err := c.ShouldBind(&request)
 	if err != nil {
-		router.logger.Error("Unable to Unmarshal JSON.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
 
-	router.logger.Info("Add a new pet.", zap.String("name", request.Name))
+	log.Info().Str("name", request.Name).Msg("Add a new pet.")
 	petResponse, err := router.service.create(ToPet(&request))
 	c.JSON(http.StatusCreated, petResponse)
 }
@@ -215,25 +216,25 @@ func (router *Router) update(c *gin.Context) {
 	var request Request
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		router.logger.Error("Unable to convert to number.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to convert to number.")
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
 
 	err = c.ShouldBind(&request)
 	if err != nil {
-		router.logger.Error("Unable to Unmarshal JSON.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
 
-	router.logger.Info("Update a pet.", zap.String("name", request.Name))
+	log.Info().Str("name", request.Name).Msg("Update a pet.")
 	petEntity := ToPet(&request)
 	petEntity.ID = uint(id)
 	petResponse, err := router.service.update(petEntity)
 
 	if err != nil {
-		router.logger.Error("Unable to update pet.", zap.String("error", err.Error()))
+		log.Error().Err(err).Msg("Unable to update pet.")
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}

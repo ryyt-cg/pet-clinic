@@ -7,7 +7,9 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func SqliteConnect() (*gorm.DB, error) {
+type Sqlite struct{}
+
+func (s *Sqlite) Connect() (*gorm.DB, error) {
 
 	db, err := gorm.Open(sqlite.Open(app.Config.Database.Sqlite.Dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),

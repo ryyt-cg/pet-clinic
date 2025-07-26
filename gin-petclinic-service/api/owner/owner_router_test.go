@@ -3,7 +3,7 @@ package owner
 import (
 	"errors"
 	"gin-petclinic-service/api/pet"
-	resterr "gin-petclinic-service/middleware/errors"
+	resterr "gin-petclinic-service/pkg/errors"
 	"gin-petclinic-service/pkg/model"
 	"gin-petclinic-service/pkg/test"
 	"go.uber.org/zap"

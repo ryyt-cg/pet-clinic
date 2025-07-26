@@ -2,6 +2,7 @@ package pet
 
 import (
 	"fiber-petclinic-service/pkg/repository"
+	"time"
 )
 
 type Request struct {
@@ -27,10 +28,10 @@ type UpdateRequest struct {
 }
 
 func ToPet(petRequest *Request) *repository.Pet {
-	//birthday, _ := time.Parse(time.DateOnly, petRequest.Birthdate)
+	birthday, _ := time.Parse(time.DateOnly, petRequest.Birthdate)
 	return &repository.Pet{
 		Name:      petRequest.Name,
-		Birthdate: petRequest.Birthdate,
+		Birthdate: birthday,
 		TypeID:    petRequest.TypeID,
 		OwnerID:   petRequest.OwnerID,
 	}

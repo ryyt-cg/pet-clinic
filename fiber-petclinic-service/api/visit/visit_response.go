@@ -3,6 +3,7 @@ package visit
 import (
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
+	"time"
 )
 
 type Response struct {
@@ -25,8 +26,7 @@ type Responses struct {
 
 func (vr *Response) FromVisit(visit *repository.Visit) {
 	vr.ID = visit.ID
-	// Format(time.DateOnly)
-	vr.VisitDate = visit.VisitDate
+	vr.VisitDate = visit.VisitDate.Format(time.DateOnly)
 	vr.Description = visit.Description
 }
 

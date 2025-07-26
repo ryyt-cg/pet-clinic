@@ -1,8 +1,8 @@
 package visit
 
 import (
-	"gin-petclinic-service/middleware/errors"
-	"go.uber.org/zap"
+	"gin-petclinic-service/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"strconv"
 
@@ -10,12 +10,11 @@ import (
 )
 
 type Router struct {
-	logger  *zap.Logger
 	service Servicer
 }
 
-func NewRouter(logger *zap.Logger, service Servicer) *Router {
-	return &Router{logger, service}
+func NewRouter(service Servicer) *Router {
+	return &Router{service}
 }
 
 func (r *Router) Register(router *gin.RouterGroup) {
@@ -39,6 +38,7 @@ func (r *Router) Register(router *gin.RouterGroup) {
 // @Router		/visits/{id} 	[get]
 func (r *Router) visitById(c *gin.Context) {
 	pathID := c.Param("id")
+	log.Info().Str("pathID", pathID).Msg("Get pet by id")
 
 	id, err := strconv.Atoi(pathID)
 	if err != nil {
@@ -66,8 +66,10 @@ func (r *Router) visitById(c *gin.Context) {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/visits/all		[get]
 func (r *Router) allVisits(c *gin.Context) {
+	log.Info().Msg("get all visits")
 	response, err := r.service.getAllVisits()
 	if err != nil {
+		c.JSON(http.StatusInternalServerError, errors.InternalServerError(err.Error()))
 		return
 	}
 
@@ -75,6 +77,7 @@ func (r *Router) allVisits(c *gin.Context) {
 }
 
 func (r *Router) addNewVisit(c *gin.Context) {
+	log.Info().Msg("add new visit")
 	var visit Request
 	if err := c.ShouldBindJSON(&visit); err != nil {
 		c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))
@@ -103,6 +106,7 @@ func (r *Router) addNewVisit(c *gin.Context) {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/visits/{id} 	[put]
 func (r *Router) updateVisit(c *gin.Context) {
+	log.Info().Msg("update visit")
 	var visit Request
 	if err := c.ShouldBindJSON(&visit); err != nil {
 		c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))

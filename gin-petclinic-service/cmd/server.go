@@ -12,42 +12,39 @@ import (
 	"gin-petclinic-service/middleware"
 	"gin-petclinic-service/pkg/dbase"
 	"gin-petclinic-service/pkg/ds"
-	"gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/repository"
 	"github.com/gin-contrib/location"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
-	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 	"gorm.io/gorm"
 	"os"
 )
 
 var (
-	g      errgroup.Group
-	sqlite *gorm.DB
-	logger *zap.Logger
-	r      *gin.Engine
+	g  errgroup.Group
+	db *gorm.DB
+	r  *gin.Engine
 )
 
 func loadConfig() {
-	logger, _ = zap.NewProduction()
-	logger.Info("pet-clinic starts")
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	log.Info().Msg("gin-pet-clinic starts")
 
 	// load application configurations
 	if err := app.LoadConfig("./config"); err != nil {
-		logger.Fatal("Fail to load application configuration.",
-			zap.String("error", err.Error()))
+		log.Fatal().Err(err).Msg("Fail to load application configuration.")
 	}
 
-	//pg = dbase.PgConnect()
+	sqlite := dbase.Sqlite{}
 	var err error
-	sqlite, err = dbase.SqliteConnect()
+	db, err = sqlite.Connect()
 	if err != nil {
-		logger.Fatal("Fail to connect the database.",
-			zap.String("error", err.Error()))
-		//os.Exit(-1)
+		log.Fatal().Err(err).Msg("Fail to connect the database.")
 	}
 
 	// Creates a router without any middleware by default
@@ -66,33 +63,33 @@ func loadConfig() {
 
 // Component initialization
 func loadComponents() {
-	logger.Info("Component initialization starts")
-	healthCheckService := health.NewService(logger)
-	healthCheckRouter := health.NewRouter(healthCheckService, logger)
+	log.Info().Msg("Component initialization starts")
+	healthCheckService := health.NewService()
+	healthCheckRouter := health.NewRouter(healthCheckService)
 
-	infoService := info.NewService(logger)
-	ipService := info.NewIPService(logger)
-	infoRouter := info.NewRouter(logger, infoService, ipService)
+	infoService := info.NewService()
+	ipService := info.NewIPService()
+	infoRouter := info.NewRouter(infoService, ipService)
 
 	// Owner
-	ownerRepository := repository.NewOwnerRepository(logger, sqlite)
-	ownerService := owner.NewService(logger, ownerRepository)
-	ownerRouter := owner.NewRouter(logger, ownerService)
+	ownerRepository := repository.NewOwnerRepository(db)
+	ownerService := owner.NewService(ownerRepository)
+	ownerRouter := owner.NewRouter(ownerService)
 
 	// Pet
-	petRepository := repository.NewPetRepository(logger, sqlite)
-	petService := pet.NewService(logger, petRepository)
-	petRouter := pet.NewRouter(logger, petService)
+	petRepository := repository.NewPetRepository(db)
+	petService := pet.NewService(petRepository)
+	petRouter := pet.NewRouter(petService)
 
 	// Vet
-	vetRepository := repository.NewVetRepository(logger, sqlite)
-	vetService := vet.NewService(logger, vetRepository)
-	vetRouter := vet.NewRouter(logger, vetService)
+	vetRepository := repository.NewVetRepository(db)
+	vetService := vet.NewService(vetRepository)
+	vetRouter := vet.NewRouter(vetService)
 
 	// Visit
-	visitRepository := repository.NewVisitRepository(logger, sqlite)
-	visitService := visit.NewService(logger, visitRepository)
-	visitRouter := visit.NewRouter(logger, visitService)
+	visitRepository := repository.NewVisitRepository(db)
+	visitService := visit.NewService(visitRepository)
+	visitRouter := visit.NewRouter(visitService)
 
 	//authenService := service.NewAuthenService(logger)
 
@@ -143,7 +140,7 @@ func main() {
 	})
 
 	if err := g.Wait(); err != nil {
-		logger.Fatal("Fail to run http server.", zap.String("error", err.Error()))
+		log.Fatal().Err(err).Msg("Fail to run http server.")
 		os.Exit(-1)
 	}
 }

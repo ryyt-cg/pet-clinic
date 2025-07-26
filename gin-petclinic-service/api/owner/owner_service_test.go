@@ -2,8 +2,8 @@ package owner
 
 import (
 	"errors"
-	"gin-petclinic-service/pkg/infra/repository"
 	"gin-petclinic-service/pkg/model"
+	repository2 "gin-petclinic-service/pkg/repository"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -14,8 +14,8 @@ import (
 func Test_getById(t *testing.T) {
 	logger := zap.NewNop()
 	//logger := log.New().With(nil, "function", "Test_getById")
-	ownerMock := repository.MockOwnerRepositorier{}
-	owner := &repository.Owner{
+	ownerMock := repository2.MockOwnerRepositorier{}
+	owner := &repository2.Owner{
 		Model: gorm.Model{
 			ID: 1,
 		},
@@ -41,7 +41,7 @@ func Test_getById(t *testing.T) {
 func Test_getById_withError(t *testing.T) {
 	logger := zap.NewNop()
 	//logger := log.New().With(nil, "function", "Test_getById")
-	ownerMock := repository.MockOwnerRepositorier{}
+	ownerMock := repository2.MockOwnerRepositorier{}
 	err := errors.New("getById: unable to find owner by id")
 	ownerMock.On("FindById", 1).Return(nil, err)
 

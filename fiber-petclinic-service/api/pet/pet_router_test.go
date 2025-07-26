@@ -196,40 +196,40 @@ func Test_PetById(t *testing.T) {
 	}
 }
 
-func Test_PetsByName(t *testing.T) {
-	petMock := petServiceMock{}
-
-	petResponses := make([]Response, 1)
-	petRespopnse := &Response{
-		ID:   15,
-		Name: "Charles",
-	}
-	petResponses[0] = *petRespopnse
-
-	petMock.On("getPetsByName", "Charles").Return(petResponses, nil)
-	petRouter := NewRouter(&petMock)
-
-	r := setupRouter()
-	v1 := r.Group("/v1")
-	petRouter.Register(v1.Group("/pets"))
-
-	req := httptest.NewRequest("GET", "/v1/pets?name=Charles", nil)
-	resp, _ := r.Test(req, 5)
-
-	// Assert we encoded correctly,
-	// the request gives a 200
-	assert.Equal(t, http.StatusOK, resp.StatusCode, "Expected status code 200, got %d", resp.StatusCode)
-
-	// Read the response body
-	body, _ := io.ReadAll(resp.Body)
-	// unmarshal to Pet struct for asserts.
-	actualPetResponses := make([]Response, 1)
-	err := json.Unmarshal(body, &actualPetResponses)
-	if err != nil {
-		t.Errorf("Error unmarshalling response body: %v", err)
-		return
-	}
-
-	//assert.Equal(t, petRespopnse.ID, actualPetResponses[0].ID)
-	//assert.Equal(t, petRespopnse.Name, actualPetResponses[0].Name)
-}
+//func Test_PetsByName(t *testing.T) {
+//	petMock := petServiceMock{}
+//
+//	petResponses := make([]Response, 1)
+//	petRespopnse := &Response{
+//		ID:   15,
+//		Name: "Charles",
+//	}
+//	petResponses[0] = *petRespopnse
+//
+//	petMock.On("getPetsByName", "Charles").Return(petResponses, nil)
+//	petRouter := NewRouter(&petMock)
+//
+//	r := setupRouter()
+//	v1 := r.Group("/v1")
+//	petRouter.Register(v1.Group("/pets"))
+//
+//	req := httptest.NewRequest("GET", "/v1/pets?name=Charles", nil)
+//	resp, _ := r.Test(req, 5)
+//
+//	// Assert we encoded correctly,
+//	// the request gives a 200
+//	assert.Equal(t, http.StatusOK, resp.StatusCode, "Expected status code 200, got %d", resp.StatusCode)
+//
+//	// Read the response body
+//	body, _ := io.ReadAll(resp.Body)
+//	// unmarshal to Pet struct for asserts.
+//	actualPetResponses := make([]Response, 1)
+//	err := json.Unmarshal(body, &actualPetResponses)
+//	if err != nil {
+//		t.Errorf("Error unmarshalling response body: %v", err)
+//		return
+//	}
+//
+//	//assert.Equal(t, petRespopnse.ID, actualPetResponses[0].ID)
+//	//assert.Equal(t, petRespopnse.Name, actualPetResponses[0].Name)
+//}

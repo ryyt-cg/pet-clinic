@@ -2,6 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
+	"time"
 )
 
 /*
@@ -17,8 +18,8 @@ Notes:
 // Pet type belongs to Type, TypeID is the foreign key
 type Pet struct {
 	gorm.Model
-	Name      string `gorm:"column:name"`
-	Birthdate string //`gorm:"column:birth_date"`
+	Name      string    `gorm:"column:name"`
+	Birthdate time.Time //`gorm:"column:birth_date"`
 	TypeID    int
 	OwnerID   int
 	Type      Type `gorm:"foreignKey:TypeID"`

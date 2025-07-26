@@ -2,9 +2,9 @@ package owner
 
 import (
 	"gin-petclinic-service/api/pet"
-	"gin-petclinic-service/middleware/errors"
-	"gin-petclinic-service/pkg/infra/repository"
+	"gin-petclinic-service/pkg/errors"
 	"gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/repository"
 )
 
 // Owner Responses - A collection of responses (output contracts) for the owner API.

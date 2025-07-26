@@ -18,7 +18,7 @@ Build a Pet Clinic restful API using the libraries mentioned below.
   * [sqlite3](gorm.io/driver/sqlite)
 * Database ORM: [GORM](https://gorm.io/)
 * Data validation: [ozzo-validation](https://github.com/go-ozzo/ozzo-validation)
-* Logging: [zap](https://github.com/uber-go/zap)
+* Logging: [zerolog](https://github.com/rs/zerolog)
 * Testing & Mock: [testify](https://github.com/stretchr/testify)
 * Mockery: [mockery](https://github.com/vektra/mockery)
 

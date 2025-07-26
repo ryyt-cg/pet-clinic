@@ -2,6 +2,7 @@ package info
 
 import (
 	"fiber-petclinic-service/config/app"
+	resterr "fiber-petclinic-service/pkg/errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
 	"strings"
@@ -29,6 +30,10 @@ func (infoRouter *Router) Register(router fiber.Router) {
 func (infoRouter *Router) appInfo(c *fiber.Ctx) error {
 	log.Info().Msg("Fetching app info")
 	result, err := infoRouter.infoService.getAppInfo()
+	if err != nil {
+		log.Error().Err(err).Msg("Error fetching app info")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+	}
 
 	ips, err := infoRouter.ipService.lookupIP(app.Config.Server.Host)
 	if err != nil {
@@ -42,13 +47,6 @@ func (infoRouter *Router) appInfo(c *fiber.Ctx) error {
 		}
 		log.Debug().Str("host", app.Config.Server.Host).Strs("ips", strIPs).Msg("IP addresses for host")
 		result.Ip = strings.Join(strIPs, ",")
-	}
-
-	if err != nil {
-		err := c.JSON(err)
-		if err != nil {
-			return err
-		}
 	}
 
 	// Content-Type will be application/json by c.JSON

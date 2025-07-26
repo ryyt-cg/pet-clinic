@@ -11,15 +11,15 @@ import (
 )
 
 type Database interface {
-	PgConnect() *gorm.DB
+	Connect() *gorm.DB
 }
 
 type Postgres struct {
 }
 
-// PgConnect
+// Connect
 // Create connection pooling using GORM postgres driver.
-func PgConnect() *gorm.DB {
+func (p *Postgres) Connect() *gorm.DB {
 	log, _ := zap.NewProduction()
 	db, err := gorm.Open(postgres.Open(app.Config.Database.Postgres.Dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
