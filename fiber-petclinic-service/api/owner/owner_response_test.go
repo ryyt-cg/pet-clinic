@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestResponseFromOwner(t *testing.T) {
+func Test_ResponseFromOwner(t *testing.T) {
 	owner := &repository.Owner{
 		Model: gorm.Model{
 			ID: 1,
@@ -36,7 +36,7 @@ func TestResponseFromOwner(t *testing.T) {
 	assert.Equal(t, pet.FromPets(owner.Pets), response.Pets)
 }
 
-func TestFromOwners(t *testing.T) {
+func Test_FromOwners(t *testing.T) {
 	owners := []repository.Owner{
 		{
 			Model: gorm.Model{ID: 1},
@@ -71,5 +71,37 @@ func TestFromOwners(t *testing.T) {
 		assert.Equal(t, owner.City, responses[i].City)
 		assert.Equal(t, owner.Telephone, responses[i].Telephone)
 		assert.Equal(t, pet.FromPets(owner.Pets), responses[i].Pets)
+	}
+}
+
+func Test_FromUpdateEntity(t *testing.T) {
+	tests := []struct {
+		updateEntity   *repository.Owner
+		updateResponse *UpdateResponse
+	}{
+		{
+			updateEntity: &repository.Owner{
+				Model: gorm.Model{ID: 202},
+				Person: model.Person{
+					FirstName: "Ronald",
+					LastName:  "Petersen",
+				},
+				Address: "123 Main St",
+				City:    "Anytown",
+			},
+			updateResponse: &UpdateResponse{
+				ID:        202,
+				FirstName: "Ronald",
+				LastName:  "Petersen",
+				Address:   "123 Main St",
+				City:      "Anytown",
+			},
+		},
+	}
+
+	for _, tc := range tests {
+		result := &UpdateResponse{}
+		result.FromUpdateEntity(tc.updateEntity)
+		assert.Equal(t, result, tc.updateResponse)
 	}
 }

@@ -31,8 +31,8 @@ func (infoM *infoServiceMock) getAppInfo() (*Info, error) {
 		return nil, args.Error(1)
 	}
 
-	val := intf.(Info)
-	return &val, args.Error(1)
+	val := intf.(*Info)
+	return val, args.Error(1)
 }
 
 func (ipM *ipServiceMock) lookupIP(host string) ([]net.IP, error) {
@@ -54,8 +54,7 @@ func setupRouter() *fiber.App {
 }
 
 func Test_appInfo(t *testing.T) {
-	infoMock := infoServiceMock{}
-	info := Info{
+	info := &Info{
 		AppName:     "fiber unit test",
 		Description: "This is fiber unit test",
 		Version:     "1.5.0",
@@ -68,6 +67,7 @@ func Test_appInfo(t *testing.T) {
 		},
 	}
 
+	infoMock := infoServiceMock{}
 	ipMock := ipServiceMock{}
 
 	infoMock.On("getAppInfo").Return(info, nil)
@@ -106,11 +106,14 @@ func Test_appInfoWithErrors(t *testing.T) {
 		Version:     "1.5.0",
 	}
 
+	expectError := resterr.InternalServerError("unable to fetch application info")
+
 	tests := []struct {
 		mockResult     *Info
 		mockError      error
 		mockIPResult   []net.IP
 		mockIPError    error
+		statusCode     int
 		expectedResult interface{}
 	}{
 		{
@@ -118,12 +121,14 @@ func Test_appInfoWithErrors(t *testing.T) {
 			mockError:      nil,
 			mockIPResult:   nil,
 			mockIPError:    errors.New("unable to fetch IPs"),
+			statusCode:     http.StatusOK,
 			expectedResult: info,
 		},
 		{
 			mockResult:     nil,
 			mockError:      errors.New("unable to fetch application info"),
-			expectedResult: resterr.InternalServerError("unable to fetch application info"),
+			statusCode:     http.StatusInternalServerError,
+			expectedResult: &expectError,
 		},
 	}
 
@@ -134,48 +139,46 @@ func Test_appInfoWithErrors(t *testing.T) {
 		},
 	}
 
-	infoMock := infoServiceMock{}
-	ipMock := ipServiceMock{}
-
-	r := setupRouter()
-	infoRouter := NewRouter(&infoMock, &ipMock)
-	infoRouter.Register(r.Group("/info"))
-
 	for _, tc := range tests {
+		infoMock := infoServiceMock{}
+		ipMock := ipServiceMock{}
+
+		r := setupRouter()
+		infoRouter := NewRouter(&infoMock, &ipMock)
+		infoRouter.Register(r.Group("/info"))
 		infoMock.On("getAppInfo").Return(tc.mockResult, tc.mockError)
 
-		req := httptest.NewRequest("GET", "/info", nil)
-		resp, err := r.Test(req, 5)
-		if err != nil {
-			//assert.Equal(t, tc.expectedResult, err)
-			assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
-
-			// Read the response body
-			//body, _ := io.ReadAll(resp.Body)
-			//// unmarshal to Pet struct for asserts.
-			//actualInfoResponse := resterr.ErrorResponse{}
-			//err := json.Unmarshal(body, &actualInfoResponse)
-			//if err != nil {
-			//	t.Errorf("Error unmarshalling response body: %v", err)
-			//	return
-			//}
-			//assert.Equal(t, tc.expectedResult, resp)
-		} else {
+		switch tc.statusCode {
+		case http.StatusOK:
 			ipMock.On("lookupIP", "localhost").Return(tc.mockIPResult, tc.mockIPError)
-			//assert.Equal(t, tc.expectedResult, err)
-			assert.Equal(t, http.StatusOK, resp.StatusCode)
+		case http.StatusInternalServerError:
 
-			// Read the response body
-			body, _ := io.ReadAll(resp.Body)
-			// unmarshal to Pet struct for asserts.
+		}
+
+		req := httptest.NewRequest("GET", "/info", nil)
+		resp, _ := r.Test(req, 5)
+		// Read the response body
+		body, _ := io.ReadAll(resp.Body)
+
+		switch resp.StatusCode {
+		case http.StatusOK:
 			actualInfoResponse := Info{}
 			err := json.Unmarshal(body, &actualInfoResponse)
 			if err != nil {
 				t.Errorf("Error unmarshalling response body: %v", err)
 				return
 			}
-			assert.Equal(t, tc.expectedResult, resp)
+			assert.Equal(t, tc.statusCode, resp.StatusCode)
+			assert.Equal(t, tc.expectedResult, &actualInfoResponse)
+		case http.StatusInternalServerError:
+			actualInfoResponse := resterr.ErrorResponse{}
+			err := json.Unmarshal(body, &actualInfoResponse)
+			if err != nil {
+				t.Errorf("Error unmarshalling response body: %v", err)
+				return
+			}
+			assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
+			assert.Equal(t, tc.expectedResult, &actualInfoResponse)
 		}
 	}
-
 }

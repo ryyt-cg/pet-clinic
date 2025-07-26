@@ -113,7 +113,7 @@ func Test_PetById(t *testing.T) {
 			description:      "Invalid pet id",
 			route:            "/v1/pets/4js",
 			expectedError:    true,
-			expectedCode:     400,
+			expectedCode:     http.StatusBadRequest,
 			expectedResponse: resterr.BadRequest("Invalid pet ID"),
 		},
 		{
@@ -132,7 +132,7 @@ func Test_PetById(t *testing.T) {
 			route:            "/v1/pets/1",
 			expectedError:    true,
 			error:            gorm.ErrRecordNotFound,
-			expectedCode:     404,
+			expectedCode:     http.StatusNotFound,
 			expectedResponse: resterr.NotFound("Pet not found"),
 		},
 		{
@@ -140,7 +140,7 @@ func Test_PetById(t *testing.T) {
 			route:            "/v1/pets/1",
 			expectedError:    true,
 			error:            error(fiber.ErrInternalServerError),
-			expectedCode:     500,
+			expectedCode:     http.StatusInternalServerError,
 			expectedResponse: resterr.InternalServerError("Something went wrong"),
 		},
 	}

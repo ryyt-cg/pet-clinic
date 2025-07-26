@@ -3,6 +3,7 @@ package owner
 import (
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
+	"gorm.io/gorm"
 )
 
 // Owner Requests - A collection of requests (input contracts) for the owner API
@@ -42,6 +43,9 @@ func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner {
 
 func ToOwnerEntityFromUpdateRequest(ownerRequest *UpdateRequest) *repository.Owner {
 	return &repository.Owner{
+		Model: gorm.Model{
+			ID: ownerRequest.Id,
+		},
 		Person: model.Person{
 			FirstName: ownerRequest.FirstName,
 			LastName:  ownerRequest.LastName,
