@@ -2,11 +2,14 @@ package owner
 
 import (
 	"errors"
+	"fiber-petclinic-service/api/pet"
+	"fiber-petclinic-service/api/visit"
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
 	"testing"
+	"time"
 )
 
 // Test_getById tests the getOwnerById function
@@ -208,7 +211,7 @@ func Test_getAllOwners(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.tcName, func(t *testing.T) {
 			ownerMock := repository.NewMockOwnerRepositorier(t)
-			ownerMock.On("FindAll").Return(tc.mockResult, tc.mockError)
+			ownerMock.EXPECT().FindAll().Return(tc.mockResult, tc.mockError)
 
 			ownerService := NewService(ownerMock)
 			result, err := ownerService.getAllOwners()
@@ -232,149 +235,95 @@ func Test_getAllOwners(t *testing.T) {
 	}
 }
 
-func Test_getAllOwnersWithPets(t *testing.T) {
-	//testCases := []struct {
-	//	name           string
-	//	expectedOwners []repository.Owner
-	//	expectedError  error
-	//}{
-	//	{
-	//		name: "Test get all owners with pets success",
-	//		expectedOwners: []repository.Owner{
-	//			{
-	//				Model: gorm.Model{
-	//					ID: 1,
-	//				},
-	//				Person: model.Person{
-	//					FirstName: "Leo",
-	//					LastName:  "DiCaprio",
-	//				},
-	//				Pets: []repository.Pet{
-	//					{
-	//						Name:      "Buddy",
-	//						Birthdate: time.Date(2010, 1, 1, 0, 0, 0, 0, time.UTC),
-	//						Type: repository.Type{
-	//							Name: "Dog",
-	//						},
-	//					},
-	//				},
-	//			},
-	//			{
-	//				Model: gorm.Model{
-	//					ID: 2,
-	//				},
-	//				Person: model.Person{
-	//					FirstName: "Tom",
-	//					LastName:  "Hanks",
-	//				},
-	//				Pets: []repository.Pet{
-	//					{
-	//						Name:      "Kitty",
-	//						Birthdate: time.Date(2010, 1, 1, 0, 0, 0, 0, time.UTC),
-	//						Type: repository.Type{
-	//							Name: "Cat",
-	//						},
-	//					},
-	//				},
-	//			},
-	//		},
-	//		expectedError: nil,
-	//	},
-	//	{
-	//		name:           "Test get all owners with pets with error",
-	//		expectedOwners: nil,
-	//		expectedError:  errors.New("getAllOwnersWithPets: unable to retrieve owners"),
-	//	},
-	//	// Add more test cases here
-	//}
-	//
-	//for _, tc := range testCases {
-	//	t.Run(tc.name, func(t *testing.T) {
-	//		ownerMock := repository.NewMockOwnerRepositorier(t)
-	//		ownerMock.On("FindAllWithPets").Return(tc.expectedOwners, tc.expectedError)
-	//
-	//		ownerService := NewService(ownerMock)
-	//		result, err := ownerService.getOwnerByIdWithPets()
-	//
-	//		if tc.expectedError != nil {
-	//			assert.Equal(t, tc.expectedError, err)
-	//			assert.Nil(t, result)
-	//		} else {
-	//			assert.Equal(t, len(tc.expectedOwners), len(result))
-	//			for i, owner := range tc.expectedOwners {
-	//				assert.Equal(t, owner.ID, result[i].ID)
-	//				assert.Equal(t, owner.FirstName, result[i].FirstName)
-	//				assert.Equal(t, owner.LastName, result[i].LastName)
-	//				assert.Equal(t, len(owner.Pets), len(result[i].Pets))
-	//				assert.Nil(t, err)
-	//			}
-	//		}
-	//
-	//		ownerMock.AssertExpectations(t)
-	//		ownerMock.AssertNumberOfCalls(t, "FindAllWithPets", 1)
-	//	})
-	//}
+func Test_getOwnerByIdWithPets(t *testing.T) {
+	mockOwner := &repository.Owner{
+		Model: gorm.Model{
+			ID: 1,
+		},
+		Person: model.Person{
+			FirstName: "Leo",
+			LastName:  "DiCaprio",
+		},
+		Pets: []repository.Pet{
+			{
+				Name:      "Buddy",
+				Birthdate: time.Date(2010, 1, 1, 0, 0, 0, 0, time.UTC),
+				Type: repository.Type{
+					Name: "Dog",
+				},
+			},
+		},
+	}
+
+	expectedResult := &Response{
+		ID:        1,
+		FirstName: "Leo",
+		LastName:  "DiCaprio",
+		Pets: []pet.Response{
+			{
+				Name:      "Buddy",
+				Birthdate: time.Date(2010, 1, 1, 0, 0, 0, 0, time.UTC).Format(time.DateOnly),
+				Type:      "Dog",
+				Visits:    []visit.Response{},
+			},
+		},
+	}
+
+	testCases := []struct {
+		name           string
+		id             uint
+		mockOwner      *repository.Owner
+		mockError      error
+		expectedResult *Response
+		expectedError  error
+	}{
+		{
+			name:           "get owner by id with pets",
+			id:             uint(1),
+			mockOwner:      mockOwner,
+			mockError:      nil,
+			expectedResult: expectedResult,
+			expectedError:  nil,
+		},
+		{
+			name:           "fail to get owner by id with pets",
+			id:             uint(1),
+			mockOwner:      nil,
+			mockError:      errors.New("unable to get owner by id"),
+			expectedResult: nil,
+			expectedError:  errors.New("unable to get owner by id"),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			ownerMock := repository.NewMockOwnerRepositorier(t)
+			ownerMock.EXPECT().FindByIdWithPets(tc.id).Return(tc.mockOwner, tc.mockError)
+
+			ownerService := NewService(ownerMock)
+			result, err := ownerService.getOwnerByIdWithPets(tc.id)
+
+			if err != nil {
+				assert.Equal(t, tc.expectedError, err)
+				assert.Nil(t, result)
+			} else {
+				assert.Equal(t, tc.expectedResult, result)
+				assert.Equal(t, tc.expectedResult.ID, result.ID)
+				assert.Equal(t, tc.expectedResult.FirstName, result.FirstName)
+				assert.Equal(t, tc.expectedResult.LastName, result.LastName)
+				assert.Equal(t, len(tc.expectedResult.Pets), len(result.Pets))
+				assert.Nil(t, err)
+			}
+
+			ownerMock.AssertExpectations(t)
+			ownerMock.AssertNumberOfCalls(t, "FindByIdWithPets", 1)
+		})
+	}
 }
 
 // Test_update tests the update function
-//func Test_update(t *testing.T) {
-//	testCases := []struct {
-//		name          string
-//		expectedOwner *repository.Owner
-//		expectedError error
-//	}{
-//		{
-//			name: "Test update owner success",
-//			expectedOwner: &repository.Owner{
-//				Model: gorm.Model{
-//					ID: 1,
-//				},
-//				Person: model.Person{
-//					FirstName: "Nat",
-//					LastName:  "Cole",
-//				},
-//			},
-//			expectedError: nil,
-//		},
-//		{
-//			name:          "Test update owner with error",
-//			expectedOwner: nil,
-//			expectedError: errors.New("update: unable to update owner"),
-//		},
-//		// Add more test cases here
-//	}
-//
-//	for _, tc := range testCases {
-//		t.Run(tc.name, func(t *testing.T) {
-//			logger := zap.NewNop()
-//			//logger := log.New().With(nil, "function", "Test_update")
-//			ownerMock := repository.MockOwnerRepositorier{}
-//			ownerMock.On("Update", tc.expectedOwner).Return(tc.expectedOwner, tc.expectedError)
-//
-//			ownerService := NewService(logger, &ownerMock)
-//			result, err := ownerService.update(tc.expectedOwner)
-//
-//			if tc.expectedError != nil {
-//				assert.Equal(t, tc.expectedError, err)
-//				assert.Nil(t, result)
-//			} else {
-//				assert.Equal(t, tc.expectedOwner.ID, result.ID)
-//				assert.Equal(t, tc.expectedOwner.FirstName, result.FirstName)
-//				assert.Equal(t, tc.expectedOwner.LastName, result.LastName)
-//				assert.Nil(t, err)
-//			}
-//
-//			ownerMock.AssertExpectations(t)
-//			ownerMock.AssertNumberOfCalls(t, "Update", 1)
-//		})
-//	}
-//}
-
-/*
-func Test_create(t *testing.T) {
-	logger := log.New().With(nil, "function", "Test_create")
-	ownerMock := repository.MockOwnerRepositorier{}
-	owner := &repository.Owner{
+func Test_update(t *testing.T) {
+	mockOwner := &repository.Owner{
 		Model: gorm.Model{
 			ID: 1,
 		},
@@ -383,16 +332,163 @@ func Test_create(t *testing.T) {
 			LastName:  "Cole",
 		},
 	}
-	ownerMock.On("Create", owner).Return(owner, nil)
 
-	ownerService := NewService(logger, &ownerMock)
-	result, err := ownerService.create(owner)
-	ownerMock.AssertExpectations(t)
-	ownerMock.AssertNumberOfCalls(t, "Create", 1)
+	updatedOwner := &repository.Owner{
+		Model: gorm.Model{
+			ID:        1,
+			UpdatedAt: time.Now(),
+		},
+		Person: model.Person{
+			FirstName: "Nat",
+			LastName:  "Cole",
+		},
+	}
 
-	assert.Equal(t, owner.ID, result.ID)
-	assert.Equal(t, owner.FirstName, result.FirstName)
-	assert.Equal(t, owner.LastName, result.LastName)
-	assert.Nil(t, err)
+	updateRequest := &UpdateRequest{
+		FirstName: "Nat",
+		LastName:  "Cole",
+	}
+
+	expectedResult := &Response{
+		ID:        uint(1),
+		FirstName: "Nat",
+		LastName:  "Cole",
+	}
+	testCases := []struct {
+		name           string
+		id             uint
+		mockOwner      *repository.Owner
+		mockError      error
+		updatedOwner   *repository.Owner
+		updateRequest  *UpdateRequest
+		expectedResult *Response
+		expectedError  error
+	}{
+		{
+			name:           "Test update owner success",
+			id:             uint(1),
+			mockOwner:      mockOwner,
+			mockError:      nil,
+			updatedOwner:   updatedOwner,
+			updateRequest:  updateRequest,
+			expectedResult: expectedResult,
+			expectedError:  nil,
+		},
+		{
+			name:           "fail to update owner",
+			id:             uint(1),
+			mockOwner:      mockOwner,
+			mockError:      errors.New("unable to update owner"),
+			updatedOwner:   nil,
+			updateRequest:  updateRequest,
+			expectedResult: nil,
+			expectedError:  errors.New("unable to update owner"),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			ownerMock := repository.NewMockOwnerRepositorier(t)
+			ownerMock.EXPECT().Update(tc.mockOwner).Return(tc.updatedOwner, tc.expectedError)
+
+			ownerService := NewService(ownerMock)
+			result, err := ownerService.update(tc.id, tc.updateRequest)
+
+			if err != nil {
+				assert.Equal(t, tc.expectedError, err)
+				assert.Nil(t, result)
+			} else {
+				assert.Equal(t, tc.expectedResult.ID, result.ID)
+				assert.Equal(t, tc.expectedResult.FirstName, result.FirstName)
+				assert.Equal(t, tc.expectedResult.LastName, result.LastName)
+				assert.Nil(t, err)
+			}
+
+			ownerMock.AssertExpectations(t)
+			ownerMock.AssertNumberOfCalls(t, "Update", 1)
+		})
+	}
 }
-*/
+
+func Test_create(t *testing.T) {
+	mockOwner := &repository.Owner{
+		//Model: gorm.Model{
+		//	ID: 1,
+		//},
+		Person: model.Person{
+			FirstName: "Nat",
+			LastName:  "Cole",
+		},
+	}
+
+	newOwner := &repository.Owner{
+		Model: gorm.Model{
+			//ID:        1,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		},
+		Person: model.Person{
+			FirstName: "Nat",
+			LastName:  "Cole",
+		},
+	}
+
+	addRequest := &AddRequest{
+		FirstName: "Nat",
+		LastName:  "Cole",
+	}
+
+	expectedResult := &Response{
+		//ID:        uint(1),
+		FirstName: "Nat",
+		LastName:  "Cole",
+	}
+	testCases := []struct {
+		name           string
+		mockOwner      *repository.Owner
+		mockError      error
+		newOwner       *repository.Owner
+		addRequest     *AddRequest
+		expectedResult *Response
+		expectedError  error
+	}{
+		{
+			name:           "add a new owner",
+			mockOwner:      mockOwner,
+			mockError:      nil,
+			newOwner:       newOwner,
+			addRequest:     addRequest,
+			expectedResult: expectedResult,
+			expectedError:  nil,
+		},
+		{
+			name:           "fail to add a new owner",
+			mockOwner:      mockOwner,
+			mockError:      errors.New("unable to add new owner"),
+			newOwner:       nil,
+			addRequest:     addRequest,
+			expectedResult: nil,
+			expectedError:  errors.New("unable to add new owner"),
+		},
+	}
+
+	for _, tc := range testCases {
+		ownerMock := repository.NewMockOwnerRepositorier(t)
+		ownerMock.EXPECT().Insert(tc.mockOwner).Return(tc.newOwner, tc.mockError)
+
+		ownerService := NewService(ownerMock)
+		result, err := ownerService.create(tc.addRequest)
+
+		if err != nil {
+			assert.Equal(t, tc.expectedError, err)
+			assert.Nil(t, result)
+		} else {
+			assert.Equal(t, tc.expectedResult.ID, result.ID)
+			assert.Equal(t, tc.expectedResult.FirstName, result.FirstName)
+			assert.Equal(t, tc.expectedResult.LastName, result.LastName)
+			assert.Nil(t, err)
+		}
+		ownerMock.AssertExpectations(t)
+		ownerMock.AssertNumberOfCalls(t, "Insert", 1)
+	}
+}

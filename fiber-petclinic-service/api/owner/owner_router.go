@@ -169,14 +169,14 @@ func (r *Router) ownersByLastName(c *fiber.Ctx) error {
 // @Router		/owners 		[post]
 func (r *Router) addNewOwner(c *fiber.Ctx) error {
 	log.Info().Msg("Post a new owner.")
-	var ownerRequest AddRequest
-	err := c.BodyParser(&ownerRequest)
+	ownerRequest := new(AddRequest)
+	err := c.BodyParser(ownerRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to Unmarshal owner JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	newOwner, err := r.service.create(&ownerRequest)
+	newOwner, err := r.service.create(ownerRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to create new owner.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))

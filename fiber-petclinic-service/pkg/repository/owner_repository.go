@@ -109,7 +109,7 @@ func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
 //
 //	VALUES ('George','Franklin','110 W. Liberty St.','Madison','6085551023','2021-09-26 15:00:00','2021-09-26 15:00:00')
 func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) {
-	log.Debug().Any("owner", owner).Msg("Fail a new owner.")
+	log.Debug().Any("owner", owner).Msg("Insert a new owner.")
 	now := time.Now()
 	owner.UpdatedAt = now
 	owner.CreatedAt = now
@@ -125,7 +125,7 @@ func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) {
 // Update - update the owner
 // UPDATE "owners" SET "first_name" = 'George', "last_name" = 'Franklin', "address" = '110 W. Liberty St.',
 func (repository *OwnerRepository) Update(owner *Owner) (*Owner, error) {
-	log.Debug().Uint("id", owner.ID).Msg("Fail owner")
+	log.Debug().Uint("id", owner.ID).Msg("Update owner")
 	owner.UpdatedAt = time.Now()
 
 	// Omit the column name from update...

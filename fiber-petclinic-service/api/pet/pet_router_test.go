@@ -3,6 +3,7 @@ package pet
 import (
 	resterr "fiber-petclinic-service/pkg/errors"
 	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/pkg/test"
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
@@ -93,12 +94,6 @@ func (petM *petServiceMock) update(pet *repository.Pet) (*Response, error) {
 	return val, args.Error(1)
 }
 
-// config the gin engine for testing purpose
-func setupRouter() *fiber.App {
-	r := fiber.New()
-	return r
-}
-
 func Test_PetById(t *testing.T) {
 	tests := []struct {
 		description      string
@@ -145,30 +140,30 @@ func Test_PetById(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
-		t.Run(test.description, func(t *testing.T) {
-			r := setupRouter()
+	for _, tc := range tests {
+		t.Run(tc.description, func(t *testing.T) {
+			r := test.SetupRouter()
 			v1 := r.Group("/v1")
 
 			petMock := petServiceMock{}
-			if test.expectedError {
-				if test.expectedCode == http.StatusBadRequest {
+			if tc.expectedError {
+				if tc.expectedCode == http.StatusBadRequest {
 					// Do not expect petMock return anything
 				} else {
-					petMock.On("getPetById", 1).Return(nil, test.error)
+					petMock.On("getPetById", 1).Return(nil, tc.error)
 				}
 			} else {
-				petMock.On("getPetById", 1).Return(test.expectedResponse, nil)
+				petMock.On("getPetById", 1).Return(tc.expectedResponse, nil)
 			}
 
 			petRouter := NewRouter(&petMock)
 			petRouter.Register(v1.Group("/pets"))
 
-			req := httptest.NewRequest("GET", test.route, nil)
+			req := httptest.NewRequest("GET", tc.route, nil)
 			resp, _ := r.Test(req, 5)
-			assert.Equal(t, test.expectedCode, resp.StatusCode, test.description)
+			assert.Equal(t, tc.expectedCode, resp.StatusCode, tc.description)
 
-			switch test.expectedCode {
+			switch tc.expectedCode {
 			case http.StatusOK:
 				actualPetResponse := &Response{}
 				// Read the response body
@@ -178,8 +173,8 @@ func Test_PetById(t *testing.T) {
 					t.Errorf("Error unmarshalling response body: %v", err)
 					return
 				}
-				assert.Equal(t, test.expectedResponse.(Response).ID, actualPetResponse.ID)
-				assert.Equal(t, test.expectedResponse.(Response).Name, actualPetResponse.Name)
+				assert.Equal(t, tc.expectedResponse.(Response).ID, actualPetResponse.ID)
+				assert.Equal(t, tc.expectedResponse.(Response).Name, actualPetResponse.Name)
 			case http.StatusNotFound:
 				actualPetResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -189,8 +184,8 @@ func Test_PetById(t *testing.T) {
 					t.Errorf("Error unmarshalling response body: %v", err)
 					return
 				}
-				assert.Equal(t, test.expectedResponse.(resterr.ErrorResponse).Status, actualPetResponse.Status)
-				assert.Equal(t, test.expectedResponse.(resterr.ErrorResponse).Message, actualPetResponse.Message)
+				assert.Equal(t, tc.expectedResponse.(resterr.ErrorResponse).Status, actualPetResponse.Status)
+				assert.Equal(t, tc.expectedResponse.(resterr.ErrorResponse).Message, actualPetResponse.Message)
 			}
 		})
 	}

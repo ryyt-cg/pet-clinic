@@ -73,7 +73,7 @@ func (service *Service) getOwnerByIdWithPets(id uint) (*Response, error) {
 	log.Debug().Uint("id", id).Msg("Fail owner with pets by id.")
 	owner, err := service.repository.FindByIdWithPets(id)
 	if err != nil {
-		log.Error().Err(err).Msg("Fail to retrieve all owner.")
+		log.Error().Err(err).Msg("Fail to retrieve all owners.")
 		return nil, err
 	}
 
@@ -100,7 +100,7 @@ func (service *Service) create(ownerRequest *AddRequest) (*Response, error) {
 
 // update - update owner
 func (service *Service) update(id uint, request *UpdateRequest) (*UpdateResponse, error) {
-	log.Debug().Msg("Fail an owner.")
+	log.Debug().Msg("Update an owner.")
 	ownerEntity := ToOwnerEntityFromUpdateRequest(request)
 	ownerEntity.ID = id
 	updatedOwner, err := service.repository.Update(ownerEntity)

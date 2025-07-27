@@ -1,26 +1,130 @@
 package owner
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fiber-petclinic-service/api/pet"
 	resterr "fiber-petclinic-service/pkg/errors"
-	//"fiber-petclinic-service/api/pet"
-	//"fiber-petclinic-service/pkg/repository/model"
+	"fiber-petclinic-service/pkg/repository/model"
 	"fiber-petclinic-service/pkg/test"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/adaptor"
-	"github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
+	"io"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 )
 
-// config the gin engine for testing purpose
-func setupRouter() *fiber.App {
-	return fiber.New()
+func Test_AllOwners(t *testing.T) {
+	ownersResponses := &Responses{
+		Context: model.Context{Count: 2},
+		Owners: []Response{
+			{
+				ID:        35,
+				FirstName: "Charles",
+				LastName:  "Ward",
+			},
+			{
+				ID:        26,
+				FirstName: "John",
+				LastName:  "Ward",
+			},
+			{
+				ID:        28,
+				FirstName: "John",
+				LastName:  "Ward",
+			},
+		},
+	}
+
+	noOwnersFoundResponse := &Responses{
+		Context: model.Context{Count: 0},
+		Owners:  []Response{},
+	}
+
+	errorResponse := resterr.InternalServerError("fail to get all owners")
+
+	testCases := []struct {
+		name             string
+		mockAllOwner     *Responses
+		mockError        error
+		route            string
+		statusCode       int
+		expectedResponse interface{}
+	}{
+		{
+			name:             "get all owners",
+			mockAllOwner:     ownersResponses,
+			mockError:        nil,
+			route:            "/v1/owners/all",
+			statusCode:       http.StatusOK,
+			expectedResponse: ownersResponses,
+		},
+		{
+			name:             "get no owner",
+			mockAllOwner:     noOwnersFoundResponse,
+			mockError:        nil,
+			route:            "/v1/owners/all",
+			statusCode:       http.StatusNotFound,
+			expectedResponse: noOwnersFoundResponse,
+		},
+		{
+			name:             "fail to get all owners",
+			mockAllOwner:     nil,
+			mockError:        errors.New("fail to get all owners"),
+			route:            "/v1/owners/all",
+			statusCode:       http.StatusInternalServerError,
+			expectedResponse: &errorResponse,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			ownerMock := NewMockServicer(t)
+			ownerMock.EXPECT().getAllOwners().Return(tc.mockAllOwner, tc.mockError)
+
+			r := test.SetupRouter()
+			v1 := r.Group("/v1")
+			ownerRouter := NewRouter(ownerMock)
+			ownerRouter.Register(v1.Group("/owners"))
+
+			req := httptest.NewRequest("GET", tc.route, nil)
+			resp, _ := r.Test(req, 5)
+
+			switch tc.statusCode {
+			case http.StatusOK | http.StatusNotFound:
+				actualPetResponses := &Responses{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualPetResponses)
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*Responses), actualPetResponses)
+				assert.Equal(t, tc.expectedResponse.(*Responses).Context.Count, actualPetResponses.Context.Count)
+				assert.Equal(t, tc.expectedResponse.(*Responses).Owners, actualPetResponses.Owners)
+			case http.StatusInternalServerError:
+				actualPetResponses := &resterr.ErrorResponse{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualPetResponses)
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*resterr.ErrorResponse), actualPetResponses)
+			}
+
+		})
+	}
 }
 
 func Test_ownerById(t *testing.T) {
-	log.Info().Str("function", "Test_ownerById").Msg("Owner by ID endpoint")
-
 	ownerResponse := &Response{
 		ID:        1,
 		FirstName: "Nat",
@@ -29,74 +133,120 @@ func Test_ownerById(t *testing.T) {
 		City:      "New York",
 		Telephone: "1234567890",
 	}
+	notFound := resterr.NotFound("record not found")
+	internalError := resterr.InternalServerError("fail to get owner by id")
 
 	testCases := []struct {
-		url           string
-		name          string
-		expectedOwner *Response
-		expectedError error
-		status        int
-		jsonResponse  string
+		name             string
+		id               interface{}
+		mockOwner        *Response
+		mockError        error
+		route            string
+		statusCode       int
+		expectedResponse interface{}
 	}{
 		{
-			url:           "/v1/owners/1",
-			name:          "Test getting owner by ID",
-			expectedOwner: ownerResponse,
-			expectedError: nil,
-			status:        http.StatusOK,
-			jsonResponse:  test.JsonString(ownerResponse),
+			name:             "get owner by ID",
+			id:               uint(1),
+			mockOwner:        ownerResponse,
+			mockError:        nil,
+			route:            "/v1/owners/1",
+			statusCode:       http.StatusOK,
+			expectedResponse: ownerResponse,
 		},
 		{
-			url:           "/v1/owners/1",
-			name:          "Test finding no owner",
-			expectedOwner: nil,
-			expectedError: gorm.ErrRecordNotFound,
-			status:        http.StatusNotFound,
-			jsonResponse:  test.JsonString(resterr.NotFound(gorm.ErrRecordNotFound.Error())),
+			name:             "get no owner by ID",
+			id:               uint(1),
+			mockOwner:        nil,
+			mockError:        gorm.ErrRecordNotFound,
+			route:            "/v1/owners/1",
+			statusCode:       http.StatusNotFound,
+			expectedResponse: &notFound,
 		},
-		//{
-		//	url:           "/v1/owners/1",
-		//	name:          "Test get owner by ID with error",
-		//	expectedOwner: nil,
-		//	expectedError: errors.New("unexpected error occurred"),
-		//	status:        http.StatusInternalServerError,
-		//	jsonResponse:  test.JsonString(resterr.InternalServerError("unexpected error occurred")),
-		//},
-		//{
-		//	url:           "/v1/owners/a1",
-		//	name:          "Test get owner by ID with invalid ID",
-		//	expectedOwner: nil,
-		//	expectedError: strconv.ErrSyntax,
-		//	status:        http.StatusBadRequest,
-		//	jsonResponse:  test.JsonString(resterr.BadRequest(errors.New("strconv.Atoi: parsing \"a1\": invalid syntax").Error())),
-		//},
+		{
+			name:             "fail to get owner by ID",
+			id:               uint(1),
+			mockOwner:        nil,
+			mockError:        errors.New("fail to get owner by id"),
+			route:            "/v1/owners/1",
+			statusCode:       http.StatusInternalServerError,
+			expectedResponse: &internalError,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ownerMock := MockServicer{}
-			ownerMock.On("getOwnerById", uint(1)).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(&ownerMock)
+			ownerMock := NewMockServicer(t)
+			ownerMock.EXPECT().getOwnerById(tc.id).Return(tc.mockOwner, tc.mockError)
 
-			r := setupRouter()
+			r := test.SetupRouter()
 			v1 := r.Group("/v1")
+			ownerRouter := NewRouter(ownerMock)
 			ownerRouter.Register(v1.Group("/owners"))
 
-			tests := []test.APITestCase{
-				{"Get Owner By ID", "GET", tc.url, "", nil, tc.status, tc.jsonResponse},
-			}
-			for _, tc := range tests {
-				test.Endpoint(t, adaptor.FiberApp(r), tc)
+			req := httptest.NewRequest("GET", tc.route, nil)
+			resp, _ := r.Test(req, 5)
+
+			switch tc.statusCode {
+			case http.StatusOK:
+				actualOwnerResponse := &Response{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualOwnerResponse)
+
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*Response), actualOwnerResponse)
+				assert.Equal(t, tc.expectedResponse.(*Response).ID, actualOwnerResponse.ID)
+				assert.Equal(t, tc.expectedResponse.(*Response).City, actualOwnerResponse.City)
+			case http.StatusNotFound | http.StatusInternalServerError:
+				actualOwnerResponse := &resterr.ErrorResponse{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualOwnerResponse)
+
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*resterr.ErrorResponse), actualOwnerResponse)
 			}
 		})
 	}
 }
 
-/*
-func Test_ownerByIdWithPets(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("Owner by ID with Pets endpoint", zap.String("function", "Test_ownerByIdWithPets"))
+func Test_ownerWithBadId(t *testing.T) {
+	badRequest := resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid-id\": invalid syntax")
+	ownerMock := NewMockServicer(t)
 
+	r := test.SetupRouter()
+	v1 := r.Group("/v1")
+	ownerRouter := NewRouter(ownerMock)
+	ownerRouter.Register(v1.Group("/owners"))
+
+	req := httptest.NewRequest("GET", "/v1/owners/invalid-id", nil)
+	resp, _ := r.Test(req, 5)
+
+	actualOwnerResponse := &resterr.ErrorResponse{}
+	// Read the response body
+	body, _ := io.ReadAll(resp.Body)
+	err := json.Unmarshal(body, actualOwnerResponse)
+
+	if err != nil {
+		t.Errorf("Error unmarshalling response body: %v", err)
+		return
+	}
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	assert.Equal(t, &badRequest, actualOwnerResponse)
+}
+
+func Test_ownerByIdWithPets(t *testing.T) {
 	ownerWithPetsResponse := &Response{
 		ID:        1,
 		FirstName: "Nat",
@@ -128,90 +278,130 @@ func Test_ownerByIdWithPets(t *testing.T) {
 		City:      "New Jersey",
 		Telephone: "1234567890",
 	}
-
-	_, convErr := strconv.Atoi("a1")
+	notFoundResponse := resterr.NotFound(gorm.ErrRecordNotFound.Error())
+	internalErrorResponse := resterr.InternalServerError("fail to get owner")
 
 	testCases := []struct {
-		url           string
-		pathParam     string
-		name          string
-		expectedOwner *Response
-		expectedError error
-		status        int
-		jsonResponse  string
+		name             string
+		id               interface{}
+		mockOwner        *Response
+		mockError        error
+		route            string
+		statusCode       int
+		expectedResponse interface{}
 	}{
 		{
-			url:           "/v1/owners/1/pets",
-			pathParam:     "1",
-			name:          "Test getting owner with pets by ID",
-			expectedOwner: ownerWithPetsResponse,
-			expectedError: nil,
-			status:        http.StatusOK,
-			jsonResponse:  test.JsonString(ownerWithPetsResponse),
+			name:             "get owner with pets by ID",
+			id:               uint(1),
+			mockOwner:        ownerWithPetsResponse,
+			mockError:        nil,
+			route:            "/v1/owners/1/pets",
+			statusCode:       http.StatusOK,
+			expectedResponse: ownerWithPetsResponse,
 		},
 		{
-			url:           "/v1/owners/2/pets",
-			pathParam:     "2",
-			name:          "Test getting owner with no pets by ID",
-			expectedOwner: ownerResponse,
-			expectedError: nil,
-			status:        http.StatusOK,
-			jsonResponse:  test.JsonString(ownerResponse),
+			name:             "get owner with no pets by ID",
+			id:               uint(2),
+			mockOwner:        ownerResponse,
+			mockError:        nil,
+			route:            "/v1/owners/2/pets",
+			statusCode:       http.StatusOK,
+			expectedResponse: ownerResponse,
 		},
 		{
-			url:           "/v1/owners/5/pets",
-			pathParam:     "5",
-			name:          "Test finding no owner",
-			expectedOwner: nil,
-			expectedError: gorm.ErrRecordNotFound,
-			status:        http.StatusNotFound,
-			jsonResponse:  test.JsonString(resterr.NotFound(gorm.ErrRecordNotFound.Error())),
+			name:             "get no owner",
+			id:               uint(5),
+			mockOwner:        nil,
+			mockError:        gorm.ErrRecordNotFound,
+			route:            "/v1/owners/5/pets",
+			statusCode:       http.StatusNotFound,
+			expectedResponse: notFoundResponse,
 		},
 		{
-			url:           "/v1/owners/6/pets",
-			pathParam:     "6",
-			name:          "Test get owner by ID with error",
-			expectedOwner: nil,
-			expectedError: errors.New("unexpected error occurred"),
-			status:        http.StatusInternalServerError,
-			jsonResponse:  test.JsonString(resterr.InternalServerError("unexpected error occurred")),
-		},
-		{
-			url:           "/v1/owners/a1/pets",
-			pathParam:     "a1",
-			name:          "Test get owner by ID with invalid ID",
-			expectedOwner: nil,
-			expectedError: convErr,
-			status:        http.StatusBadRequest,
-			jsonResponse:  test.JsonString(resterr.BadRequest(convErr.Error())),
+			name:             "fail to get owner by id",
+			id:               uint(6),
+			mockOwner:        nil,
+			mockError:        resterr.InternalServerError("fail to get owner"),
+			route:            "/v1/owners/6/pets",
+			statusCode:       http.StatusNotFound,
+			expectedResponse: internalErrorResponse,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ownerMock := MockServicer{}
-			id, _ := strconv.Atoi(tc.pathParam)
-			ownerMock.On("getOwnerByIdWithPets", uint(id)).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerMock := NewMockServicer(t)
+			ownerMock.EXPECT().getOwnerByIdWithPets(tc.id).Return(tc.mockOwner, tc.mockError)
 
-			r := setupRouter()
+			r := test.SetupRouter()
 			v1 := r.Group("/v1")
+			ownerRouter := NewRouter(ownerMock)
 			ownerRouter.Register(v1.Group("/owners"))
 
-			tests := []test.APITestCase{
-				{"Get Owner with Pets By ID", "GET", tc.url, "", nil, tc.status, tc.jsonResponse},
-			}
-			for _, tc := range tests {
-				test.Endpoint(t, r, tc)
+			req := httptest.NewRequest("GET", tc.route, nil)
+			resp, _ := r.Test(req, 5)
+
+			switch tc.statusCode {
+			case http.StatusOK:
+				actualOwnerResponse := &Response{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualOwnerResponse)
+
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*Response), actualOwnerResponse)
+				assert.Equal(t, tc.expectedResponse.(*Response).ID, actualOwnerResponse.ID)
+				assert.Equal(t, tc.expectedResponse.(*Response).City, actualOwnerResponse.City)
+				assert.Equal(t, tc.expectedResponse.(*Response).Pets, actualOwnerResponse.Pets)
+			case http.StatusNotFound | http.StatusInternalServerError:
+				actualOwnerResponse := &resterr.ErrorResponse{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualOwnerResponse)
+
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*resterr.ErrorResponse), actualOwnerResponse)
 			}
 		})
 	}
 }
 
-func Test_OwnerByLastName(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("Owner by Last Name endpoint", zap.String("function", "Test_OwnerByLastName"))
+func Test_ownerByIdWithPetsBadID(t *testing.T) {
+	response := resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"notID\": invalid syntax")
+	ownerMock := NewMockServicer(t)
 
+	r := test.SetupRouter()
+	v1 := r.Group("/v1")
+	ownerRouter := NewRouter(ownerMock)
+	ownerRouter.Register(v1.Group("/owners"))
+
+	req := httptest.NewRequest("GET", "/v1/owners/notID/pets", nil)
+	resp, _ := r.Test(req, 5)
+
+	actualOwnerResponse := &resterr.ErrorResponse{}
+	// Read the response body
+	body, _ := io.ReadAll(resp.Body)
+	err := json.Unmarshal(body, actualOwnerResponse)
+
+	if err != nil {
+		t.Errorf("Error unmarshalling response body: %v", err)
+		return
+	}
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+	assert.Equal(t, &response, actualOwnerResponse)
+}
+
+func Test_OwnerByLastName(t *testing.T) {
 	ownersResponse := &Responses{
 		Context: model.Context{Count: 2},
 		Owners: []Response{
@@ -233,147 +423,92 @@ func Test_OwnerByLastName(t *testing.T) {
 		Owners:  []Response{},
 	}
 
+	errorResponse := resterr.InternalServerError("unexpected error occurred")
+
 	testCases := []struct {
-		name           string
-		queryParam     string
-		url            string
-		expectedOwners *Responses
-		expectedError  error
-		status         int
-		jsonResponse   string
+		name             string
+		lastName         string
+		mockOwners       *Responses
+		mockError        error
+		route            string
+		statusCode       int
+		expectedResponse interface{}
 	}{
 		{
-			name:           "Test getting owners by last name",
-			queryParam:     "Ward",
-			url:            "/v1/owners?last-name=Ward",
-			expectedOwners: ownersResponse,
-			expectedError:  nil,
-			status:         http.StatusOK,
-			jsonResponse:   test.JsonString(ownersResponse),
+			name:             "get owners by last name",
+			lastName:         "Ward",
+			mockOwners:       ownersResponse,
+			mockError:        nil,
+			route:            "/v1/owners?last-name=Ward",
+			statusCode:       http.StatusOK,
+			expectedResponse: ownersResponse,
 		},
 		{
-			name:           "Test finding no owner",
-			queryParam:     "Jackson",
-			url:            "/v1/owners?last-name=Jackson",
-			expectedOwners: noOwnersFoundResponse,
-			expectedError:  nil,
-			status:         http.StatusNotFound,
-			jsonResponse:   test.JsonString(resterr.NotFound("Find no owner with last name: Jackson")),
+			name:             "get no owners by last name",
+			lastName:         "Jackson",
+			mockOwners:       noOwnersFoundResponse,
+			mockError:        nil,
+			route:            "/v1/owners?last-name=Jackson",
+			statusCode:       http.StatusNotFound,
+			expectedResponse: noOwnersFoundResponse,
 		},
 		{
-			name:           "Test get owner by last name with error",
-			queryParam:     "Ward",
-			url:            "/v1/owners?last-name=Ward",
-			expectedOwners: nil,
-			expectedError:  errors.New("unexpected error occurred"),
-			status:         http.StatusInternalServerError,
-			jsonResponse:   test.JsonString(resterr.InternalServerError("unexpected error occurred")),
+			name:             "Test get owner by last name with error",
+			lastName:         "Ward",
+			route:            "/v1/owners?last-name=Ward",
+			mockOwners:       nil,
+			mockError:        errors.New("unexpected error occurred"),
+			statusCode:       http.StatusInternalServerError,
+			expectedResponse: &errorResponse,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ownerMock := MockServicer{}
-			ownerMock.On("getOwnerByLastName", tc.queryParam).Return(tc.expectedOwners, tc.expectedError)
-			ownerRouter := NewRouter(&ownerMock)
+			ownerMock := NewMockServicer(t)
+			ownerMock.EXPECT().getOwnerByLastName(tc.lastName).Return(tc.mockOwners, tc.mockError)
 
-			r := setupRouter()
+			r := test.SetupRouter()
 			v1 := r.Group("/v1")
+			ownerRouter := NewRouter(ownerMock)
 			ownerRouter.Register(v1.Group("/owners"))
 
-			tests := []test.APITestCase{
-				{"Get Owner By Last Name", "GET", tc.url, "", nil, tc.status, tc.jsonResponse},
-			}
-			for _, tc := range tests {
-				test.Endpoint(t, r, tc)
+			req := httptest.NewRequest("GET", tc.route, nil)
+			resp, _ := r.Test(req, 5)
+
+			switch tc.statusCode {
+			case http.StatusOK:
+				actualOwnersResponse := &Responses{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualOwnersResponse)
+
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*Responses), actualOwnersResponse)
+				assert.Equal(t, tc.expectedResponse.(*Responses).Context.Count, actualOwnersResponse.Context.Count)
+			case http.StatusNotFound | http.StatusInternalServerError:
+				actualOwnerResponse := &resterr.ErrorResponse{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualOwnerResponse)
+
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*resterr.ErrorResponse), actualOwnerResponse)
 			}
 		})
 	}
 }
 
-func Test_AllOwners(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("All owner endpoint", zap.String("function", "TestAllOwners"))
-
-	ownersResponse := &Responses{
-		Context: model.Context{Count: 2},
-		Owners: []Response{
-			{
-				ID:        35,
-				FirstName: "Charles",
-				LastName:  "Ward",
-			},
-			{
-				ID:        26,
-				FirstName: "John",
-				LastName:  "Ward",
-			},
-			{
-				ID:        28,
-				FirstName: "John",
-				LastName:  "Ward",
-			},
-		},
-	}
-
-	noOwnersFoundResponse := &Responses{
-		Context: model.Context{Count: 0},
-		Owners:  []Response{},
-	}
-
-	testCases := []struct {
-		name           string
-		expectedOwners *Responses
-		expectedError  error
-		status         int
-		jsonResponse   string
-	}{
-		{
-			name:           "Test getting all owners",
-			expectedOwners: ownersResponse,
-			expectedError:  nil,
-			status:         http.StatusOK,
-			jsonResponse:   test.JsonString(ownersResponse),
-		},
-		{
-			name:           "Test finding no owner",
-			expectedOwners: noOwnersFoundResponse,
-			expectedError:  nil,
-			status:         http.StatusNotFound,
-			jsonResponse:   test.JsonString(resterr.NotFound("Find no owner")),
-		},
-		{
-			name:           "Test get all owners with error",
-			expectedOwners: nil,
-			expectedError:  errors.New("unexpected error occurred"),
-			status:         http.StatusInternalServerError,
-			jsonResponse:   test.JsonString(resterr.InternalServerError("unexpected error occurred")),
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			ownerMock := MockServicer{}
-			ownerMock.On("getAllOwners").Return(tc.expectedOwners, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
-
-			r := setupRouter()
-			v1 := r.Group("/v1")
-			ownerRouter.Register(v1.Group("/owners"))
-
-			tests := []test.APITestCase{
-				{"Get All Owners", "GET", "/v1/owners/all", "", nil, tc.status, tc.jsonResponse},
-			}
-			for _, tc := range tests {
-				test.Endpoint(t, r, tc)
-			}
-		})
-	}
-}
-
-func Test_CreateOwner(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("Create Owner endpoint", zap.String("function", "Test_CreateOwner"))
+func Test_addNewOwner(t *testing.T) {
 	ownerRequest := &AddRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -391,56 +526,120 @@ func Test_CreateOwner(t *testing.T) {
 		Telephone: "1234567890",
 	}
 
+	internalError := resterr.InternalServerError("fail to add a new owner")
 	testCases := []struct {
-		name          string
-		request       *AddRequest
-		expectedOwner *Response
-		expectedError error
-		status        int
-		jsonResponse  string
+		name             string
+		request          *AddRequest
+		mockOwner        *Response
+		mockError        error
+		route            string
+		statusCode       int
+		expectedResponse interface{}
 	}{
 		{
-			name:          "Test create owner",
-			request:       ownerRequest,
-			expectedOwner: owner,
-			expectedError: nil,
-			status:        http.StatusCreated,
-			jsonResponse:  test.JsonString(owner),
+			name:             "add a new owner",
+			request:          ownerRequest,
+			mockOwner:        owner,
+			mockError:        nil,
+			route:            "/v1/owners",
+			statusCode:       http.StatusCreated,
+			expectedResponse: owner,
 		},
 		{
-			name:          "Test create owner with error",
-			request:       ownerRequest,
-			expectedOwner: nil,
-			expectedError: errors.New("unexpected error occurred"),
-			status:        http.StatusInternalServerError,
-			jsonResponse:  test.JsonString(resterr.InternalServerError("unexpected error occurred")),
+			name:             "fail to create a new owner",
+			request:          ownerRequest,
+			mockOwner:        nil,
+			mockError:        errors.New("fail to add a new owner"),
+			route:            "/v1/owners",
+			statusCode:       http.StatusInternalServerError,
+			expectedResponse: &internalError,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ownerMock := MockServicer{}
-			ownerMock.On("create", tc.request).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(&ownerMock)
+			ownerMock := NewMockServicer(t)
+			ownerMock.EXPECT().create(tc.request).Return(tc.mockOwner, tc.mockError)
 
-			r := setupRouter()
+			r := test.SetupRouter()
 			v1 := r.Group("/v1")
+			ownerRouter := NewRouter(ownerMock)
 			ownerRouter.Register(v1.Group("/owners"))
 
-			tests := []test.APITestCase{
-				{"Create Owner", "POST", "/v1/owners", test.JsonString(tc.request), nil, tc.status, tc.jsonResponse},
-			}
-			for _, tc := range tests {
-				test.Endpoint(t, r, tc)
+			requestBody, _ := json.Marshal(tc.request)
+
+			req := httptest.NewRequest("POST", tc.route, bytes.NewReader(requestBody))
+			// Must se content-type header.
+			req.Header.Set("Content-Type", "application/json")
+			resp, _ := r.Test(req, 10)
+
+			switch resp.StatusCode {
+			case http.StatusCreated:
+				actualOwnerResponse := &Response{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualOwnerResponse)
+
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*Response), actualOwnerResponse)
+			case http.StatusInternalServerError:
+				actualOwnerResponse := &resterr.ErrorResponse{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualOwnerResponse)
+
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*resterr.ErrorResponse), actualOwnerResponse)
 			}
 		})
 	}
 }
 
-func Test_UpdateOwner(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("Update Owner endpoint", zap.String("function", "Test_UpdateOwner"))
+func Test_addNewOwnerWithBadRequest(t *testing.T) {
+	r := test.SetupRouter()
+	v1 := r.Group("/v1")
 
+	ownerMock := NewMockServicer(t)
+	ownerRouter := NewRouter(ownerMock)
+	ownerRouter.Register(v1.Group("/owners"))
+
+	// assign number to lastName to purposely fail JSON unmarshalling
+	addRequest := map[string]interface{}{
+		"firstName": "James",
+		"lastName":  5,
+		"address":   "123 Main St.",
+	}
+	addRequestJSON, _ := json.Marshal(addRequest)
+
+	req := httptest.NewRequest("POST", "/v1/owners", bytes.NewReader(addRequestJSON))
+	// Must se content-type header.
+	req.Header.Set("Content-Type", "application/json")
+	resp, _ := r.Test(req, 10)
+
+	actualOwnerResponse := &resterr.ErrorResponse{}
+	// Read the response body
+	body, _ := io.ReadAll(resp.Body)
+	err := json.Unmarshal(body, actualOwnerResponse)
+
+	if err != nil {
+		t.Errorf("Error unmarshalling response body: %v", err)
+		return
+	}
+
+	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
+
+}
+
+func Test_UpdateOwner(t *testing.T) {
 	ownerRequest := &UpdateRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -458,76 +657,166 @@ func Test_UpdateOwner(t *testing.T) {
 		Telephone: "1234567890",
 	}
 
+	internalError := resterr.InternalServerError("update: unable to update owner")
+
 	testCases := []struct {
-		name          string
-		requestID     string
-		request       *UpdateRequest
-		url           string
-		expectedOwner *UpdateResponse
-		expectedError error
-		status        int
-		jsonResponse  string
+		name             string
+		id               interface{}
+		request          *UpdateRequest
+		mockOwner        *UpdateResponse
+		mockError        error
+		route            string
+		statusCode       int
+		expectedResponse interface{}
 	}{
 		{
-			name:          "Test update owner",
-			requestID:     "15",
-			request:       ownerRequest,
-			url:           "/v1/owners/15",
-			expectedOwner: owner,
-			expectedError: nil,
-			status:        http.StatusOK,
-			jsonResponse:  test.JsonString(owner),
+			name:             "update an owner",
+			id:               uint(15),
+			request:          ownerRequest,
+			mockOwner:        owner,
+			mockError:        nil,
+			route:            "/v1/owners/15",
+			statusCode:       http.StatusOK,
+			expectedResponse: owner,
 		},
 		{
-			name:          "Test update owner",
-			requestID:     "a1",
-			request:       ownerRequest,
-			url:           "/v1/owners/a1",
-			expectedOwner: nil,
-			expectedError: strconv.ErrSyntax,
-			status:        http.StatusBadRequest,
-			jsonResponse:  test.JsonString(resterr.BadRequest(errors.New("strconv.Atoi: parsing \"a1\": invalid syntax"))),
-		},
-		{
-			name:          "Test update owner with error",
-			requestID:     "17",
-			request:       ownerRequest,
-			url:           "/v1/owners/17",
-			expectedOwner: nil,
-			expectedError: errors.New("unexpected error occurred"),
-			status:        http.StatusInternalServerError,
-			jsonResponse:  test.JsonString(resterr.InternalServerError("unexpected error occurred")),
-		},
-		{
-			name:          "Test update owner fail",
-			requestID:     "39",
-			request:       ownerRequest,
-			url:           "/v1/owners/39",
-			expectedOwner: nil,
-			expectedError: errors.New("update: unable to update owner"),
-			status:        http.StatusInternalServerError,
-			jsonResponse:  test.JsonString(resterr.InternalServerError("update: unable to update owner")),
+			name:             "fail to update owner",
+			id:               uint(39),
+			request:          ownerRequest,
+			mockOwner:        nil,
+			mockError:        errors.New("update: unable to update owner"),
+			route:            "/v1/owners/39",
+			statusCode:       http.StatusInternalServerError,
+			expectedResponse: &internalError,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ownerMock := MockServicer{}
-			id, _ := strconv.Atoi(tc.requestID)
-			ownerMock.On("update", uint(id), tc.request).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(&ownerMock)
+			ownerMock := NewMockServicer(t)
+			ownerMock.EXPECT().update(tc.id, tc.request).Return(tc.mockOwner, tc.mockError)
 
-			r := setupRouter()
+			r := test.SetupRouter()
 			v1 := r.Group("/v1")
+			ownerRouter := NewRouter(ownerMock)
 			ownerRouter.Register(v1.Group("/owners"))
 
-			tests := []test.APITestCase{
-				{"Update Owner", "PUT", tc.url, test.JsonString(tc.request), nil, tc.status, tc.jsonResponse},
+			requestBody, _ := json.Marshal(tc.request)
+			req := httptest.NewRequest("PUT", tc.route, bytes.NewReader(requestBody))
+			// Must se content-type header.
+			req.Header.Set("Content-Type", "application/json")
+			resp, _ := r.Test(req, 5)
+
+			switch resp.StatusCode {
+			case http.StatusCreated:
+				actualOwnerResponse := &UpdateResponse{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualOwnerResponse)
+
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*UpdateResponse), actualOwnerResponse)
+			case http.StatusInternalServerError:
+				actualOwnerResponse := &resterr.ErrorResponse{}
+				// Read the response body
+				body, _ := io.ReadAll(resp.Body)
+				err := json.Unmarshal(body, actualOwnerResponse)
+
+				if err != nil {
+					t.Errorf("Error unmarshalling response body: %v", err)
+					return
+				}
+
+				assert.Equal(t, tc.statusCode, resp.StatusCode)
+				assert.Equal(t, tc.expectedResponse.(*resterr.ErrorResponse), actualOwnerResponse)
 			}
-			for _, tc := range tests {
-				test.Endpoint(t, r, tc)
-			}
+
 		})
 	}
 }
-*/
+
+func Test_updateOwnerWithBadRequest(t *testing.T) {
+	ownerRequest := &UpdateRequest{
+		FirstName: "Nat",
+		LastName:  "Cole",
+		Address:   "1234 Elm St",
+		City:      "New York",
+		Telephone: "1234567890",
+	}
+	// assign number to lastName to purposely fail JSON unmarshalling
+	updateRequest := map[string]interface{}{
+		"firstName": "James",
+		"lastName":  5,
+		"address":   "123 Main St.",
+	}
+	updateRequestJSON, _ := json.Marshal(updateRequest)
+
+	badResponse := resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"a1\": invalid syntax")
+	badResponse2 := resterr.BadRequest("json: cannot unmarshal number into Go struct field UpdateRequest.lastName of type string")
+
+	testCases := []struct {
+		name             string
+		id               interface{}
+		request          interface{}
+		route            string
+		statusCode       int
+		expectedResponse interface{}
+	}{
+		{
+			name:             "update owner request with invalid id",
+			id:               "a1",
+			request:          ownerRequest,
+			route:            "/v1/owners/a1",
+			statusCode:       http.StatusBadRequest,
+			expectedResponse: &badResponse,
+		},
+		{
+			name:             "bad update owner request",
+			id:               uint(17),
+			request:          updateRequestJSON,
+			route:            "/v1/owners/17",
+			statusCode:       http.StatusBadRequest,
+			expectedResponse: &badResponse2,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			ownerMock := NewMockServicer(t)
+
+			r := test.SetupRouter()
+			v1 := r.Group("/v1")
+			ownerRouter := NewRouter(ownerMock)
+			ownerRouter.Register(v1.Group("/owners"))
+			var req *http.Request
+
+			switch tc.request.(type) {
+			case []byte:
+				req = httptest.NewRequest("PUT", tc.route, bytes.NewReader(tc.request.([]byte)))
+			default:
+				requestBody, _ := json.Marshal(tc.request)
+				req = httptest.NewRequest("PUT", tc.route, bytes.NewReader(requestBody))
+			}
+
+			// Must se content-type header.
+			req.Header.Set("Content-Type", "application/json")
+			resp, _ := r.Test(req, 5)
+			actualOwnerResponse := &resterr.ErrorResponse{}
+			// Read the response body
+			body, _ := io.ReadAll(resp.Body)
+			err := json.Unmarshal(body, actualOwnerResponse)
+
+			if err != nil {
+				t.Errorf("Error unmarshalling response body: %v", err)
+				return
+			}
+
+			assert.Equal(t, tc.statusCode, resp.StatusCode)
+			assert.Equal(t, tc.expectedResponse.(*resterr.ErrorResponse), actualOwnerResponse)
+		})
+	}
+}
