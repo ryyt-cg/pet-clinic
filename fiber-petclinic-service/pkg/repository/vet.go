@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// many2many relation by join vet_specialty table
+// Vet many2many relation by join vet_specialty table
 type Vet struct {
 	gorm.Model
 	model.Person

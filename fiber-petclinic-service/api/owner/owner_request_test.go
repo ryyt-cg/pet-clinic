@@ -68,7 +68,7 @@ func Test_ToOwnerEntityFromUpdateRequest(t *testing.T) {
 		ownerEntity   *repository.Owner
 	}{
 		{updateRequest: &UpdateRequest{
-			Id:        101,
+			ID:        101,
 			FirstName: "John",
 			LastName:  "Five",
 			Address:   "123 Main St",

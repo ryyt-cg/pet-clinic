@@ -2,7 +2,6 @@ package owner
 
 import (
 	"fiber-petclinic-service/api/pet"
-	"fiber-petclinic-service/pkg/errors"
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
 )
@@ -34,13 +33,14 @@ func (ur *UpdateResponse) FromUpdateEntity(owner *repository.Owner) {
 
 // Response - owner response
 type Response struct {
-	ID        uint           `json:"id"`
-	FirstName string         `json:"firstName"`
-	LastName  string         `json:"lastName"`
-	Address   string         `json:"address"`
-	City      string         `json:"city"`
-	Telephone string         `json:"telephone"`
-	Pets      []pet.Response `json:"pets,omitempty"`
+	ID        uint   `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Address   string `json:"address"`
+	City      string `json:"city"`
+	Telephone string `json:"telephone"`
+	// Must set pointer because it could be omitted
+	Pets *[]pet.Response `json:"pets,omitempty"`
 }
 
 // Responses - list of owners
@@ -49,19 +49,19 @@ type Responses struct {
 	Owners  []Response    `json:"owners"`
 }
 
-type exceptionResponse struct {
-	Code          int                  `json:"code"`
-	ErrorResponse errors.ErrorResponse `json:"error"`
-}
-
-func (or *Response) FromOwner(owner *repository.Owner) {
-	or.ID = owner.ID
-	or.FirstName = owner.FirstName
-	or.LastName = owner.LastName
-	or.Address = owner.Address
-	or.City = owner.City
-	or.Telephone = owner.Telephone
-	or.Pets = pet.FromPets(owner.Pets)
+func (resp *Response) FromOwner(owner *repository.Owner) {
+	resp.ID = owner.ID
+	resp.FirstName = owner.FirstName
+	resp.LastName = owner.LastName
+	resp.Address = owner.Address
+	resp.City = owner.City
+	resp.Telephone = owner.Telephone
+	pets := pet.FromPets(owner.Pets)
+	if len(pets) == 0 {
+		resp.Pets = nil
+	} else {
+		resp.Pets = &pets
+	}
 }
 
 func FromOwners(owners []repository.Owner) []Response {

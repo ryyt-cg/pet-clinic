@@ -1,5 +1,5 @@
 # Fiber Pet Clinic Service
-This example inherits every feature from fiber-petclinic-service example.  It has a circuit breaker middleware to handle service failures gracefully.
+This example inherits every feature from gin-petclinic-service example.  It has a circuit breaker middleware to handle service failures gracefully.
 
 ## Features
 - Middleware

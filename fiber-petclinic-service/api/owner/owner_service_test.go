@@ -27,7 +27,7 @@ func Test_getById(t *testing.T) {
 	}
 
 	tests := []struct {
-		id             uint
+		id             int
 		mockResult     *repository.Owner
 		mockError      error
 		expectedResult *Response
@@ -259,7 +259,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 		ID:        1,
 		FirstName: "Leo",
 		LastName:  "DiCaprio",
-		Pets: []pet.Response{
+		Pets: &[]pet.Response{
 			{
 				Name:      "Buddy",
 				Birthdate: time.Date(2010, 1, 1, 0, 0, 0, 0, time.UTC).Format(time.DateOnly),
@@ -271,7 +271,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 
 	testCases := []struct {
 		name           string
-		id             uint
+		id             int
 		mockOwner      *repository.Owner
 		mockError      error
 		expectedResult *Response
@@ -279,7 +279,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 	}{
 		{
 			name:           "get owner by id with pets",
-			id:             uint(1),
+			id:             int(1),
 			mockOwner:      mockOwner,
 			mockError:      nil,
 			expectedResult: expectedResult,
@@ -287,7 +287,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 		},
 		{
 			name:           "fail to get owner by id with pets",
-			id:             uint(1),
+			id:             int(1),
 			mockOwner:      nil,
 			mockError:      errors.New("unable to get owner by id"),
 			expectedResult: nil,
@@ -311,7 +311,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 				assert.Equal(t, tc.expectedResult.ID, result.ID)
 				assert.Equal(t, tc.expectedResult.FirstName, result.FirstName)
 				assert.Equal(t, tc.expectedResult.LastName, result.LastName)
-				assert.Equal(t, len(tc.expectedResult.Pets), len(result.Pets))
+				assert.Equal(t, len(*tc.expectedResult.Pets), len(*result.Pets))
 				assert.Nil(t, err)
 			}
 
@@ -350,13 +350,13 @@ func Test_update(t *testing.T) {
 	}
 
 	expectedResult := &Response{
-		ID:        uint(1),
+		ID:        int(1),
 		FirstName: "Nat",
 		LastName:  "Cole",
 	}
 	testCases := []struct {
 		name           string
-		id             uint
+		id             int
 		mockOwner      *repository.Owner
 		mockError      error
 		updatedOwner   *repository.Owner
@@ -366,7 +366,7 @@ func Test_update(t *testing.T) {
 	}{
 		{
 			name:           "Test update owner success",
-			id:             uint(1),
+			id:             int(1),
 			mockOwner:      mockOwner,
 			mockError:      nil,
 			updatedOwner:   updatedOwner,
@@ -376,7 +376,7 @@ func Test_update(t *testing.T) {
 		},
 		{
 			name:           "fail to update owner",
-			id:             uint(1),
+			id:             int(1),
 			mockOwner:      mockOwner,
 			mockError:      errors.New("unable to update owner"),
 			updatedOwner:   nil,
@@ -439,7 +439,7 @@ func Test_create(t *testing.T) {
 	}
 
 	expectedResult := &Response{
-		//ID:        uint(1),
+		//ID:        int(1),
 		FirstName: "Nat",
 		LastName:  "Cole",
 	}

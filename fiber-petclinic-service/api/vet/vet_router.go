@@ -5,8 +5,6 @@ import (
 	resterr "fiber-petclinic-service/pkg/errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
-	"strconv"
-
 	"gorm.io/gorm"
 )
 
@@ -46,8 +44,9 @@ func (vetRouter *Router) allSpecialties(c *fiber.Ctx) error {
 // vetById - retrieve vet by id
 func (vetRouter *Router) vetById(c *fiber.Ctx) error {
 	pathID := c.Params("id")
+	log.Info().Str("id", pathID).Msg("Retrieving vet by id")
 
-	id, err := strconv.Atoi(pathID)
+	id, err := c.ParamsInt("id")
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
@@ -157,7 +156,7 @@ func (vetRouter *Router) create(c *fiber.Ctx) error {
 
 func (vetRouter *Router) update(c *fiber.Ctx) error {
 	var vetRequest Request
-	id, _ := strconv.ParseUint(c.Params("id"), 10, 64)
+	id, _ := c.ParamsInt("id")
 	err := c.BodyParser(&vetRequest)
 
 	if err != nil {

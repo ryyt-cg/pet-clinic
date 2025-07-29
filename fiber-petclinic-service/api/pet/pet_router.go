@@ -43,9 +43,13 @@ func (router *Router) getAll(c *fiber.Ctx) error {
 	log.Info().Msg("GET all pets")
 	responses, err := router.service.getAllPets()
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Err(err).Msg("Found no pet.")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
+		}
+
 		log.Error().Err(err).Msg("Unable to get all pets.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
-
 	}
 
 	return c.Status(fiber.StatusOK).JSON(responses)

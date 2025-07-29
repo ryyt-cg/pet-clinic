@@ -1,9 +1,11 @@
 package visit
 
 import (
+	"errors"
 	resterr "fiber-petclinic-service/pkg/errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 )
 
 type Router struct {
@@ -43,8 +45,13 @@ func (r *Router) visitById(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	response, err := r.service.getVisitById(id)
+	response, err := r.service.getVisitById(uint(id))
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Err(err).Str("id", strID).Msg("Visit by id not found")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("get no visit by id"))
+		}
+		log.Error().Err(err).Str("id", strID).Msg("fail to get a visit by id")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
@@ -79,13 +86,19 @@ func (r *Router) allVisits(c *fiber.Ctx) error {
 
 func (r *Router) addNewVisit(c *fiber.Ctx) error {
 	log.Info().Msg("Post a new visit.")
-	var visit Request
-	if err := c.BodyParser(&visit); err != nil {
+	var addRequest *AddRequest
+	if err := c.BodyParser(addRequest); err != nil {
 		log.Error().Err(err).Msg("Fail to Unmarshal visit JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	response, err := r.service.create(&visit)
+	addVisit, err := FromAddRequest(addRequest)
+	if err != nil {
+		log.Error().Err(err).Msg("Invalid Add Request.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
+
+	response, err := r.service.create(addVisit)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
@@ -109,8 +122,8 @@ func (r *Router) updateVisit(c *fiber.Ctx) error {
 	log.Info().Msg("Update a visit.")
 	strID := c.Params("id")
 
-	var visit Request
-	if err := c.BodyParser(&visit); err != nil {
+	var updateRequest *UpdateRequest
+	if err := c.BodyParser(updateRequest); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
@@ -120,8 +133,13 @@ func (r *Router) updateVisit(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	visit.ID = id
-	response, err := r.service.update(&visit)
+	visit, err := FromUpdateRequest(updateRequest)
+	if err != nil {
+		log.Error().Err(err).Msg("Invalid Update Request.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
+	visit.ID = uint(id)
+	response, err := r.service.update(visit)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to update visit.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))

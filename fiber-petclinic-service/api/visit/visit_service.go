@@ -2,15 +2,14 @@ package visit
 
 import (
 	"fiber-petclinic-service/pkg/repository"
-	"fiber-petclinic-service/pkg/repository/model"
 	"github.com/rs/zerolog/log"
 )
 
 type Servicer interface {
-	getVisitById(id int) (*Response, error)
+	getVisitById(id uint) (*Response, error)
 	getAllVisits() (*Responses, error)
-	create(visit *Request) (*Response, error)
-	update(visit *Request) (*Response, error)
+	create(visit *repository.Visit) (*Response, error)
+	update(visit *repository.Visit) (*Response, error)
 }
 
 type Service struct {
@@ -21,10 +20,10 @@ func NewService(repository repository.VisitRepositorier) *Service {
 	return &Service{repository: repository}
 }
 
-func (service *Service) getVisitById(id int) (*Response, error) {
+func (service *Service) getVisitById(id uint) (*Response, error) {
 	visit, err := service.repository.FindById(id)
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve visit by id.")
+		log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve visit by id.")
 		return nil, err
 	}
 
@@ -43,14 +42,12 @@ func (service *Service) getAllVisits() (*Responses, error) {
 	log.Debug().Int("count", len(visits)).Msg("counts of all visits")
 
 	// convert to []Response & model.Context
-	visitsJson := FromVisits(visits)
-	contextJson := model.Context{Count: len(visitsJson)}
-	return &Responses{Visits: visitsJson, Context: contextJson}, nil
+	responses := FromVisitsToResponses(visits)
+	return responses, nil
 }
 
-func (service *Service) create(request *Request) (*Response, error) {
-	visitEntity := ToVisit(request)
-	newVisit, err := service.repository.Insert(visitEntity)
+func (service *Service) create(visit *repository.Visit) (*Response, error) {
+	newVisit, err := service.repository.Insert(visit)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to create visit.")
 		return nil, err
@@ -61,10 +58,8 @@ func (service *Service) create(request *Request) (*Response, error) {
 	return response, nil
 }
 
-func (service *Service) update(request *Request) (*Response, error) {
-	visitEntity := ToVisit(request)
-	visitEntity.ID = uint(request.ID)
-	updatedVisit, err := service.repository.Update(visitEntity)
+func (service *Service) update(visit *repository.Visit) (*Response, error) {
+	updatedVisit, err := service.repository.Update(visit)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to update visit.")
 		return nil, err

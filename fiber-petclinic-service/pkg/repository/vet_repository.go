@@ -148,7 +148,7 @@ func (repository *VetRepository) Insert(vet *Vet) (*Vet, error) {
 // Update - update vet
 // UPDATE "vets" SET "first_name" = 'James', "last_name" = 'Carter' WHERE "id" = 1
 func (repository *VetRepository) Update(vet *Vet) (*Vet, error) {
-	log.Debug().Uint("id", vet.ID).Msg("Fail vet id.")
+	//log.Debug().Int("id", vet.ID).Msg("Fail vet id.")
 
 	// Omit the column name from update...
 	err := repository.db.Omit("created_at").Save(&vet).Error

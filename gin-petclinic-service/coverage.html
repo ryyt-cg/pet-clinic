@@ -1,0 +1,1991 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>service: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">gin-petclinic-service/api/service/auth_service.go (0.0%)</option>
+				
+				<option value="file1">gin-petclinic-service/cmd/server.go (0.0%)</option>
+				
+				<option value="file2">gin-petclinic-service/docs/docs.go (0.0%)</option>
+				
+				<option value="file3">gin-petclinic-service/pkg/ds/http_server.go (100.0%)</option>
+				
+				<option value="file4">gin-petclinic-service/pkg/log/logger.go (100.0%)</option>
+				
+				<option value="file5">gin-petclinic-service/pkg/log/mock_logger.go (0.0%)</option>
+				
+				<option value="file6">gin-petclinic-service/pkg/test/api.go (0.0%)</option>
+				
+				<option value="file7">gin-petclinic-service/pkg/test/embedded_postgres.go (0.0%)</option>
+				
+				<option value="file8">gin-petclinic-service/pkg/test/etl.go (0.0%)</option>
+				
+				<option value="file9">gin-petclinic-service/pkg/test/mock.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package service
+
+import (
+        "errors"
+        "fmt"
+        "gin-petclinic-service/config/app"
+        "go.uber.org/zap"
+        "net/http"
+        "strings"
+
+        "github.com/gin-gonic/gin"
+        jwtverifier "github.com/okta/okta-jwt-verifier-golang"
+)
+
+type AuthenService struct {
+        logger      *zap.Logger
+        jwtVerifier *jwtverifier.JwtVerifier
+}
+
+func NewAuthenService(logger *zap.Logger) *AuthenService <span class="cov0" title="0">{
+        tv := map[string]string{}
+        tv["aud"] = app.Config.Okta.OAuth2.Audience
+        tv["cid"] = app.Config.Okta.OAuth2.ClientId
+        tv["scp"] = app.Config.Okta.OAuth2.Scopes
+
+        jvConfig := jwtverifier.JwtVerifier{
+                Issuer:           app.Config.Okta.OAuth2.Issuer,
+                ClaimsToValidate: tv,
+        }
+
+        return &amp;AuthenService{
+                logger:      logger,
+                jwtVerifier: jvConfig.New(),
+        }
+}</span>
+
+// redirect and return un-authorized exception
+func (authSvc *AuthenService) RedirectURL(c *gin.Context) <span class="cov0" title="0">{
+        c.JSON(http.StatusUnauthorized, gin.H{"status": http.StatusUnauthorized, "message": "Invalid Token"})
+        c.Abort()
+}</span>
+
+func (authSvc *AuthenService) Verify(bearerToken string) error <span class="cov0" title="0">{
+        tokenString := strings.Split(bearerToken, "Bearer ")
+
+        if len(tokenString) &gt; 1 </span><span class="cov0" title="0">{
+                jwt, err := authSvc.jwtVerifier.VerifyAccessToken(tokenString[1])
+                fmt.Println(jwt.Claims)
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return errors.New("bearer token requires")</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package main
+
+import (
+        "gin-petclinic-service/api/health"
+        "gin-petclinic-service/api/info"
+        "gin-petclinic-service/api/owner"
+        "gin-petclinic-service/api/pet"
+        "gin-petclinic-service/api/vet"
+        "gin-petclinic-service/api/visit"
+        "gin-petclinic-service/config/app"
+        _ "gin-petclinic-service/docs"
+        "gin-petclinic-service/middleware"
+        "gin-petclinic-service/pkg/dbase"
+        "gin-petclinic-service/pkg/ds"
+        "gin-petclinic-service/pkg/repository"
+        "github.com/gin-contrib/location"
+        "github.com/gin-gonic/gin"
+        "github.com/rs/zerolog"
+        "github.com/rs/zerolog/log"
+        swaggerFiles "github.com/swaggo/files"
+        ginSwagger "github.com/swaggo/gin-swagger"
+        ginprometheus "github.com/zsais/go-gin-prometheus"
+        "golang.org/x/sync/errgroup"
+        "gorm.io/gorm"
+        "os"
+)
+
+var (
+        g  errgroup.Group
+        db *gorm.DB
+        r  *gin.Engine
+)
+
+func loadConfig() <span class="cov0" title="0">{
+        zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+        log.Info().Msg("gin-pet-clinic starts")
+
+        // load application configurations
+        if err := app.LoadConfig("./config"); err != nil </span><span class="cov0" title="0">{
+                log.Fatal().Err(err).Msg("Fail to load application configuration.")
+        }</span>
+
+        <span class="cov0" title="0">sqlite := dbase.Sqlite{}
+        var err error
+        db, err = sqlite.Connect()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal().Err(err).Msg("Fail to connect the database.")
+        }</span>
+
+        // Creates a router without any middleware by default
+        <span class="cov0" title="0">r = gin.New()
+
+        // Global middleware
+        // Logger middleware will write the logs to gin.DefaultWriter even if you set with GIN_MODE=release.
+        // By default, gin.DefaultWriter = os.Stdout
+        r.Use(gin.Logger())
+
+        // Recovery middleware recovers from any panics and writes a 500 if there was one.
+        r.Use(gin.Recovery())
+        r.Use(location.Default())
+        r.Use(middleware.SetRequestUUID())</span>
+}
+
+// Component initialization
+func loadComponents() <span class="cov0" title="0">{
+        log.Info().Msg("Component initialization starts")
+        healthCheckService := health.NewService()
+        healthCheckRouter := health.NewRouter(healthCheckService)
+
+        infoService := info.NewService()
+        ipService := info.NewIPService()
+        infoRouter := info.NewRouter(infoService, ipService)
+
+        // Owner
+        ownerRepository := repository.NewOwnerRepository(db)
+        ownerService := owner.NewService(ownerRepository)
+        ownerRouter := owner.NewRouter(ownerService)
+
+        // Pet
+        petRepository := repository.NewPetRepository(db)
+        petService := pet.NewService(petRepository)
+        petRouter := pet.NewRouter(petService)
+
+        // Vet
+        vetRepository := repository.NewVetRepository(db)
+        vetService := vet.NewService(vetRepository)
+        vetRouter := vet.NewRouter(vetService)
+
+        // Visit
+        visitRepository := repository.NewVisitRepository(db)
+        visitService := visit.NewService(visitRepository)
+        visitRouter := visit.NewRouter(visitService)
+
+        //authenService := service.NewAuthenService(logger)
+
+        // config prometheus &amp; endpoint group
+        p := ginprometheus.NewPrometheus("gin")
+        p.Use(r)
+        home := r.Group("/")
+        v1 := r.Group("/v1")
+        //v1.Use(middleware.Authenticate(authenService))
+
+        healthCheckRouter.Register(home.Group("/health"))
+        infoRouter.Register(home.Group("/info"))
+        ownerRouter.Register(v1.Group("/owners"))
+        petRouter.Register(v1.Group("/pets"))
+        vetRouter.Register(v1.Group("/vets"))
+        visitRouter.Register(v1.Group("/visits"))
+}</span>
+
+//        @title                        Pet Clinic API
+//        @version                1.0
+//        @description        This is a pet clinic API server.
+//        @termsOfService        http://swagger.io/terms/
+
+//        @contact.name        API Support
+//        @contact.url        http://www.swagger.io/support
+//        @contact.email        support@swagger.io
+//        @license.name        Apache 2.0
+//        @license.url        http://www.apache.org/licenses/LICENSE-2.0.html
+
+//        @Schemes        https
+//  @Host                localhost:8443
+//        @BasePath        /v1
+
+// @externalDocs.description        OpenAPI
+// @externalDocs.url                        https://swagger.io/resources/open-api/
+func main() <span class="cov0" title="0">{
+        loadConfig()
+        loadComponents()
+        // add swagger endpoint
+        r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+        //r.Run(":8080")
+        httpServer := ds.NewHttpServer(r)
+        httpRouter := httpServer.HttpRouter()
+
+        g.Go(func() error </span><span class="cov0" title="0">{
+                return httpRouter.ListenAndServeTLS(app.Config.Server.CertFile, app.Config.Server.KeyFile)
+        }</span>)
+
+        <span class="cov0" title="0">if err := g.Wait(); err != nil </span><span class="cov0" title="0">{
+                log.Fatal().Err(err).Msg("Fail to run http server.")
+                os.Exit(-1)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">// Package docs Code generated by swaggo/swag. DO NOT EDIT
+package docs
+
+import "github.com/swaggo/swag"
+
+const docTemplate = `{
+    "schemes": {{ marshal .Schemes }},
+    "swagger": "2.0",
+    "info": {
+        "description": "{{escape .Description}}",
+        "title": "{{.Title}}",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "{{.Version}}"
+    },
+    "host": "{{.Host}}",
+    "basePath": "{{.BasePath}}",
+    "paths": {
+        "/owners": {
+            "get": {
+                "description": "Get owners by last name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owners"
+                ],
+                "summary": "Search owners by last name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Owner last name",
+                        "name": "last-name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/owner.Responses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Fail new owner",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owners"
+                ],
+                "summary": "Fail new owner",
+                "parameters": [
+                    {
+                        "description": "Add owner",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/owner.AddRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/owner.UpdateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/owners/all": {
+            "get": {
+                "description": "Get all owners",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owners"
+                ],
+                "summary": "List all owners",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/owner.Responses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/owners/{id}": {
+            "get": {
+                "description": "Get owner by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owners"
+                ],
+                "summary": "Search owner by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Owner ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/owner.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update new owner",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owners"
+                ],
+                "summary": "Update owner",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Owner ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update owner",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/owner.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/owner.UpdateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/owners/{id}/pets": {
+            "get": {
+                "description": "Get owner that has pets by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "owners"
+                ],
+                "summary": "Search owner that has pets by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Owner ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/owner.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets": {
+            "get": {
+                "description": "Get pet by name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pets"
+                ],
+                "summary": "Get pet by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Pet Name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pet.Responses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add a new pet",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pets"
+                ],
+                "summary": "Add a new pet",
+                "parameters": [
+                    {
+                        "description": "Add pet",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pet.AddRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pet.Responses"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/all": {
+            "get": {
+                "description": "Get all pets",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pets"
+                ],
+                "summary": "List all pets",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pet.Responses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/{id}": {
+            "get": {
+                "description": "Get pet by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pets"
+                ],
+                "summary": "Get pet by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Pet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pet.Responses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Fail pet",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pets"
+                ],
+                "summary": "Fail a pet",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Pet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update pet",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pet.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pet.Responses"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/{id}/visits": {
+            "get": {
+                "description": "Get pet with visits by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "pets"
+                ],
+                "summary": "Get pet with visits by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Pet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pet.Responses"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/vets/all": {
+            "get": {
+                "description": "Get all vets",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "vets"
+                ],
+                "summary": "List all vets",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/vet.Responses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/visits/all": {
+            "get": {
+                "description": "Get all visits",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "visits"
+                ],
+                "summary": "List all visits",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/visit.Responses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/visits/{id}": {
+            "get": {
+                "description": "Get visit by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "visits"
+                ],
+                "summary": "Get visit by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Visit ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/visit.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update visit",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "visits"
+                ],
+                "summary": "Update visit",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Visit ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update visit",
+                        "name": "Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/visit.UpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/visit.Responses"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "errors.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "details": {},
+                "message": {
+                    "type": "string",
+                    "example": "status bad request"
+                },
+                "status": {
+                    "type": "integer",
+                    "example": 400
+                }
+            }
+        },
+        "model.Context": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "owner.AddRequest": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "telephone": {
+                    "type": "string"
+                }
+            }
+        },
+        "owner.Response": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "pets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/pet.Response"
+                    }
+                },
+                "telephone": {
+                    "type": "string"
+                }
+            }
+        },
+        "owner.Responses": {
+            "type": "object",
+            "properties": {
+                "context": {
+                    "$ref": "#/definitions/model.Context"
+                },
+                "owners": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/owner.Response"
+                    }
+                }
+            }
+        },
+        "owner.UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "telephone": {
+                    "type": "string"
+                }
+            }
+        },
+        "owner.UpdateResponse": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "telephone": {
+                    "type": "string"
+                }
+            }
+        },
+        "pet.AddRequest": {
+            "type": "object",
+            "required": [
+                "birthdate",
+                "name",
+                "ownerID",
+                "typeID"
+            ],
+            "properties": {
+                "birthdate": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ownerID": {
+                    "type": "integer"
+                },
+                "typeID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "pet.Response": {
+            "type": "object",
+            "properties": {
+                "birthdate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "visits": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/visit.Response"
+                    }
+                }
+            }
+        },
+        "pet.Responses": {
+            "type": "object",
+            "properties": {
+                "context": {
+                    "$ref": "#/definitions/model.Context"
+                },
+                "pets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/pet.Response"
+                    }
+                }
+            }
+        },
+        "pet.UpdateRequest": {
+            "type": "object",
+            "required": [
+                "birthdate",
+                "id",
+                "name",
+                "ownerID",
+                "typeID"
+            ],
+            "properties": {
+                "birthdate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ownerID": {
+                    "type": "integer"
+                },
+                "typeID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "vet.Response": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "specialties": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vet.specialtyResponse"
+                    }
+                }
+            }
+        },
+        "vet.Responses": {
+            "type": "object",
+            "properties": {
+                "context": {
+                    "$ref": "#/definitions/model.Context"
+                },
+                "vets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vet.Response"
+                    }
+                }
+            }
+        },
+        "vet.specialtyResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "visit.Response": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "visitDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "visit.Responses": {
+            "type": "object",
+            "properties": {
+                "context": {
+                    "$ref": "#/definitions/model.Context"
+                },
+                "visits": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/visit.Response"
+                    }
+                }
+            }
+        },
+        "visit.UpdateRequest": {
+            "type": "object",
+            "required": [
+                "description",
+                "petId",
+                "visitDate"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "petId": {
+                    "type": "integer"
+                },
+                "visitDate": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
+    }
+}`
+
+// SwaggerInfo holds exported Swagger Info so clients can modify it
+var SwaggerInfo = &amp;swag.Spec{
+        Version:          "1.0",
+        Host:             "localhost:8443",
+        BasePath:         "/v1",
+        Schemes:          []string{"https"},
+        Title:            "Pet Clinic API",
+        Description:      "This is a pet clinic API server.",
+        InfoInstanceName: "swagger",
+        SwaggerTemplate:  docTemplate,
+        LeftDelim:        "{{",
+        RightDelim:       "}}",
+}
+
+func init() <span class="cov0" title="0">{
+        swag.Register(SwaggerInfo.InstanceName(), SwaggerInfo)
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package ds
+
+import (
+        "gin-petclinic-service/config/app"
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+)
+
+type HttpServer struct {
+        r *gin.Engine
+}
+
+func NewHttpServer(r *gin.Engine) *HttpServer <span class="cov8" title="1">{
+        return &amp;HttpServer{
+                r: r,
+        }
+}</span>
+
+// HttpRouter is a method on the HttpServer struct that sets up and returns a new http.Server instance.
+// The http.Server instance uses the gin.Engine instance from the HttpServer struct to handle HTTP requests.
+func (httpSrv *HttpServer) HttpRouter() *http.Server <span class="cov8" title="1">{
+        srv := &amp;http.Server{
+                Addr:    app.Config.Server.HttpPort,
+                Handler: httpSrv.r,
+        }
+
+        return srv
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">// Package log provides context-aware and structured logging capabilities.
+package log
+
+import (
+        "context"
+        "github.com/google/uuid"
+        "go.uber.org/zap"
+        "go.uber.org/zap/zapcore"
+        "go.uber.org/zap/zaptest/observer"
+        "net/http"
+)
+
+// Logger is a logger that supports log levels, context and structured logging.
+type Logger interface {
+        // With returns a logger based off the root logger and decorates it with the given context and arguments.
+        With(ctx context.Context, args ...interface{}) Logger
+
+        // Debug uses fmt.Sprint to construct and log a message at DEBUG level
+        Debug(args ...interface{})
+        // Info uses fmt.Sprint to construct and log a message at INFO level
+        Info(args ...interface{})
+        // Error uses fmt.Sprint to construct and log a message at ERROR level
+        Error(args ...interface{})
+
+        // Debugf uses fmt.Sprintf to construct and log a message at DEBUG level
+        Debugf(format string, args ...interface{})
+        // Infof uses fmt.Sprintf to construct and log a message at INFO level
+        Infof(format string, args ...interface{})
+        // Errorf uses fmt.Sprintf to construct and log a message at ERROR level
+        Errorf(format string, args ...interface{})
+}
+
+type logger struct {
+        *zap.SugaredLogger
+}
+
+type contextKey int
+
+const (
+        requestIDKey contextKey = iota
+        correlationIDKey
+)
+
+// New creates a new logger using the default configuration.
+func New() Logger <span class="cov8" title="1">{
+        l, _ := zap.NewProduction()
+        return NewWithZap(l)
+}</span>
+
+// NewWithZap creates a new logger using the preconfigured zap logger.
+func NewWithZap(l *zap.Logger) Logger <span class="cov8" title="1">{
+        return &amp;logger{l.Sugar()}
+}</span>
+
+// NewForTest returns a new logger and the corresponding observed logs which can be used in unit tests to verify log entries.
+func NewForTest() (Logger, *observer.ObservedLogs) <span class="cov8" title="1">{
+        core, recorded := observer.New(zapcore.InfoLevel)
+        return NewWithZap(zap.New(core)), recorded
+}</span>
+
+// With returns a logger based off the root logger and decorates it with the given context and arguments.
+//
+// If the context contains request ID and/or correlation ID information (recorded via WithRequestID()
+// and WithCorrelationID()), they will be added to every log message generated by the new logger.
+//
+// The arguments should be specified as a sequence of name, value pairs with names being strings.
+// The arguments will also be added to every log message generated by the logger.
+func (l *logger) With(ctx context.Context, args ...interface{}) Logger <span class="cov8" title="1">{
+        if ctx != nil </span><span class="cov8" title="1">{
+                if id, ok := ctx.Value(requestIDKey).(string); ok </span><span class="cov8" title="1">{
+                        args = append(args, zap.String("request_id", id))
+                }</span>
+                <span class="cov8" title="1">if id, ok := ctx.Value(correlationIDKey).(string); ok </span><span class="cov8" title="1">{
+                        args = append(args, zap.String("correlation_id", id))
+                }</span>
+        }
+        <span class="cov8" title="1">if len(args) &gt; 0 </span><span class="cov8" title="1">{
+                return &amp;logger{l.SugaredLogger.With(args...)}
+        }</span>
+        <span class="cov8" title="1">return l</span>
+}
+
+// WithRequest returns a context which knows the request ID and correlation ID in the given request.
+func WithRequest(ctx context.Context, req *http.Request) context.Context <span class="cov8" title="1">{
+        id := getRequestID(req)
+        if id == "" </span><span class="cov8" title="1">{
+                id = uuid.New().String()
+        }</span>
+        <span class="cov8" title="1">ctx = context.WithValue(ctx, requestIDKey, id)
+        if id := getCorrelationID(req); id != "" </span><span class="cov8" title="1">{
+                ctx = context.WithValue(ctx, correlationIDKey, id)
+        }</span>
+        <span class="cov8" title="1">return ctx</span>
+}
+
+// getCorrelationID extracts the correlation ID from the HTTP request
+func getCorrelationID(req *http.Request) string <span class="cov8" title="1">{
+        return req.Header.Get("X-Correlation-ID")
+}</span>
+
+// getRequestID extracts the correlation ID from the HTTP request
+func getRequestID(req *http.Request) string <span class="cov8" title="1">{
+        return req.Header.Get("X-Request-ID")
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">// Code generated by mockery v2.52.2. DO NOT EDIT.
+
+package log
+
+import (
+        context "context"
+
+        mock "github.com/stretchr/testify/mock"
+)
+
+// MockLogger is an autogenerated mock type for the Logger type
+type MockLogger struct {
+        mock.Mock
+}
+
+type MockLogger_Expecter struct {
+        mock *mock.Mock
+}
+
+func (_m *MockLogger) EXPECT() *MockLogger_Expecter <span class="cov0" title="0">{
+        return &amp;MockLogger_Expecter{mock: &amp;_m.Mock}
+}</span>
+
+// Debug provides a mock function with given fields: args
+func (_m *MockLogger) Debug(args ...interface{}) <span class="cov0" title="0">{
+        var _ca []interface{}
+        _ca = append(_ca, args...)
+        _m.Called(_ca...)
+}</span>
+
+// MockLogger_Debug_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Debug'
+type MockLogger_Debug_Call struct {
+        *mock.Call
+}
+
+// Debug is a helper method to define mock.On call
+//   - args ...interface{}
+func (_e *MockLogger_Expecter) Debug(args ...interface{}) *MockLogger_Debug_Call <span class="cov0" title="0">{
+        return &amp;MockLogger_Debug_Call{Call: _e.mock.On("Debug",
+                append([]interface{}{}, args...)...)}
+}</span>
+
+func (_c *MockLogger_Debug_Call) Run(run func(args ...interface{})) *MockLogger_Debug_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                variadicArgs := make([]interface{}, len(args)-0)
+                for i, a := range args[0:] </span><span class="cov0" title="0">{
+                        if a != nil </span><span class="cov0" title="0">{
+                                variadicArgs[i] = a.(interface{})
+                        }</span>
+                }
+                <span class="cov0" title="0">run(variadicArgs...)</span>
+        })
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockLogger_Debug_Call) Return() *MockLogger_Debug_Call <span class="cov0" title="0">{
+        _c.Call.Return()
+        return _c
+}</span>
+
+func (_c *MockLogger_Debug_Call) RunAndReturn(run func(...interface{})) *MockLogger_Debug_Call <span class="cov0" title="0">{
+        _c.Run(run)
+        return _c
+}</span>
+
+// Debugf provides a mock function with given fields: format, args
+func (_m *MockLogger) Debugf(format string, args ...interface{}) <span class="cov0" title="0">{
+        var _ca []interface{}
+        _ca = append(_ca, format)
+        _ca = append(_ca, args...)
+        _m.Called(_ca...)
+}</span>
+
+// MockLogger_Debugf_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Debugf'
+type MockLogger_Debugf_Call struct {
+        *mock.Call
+}
+
+// Debugf is a helper method to define mock.On call
+//   - format string
+//   - args ...interface{}
+func (_e *MockLogger_Expecter) Debugf(format interface{}, args ...interface{}) *MockLogger_Debugf_Call <span class="cov0" title="0">{
+        return &amp;MockLogger_Debugf_Call{Call: _e.mock.On("Debugf",
+                append([]interface{}{format}, args...)...)}
+}</span>
+
+func (_c *MockLogger_Debugf_Call) Run(run func(format string, args ...interface{})) *MockLogger_Debugf_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                variadicArgs := make([]interface{}, len(args)-1)
+                for i, a := range args[1:] </span><span class="cov0" title="0">{
+                        if a != nil </span><span class="cov0" title="0">{
+                                variadicArgs[i] = a.(interface{})
+                        }</span>
+                }
+                <span class="cov0" title="0">run(args[0].(string), variadicArgs...)</span>
+        })
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockLogger_Debugf_Call) Return() *MockLogger_Debugf_Call <span class="cov0" title="0">{
+        _c.Call.Return()
+        return _c
+}</span>
+
+func (_c *MockLogger_Debugf_Call) RunAndReturn(run func(string, ...interface{})) *MockLogger_Debugf_Call <span class="cov0" title="0">{
+        _c.Run(run)
+        return _c
+}</span>
+
+// Error provides a mock function with given fields: args
+func (_m *MockLogger) Error(args ...interface{}) <span class="cov0" title="0">{
+        var _ca []interface{}
+        _ca = append(_ca, args...)
+        _m.Called(_ca...)
+}</span>
+
+// MockLogger_Error_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Error'
+type MockLogger_Error_Call struct {
+        *mock.Call
+}
+
+// Error is a helper method to define mock.On call
+//   - args ...interface{}
+func (_e *MockLogger_Expecter) Error(args ...interface{}) *MockLogger_Error_Call <span class="cov0" title="0">{
+        return &amp;MockLogger_Error_Call{Call: _e.mock.On("Error",
+                append([]interface{}{}, args...)...)}
+}</span>
+
+func (_c *MockLogger_Error_Call) Run(run func(args ...interface{})) *MockLogger_Error_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                variadicArgs := make([]interface{}, len(args)-0)
+                for i, a := range args[0:] </span><span class="cov0" title="0">{
+                        if a != nil </span><span class="cov0" title="0">{
+                                variadicArgs[i] = a.(interface{})
+                        }</span>
+                }
+                <span class="cov0" title="0">run(variadicArgs...)</span>
+        })
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockLogger_Error_Call) Return() *MockLogger_Error_Call <span class="cov0" title="0">{
+        _c.Call.Return()
+        return _c
+}</span>
+
+func (_c *MockLogger_Error_Call) RunAndReturn(run func(...interface{})) *MockLogger_Error_Call <span class="cov0" title="0">{
+        _c.Run(run)
+        return _c
+}</span>
+
+// Errorf provides a mock function with given fields: format, args
+func (_m *MockLogger) Errorf(format string, args ...interface{}) <span class="cov0" title="0">{
+        var _ca []interface{}
+        _ca = append(_ca, format)
+        _ca = append(_ca, args...)
+        _m.Called(_ca...)
+}</span>
+
+// MockLogger_Errorf_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Errorf'
+type MockLogger_Errorf_Call struct {
+        *mock.Call
+}
+
+// Errorf is a helper method to define mock.On call
+//   - format string
+//   - args ...interface{}
+func (_e *MockLogger_Expecter) Errorf(format interface{}, args ...interface{}) *MockLogger_Errorf_Call <span class="cov0" title="0">{
+        return &amp;MockLogger_Errorf_Call{Call: _e.mock.On("Errorf",
+                append([]interface{}{format}, args...)...)}
+}</span>
+
+func (_c *MockLogger_Errorf_Call) Run(run func(format string, args ...interface{})) *MockLogger_Errorf_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                variadicArgs := make([]interface{}, len(args)-1)
+                for i, a := range args[1:] </span><span class="cov0" title="0">{
+                        if a != nil </span><span class="cov0" title="0">{
+                                variadicArgs[i] = a.(interface{})
+                        }</span>
+                }
+                <span class="cov0" title="0">run(args[0].(string), variadicArgs...)</span>
+        })
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockLogger_Errorf_Call) Return() *MockLogger_Errorf_Call <span class="cov0" title="0">{
+        _c.Call.Return()
+        return _c
+}</span>
+
+func (_c *MockLogger_Errorf_Call) RunAndReturn(run func(string, ...interface{})) *MockLogger_Errorf_Call <span class="cov0" title="0">{
+        _c.Run(run)
+        return _c
+}</span>
+
+// Info provides a mock function with given fields: args
+func (_m *MockLogger) Info(args ...interface{}) <span class="cov0" title="0">{
+        var _ca []interface{}
+        _ca = append(_ca, args...)
+        _m.Called(_ca...)
+}</span>
+
+// MockLogger_Info_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Info'
+type MockLogger_Info_Call struct {
+        *mock.Call
+}
+
+// Info is a helper method to define mock.On call
+//   - args ...interface{}
+func (_e *MockLogger_Expecter) Info(args ...interface{}) *MockLogger_Info_Call <span class="cov0" title="0">{
+        return &amp;MockLogger_Info_Call{Call: _e.mock.On("Info",
+                append([]interface{}{}, args...)...)}
+}</span>
+
+func (_c *MockLogger_Info_Call) Run(run func(args ...interface{})) *MockLogger_Info_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                variadicArgs := make([]interface{}, len(args)-0)
+                for i, a := range args[0:] </span><span class="cov0" title="0">{
+                        if a != nil </span><span class="cov0" title="0">{
+                                variadicArgs[i] = a.(interface{})
+                        }</span>
+                }
+                <span class="cov0" title="0">run(variadicArgs...)</span>
+        })
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockLogger_Info_Call) Return() *MockLogger_Info_Call <span class="cov0" title="0">{
+        _c.Call.Return()
+        return _c
+}</span>
+
+func (_c *MockLogger_Info_Call) RunAndReturn(run func(...interface{})) *MockLogger_Info_Call <span class="cov0" title="0">{
+        _c.Run(run)
+        return _c
+}</span>
+
+// Infof provides a mock function with given fields: format, args
+func (_m *MockLogger) Infof(format string, args ...interface{}) <span class="cov0" title="0">{
+        var _ca []interface{}
+        _ca = append(_ca, format)
+        _ca = append(_ca, args...)
+        _m.Called(_ca...)
+}</span>
+
+// MockLogger_Infof_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Infof'
+type MockLogger_Infof_Call struct {
+        *mock.Call
+}
+
+// Infof is a helper method to define mock.On call
+//   - format string
+//   - args ...interface{}
+func (_e *MockLogger_Expecter) Infof(format interface{}, args ...interface{}) *MockLogger_Infof_Call <span class="cov0" title="0">{
+        return &amp;MockLogger_Infof_Call{Call: _e.mock.On("Infof",
+                append([]interface{}{format}, args...)...)}
+}</span>
+
+func (_c *MockLogger_Infof_Call) Run(run func(format string, args ...interface{})) *MockLogger_Infof_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                variadicArgs := make([]interface{}, len(args)-1)
+                for i, a := range args[1:] </span><span class="cov0" title="0">{
+                        if a != nil </span><span class="cov0" title="0">{
+                                variadicArgs[i] = a.(interface{})
+                        }</span>
+                }
+                <span class="cov0" title="0">run(args[0].(string), variadicArgs...)</span>
+        })
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockLogger_Infof_Call) Return() *MockLogger_Infof_Call <span class="cov0" title="0">{
+        _c.Call.Return()
+        return _c
+}</span>
+
+func (_c *MockLogger_Infof_Call) RunAndReturn(run func(string, ...interface{})) *MockLogger_Infof_Call <span class="cov0" title="0">{
+        _c.Run(run)
+        return _c
+}</span>
+
+// With provides a mock function with given fields: ctx, args
+func (_m *MockLogger) With(ctx context.Context, args ...interface{}) Logger <span class="cov0" title="0">{
+        var _ca []interface{}
+        _ca = append(_ca, ctx)
+        _ca = append(_ca, args...)
+        ret := _m.Called(_ca...)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for With")</span>
+        }
+
+        <span class="cov0" title="0">var r0 Logger
+        if rf, ok := ret.Get(0).(func(context.Context, ...interface{}) Logger); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, args...)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(Logger)
+                }</span>
+        }
+
+        <span class="cov0" title="0">return r0</span>
+}
+
+// MockLogger_With_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'With'
+type MockLogger_With_Call struct {
+        *mock.Call
+}
+
+// With is a helper method to define mock.On call
+//   - ctx context.Context
+//   - args ...interface{}
+func (_e *MockLogger_Expecter) With(ctx interface{}, args ...interface{}) *MockLogger_With_Call <span class="cov0" title="0">{
+        return &amp;MockLogger_With_Call{Call: _e.mock.On("With",
+                append([]interface{}{ctx}, args...)...)}
+}</span>
+
+func (_c *MockLogger_With_Call) Run(run func(ctx context.Context, args ...interface{})) *MockLogger_With_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                variadicArgs := make([]interface{}, len(args)-1)
+                for i, a := range args[1:] </span><span class="cov0" title="0">{
+                        if a != nil </span><span class="cov0" title="0">{
+                                variadicArgs[i] = a.(interface{})
+                        }</span>
+                }
+                <span class="cov0" title="0">run(args[0].(context.Context), variadicArgs...)</span>
+        })
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockLogger_With_Call) Return(_a0 Logger) *MockLogger_With_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0)
+        return _c
+}</span>
+
+func (_c *MockLogger_With_Call) RunAndReturn(run func(context.Context, ...interface{}) Logger) *MockLogger_With_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// NewMockLogger creates a new instance of MockLogger. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockLogger(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *MockLogger <span class="cov0" title="0">{
+        mock := &amp;MockLogger{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package test
+
+import (
+        "bytes"
+        "net/http"
+        "net/http/httptest"
+        "strings"
+        "testing"
+
+        "github.com/stretchr/testify/assert"
+)
+
+// APITestCase represents the data needed to describe an API test case.
+type APITestCase struct {
+        Name         string
+        Method, URL  string
+        Body         string
+        Header       http.Header
+        WantStatus   int
+        WantResponse string
+}
+
+// Endpoint tests an HTTP endpoint using the given APITestCase spec.
+func Endpoint(t *testing.T, router http.Handler, tc APITestCase) <span class="cov0" title="0">{
+        t.Run(tc.Name, func(t *testing.T) </span><span class="cov0" title="0">{
+                req, _ := http.NewRequest(tc.Method, tc.URL, bytes.NewBufferString(tc.Body))
+                if tc.Header != nil </span><span class="cov0" title="0">{
+                        req.Header = tc.Header
+                }</span>
+                <span class="cov0" title="0">res := httptest.NewRecorder()
+                if req.Header.Get("Content-Type") == "" </span><span class="cov0" title="0">{
+                        req.Header.Set("Content-Type", "application/json")
+                }</span>
+                <span class="cov0" title="0">router.ServeHTTP(res, req)
+                assert.Equal(t, tc.WantStatus, res.Code, "status mismatch")
+                if tc.WantResponse != "" </span><span class="cov0" title="0">{
+                        pattern := strings.Trim(tc.WantResponse, "*")
+                        if pattern != tc.WantResponse </span><span class="cov0" title="0">{
+                                assert.Contains(t, res.Body.String(), pattern, "response mismatch")
+                        }</span> else<span class="cov0" title="0"> {
+                                assert.JSONEq(t, tc.WantResponse, res.Body.String(), "response mismatch")
+                        }</span>
+                }
+        })
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package test
+
+import (
+        "testing"
+
+        "github.com/pressly/goose"
+
+        embeddedpostgres "github.com/fergusstrange/embedded-postgres"
+        "gorm.io/driver/postgres"
+        "gorm.io/gorm"
+)
+
+func Connect() (*gorm.DB, error) <span class="cov0" title="0">{
+        return gorm.Open(postgres.Open("host=localhost port=5433 user=postgres password=postgres dbname=postgres sslmode=disable"), &amp;gorm.Config{})
+}</span>
+
+func PgStart(t *testing.T, dir string) *embeddedpostgres.EmbeddedPostgres <span class="cov0" title="0">{
+        postgresql := embeddedpostgres.NewDatabase(embeddedpostgres.
+                DefaultConfig().Port(5433))
+
+        if err := postgresql.Start(); err != nil </span><span class="cov0" title="0">{
+                t.Fatal(err)
+        }</span>
+
+        <span class="cov0" title="0">db, err := Connect()
+        if err != nil </span><span class="cov0" title="0">{
+                t.Fatal(err)
+        }</span>
+
+        <span class="cov0" title="0">sqlDB, _ := db.DB()
+        if err := goose.Up(sqlDB, dir); err != nil </span><span class="cov0" title="0">{
+                t.Fatal(err)
+        }</span>
+
+        <span class="cov0" title="0">return postgresql</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package test
+
+import jsoniter "github.com/json-iterator/go"
+
+func JsonString(obj interface{}) string <span class="cov0" title="0">{
+        b, _ := jsoniter.Marshal(obj)
+        return string(b)
+}</span>
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package test
+
+import (
+        "gin-petclinic-service/pkg/accesslog"
+        "gin-petclinic-service/pkg/errors"
+        "go.uber.org/zap"
+        "net/http"
+        "net/http/httptest"
+
+        routing "github.com/go-ozzo/ozzo-routing/v2"
+        "github.com/go-ozzo/ozzo-routing/v2/content"
+        "github.com/go-ozzo/ozzo-routing/v2/cors"
+)
+
+// MockRoutingContext creates a routing.Conext for testing handlers.
+func MockRoutingContext(req *http.Request) (*routing.Context, *httptest.ResponseRecorder) <span class="cov0" title="0">{
+        res := httptest.NewRecorder()
+        if req.Header.Get("Content-Type") == "" </span><span class="cov0" title="0">{
+                req.Header.Set("Content-Type", "application/json")
+        }</span>
+        <span class="cov0" title="0">ctx := routing.NewContext(res, req)
+        ctx.SetDataWriter(&amp;content.JSONDataWriter{})
+        return ctx, res</span>
+}
+
+// MockRouter creates a routing.Router for testing APIs.
+func MockRouter(logger *zap.Logger) *routing.Router <span class="cov0" title="0">{
+        router := routing.New()
+        router.Use(
+                accesslog.Handler(logger),
+                errors.Handler(logger),
+                content.TypeNegotiator(content.JSON),
+                cors.Handler(cors.AllowAll),
+        )
+        return router
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

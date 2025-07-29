@@ -5,6 +5,8 @@
 package visit
 
 import (
+	"fiber-petclinic-service/pkg/repository"
+
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -36,7 +38,7 @@ func (_m *MockServicer) EXPECT() *MockServicer_Expecter {
 }
 
 // create provides a mock function for the type MockServicer
-func (_mock *MockServicer) create(visit *Request) (*Response, error) {
+func (_mock *MockServicer) create(visit *repository.Visit) (*Response, error) {
 	ret := _mock.Called(visit)
 
 	if len(ret) == 0 {
@@ -45,17 +47,17 @@ func (_mock *MockServicer) create(visit *Request) (*Response, error) {
 
 	var r0 *Response
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(*Request) (*Response, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(*repository.Visit) (*Response, error)); ok {
 		return returnFunc(visit)
 	}
-	if returnFunc, ok := ret.Get(0).(func(*Request) *Response); ok {
+	if returnFunc, ok := ret.Get(0).(func(*repository.Visit) *Response); ok {
 		r0 = returnFunc(visit)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Response)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(*Request) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(*repository.Visit) error); ok {
 		r1 = returnFunc(visit)
 	} else {
 		r1 = ret.Error(1)
@@ -69,16 +71,16 @@ type MockServicer_create_Call struct {
 }
 
 // create is a helper method to define mock.On call
-//   - visit *Request
+//   - visit *repository.Visit
 func (_e *MockServicer_Expecter) create(visit interface{}) *MockServicer_create_Call {
 	return &MockServicer_create_Call{Call: _e.mock.On("create", visit)}
 }
 
-func (_c *MockServicer_create_Call) Run(run func(visit *Request)) *MockServicer_create_Call {
+func (_c *MockServicer_create_Call) Run(run func(visit *repository.Visit)) *MockServicer_create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 *Request
+		var arg0 *repository.Visit
 		if args[0] != nil {
-			arg0 = args[0].(*Request)
+			arg0 = args[0].(*repository.Visit)
 		}
 		run(
 			arg0,
@@ -92,7 +94,7 @@ func (_c *MockServicer_create_Call) Return(response *Response, err error) *MockS
 	return _c
 }
 
-func (_c *MockServicer_create_Call) RunAndReturn(run func(visit *Request) (*Response, error)) *MockServicer_create_Call {
+func (_c *MockServicer_create_Call) RunAndReturn(run func(visit *repository.Visit) (*Response, error)) *MockServicer_create_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -153,7 +155,7 @@ func (_c *MockServicer_getAllVisits_Call) RunAndReturn(run func() (*Responses, e
 }
 
 // getVisitById provides a mock function for the type MockServicer
-func (_mock *MockServicer) getVisitById(id int) (*Response, error) {
+func (_mock *MockServicer) getVisitById(id uint) (*Response, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
@@ -162,17 +164,17 @@ func (_mock *MockServicer) getVisitById(id int) (*Response, error) {
 
 	var r0 *Response
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(int) (*Response, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) (*Response, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(int) *Response); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) *Response); ok {
 		r0 = returnFunc(id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Response)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(int) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(uint) error); ok {
 		r1 = returnFunc(id)
 	} else {
 		r1 = ret.Error(1)
@@ -186,16 +188,16 @@ type MockServicer_getVisitById_Call struct {
 }
 
 // getVisitById is a helper method to define mock.On call
-//   - id int
+//   - id uint
 func (_e *MockServicer_Expecter) getVisitById(id interface{}) *MockServicer_getVisitById_Call {
 	return &MockServicer_getVisitById_Call{Call: _e.mock.On("getVisitById", id)}
 }
 
-func (_c *MockServicer_getVisitById_Call) Run(run func(id int)) *MockServicer_getVisitById_Call {
+func (_c *MockServicer_getVisitById_Call) Run(run func(id uint)) *MockServicer_getVisitById_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 int
+		var arg0 uint
 		if args[0] != nil {
-			arg0 = args[0].(int)
+			arg0 = args[0].(uint)
 		}
 		run(
 			arg0,
@@ -209,13 +211,13 @@ func (_c *MockServicer_getVisitById_Call) Return(response *Response, err error) 
 	return _c
 }
 
-func (_c *MockServicer_getVisitById_Call) RunAndReturn(run func(id int) (*Response, error)) *MockServicer_getVisitById_Call {
+func (_c *MockServicer_getVisitById_Call) RunAndReturn(run func(id uint) (*Response, error)) *MockServicer_getVisitById_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // update provides a mock function for the type MockServicer
-func (_mock *MockServicer) update(visit *Request) (*Response, error) {
+func (_mock *MockServicer) update(visit *repository.Visit) (*Response, error) {
 	ret := _mock.Called(visit)
 
 	if len(ret) == 0 {
@@ -224,17 +226,17 @@ func (_mock *MockServicer) update(visit *Request) (*Response, error) {
 
 	var r0 *Response
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(*Request) (*Response, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(*repository.Visit) (*Response, error)); ok {
 		return returnFunc(visit)
 	}
-	if returnFunc, ok := ret.Get(0).(func(*Request) *Response); ok {
+	if returnFunc, ok := ret.Get(0).(func(*repository.Visit) *Response); ok {
 		r0 = returnFunc(visit)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Response)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(*Request) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(*repository.Visit) error); ok {
 		r1 = returnFunc(visit)
 	} else {
 		r1 = ret.Error(1)
@@ -248,16 +250,16 @@ type MockServicer_update_Call struct {
 }
 
 // update is a helper method to define mock.On call
-//   - visit *Request
+//   - visit *repository.Visit
 func (_e *MockServicer_Expecter) update(visit interface{}) *MockServicer_update_Call {
 	return &MockServicer_update_Call{Call: _e.mock.On("update", visit)}
 }
 
-func (_c *MockServicer_update_Call) Run(run func(visit *Request)) *MockServicer_update_Call {
+func (_c *MockServicer_update_Call) Run(run func(visit *repository.Visit)) *MockServicer_update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 *Request
+		var arg0 *repository.Visit
 		if args[0] != nil {
-			arg0 = args[0].(*Request)
+			arg0 = args[0].(*repository.Visit)
 		}
 		run(
 			arg0,
@@ -271,7 +273,7 @@ func (_c *MockServicer_update_Call) Return(response *Response, err error) *MockS
 	return _c
 }
 
-func (_c *MockServicer_update_Call) RunAndReturn(run func(visit *Request) (*Response, error)) *MockServicer_update_Call {
+func (_c *MockServicer_update_Call) RunAndReturn(run func(visit *repository.Visit) (*Response, error)) *MockServicer_update_Call {
 	_c.Call.Return(run)
 	return _c
 }

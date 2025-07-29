@@ -20,7 +20,7 @@ type AddRequest struct {
 }
 
 type UpdateRequest struct {
-	Id        uint   `json:"id"`
+	ID        uint   `json:"id"`
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Address   string `json:"address"`
@@ -44,7 +44,7 @@ func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner {
 func ToOwnerEntityFromUpdateRequest(ownerRequest *UpdateRequest) *repository.Owner {
 	return &repository.Owner{
 		Model: gorm.Model{
-			ID: ownerRequest.Id,
+			ID: ownerRequest.ID,
 		},
 		Person: model.Person{
 			FirstName: ownerRequest.FirstName,

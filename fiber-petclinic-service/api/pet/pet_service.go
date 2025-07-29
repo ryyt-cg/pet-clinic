@@ -33,7 +33,6 @@ func (service *Service) getAllPets() (*Responses, error) {
 	}
 
 	petResponses := FromPets(pets)
-
 	contextJson := model.Context{Count: len(petResponses)}
 	return &Responses{Pets: petResponses, Context: contextJson}, nil
 }

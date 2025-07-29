@@ -10,8 +10,8 @@ import (
 // entity:model visit
 type Visit struct {
 	gorm.Model
-	VisitDate   time.Time
+	VisitDate   *time.Time // return nil if no visit date presents
 	Description string
-	PetID       int
+	PetID       uint
 	Pet         Pet
 }

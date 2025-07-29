@@ -1377,7 +1377,7 @@ func (_c *MockVisitRepositorier_FindAll_Call) RunAndReturn(run func() ([]Visit, 
 }
 
 // FindById provides a mock function for the type MockVisitRepositorier
-func (_mock *MockVisitRepositorier) FindById(id int) (*Visit, error) {
+func (_mock *MockVisitRepositorier) FindById(id uint) (*Visit, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
@@ -1386,17 +1386,17 @@ func (_mock *MockVisitRepositorier) FindById(id int) (*Visit, error) {
 
 	var r0 *Visit
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(int) (*Visit, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) (*Visit, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(int) *Visit); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) *Visit); ok {
 		r0 = returnFunc(id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Visit)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(int) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(uint) error); ok {
 		r1 = returnFunc(id)
 	} else {
 		r1 = ret.Error(1)
@@ -1410,16 +1410,16 @@ type MockVisitRepositorier_FindById_Call struct {
 }
 
 // FindById is a helper method to define mock.On call
-//   - id int
+//   - id uint
 func (_e *MockVisitRepositorier_Expecter) FindById(id interface{}) *MockVisitRepositorier_FindById_Call {
 	return &MockVisitRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
 }
 
-func (_c *MockVisitRepositorier_FindById_Call) Run(run func(id int)) *MockVisitRepositorier_FindById_Call {
+func (_c *MockVisitRepositorier_FindById_Call) Run(run func(id uint)) *MockVisitRepositorier_FindById_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 int
+		var arg0 uint
 		if args[0] != nil {
-			arg0 = args[0].(int)
+			arg0 = args[0].(uint)
 		}
 		run(
 			arg0,
@@ -1433,7 +1433,7 @@ func (_c *MockVisitRepositorier_FindById_Call) Return(visit *Visit, err error) *
 	return _c
 }
 
-func (_c *MockVisitRepositorier_FindById_Call) RunAndReturn(run func(id int) (*Visit, error)) *MockVisitRepositorier_FindById_Call {
+func (_c *MockVisitRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Visit, error)) *MockVisitRepositorier_FindById_Call {
 	_c.Call.Return(run)
 	return _c
 }
