@@ -179,12 +179,11 @@ func Test_getAllPets(t *testing.T) {
 			}
 		})
 	}
-
 }
 
 func Test_getPetById(t *testing.T) {
 	mockPet := &Response{
-		ID:        int(1),
+		ID:        1,
 		Name:      "Running Water",
 		Birthdate: "2018-02-26",
 	}

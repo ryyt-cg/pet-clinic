@@ -94,13 +94,7 @@ func Test_FromOwners(t *testing.T) {
 
 	assert.Equal(t, len(exceptionResponses), len(responses))
 	for i, owner := range exceptionResponses {
-		assert.Equal(t, owner.ID, responses[i].ID)
-		assert.Equal(t, owner.FirstName, responses[i].FirstName)
-		assert.Equal(t, owner.LastName, responses[i].LastName)
-		assert.Equal(t, owner.Address, responses[i].Address)
-		assert.Equal(t, owner.City, responses[i].City)
-		assert.Equal(t, owner.Telephone, responses[i].Telephone)
-		assert.Equal(t, owner.Pets, responses[i].Pets)
+		assert.Equal(t, owner, responses[i])
 	}
 }
 

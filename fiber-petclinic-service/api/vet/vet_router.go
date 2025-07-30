@@ -99,14 +99,13 @@ func (vetRouter *Router) allVets(c *fiber.Ctx) error {
 	log.Info().Msg("Retrieving all vets.")
 	responses, err := vetRouter.service.getAllVets()
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Msg("No vets found.")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No vets found"))
+		}
 		log.Error().Err(err).Msg("Fail to get all vets.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 
-	}
-
-	if responses.Context.Count == 0 {
-		log.Warn().Msg("Find no vet.")
-		return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Find no vet"))
 	}
 
 	return c.Status(fiber.StatusOK).JSON(responses)

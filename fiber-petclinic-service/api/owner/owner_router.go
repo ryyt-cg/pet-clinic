@@ -43,13 +43,12 @@ func (r *Router) allOwners(c *fiber.Ctx) error {
 	responses, err := r.service.getAllOwners()
 
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Warn().Msg("Find no owners.")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Find no owners"))
+		}
 		log.Error().Err(err).Msg("Fail to get all owners.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
-	}
-
-	if responses.Context.Count == 0 {
-		log.Warn().Msg("Find no owner.")
-		return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Find no owner"))
 	}
 
 	return c.Status(fiber.StatusOK).JSON(responses)

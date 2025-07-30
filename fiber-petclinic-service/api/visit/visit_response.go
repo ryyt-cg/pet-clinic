@@ -68,6 +68,7 @@ func ToResponses(responses []Response) *Responses {
 		result[i].ID = v.ID
 		result[i].VisitDate = v.VisitDate
 		result[i].Description = v.Description
+		result[i].PetID = v.PetID
 	}
 
 	return &Responses{

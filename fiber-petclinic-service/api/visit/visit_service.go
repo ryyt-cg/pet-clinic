@@ -1,8 +1,10 @@
 package visit
 
 import (
+	"errors"
 	"fiber-petclinic-service/pkg/repository"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 )
 
 type Servicer interface {
@@ -23,6 +25,10 @@ func NewService(repository repository.VisitRepositorier) *Service {
 func (service *Service) getVisitById(id uint) (*Response, error) {
 	visit, err := service.repository.FindById(id)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Uint("id", id).Msg("Visit by id not found.")
+			return nil, gorm.ErrRecordNotFound
+		}
 		log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve visit by id.")
 		return nil, err
 	}
@@ -36,6 +42,11 @@ func (service *Service) getAllVisits() (*Responses, error) {
 	visits, err := service.repository.FindAll()
 
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Msg("No visits found.")
+			return nil, gorm.ErrRecordNotFound
+		}
+
 		log.Error().Err(err).Msg("Fail to retrieve all visits.")
 		return nil, err
 	}
@@ -61,6 +72,10 @@ func (service *Service) create(visit *repository.Visit) (*Response, error) {
 func (service *Service) update(visit *repository.Visit) (*Response, error) {
 	updatedVisit, err := service.repository.Update(visit)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Err(err).Uint("id", visit.ID).Msg("No visit found for update.")
+			return nil, gorm.ErrRecordNotFound
+		}
 		log.Error().Err(err).Msg("Fail to update visit.")
 		return nil, err
 	}

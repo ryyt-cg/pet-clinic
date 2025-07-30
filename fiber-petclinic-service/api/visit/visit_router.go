@@ -72,13 +72,12 @@ func (r *Router) allVisits(c *fiber.Ctx) error {
 	log.Info().Msg("All visits.")
 	responses, err := r.service.getAllVisits()
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Msg("No visits found.")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No visits found"))
+		}
 		log.Error().Err(err).Msg("Fail to get all visits.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
-	}
-
-	if responses.Context.Count == 0 {
-		log.Warn().Msg("Find no visit.")
-		return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Find no visit"))
 	}
 
 	return c.Status(fiber.StatusOK).JSON(responses)
@@ -87,7 +86,7 @@ func (r *Router) allVisits(c *fiber.Ctx) error {
 func (r *Router) addNewVisit(c *fiber.Ctx) error {
 	log.Info().Msg("Post a new visit.")
 	var addRequest *AddRequest
-	if err := c.BodyParser(addRequest); err != nil {
+	if err := c.BodyParser(&addRequest); err != nil {
 		log.Error().Err(err).Msg("Fail to Unmarshal visit JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
@@ -122,14 +121,14 @@ func (r *Router) updateVisit(c *fiber.Ctx) error {
 	log.Info().Msg("Update a visit.")
 	strID := c.Params("id")
 
-	var updateRequest *UpdateRequest
-	if err := c.BodyParser(updateRequest); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	}
-
 	id, err := c.ParamsInt("id")
 	if err != nil {
 		log.Error().Err(err).Str("id", strID).Msg("Invalid visit ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
+
+	var updateRequest *UpdateRequest
+	if err := c.BodyParser(&updateRequest); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
@@ -141,6 +140,10 @@ func (r *Router) updateVisit(c *fiber.Ctx) error {
 	visit.ID = uint(id)
 	response, err := r.service.update(visit)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Err(err).Str("id", strID).Msg("Visit by id not found")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("visit not found"))
+		}
 		log.Error().Err(err).Msg("Fail to update visit.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}

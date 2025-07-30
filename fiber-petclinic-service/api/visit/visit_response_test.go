@@ -22,7 +22,8 @@ func TestResponse_FromVisit(t *testing.T) {
 		}, toResponse: Response{
 			ID:          1,
 			VisitDate:   "2023-07-12",
-			Description: "Flu Shot"},
+			Description: "Flu Shot",
+			PetID:       1},
 		},
 		{fromVisit: &repository.Visit{
 			Model:       gorm.Model{ID: 2},
@@ -30,7 +31,8 @@ func TestResponse_FromVisit(t *testing.T) {
 			PetID:       1,
 		}, toResponse: Response{
 			ID:          2,
-			Description: "Flu Shot"},
+			Description: "Flu Shot",
+			PetID:       1},
 		},
 	}
 
@@ -54,14 +56,11 @@ func Test_FromVisits(t *testing.T) {
 
 	testCases := []struct {
 		fromVisits  []repository.Visit
-		toResponses *Responses
+		toResponses []Response
 	}{
 		{
-			fromVisits: mockVisits,
-			toResponses: &Responses{
-				Context: model.Context{Count: 2},
-				Visits:  mockResponses,
-			},
+			fromVisits:  mockVisits,
+			toResponses: mockResponses,
 		},
 	}
 
