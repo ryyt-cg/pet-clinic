@@ -22,12 +22,29 @@ func (s *specialtyResponse) FromSpecialty(specialty *repository.Specialty) {
 }
 
 func ToSpecialtyResponses(specialties []repository.Specialty) *[]specialtyResponse {
+	if len(specialties) == 0 {
+		return nil
+	}
+
 	specialtyResponses := make([]specialtyResponse, len(specialties))
 	for i, s := range specialties {
 		specialtyResponses[i].ID = s.ID
 		specialtyResponses[i].Name = s.Name
 	}
 	return &specialtyResponses
+}
+
+func ToSpecialtiesResponses(specialties []repository.Specialty) *specialtiesResponse {
+	specialtyResponses := make([]specialtyResponse, len(specialties))
+	for i, s := range specialties {
+		specialtyResponses[i].ID = s.ID
+		specialtyResponses[i].Name = s.Name
+	}
+	specialtiesResponse := &specialtiesResponse{
+		Context:     model.Context{Count: len(specialtyResponses)},
+		Specialties: specialtyResponses,
+	}
+	return specialtiesResponse
 }
 
 func ToSpecialty(specialty *specialtyResponse) *repository.Specialty {
@@ -37,14 +54,6 @@ func ToSpecialty(specialty *specialtyResponse) *repository.Specialty {
 		},
 		Name: specialty.Name,
 	}
-}
-
-func (s *specialtiesResponse) ToSpecialties() *[]repository.Specialty {
-	specialties := make([]repository.Specialty, len(s.Specialties))
-	for i, s := range s.Specialties {
-		specialties[i] = *ToSpecialty(&s)
-	}
-	return &specialties
 }
 
 func ToSpecialties(specialties []specialtyResponse) *[]repository.Specialty {

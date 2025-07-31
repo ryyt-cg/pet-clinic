@@ -265,7 +265,7 @@ func (_c *MockServicer_getAllVetsWithSpecialties_Call) RunAndReturn(run func() (
 }
 
 // getVetById provides a mock function for the type MockServicer
-func (_mock *MockServicer) getVetById(id int) (*Response, error) {
+func (_mock *MockServicer) getVetById(id uint) (*Response, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
@@ -274,17 +274,17 @@ func (_mock *MockServicer) getVetById(id int) (*Response, error) {
 
 	var r0 *Response
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(int) (*Response, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) (*Response, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(int) *Response); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) *Response); ok {
 		r0 = returnFunc(id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Response)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(int) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(uint) error); ok {
 		r1 = returnFunc(id)
 	} else {
 		r1 = ret.Error(1)
@@ -298,16 +298,16 @@ type MockServicer_getVetById_Call struct {
 }
 
 // getVetById is a helper method to define mock.On call
-//   - id int
+//   - id uint
 func (_e *MockServicer_Expecter) getVetById(id interface{}) *MockServicer_getVetById_Call {
 	return &MockServicer_getVetById_Call{Call: _e.mock.On("getVetById", id)}
 }
 
-func (_c *MockServicer_getVetById_Call) Run(run func(id int)) *MockServicer_getVetById_Call {
+func (_c *MockServicer_getVetById_Call) Run(run func(id uint)) *MockServicer_getVetById_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 int
+		var arg0 uint
 		if args[0] != nil {
-			arg0 = args[0].(int)
+			arg0 = args[0].(uint)
 		}
 		run(
 			arg0,
@@ -321,13 +321,13 @@ func (_c *MockServicer_getVetById_Call) Return(response *Response, err error) *M
 	return _c
 }
 
-func (_c *MockServicer_getVetById_Call) RunAndReturn(run func(id int) (*Response, error)) *MockServicer_getVetById_Call {
+func (_c *MockServicer_getVetById_Call) RunAndReturn(run func(id uint) (*Response, error)) *MockServicer_getVetById_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // getVetByIdWithSpecialties provides a mock function for the type MockServicer
-func (_mock *MockServicer) getVetByIdWithSpecialties(id int) (*Response, error) {
+func (_mock *MockServicer) getVetByIdWithSpecialties(id uint) (*Response, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
@@ -336,17 +336,17 @@ func (_mock *MockServicer) getVetByIdWithSpecialties(id int) (*Response, error) 
 
 	var r0 *Response
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(int) (*Response, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) (*Response, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(int) *Response); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) *Response); ok {
 		r0 = returnFunc(id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Response)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(int) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(uint) error); ok {
 		r1 = returnFunc(id)
 	} else {
 		r1 = ret.Error(1)
@@ -360,16 +360,16 @@ type MockServicer_getVetByIdWithSpecialties_Call struct {
 }
 
 // getVetByIdWithSpecialties is a helper method to define mock.On call
-//   - id int
+//   - id uint
 func (_e *MockServicer_Expecter) getVetByIdWithSpecialties(id interface{}) *MockServicer_getVetByIdWithSpecialties_Call {
 	return &MockServicer_getVetByIdWithSpecialties_Call{Call: _e.mock.On("getVetByIdWithSpecialties", id)}
 }
 
-func (_c *MockServicer_getVetByIdWithSpecialties_Call) Run(run func(id int)) *MockServicer_getVetByIdWithSpecialties_Call {
+func (_c *MockServicer_getVetByIdWithSpecialties_Call) Run(run func(id uint)) *MockServicer_getVetByIdWithSpecialties_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 int
+		var arg0 uint
 		if args[0] != nil {
-			arg0 = args[0].(int)
+			arg0 = args[0].(uint)
 		}
 		run(
 			arg0,
@@ -383,7 +383,7 @@ func (_c *MockServicer_getVetByIdWithSpecialties_Call) Return(response *Response
 	return _c
 }
 
-func (_c *MockServicer_getVetByIdWithSpecialties_Call) RunAndReturn(run func(id int) (*Response, error)) *MockServicer_getVetByIdWithSpecialties_Call {
+func (_c *MockServicer_getVetByIdWithSpecialties_Call) RunAndReturn(run func(id uint) (*Response, error)) *MockServicer_getVetByIdWithSpecialties_Call {
 	_c.Call.Return(run)
 	return _c
 }

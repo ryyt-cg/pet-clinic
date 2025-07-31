@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestRequestValidation(t *testing.T) {
-	vetRequest := &Request{
+func Test_AddRequestValidation(t *testing.T) {
+	vetRequest := &AddRequest{
 		FirstName: "John",
 		LastName:  "Doe",
 		//Specialties: []specialtyResponse{
@@ -20,8 +20,8 @@ func TestRequestValidation(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestRequestValidationWithEmptyFields(t *testing.T) {
-	vetRequest := &Request{
+func Test_AddRequestValidationWithEmptyFields(t *testing.T) {
+	vetRequest := &AddRequest{
 		FirstName: "",
 		LastName:  "",
 		//Specialties: []Specialty{},
@@ -32,8 +32,8 @@ func TestRequestValidationWithEmptyFields(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func TestToVet(t *testing.T) {
-	vetRequest := &Request{
+func Test_FromAddRequest(t *testing.T) {
+	vetRequest := &AddRequest{
 		FirstName: "John",
 		LastName:  "Doe",
 		//Specialties: []Specialty{
@@ -42,7 +42,7 @@ func TestToVet(t *testing.T) {
 		//},
 	}
 
-	vet := ToVet(vetRequest)
+	vet := FromAddRequest(vetRequest)
 
 	assert.Equal(t, vetRequest.FirstName, vet.FirstName)
 	assert.Equal(t, vetRequest.LastName, vet.LastName)

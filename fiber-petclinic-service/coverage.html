@@ -69,15 +69,15 @@
 				
 				<option value="file6">fiber-petclinic-service/api/pet/pet_service.go (48.9%)</option>
 				
-				<option value="file7">fiber-petclinic-service/api/vet/specialty.go (75.0%)</option>
+				<option value="file7">fiber-petclinic-service/api/vet/specialty.go (100.0%)</option>
 				
-				<option value="file8">fiber-petclinic-service/api/vet/vet_request.go (100.0%)</option>
+				<option value="file8">fiber-petclinic-service/api/vet/vet_request.go (66.7%)</option>
 				
 				<option value="file9">fiber-petclinic-service/api/vet/vet_response.go (100.0%)</option>
 				
 				<option value="file10">fiber-petclinic-service/api/vet/vet_router.go (0.0%)</option>
 				
-				<option value="file11">fiber-petclinic-service/api/vet/vet_service.go (13.3%)</option>
+				<option value="file11">fiber-petclinic-service/api/vet/vet_service.go (100.0%)</option>
 				
 				<option value="file12">fiber-petclinic-service/api/visit/visit_request.go (100.0%)</option>
 				
@@ -95,21 +95,11 @@
 				
 				<option value="file19">fiber-petclinic-service/pkg/pagination/pages.go (100.0%)</option>
 				
-				<option value="file20">fiber-petclinic-service/pkg/repository/mocks.go (0.0%)</option>
+				<option value="file20">fiber-petclinic-service/pkg/test/api.go (0.0%)</option>
 				
-				<option value="file21">fiber-petclinic-service/pkg/repository/owner_repository.go (0.0%)</option>
+				<option value="file21">fiber-petclinic-service/pkg/test/embedded_postgres.go (0.0%)</option>
 				
-				<option value="file22">fiber-petclinic-service/pkg/repository/pet_repository.go (0.0%)</option>
-				
-				<option value="file23">fiber-petclinic-service/pkg/repository/vet_repository.go (0.0%)</option>
-				
-				<option value="file24">fiber-petclinic-service/pkg/repository/visit_repository.go (0.0%)</option>
-				
-				<option value="file25">fiber-petclinic-service/pkg/test/api.go (0.0%)</option>
-				
-				<option value="file26">fiber-petclinic-service/pkg/test/embedded_postgres.go (0.0%)</option>
-				
-				<option value="file27">fiber-petclinic-service/pkg/test/etl.go (0.0%)</option>
+				<option value="file22">fiber-petclinic-service/pkg/test/etl.go (0.0%)</option>
 				
 				</select>
 			</div>
@@ -705,12 +695,29 @@ func (s *specialtyResponse) FromSpecialty(specialty *repository.Specialty) <span
 }</span>
 
 func ToSpecialtyResponses(specialties []repository.Specialty) *[]specialtyResponse <span class="cov8" title="1">{
-        specialtyResponses := make([]specialtyResponse, len(specialties))
+        if len(specialties) == 0 </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">specialtyResponses := make([]specialtyResponse, len(specialties))
         for i, s := range specialties </span><span class="cov8" title="1">{
                 specialtyResponses[i].ID = s.ID
                 specialtyResponses[i].Name = s.Name
         }</span>
         <span class="cov8" title="1">return &amp;specialtyResponses</span>
+}
+
+func ToSpecialtiesResponses(specialties []repository.Specialty) *specialtiesResponse <span class="cov8" title="1">{
+        specialtyResponses := make([]specialtyResponse, len(specialties))
+        for i, s := range specialties </span><span class="cov8" title="1">{
+                specialtyResponses[i].ID = s.ID
+                specialtyResponses[i].Name = s.Name
+        }</span>
+        <span class="cov8" title="1">specialtiesResponse := &amp;specialtiesResponse{
+                Context:     model.Context{Count: len(specialtyResponses)},
+                Specialties: specialtyResponses,
+        }
+        return specialtiesResponse</span>
 }
 
 func ToSpecialty(specialty *specialtyResponse) *repository.Specialty <span class="cov8" title="1">{
@@ -721,14 +728,6 @@ func ToSpecialty(specialty *specialtyResponse) *repository.Specialty <span class
                 Name: specialty.Name,
         }
 }</span>
-
-func (s *specialtiesResponse) ToSpecialties() *[]repository.Specialty <span class="cov0" title="0">{
-        specialties := make([]repository.Specialty, len(s.Specialties))
-        for i, s := range s.Specialties </span><span class="cov0" title="0">{
-                specialties[i] = *ToSpecialty(&amp;s)
-        }</span>
-        <span class="cov0" title="0">return &amp;specialties</span>
-}
 
 func ToSpecialties(specialties []specialtyResponse) *[]repository.Specialty <span class="cov8" title="1">{
         specialtyEntities := make([]repository.Specialty, len(specialties))
@@ -748,13 +747,26 @@ import (
         validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-type Request struct {
-        FirstName string `json:"firstName" binding:"required"`
-        LastName  string `json:"lastName" binding:"required"`
-        //Specialties []Specialty `json:"specialties" binding:"required"`
+//type Request struct {
+//        FirstName string `json:"firstName" binding:"required"`
+//        LastName  string `json:"lastName" binding:"required"`
+//        //Specialties []Specialty `json:"specialties" binding:"required"`
+//}
+
+type AddRequest struct {
+        FirstName   string `json:"firstName" binding:"required"`
+        LastName    string `json:"lastName" binding:"required"`
+        Specialties []uint `json:"specialties" binding:"required"`
 }
 
-func (vr Request) Validate() error <span class="cov8" title="1">{
+type UpdateRequest struct {
+        ID          uint   `json:"id" binding:"required"`
+        FirstName   string `json:"firstName" binding:"required"`
+        LastName    string `json:"lastName" binding:"required"`
+        Specialties []uint `json:"specialties" binding:"required"`
+}
+
+func (vr AddRequest) Validate() error <span class="cov8" title="1">{
         return validation.ValidateStruct(&amp;vr,
                 validation.Field(&amp;vr.FirstName, validation.Required),
                 validation.Field(&amp;vr.LastName, validation.Required),
@@ -762,7 +774,17 @@ func (vr Request) Validate() error <span class="cov8" title="1">{
         )
 }</span>
 
-func ToVet(vetRequest *Request) *repository.Vet <span class="cov8" title="1">{
+func FromAddRequest(vetRequest *AddRequest) *repository.Vet <span class="cov8" title="1">{
+        return &amp;repository.Vet{
+                Person: model.Person{
+                        FirstName: vetRequest.FirstName,
+                        LastName:  vetRequest.LastName,
+                },
+                //Specialties: *ToSpecialties(vetRequest.Specialties),
+        }
+}</span>
+
+func FromUpdateRequest(vetRequest *UpdateRequest) *repository.Vet <span class="cov0" title="0">{
         return &amp;repository.Vet{
                 Person: model.Person{
                         FirstName: vetRequest.FirstName,
@@ -781,10 +803,10 @@ import (
 )
 
 type Response struct {
-        ID          uint                `json:"id"`
-        FirstName   string              `json:"firstName"`
-        LastName    string              `json:"lastName"`
-        Specialties []specialtyResponse `json:"specialties,omitempty"`
+        ID          uint                 `json:"id"`
+        FirstName   string               `json:"firstName"`
+        LastName    string               `json:"lastName"`
+        Specialties *[]specialtyResponse `json:"specialties,omitempty"`
 }
 
 type Responses struct {
@@ -796,7 +818,7 @@ func (vr *Response) FromVet(vet *repository.Vet) <span class="cov8" title="1">{
         vr.ID = vet.ID
         vr.FirstName = vet.FirstName
         vr.LastName = vet.LastName
-        vr.Specialties = *ToSpecialtyResponses(vet.Specialties)
+        vr.Specialties = ToSpecialtyResponses(vet.Specialties)
 }</span>
 
 func FromVets(vets []repository.Vet) []Response <span class="cov8" title="1">{
@@ -806,6 +828,12 @@ func FromVets(vets []repository.Vet) []Response <span class="cov8" title="1">{
         }</span>
         <span class="cov8" title="1">return vetResponses</span>
 }
+
+func ToResponses(vets []repository.Vet) *Responses <span class="cov8" title="1">{
+        vetsJson := FromVets(vets)
+        contextJson := model.Context{Count: len(vetsJson)}
+        return &amp;Responses{Vets: vetsJson, Context: contextJson}
+}</span>
 </pre>
 		
 		<pre class="file" id="file10" style="display: none">package vet
@@ -861,7 +889,7 @@ func (vetRouter *Router) vetById(c *fiber.Ctx) error <span class="cov0" title="0
                 return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
         }</span>
 
-        <span class="cov0" title="0">response, err := vetRouter.service.getVetById(id)
+        <span class="cov0" title="0">response, err := vetRouter.service.getVetById(uint(id))
         if err != nil </span><span class="cov0" title="0">{
                 if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
                         return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
@@ -932,7 +960,7 @@ func (vetRouter *Router) getVetByIdWithSpecialties(c *fiber.Ctx) error <span cla
                 return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
         }</span>
 
-        <span class="cov0" title="0">response, err := vetRouter.service.getVetByIdWithSpecialties(id)
+        <span class="cov0" title="0">response, err := vetRouter.service.getVetByIdWithSpecialties(uint(id))
         if err != nil </span><span class="cov0" title="0">{
                 if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
                         log.Error().Err(err).Int("id", id).Msg("Found no vet.")
@@ -948,14 +976,14 @@ func (vetRouter *Router) getVetByIdWithSpecialties(c *fiber.Ctx) error <span cla
 
 // addNewVet - add new vet
 func (vetRouter *Router) create(c *fiber.Ctx) error <span class="cov0" title="0">{
-        var vetRequest Request
+        var vetRequest AddRequest
         err := c.BodyParser(&amp;vetRequest)
         if err != nil </span><span class="cov0" title="0">{
                 log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
                 return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
         }</span>
 
-        <span class="cov0" title="0">newVet, err := vetRouter.service.create(ToVet(&amp;vetRequest))
+        <span class="cov0" title="0">newVet, err := vetRouter.service.create(FromAddRequest(&amp;vetRequest))
         if err != nil </span><span class="cov0" title="0">{
                 log.Error().Err(err).Msg("Unable to create new vet.")
                 return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
@@ -964,7 +992,7 @@ func (vetRouter *Router) create(c *fiber.Ctx) error <span class="cov0" title="0"
 }
 
 func (vetRouter *Router) update(c *fiber.Ctx) error <span class="cov0" title="0">{
-        var vetRequest Request
+        var vetRequest UpdateRequest
         id, _ := c.ParamsInt("id")
         err := c.BodyParser(&amp;vetRequest)
 
@@ -973,7 +1001,7 @@ func (vetRouter *Router) update(c *fiber.Ctx) error <span class="cov0" title="0"
                 return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
         }</span>
 
-        <span class="cov0" title="0">vetEntity := ToVet(&amp;vetRequest)
+        <span class="cov0" title="0">vetEntity := FromUpdateRequest(&amp;vetRequest)
         vetEntity.ID = uint(id)
         newVet, err := vetRouter.service.update(vetEntity)
         if err != nil </span><span class="cov0" title="0">{
@@ -997,8 +1025,8 @@ import (
 
 type Servicer interface {
         getAllSpecialties() (*specialtiesResponse, error)
-        getVetById(id int) (*Response, error)
-        getVetByIdWithSpecialties(id int) (*Response, error)
+        getVetById(id uint) (*Response, error)
+        getVetByIdWithSpecialties(id uint) (*Response, error)
         getVetByLastName(lastName string) (*Responses, error)
         getAllVets() (*Responses, error)
         getAllVetsWithSpecialties() (*Responses, error)
@@ -1015,25 +1043,23 @@ func NewService(repository repository.VetRepositorier) *Service <span class="cov
 }</span>
 
 // getAllSpecialties - retrieve all specialties
-func (service *Service) getAllSpecialties() (*specialtiesResponse, error) <span class="cov0" title="0">{
+func (service *Service) getAllSpecialties() (*specialtiesResponse, error) <span class="cov8" title="1">{
         specialties, err := service.repository.FindAllSpecialties()
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 log.Error().Err(err).Msg("Fail to retrieve all specialties.")
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">specialtyResponses := ToSpecialtyResponses(specialties)
-
-        return &amp;specialtiesResponse{
-                Specialties: *specialtyResponses,
-        }, nil</span>
+        <span class="cov8" title="1">specialtiesResponses := ToSpecialtiesResponses(specialties)
+        return specialtiesResponses, nil</span>
 }
 
 // getVetById - retrieve vet by id
-func (service *Service) getVetById(id int) (*Response, error) <span class="cov8" title="1">{
+func (service *Service) getVetById(id uint) (*Response, error) <span class="cov8" title="1">{
+        log.Debug().Uint("id", id).Msg("GET vet by id")
         vet, err := service.repository.FindById(id)
         if err != nil </span><span class="cov8" title="1">{
-                log.Error().Err(err).Int("id", id).Msg("Fail to retrieve vet by id.")
+                log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve vet by id.")
                 return nil, err
         }</span>
 
@@ -1042,84 +1068,82 @@ func (service *Service) getVetById(id int) (*Response, error) <span class="cov8"
         return response, nil</span>
 }
 
-func (service *Service) getVetByIdWithSpecialties(id int) (*Response, error) <span class="cov0" title="0">{
+func (service *Service) getVetByIdWithSpecialties(id uint) (*Response, error) <span class="cov8" title="1">{
         vet, err := service.repository.FindByIdWithSpecialties(id)
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Int("id", id).Msg("Fail to retrieve vet by id with specialties")
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve vet by id with specialties")
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">response := &amp;Response{}
+        <span class="cov8" title="1">response := &amp;Response{}
         response.FromVet(vet)
         return response, nil</span>
 }
 
-func (service *Service) getVetByLastName(lastName string) (*Responses, error) <span class="cov0" title="0">{
+func (service *Service) getVetByLastName(lastName string) (*Responses, error) <span class="cov8" title="1">{
         vets, err := service.repository.FindByLastName(lastName)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 log.Error().Err(err).Str("lastName", lastName).Msg("Fail to retrieve the vets by last name.")
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">vetsJson := FromVets(vets)
+        <span class="cov8" title="1">vetsJson := FromVets(vets)
         contextJson := model.Context{Count: len(vetsJson)}
         return &amp;Responses{Vets: vetsJson, Context: contextJson}, nil</span>
 }
 
 // getAllVets - retrieve all vets
-func (service *Service) getAllVets() (*Responses, error) <span class="cov0" title="0">{
+func (service *Service) getAllVets() (*Responses, error) <span class="cov8" title="1">{
         vets, err := service.repository.FindAll()
 
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 log.Error().Err(err).Msg("Fail to retrieve all vets.")
                 return nil, err
         }</span>
-        <span class="cov0" title="0">log.Debug().Msg("counts of all vets")
+        <span class="cov8" title="1">log.Debug().Msg("counts of all vets")
 
         vetsJson := FromVets(vets)
         contextJson := model.Context{Count: len(vetsJson)}
         return &amp;Responses{Vets: vetsJson, Context: contextJson}, nil</span>
 }
 
-func (service *Service) getAllVetsWithSpecialties() (*Responses, error) <span class="cov0" title="0">{
+func (service *Service) getAllVetsWithSpecialties() (*Responses, error) <span class="cov8" title="1">{
         vets, err := service.repository.FindAllPreload()
 
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 log.Error().Err(err).Msg("Fail to retrieve all vets.")
                 return nil, err
         }</span>
-        <span class="cov0" title="0">log.Debug().Int("count", len(vets)).Msg("counts of all vets.")
-        vetsJson := FromVets(vets)
-        contextJson := model.Context{Count: len(vetsJson)}
-        return &amp;Responses{Vets: vetsJson, Context: contextJson}, nil</span>
+
+        <span class="cov8" title="1">return ToResponses(vets), nil</span>
 }
 
 // create - create new vet
-func (service *Service) create(vet *repository.Vet) (*Response, error) <span class="cov0" title="0">{
+func (service *Service) create(vet *repository.Vet) (*Response, error) <span class="cov8" title="1">{
         log.Info().Any("vet", vet).Msg("Create new vet.")
         newVet, err := service.repository.Insert(vet)
 
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 log.Error().Err(err).Msg("Fail new vet failed.")
-                return &amp;Response{}, err
+                return nil, err
         }</span>
 
-        <span class="cov0" title="0">response := &amp;Response{}
+        <span class="cov8" title="1">response := &amp;Response{}
         response.FromVet(newVet)
         return response, nil</span>
 }
 
 // update - update vet
-func (service *Service) update(vet *repository.Vet) (*Response, error) <span class="cov0" title="0">{
+func (service *Service) update(vet *repository.Vet) (*Response, error) <span class="cov8" title="1">{
         log.Info().Any("vet", vet).Msg("Update a vet.")
         updatedVet, err := service.repository.Update(vet)
 
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 log.Error().Err(err).Msg("Update vet failed.")
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">response := &amp;Response{}
+        <span class="cov8" title="1">response := &amp;Response{}
         response.FromVet(updatedVet)
         return response, nil</span>
 }
@@ -1141,7 +1165,7 @@ type Request struct {
 }
 
 type AddRequest struct {
-        VisitDate   string `json:"visitDate"`
+        VisitDate   string `json:"visitDate" binding:"required"`
         Description string `json:"description" binding:"required"`
         PetID       uint   `json:"petID" binding:"required"`
 }
@@ -1973,2073 +1997,7 @@ func (p *Pages) BuildLinks(baseURL string, defaultPerPage int) [4]string <span c
 }
 </pre>
 		
-		<pre class="file" id="file20" style="display: none">// Code generated by mockery; DO NOT EDIT.
-// github.com/vektra/mockery
-// template: testify
-
-package repository
-
-import (
-        mock "github.com/stretchr/testify/mock"
-)
-
-// NewMockOwnerRepositorier creates a new instance of MockOwnerRepositorier. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
-// The first argument is typically a *testing.T value.
-func NewMockOwnerRepositorier(t interface {
-        mock.TestingT
-        Cleanup(func())
-}) *MockOwnerRepositorier <span class="cov0" title="0">{
-        mock := &amp;MockOwnerRepositorier{}
-        mock.Mock.Test(t)
-
-        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
-
-        <span class="cov0" title="0">return mock</span>
-}
-
-// MockOwnerRepositorier is an autogenerated mock type for the OwnerRepositorier type
-type MockOwnerRepositorier struct {
-        mock.Mock
-}
-
-type MockOwnerRepositorier_Expecter struct {
-        mock *mock.Mock
-}
-
-func (_m *MockOwnerRepositorier) EXPECT() *MockOwnerRepositorier_Expecter <span class="cov0" title="0">{
-        return &amp;MockOwnerRepositorier_Expecter{mock: &amp;_m.Mock}
-}</span>
-
-// FindAll provides a mock function for the type MockOwnerRepositorier
-func (_mock *MockOwnerRepositorier) FindAll() ([]Owner, error) <span class="cov0" title="0">{
-        ret := _mock.Called()
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindAll")</span>
-        }
-
-        <span class="cov0" title="0">var r0 []Owner
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func() ([]Owner, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc()
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Owner); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).([]Owner)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockOwnerRepositorier_FindAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAll'
-type MockOwnerRepositorier_FindAll_Call struct {
-        *mock.Call
-}
-
-// FindAll is a helper method to define mock.On call
-func (_e *MockOwnerRepositorier_Expecter) FindAll() *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
-        return &amp;MockOwnerRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
-}</span>
-
-func (_c *MockOwnerRepositorier_FindAll_Call) Run(run func()) *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                run()
-        }</span>)
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockOwnerRepositorier_FindAll_Call) Return(owners []Owner, err error) *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Return(owners, err)
-        return _c
-}</span>
-
-func (_c *MockOwnerRepositorier_FindAll_Call) RunAndReturn(run func() ([]Owner, error)) *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindById provides a mock function for the type MockOwnerRepositorier
-func (_mock *MockOwnerRepositorier) FindById(id uint) (*Owner, error) <span class="cov0" title="0">{
-        ret := _mock.Called(id)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindById")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Owner
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(uint) (*Owner, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(id)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Owner); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Owner)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockOwnerRepositorier_FindById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindById'
-type MockOwnerRepositorier_FindById_Call struct {
-        *mock.Call
-}
-
-// FindById is a helper method to define mock.On call
-//   - id uint
-func (_e *MockOwnerRepositorier_Expecter) FindById(id interface{}) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
-        return &amp;MockOwnerRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
-}</span>
-
-func (_c *MockOwnerRepositorier_FindById_Call) Run(run func(id uint)) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 uint
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(uint)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockOwnerRepositorier_FindById_Call) Return(owner *Owner, err error) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Return(owner, err)
-        return _c
-}</span>
-
-func (_c *MockOwnerRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Owner, error)) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindByIdWithPets provides a mock function for the type MockOwnerRepositorier
-func (_mock *MockOwnerRepositorier) FindByIdWithPets(id uint) (*Owner, error) <span class="cov0" title="0">{
-        ret := _mock.Called(id)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindByIdWithPets")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Owner
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(uint) (*Owner, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(id)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Owner); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Owner)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockOwnerRepositorier_FindByIdWithPets_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindByIdWithPets'
-type MockOwnerRepositorier_FindByIdWithPets_Call struct {
-        *mock.Call
-}
-
-// FindByIdWithPets is a helper method to define mock.On call
-//   - id uint
-func (_e *MockOwnerRepositorier_Expecter) FindByIdWithPets(id interface{}) *MockOwnerRepositorier_FindByIdWithPets_Call <span class="cov0" title="0">{
-        return &amp;MockOwnerRepositorier_FindByIdWithPets_Call{Call: _e.mock.On("FindByIdWithPets", id)}
-}</span>
-
-func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) Run(run func(id uint)) *MockOwnerRepositorier_FindByIdWithPets_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 uint
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(uint)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) Return(owner *Owner, err error) *MockOwnerRepositorier_FindByIdWithPets_Call <span class="cov0" title="0">{
-        _c.Call.Return(owner, err)
-        return _c
-}</span>
-
-func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) RunAndReturn(run func(id uint) (*Owner, error)) *MockOwnerRepositorier_FindByIdWithPets_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindByLastName provides a mock function for the type MockOwnerRepositorier
-func (_mock *MockOwnerRepositorier) FindByLastName(lastName string) ([]Owner, error) <span class="cov0" title="0">{
-        ret := _mock.Called(lastName)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindByLastName")</span>
-        }
-
-        <span class="cov0" title="0">var r0 []Owner
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(string) ([]Owner, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(lastName)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(string) []Owner); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(lastName)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).([]Owner)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(lastName)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockOwnerRepositorier_FindByLastName_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindByLastName'
-type MockOwnerRepositorier_FindByLastName_Call struct {
-        *mock.Call
-}
-
-// FindByLastName is a helper method to define mock.On call
-//   - lastName string
-func (_e *MockOwnerRepositorier_Expecter) FindByLastName(lastName interface{}) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
-        return &amp;MockOwnerRepositorier_FindByLastName_Call{Call: _e.mock.On("FindByLastName", lastName)}
-}</span>
-
-func (_c *MockOwnerRepositorier_FindByLastName_Call) Run(run func(lastName string)) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 string
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(string)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockOwnerRepositorier_FindByLastName_Call) Return(owners []Owner, err error) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
-        _c.Call.Return(owners, err)
-        return _c
-}</span>
-
-func (_c *MockOwnerRepositorier_FindByLastName_Call) RunAndReturn(run func(lastName string) ([]Owner, error)) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// Insert provides a mock function for the type MockOwnerRepositorier
-func (_mock *MockOwnerRepositorier) Insert(owner *Owner) (*Owner, error) <span class="cov0" title="0">{
-        ret := _mock.Called(owner)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for Insert")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Owner
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(*Owner) (*Owner, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(owner)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Owner) *Owner); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(owner)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Owner)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Owner) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(owner)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockOwnerRepositorier_Insert_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Insert'
-type MockOwnerRepositorier_Insert_Call struct {
-        *mock.Call
-}
-
-// Insert is a helper method to define mock.On call
-//   - owner *Owner
-func (_e *MockOwnerRepositorier_Expecter) Insert(owner interface{}) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
-        return &amp;MockOwnerRepositorier_Insert_Call{Call: _e.mock.On("Insert", owner)}
-}</span>
-
-func (_c *MockOwnerRepositorier_Insert_Call) Run(run func(owner *Owner)) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 *Owner
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(*Owner)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockOwnerRepositorier_Insert_Call) Return(owner1 *Owner, err error) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Return(owner1, err)
-        return _c
-}</span>
-
-func (_c *MockOwnerRepositorier_Insert_Call) RunAndReturn(run func(owner *Owner) (*Owner, error)) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// Update provides a mock function for the type MockOwnerRepositorier
-func (_mock *MockOwnerRepositorier) Update(owner *Owner) (*Owner, error) <span class="cov0" title="0">{
-        ret := _mock.Called(owner)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for Update")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Owner
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(*Owner) (*Owner, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(owner)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Owner) *Owner); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(owner)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Owner)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Owner) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(owner)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockOwnerRepositorier_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
-type MockOwnerRepositorier_Update_Call struct {
-        *mock.Call
-}
-
-// Update is a helper method to define mock.On call
-//   - owner *Owner
-func (_e *MockOwnerRepositorier_Expecter) Update(owner interface{}) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
-        return &amp;MockOwnerRepositorier_Update_Call{Call: _e.mock.On("Update", owner)}
-}</span>
-
-func (_c *MockOwnerRepositorier_Update_Call) Run(run func(owner *Owner)) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 *Owner
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(*Owner)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockOwnerRepositorier_Update_Call) Return(owner1 *Owner, err error) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Return(owner1, err)
-        return _c
-}</span>
-
-func (_c *MockOwnerRepositorier_Update_Call) RunAndReturn(run func(owner *Owner) (*Owner, error)) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// NewMockPetRepositorier creates a new instance of MockPetRepositorier. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
-// The first argument is typically a *testing.T value.
-func NewMockPetRepositorier(t interface {
-        mock.TestingT
-        Cleanup(func())
-}) *MockPetRepositorier <span class="cov0" title="0">{
-        mock := &amp;MockPetRepositorier{}
-        mock.Mock.Test(t)
-
-        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
-
-        <span class="cov0" title="0">return mock</span>
-}
-
-// MockPetRepositorier is an autogenerated mock type for the PetRepositorier type
-type MockPetRepositorier struct {
-        mock.Mock
-}
-
-type MockPetRepositorier_Expecter struct {
-        mock *mock.Mock
-}
-
-func (_m *MockPetRepositorier) EXPECT() *MockPetRepositorier_Expecter <span class="cov0" title="0">{
-        return &amp;MockPetRepositorier_Expecter{mock: &amp;_m.Mock}
-}</span>
-
-// FindAll provides a mock function for the type MockPetRepositorier
-func (_mock *MockPetRepositorier) FindAll() ([]Pet, error) <span class="cov0" title="0">{
-        ret := _mock.Called()
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindAll")</span>
-        }
-
-        <span class="cov0" title="0">var r0 []Pet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func() ([]Pet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc()
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Pet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).([]Pet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockPetRepositorier_FindAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAll'
-type MockPetRepositorier_FindAll_Call struct {
-        *mock.Call
-}
-
-// FindAll is a helper method to define mock.On call
-func (_e *MockPetRepositorier_Expecter) FindAll() *MockPetRepositorier_FindAll_Call <span class="cov0" title="0">{
-        return &amp;MockPetRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
-}</span>
-
-func (_c *MockPetRepositorier_FindAll_Call) Run(run func()) *MockPetRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                run()
-        }</span>)
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockPetRepositorier_FindAll_Call) Return(pets []Pet, err error) *MockPetRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Return(pets, err)
-        return _c
-}</span>
-
-func (_c *MockPetRepositorier_FindAll_Call) RunAndReturn(run func() ([]Pet, error)) *MockPetRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindById provides a mock function for the type MockPetRepositorier
-func (_mock *MockPetRepositorier) FindById(id int) (*Pet, error) <span class="cov0" title="0">{
-        ret := _mock.Called(id)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindById")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Pet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(int) (*Pet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(id)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(int) *Pet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Pet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockPetRepositorier_FindById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindById'
-type MockPetRepositorier_FindById_Call struct {
-        *mock.Call
-}
-
-// FindById is a helper method to define mock.On call
-//   - id int
-func (_e *MockPetRepositorier_Expecter) FindById(id interface{}) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
-        return &amp;MockPetRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
-}</span>
-
-func (_c *MockPetRepositorier_FindById_Call) Run(run func(id int)) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 int
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(int)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockPetRepositorier_FindById_Call) Return(pet *Pet, err error) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Return(pet, err)
-        return _c
-}</span>
-
-func (_c *MockPetRepositorier_FindById_Call) RunAndReturn(run func(id int) (*Pet, error)) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindByIdWithVisits provides a mock function for the type MockPetRepositorier
-func (_mock *MockPetRepositorier) FindByIdWithVisits(id int) (*Pet, error) <span class="cov0" title="0">{
-        ret := _mock.Called(id)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindByIdWithVisits")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Pet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(int) (*Pet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(id)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(int) *Pet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Pet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockPetRepositorier_FindByIdWithVisits_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindByIdWithVisits'
-type MockPetRepositorier_FindByIdWithVisits_Call struct {
-        *mock.Call
-}
-
-// FindByIdWithVisits is a helper method to define mock.On call
-//   - id int
-func (_e *MockPetRepositorier_Expecter) FindByIdWithVisits(id interface{}) *MockPetRepositorier_FindByIdWithVisits_Call <span class="cov0" title="0">{
-        return &amp;MockPetRepositorier_FindByIdWithVisits_Call{Call: _e.mock.On("FindByIdWithVisits", id)}
-}</span>
-
-func (_c *MockPetRepositorier_FindByIdWithVisits_Call) Run(run func(id int)) *MockPetRepositorier_FindByIdWithVisits_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 int
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(int)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockPetRepositorier_FindByIdWithVisits_Call) Return(pet *Pet, err error) *MockPetRepositorier_FindByIdWithVisits_Call <span class="cov0" title="0">{
-        _c.Call.Return(pet, err)
-        return _c
-}</span>
-
-func (_c *MockPetRepositorier_FindByIdWithVisits_Call) RunAndReturn(run func(id int) (*Pet, error)) *MockPetRepositorier_FindByIdWithVisits_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindByName provides a mock function for the type MockPetRepositorier
-func (_mock *MockPetRepositorier) FindByName(name string) ([]Pet, error) <span class="cov0" title="0">{
-        ret := _mock.Called(name)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindByName")</span>
-        }
-
-        <span class="cov0" title="0">var r0 []Pet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(string) ([]Pet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(name)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(string) []Pet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(name)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).([]Pet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(name)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockPetRepositorier_FindByName_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindByName'
-type MockPetRepositorier_FindByName_Call struct {
-        *mock.Call
-}
-
-// FindByName is a helper method to define mock.On call
-//   - name string
-func (_e *MockPetRepositorier_Expecter) FindByName(name interface{}) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
-        return &amp;MockPetRepositorier_FindByName_Call{Call: _e.mock.On("FindByName", name)}
-}</span>
-
-func (_c *MockPetRepositorier_FindByName_Call) Run(run func(name string)) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 string
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(string)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockPetRepositorier_FindByName_Call) Return(pets []Pet, err error) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
-        _c.Call.Return(pets, err)
-        return _c
-}</span>
-
-func (_c *MockPetRepositorier_FindByName_Call) RunAndReturn(run func(name string) ([]Pet, error)) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// Insert provides a mock function for the type MockPetRepositorier
-func (_mock *MockPetRepositorier) Insert(pet *Pet) (*Pet, error) <span class="cov0" title="0">{
-        ret := _mock.Called(pet)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for Insert")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Pet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(*Pet) (*Pet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(pet)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Pet) *Pet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(pet)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Pet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Pet) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(pet)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockPetRepositorier_Insert_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Insert'
-type MockPetRepositorier_Insert_Call struct {
-        *mock.Call
-}
-
-// Insert is a helper method to define mock.On call
-//   - pet *Pet
-func (_e *MockPetRepositorier_Expecter) Insert(pet interface{}) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
-        return &amp;MockPetRepositorier_Insert_Call{Call: _e.mock.On("Insert", pet)}
-}</span>
-
-func (_c *MockPetRepositorier_Insert_Call) Run(run func(pet *Pet)) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 *Pet
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(*Pet)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockPetRepositorier_Insert_Call) Return(pet1 *Pet, err error) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Return(pet1, err)
-        return _c
-}</span>
-
-func (_c *MockPetRepositorier_Insert_Call) RunAndReturn(run func(pet *Pet) (*Pet, error)) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// Update provides a mock function for the type MockPetRepositorier
-func (_mock *MockPetRepositorier) Update(pet *Pet) (*Pet, error) <span class="cov0" title="0">{
-        ret := _mock.Called(pet)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for Update")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Pet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(*Pet) (*Pet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(pet)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Pet) *Pet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(pet)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Pet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Pet) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(pet)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockPetRepositorier_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
-type MockPetRepositorier_Update_Call struct {
-        *mock.Call
-}
-
-// Update is a helper method to define mock.On call
-//   - pet *Pet
-func (_e *MockPetRepositorier_Expecter) Update(pet interface{}) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
-        return &amp;MockPetRepositorier_Update_Call{Call: _e.mock.On("Update", pet)}
-}</span>
-
-func (_c *MockPetRepositorier_Update_Call) Run(run func(pet *Pet)) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 *Pet
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(*Pet)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockPetRepositorier_Update_Call) Return(pet1 *Pet, err error) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Return(pet1, err)
-        return _c
-}</span>
-
-func (_c *MockPetRepositorier_Update_Call) RunAndReturn(run func(pet *Pet) (*Pet, error)) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// NewMockVetRepositorier creates a new instance of MockVetRepositorier. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
-// The first argument is typically a *testing.T value.
-func NewMockVetRepositorier(t interface {
-        mock.TestingT
-        Cleanup(func())
-}) *MockVetRepositorier <span class="cov0" title="0">{
-        mock := &amp;MockVetRepositorier{}
-        mock.Mock.Test(t)
-
-        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
-
-        <span class="cov0" title="0">return mock</span>
-}
-
-// MockVetRepositorier is an autogenerated mock type for the VetRepositorier type
-type MockVetRepositorier struct {
-        mock.Mock
-}
-
-type MockVetRepositorier_Expecter struct {
-        mock *mock.Mock
-}
-
-func (_m *MockVetRepositorier) EXPECT() *MockVetRepositorier_Expecter <span class="cov0" title="0">{
-        return &amp;MockVetRepositorier_Expecter{mock: &amp;_m.Mock}
-}</span>
-
-// FindAll provides a mock function for the type MockVetRepositorier
-func (_mock *MockVetRepositorier) FindAll() ([]Vet, error) <span class="cov0" title="0">{
-        ret := _mock.Called()
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindAll")</span>
-        }
-
-        <span class="cov0" title="0">var r0 []Vet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func() ([]Vet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc()
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Vet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).([]Vet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVetRepositorier_FindAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAll'
-type MockVetRepositorier_FindAll_Call struct {
-        *mock.Call
-}
-
-// FindAll is a helper method to define mock.On call
-func (_e *MockVetRepositorier_Expecter) FindAll() *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
-        return &amp;MockVetRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
-}</span>
-
-func (_c *MockVetRepositorier_FindAll_Call) Run(run func()) *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                run()
-        }</span>)
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVetRepositorier_FindAll_Call) Return(vets []Vet, err error) *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Return(vets, err)
-        return _c
-}</span>
-
-func (_c *MockVetRepositorier_FindAll_Call) RunAndReturn(run func() ([]Vet, error)) *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindAllPreload provides a mock function for the type MockVetRepositorier
-func (_mock *MockVetRepositorier) FindAllPreload() ([]Vet, error) <span class="cov0" title="0">{
-        ret := _mock.Called()
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindAllPreload")</span>
-        }
-
-        <span class="cov0" title="0">var r0 []Vet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func() ([]Vet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc()
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Vet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).([]Vet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVetRepositorier_FindAllPreload_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAllPreload'
-type MockVetRepositorier_FindAllPreload_Call struct {
-        *mock.Call
-}
-
-// FindAllPreload is a helper method to define mock.On call
-func (_e *MockVetRepositorier_Expecter) FindAllPreload() *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
-        return &amp;MockVetRepositorier_FindAllPreload_Call{Call: _e.mock.On("FindAllPreload")}
-}</span>
-
-func (_c *MockVetRepositorier_FindAllPreload_Call) Run(run func()) *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                run()
-        }</span>)
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVetRepositorier_FindAllPreload_Call) Return(vets []Vet, err error) *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
-        _c.Call.Return(vets, err)
-        return _c
-}</span>
-
-func (_c *MockVetRepositorier_FindAllPreload_Call) RunAndReturn(run func() ([]Vet, error)) *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindAllSpecialties provides a mock function for the type MockVetRepositorier
-func (_mock *MockVetRepositorier) FindAllSpecialties() ([]Specialty, error) <span class="cov0" title="0">{
-        ret := _mock.Called()
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindAllSpecialties")</span>
-        }
-
-        <span class="cov0" title="0">var r0 []Specialty
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func() ([]Specialty, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc()
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Specialty); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).([]Specialty)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVetRepositorier_FindAllSpecialties_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAllSpecialties'
-type MockVetRepositorier_FindAllSpecialties_Call struct {
-        *mock.Call
-}
-
-// FindAllSpecialties is a helper method to define mock.On call
-func (_e *MockVetRepositorier_Expecter) FindAllSpecialties() *MockVetRepositorier_FindAllSpecialties_Call <span class="cov0" title="0">{
-        return &amp;MockVetRepositorier_FindAllSpecialties_Call{Call: _e.mock.On("FindAllSpecialties")}
-}</span>
-
-func (_c *MockVetRepositorier_FindAllSpecialties_Call) Run(run func()) *MockVetRepositorier_FindAllSpecialties_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                run()
-        }</span>)
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVetRepositorier_FindAllSpecialties_Call) Return(specialtys []Specialty, err error) *MockVetRepositorier_FindAllSpecialties_Call <span class="cov0" title="0">{
-        _c.Call.Return(specialtys, err)
-        return _c
-}</span>
-
-func (_c *MockVetRepositorier_FindAllSpecialties_Call) RunAndReturn(run func() ([]Specialty, error)) *MockVetRepositorier_FindAllSpecialties_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindById provides a mock function for the type MockVetRepositorier
-func (_mock *MockVetRepositorier) FindById(id int) (*Vet, error) <span class="cov0" title="0">{
-        ret := _mock.Called(id)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindById")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Vet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(int) (*Vet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(id)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(int) *Vet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Vet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVetRepositorier_FindById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindById'
-type MockVetRepositorier_FindById_Call struct {
-        *mock.Call
-}
-
-// FindById is a helper method to define mock.On call
-//   - id int
-func (_e *MockVetRepositorier_Expecter) FindById(id interface{}) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
-        return &amp;MockVetRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
-}</span>
-
-func (_c *MockVetRepositorier_FindById_Call) Run(run func(id int)) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 int
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(int)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVetRepositorier_FindById_Call) Return(vet *Vet, err error) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Return(vet, err)
-        return _c
-}</span>
-
-func (_c *MockVetRepositorier_FindById_Call) RunAndReturn(run func(id int) (*Vet, error)) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindByIdWithSpecialties provides a mock function for the type MockVetRepositorier
-func (_mock *MockVetRepositorier) FindByIdWithSpecialties(id int) (*Vet, error) <span class="cov0" title="0">{
-        ret := _mock.Called(id)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindByIdWithSpecialties")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Vet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(int) (*Vet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(id)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(int) *Vet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Vet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(int) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVetRepositorier_FindByIdWithSpecialties_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindByIdWithSpecialties'
-type MockVetRepositorier_FindByIdWithSpecialties_Call struct {
-        *mock.Call
-}
-
-// FindByIdWithSpecialties is a helper method to define mock.On call
-//   - id int
-func (_e *MockVetRepositorier_Expecter) FindByIdWithSpecialties(id interface{}) *MockVetRepositorier_FindByIdWithSpecialties_Call <span class="cov0" title="0">{
-        return &amp;MockVetRepositorier_FindByIdWithSpecialties_Call{Call: _e.mock.On("FindByIdWithSpecialties", id)}
-}</span>
-
-func (_c *MockVetRepositorier_FindByIdWithSpecialties_Call) Run(run func(id int)) *MockVetRepositorier_FindByIdWithSpecialties_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 int
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(int)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVetRepositorier_FindByIdWithSpecialties_Call) Return(vet *Vet, err error) *MockVetRepositorier_FindByIdWithSpecialties_Call <span class="cov0" title="0">{
-        _c.Call.Return(vet, err)
-        return _c
-}</span>
-
-func (_c *MockVetRepositorier_FindByIdWithSpecialties_Call) RunAndReturn(run func(id int) (*Vet, error)) *MockVetRepositorier_FindByIdWithSpecialties_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindByLastName provides a mock function for the type MockVetRepositorier
-func (_mock *MockVetRepositorier) FindByLastName(lastName string) ([]Vet, error) <span class="cov0" title="0">{
-        ret := _mock.Called(lastName)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindByLastName")</span>
-        }
-
-        <span class="cov0" title="0">var r0 []Vet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(string) ([]Vet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(lastName)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(string) []Vet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(lastName)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).([]Vet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(lastName)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVetRepositorier_FindByLastName_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindByLastName'
-type MockVetRepositorier_FindByLastName_Call struct {
-        *mock.Call
-}
-
-// FindByLastName is a helper method to define mock.On call
-//   - lastName string
-func (_e *MockVetRepositorier_Expecter) FindByLastName(lastName interface{}) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
-        return &amp;MockVetRepositorier_FindByLastName_Call{Call: _e.mock.On("FindByLastName", lastName)}
-}</span>
-
-func (_c *MockVetRepositorier_FindByLastName_Call) Run(run func(lastName string)) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 string
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(string)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVetRepositorier_FindByLastName_Call) Return(vets []Vet, err error) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
-        _c.Call.Return(vets, err)
-        return _c
-}</span>
-
-func (_c *MockVetRepositorier_FindByLastName_Call) RunAndReturn(run func(lastName string) ([]Vet, error)) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// Insert provides a mock function for the type MockVetRepositorier
-func (_mock *MockVetRepositorier) Insert(vet *Vet) (*Vet, error) <span class="cov0" title="0">{
-        ret := _mock.Called(vet)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for Insert")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Vet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(*Vet) (*Vet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(vet)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Vet) *Vet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(vet)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Vet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Vet) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(vet)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVetRepositorier_Insert_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Insert'
-type MockVetRepositorier_Insert_Call struct {
-        *mock.Call
-}
-
-// Insert is a helper method to define mock.On call
-//   - vet *Vet
-func (_e *MockVetRepositorier_Expecter) Insert(vet interface{}) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
-        return &amp;MockVetRepositorier_Insert_Call{Call: _e.mock.On("Insert", vet)}
-}</span>
-
-func (_c *MockVetRepositorier_Insert_Call) Run(run func(vet *Vet)) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 *Vet
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(*Vet)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVetRepositorier_Insert_Call) Return(vet1 *Vet, err error) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Return(vet1, err)
-        return _c
-}</span>
-
-func (_c *MockVetRepositorier_Insert_Call) RunAndReturn(run func(vet *Vet) (*Vet, error)) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// Update provides a mock function for the type MockVetRepositorier
-func (_mock *MockVetRepositorier) Update(vet *Vet) (*Vet, error) <span class="cov0" title="0">{
-        ret := _mock.Called(vet)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for Update")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Vet
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(*Vet) (*Vet, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(vet)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Vet) *Vet); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(vet)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Vet)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Vet) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(vet)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVetRepositorier_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
-type MockVetRepositorier_Update_Call struct {
-        *mock.Call
-}
-
-// Update is a helper method to define mock.On call
-//   - vet *Vet
-func (_e *MockVetRepositorier_Expecter) Update(vet interface{}) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
-        return &amp;MockVetRepositorier_Update_Call{Call: _e.mock.On("Update", vet)}
-}</span>
-
-func (_c *MockVetRepositorier_Update_Call) Run(run func(vet *Vet)) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 *Vet
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(*Vet)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVetRepositorier_Update_Call) Return(vet1 *Vet, err error) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Return(vet1, err)
-        return _c
-}</span>
-
-func (_c *MockVetRepositorier_Update_Call) RunAndReturn(run func(vet *Vet) (*Vet, error)) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// NewMockVisitRepositorier creates a new instance of MockVisitRepositorier. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
-// The first argument is typically a *testing.T value.
-func NewMockVisitRepositorier(t interface {
-        mock.TestingT
-        Cleanup(func())
-}) *MockVisitRepositorier <span class="cov0" title="0">{
-        mock := &amp;MockVisitRepositorier{}
-        mock.Mock.Test(t)
-
-        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
-
-        <span class="cov0" title="0">return mock</span>
-}
-
-// MockVisitRepositorier is an autogenerated mock type for the VisitRepositorier type
-type MockVisitRepositorier struct {
-        mock.Mock
-}
-
-type MockVisitRepositorier_Expecter struct {
-        mock *mock.Mock
-}
-
-func (_m *MockVisitRepositorier) EXPECT() *MockVisitRepositorier_Expecter <span class="cov0" title="0">{
-        return &amp;MockVisitRepositorier_Expecter{mock: &amp;_m.Mock}
-}</span>
-
-// FindAll provides a mock function for the type MockVisitRepositorier
-func (_mock *MockVisitRepositorier) FindAll() ([]Visit, error) <span class="cov0" title="0">{
-        ret := _mock.Called()
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindAll")</span>
-        }
-
-        <span class="cov0" title="0">var r0 []Visit
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func() ([]Visit, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc()
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Visit); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).([]Visit)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc()
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVisitRepositorier_FindAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAll'
-type MockVisitRepositorier_FindAll_Call struct {
-        *mock.Call
-}
-
-// FindAll is a helper method to define mock.On call
-func (_e *MockVisitRepositorier_Expecter) FindAll() *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
-        return &amp;MockVisitRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
-}</span>
-
-func (_c *MockVisitRepositorier_FindAll_Call) Run(run func()) *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                run()
-        }</span>)
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVisitRepositorier_FindAll_Call) Return(visits []Visit, err error) *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Return(visits, err)
-        return _c
-}</span>
-
-func (_c *MockVisitRepositorier_FindAll_Call) RunAndReturn(run func() ([]Visit, error)) *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// FindById provides a mock function for the type MockVisitRepositorier
-func (_mock *MockVisitRepositorier) FindById(id uint) (*Visit, error) <span class="cov0" title="0">{
-        ret := _mock.Called(id)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for FindById")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Visit
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(uint) (*Visit, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(id)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Visit); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Visit)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(id)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVisitRepositorier_FindById_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindById'
-type MockVisitRepositorier_FindById_Call struct {
-        *mock.Call
-}
-
-// FindById is a helper method to define mock.On call
-//   - id uint
-func (_e *MockVisitRepositorier_Expecter) FindById(id interface{}) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
-        return &amp;MockVisitRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
-}</span>
-
-func (_c *MockVisitRepositorier_FindById_Call) Run(run func(id uint)) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 uint
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(uint)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVisitRepositorier_FindById_Call) Return(visit *Visit, err error) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Return(visit, err)
-        return _c
-}</span>
-
-func (_c *MockVisitRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Visit, error)) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// Insert provides a mock function for the type MockVisitRepositorier
-func (_mock *MockVisitRepositorier) Insert(visit *Visit) (*Visit, error) <span class="cov0" title="0">{
-        ret := _mock.Called(visit)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for Insert")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Visit
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(*Visit) (*Visit, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(visit)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Visit) *Visit); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(visit)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Visit)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Visit) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(visit)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVisitRepositorier_Insert_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Insert'
-type MockVisitRepositorier_Insert_Call struct {
-        *mock.Call
-}
-
-// Insert is a helper method to define mock.On call
-//   - visit *Visit
-func (_e *MockVisitRepositorier_Expecter) Insert(visit interface{}) *MockVisitRepositorier_Insert_Call <span class="cov0" title="0">{
-        return &amp;MockVisitRepositorier_Insert_Call{Call: _e.mock.On("Insert", visit)}
-}</span>
-
-func (_c *MockVisitRepositorier_Insert_Call) Run(run func(visit *Visit)) *MockVisitRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 *Visit
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(*Visit)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVisitRepositorier_Insert_Call) Return(visit1 *Visit, err error) *MockVisitRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Return(visit1, err)
-        return _c
-}</span>
-
-func (_c *MockVisitRepositorier_Insert_Call) RunAndReturn(run func(visit *Visit) (*Visit, error)) *MockVisitRepositorier_Insert_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// Update provides a mock function for the type MockVisitRepositorier
-func (_mock *MockVisitRepositorier) Update(visit *Visit) (*Visit, error) <span class="cov0" title="0">{
-        ret := _mock.Called(visit)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for Update")</span>
-        }
-
-        <span class="cov0" title="0">var r0 *Visit
-        var r1 error
-        if returnFunc, ok := ret.Get(0).(func(*Visit) (*Visit, error)); ok </span><span class="cov0" title="0">{
-                return returnFunc(visit)
-        }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Visit) *Visit); ok </span><span class="cov0" title="0">{
-                r0 = returnFunc(visit)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(*Visit)
-                }</span>
-        }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Visit) error); ok </span><span class="cov0" title="0">{
-                r1 = returnFunc(visit)
-        }</span> else<span class="cov0" title="0"> {
-                r1 = ret.Error(1)
-        }</span>
-        <span class="cov0" title="0">return r0, r1</span>
-}
-
-// MockVisitRepositorier_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
-type MockVisitRepositorier_Update_Call struct {
-        *mock.Call
-}
-
-// Update is a helper method to define mock.On call
-//   - visit *Visit
-func (_e *MockVisitRepositorier_Expecter) Update(visit interface{}) *MockVisitRepositorier_Update_Call <span class="cov0" title="0">{
-        return &amp;MockVisitRepositorier_Update_Call{Call: _e.mock.On("Update", visit)}
-}</span>
-
-func (_c *MockVisitRepositorier_Update_Call) Run(run func(visit *Visit)) *MockVisitRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                var arg0 *Visit
-                if args[0] != nil </span><span class="cov0" title="0">{
-                        arg0 = args[0].(*Visit)
-                }</span>
-                <span class="cov0" title="0">run(
-                        arg0,
-                )</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockVisitRepositorier_Update_Call) Return(visit1 *Visit, err error) *MockVisitRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Return(visit1, err)
-        return _c
-}</span>
-
-func (_c *MockVisitRepositorier_Update_Call) RunAndReturn(run func(visit *Visit) (*Visit, error)) *MockVisitRepositorier_Update_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-</pre>
-		
-		<pre class="file" id="file21" style="display: none">package repository
-
-import (
-        "github.com/rs/zerolog/log"
-        "gorm.io/gorm"
-        "gorm.io/gorm/clause"
-        "time"
-)
-
-// OwnerRepositorier - owner repository interface
-// It composes the interfaces to interact with the database
-type OwnerRepositorier interface {
-        FindById(id uint) (*Owner, error)
-        FindByLastName(lastName string) ([]Owner, error)
-        FindAll() ([]Owner, error)
-        FindByIdWithPets(id uint) (*Owner, error)
-        Insert(owner *Owner) (*Owner, error)
-        Update(owner *Owner) (*Owner, error)
-}
-
-// OwnerRepository searches owner from the database
-type OwnerRepository struct {
-        db *gorm.DB
-}
-
-// NewOwnerRepository - OwnerRepository factory
-func NewOwnerRepository(db *gorm.DB) *OwnerRepository <span class="cov0" title="0">{
-        return &amp;OwnerRepository{
-                db: db,
-        }
-}</span>
-
-// FindById - find the owner by id
-//
-// SELECT * FROM "pets" WHERE "pets"."owner_id" = 3 AND "pets"."deleted_at" IS NULL
-// SELECT * FROM `visits` WHERE `visits`.`pet_id` = 6 AND `visits`.`deleted_at` IS NULL
-// SELECT * FROM "types" WHERE "types"."id" = 2 AND "types"."deleted_at" IS NULL
-// SELECT * FROM "owners" WHERE "owners"."id" = 1 AND "owners"."deleted_at" IS NULL ORDER BY "owners"."id" LIMIT 1
-func (repository *OwnerRepository) FindById(id uint) (*Owner, error) <span class="cov0" title="0">{
-        log.Debug().Uint("id", id).Msg("search owner by id.")
-
-        var owner Owner
-        // Pets.Type - Nested Preloading (Eager Loading)
-        err := repository.db.First(&amp;owner, id).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Uint("id", id).Msg("Fail to find owner by id.")
-                return nil, err
-        }</span>
-        <span class="cov0" title="0">return &amp;owner, nil</span>
-}
-
-// FindByLastName - find owner by last name
-//
-// SELECT * FROM "owners" WHERE last_name = 'Rodriquez' AND "owners"."deleted_at" IS NULL
-func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, error) <span class="cov0" title="0">{
-        log.Debug().Str("lastName", lastName).Msg("Search owner by last name")
-
-        // Pets.Type - Nested Preloading (Eager Loading)
-        var owners []Owner
-        err := repository.db.Where("last_name = ?", lastName).Find(&amp;owners).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Str("lastName", lastName).Msg("Fail to find owners by last name.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return owners, nil</span>
-}
-
-// FindAll
-// SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
-func (repository *OwnerRepository) FindAll() ([]Owner, error) <span class="cov0" title="0">{
-        log.Debug().Msg("get list of owners")
-
-        var owners []Owner
-        // Get all owners
-        // SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
-        err := repository.db.Find(&amp;owners).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to find all owners")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return owners, nil</span>
-}
-
-// FindByIdWithPets Find all owners with pets &amp; visits and its nested associations.
-//
-// SELECT * FROM "pets" WHERE "pets"."owner_id" IN (1,2,3,4,5,6,7,8,9,10) AND "pets"."deleted_at" IS NULL
-// SELECT * FROM "types" WHERE "types"."id" IN (1,6,2,3,4,5) AND "types"."deleted_at" IS NULL
-// SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
-func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) <span class="cov0" title="0">{
-        log.Debug().Msg("get list of owners with pets")
-
-        var owner Owner
-        /*
-         clause.Associations won’t preload nested associations, but can use it with Nested Preloading together
-        */
-        err := repository.db.Preload("Pets.Type").Preload("Pets.Visits").Preload(clause.Associations).First(&amp;owner, id).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to find owners with pets by id.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return &amp;owner, nil</span>
-}
-
-// Insert - insert a new owner
-// INSERT INTO "owners" ("first_name","last_name","address","city","telephone","created_at","updated_at")
-//
-//        VALUES ('George','Franklin','110 W. Liberty St.','Madison','6085551023','2021-09-26 15:00:00','2021-09-26 15:00:00')
-func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) <span class="cov0" title="0">{
-        log.Debug().Any("owner", owner).Msg("Insert a new owner.")
-        now := time.Now()
-        owner.UpdatedAt = now
-        owner.CreatedAt = now
-
-        err := repository.db.Create(&amp;owner).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to insert new owner")
-                return nil, err
-        }</span>
-        <span class="cov0" title="0">return owner, nil</span>
-}
-
-// Update - update the owner
-// UPDATE "owners" SET "first_name" = 'George', "last_name" = 'Franklin', "address" = '110 W. Liberty St.',
-func (repository *OwnerRepository) Update(owner *Owner) (*Owner, error) <span class="cov0" title="0">{
-        log.Debug().Uint("id", owner.ID).Msg("Update owner")
-        owner.UpdatedAt = time.Now()
-
-        // Omit the column name from update...
-        err := repository.db.Omit("created_at").Updates(&amp;owner).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Uint("id", owner.ID).Msg("Fail to update owner.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return owner, nil</span>
-}
-</pre>
-		
-		<pre class="file" id="file22" style="display: none">package repository
-
-import (
-        "github.com/rs/zerolog/log"
-        "gorm.io/gorm"
-)
-
-type PetRepositorier interface {
-        FindAll() ([]Pet, error)
-        FindById(id int) (*Pet, error)
-        FindByIdWithVisits(id int) (*Pet, error)
-        FindByName(name string) ([]Pet, error)
-        Insert(pet *Pet) (*Pet, error)
-        Update(pet *Pet) (*Pet, error)
-}
-
-// PetRepository searches pet from the database
-type PetRepository struct {
-        db *gorm.DB
-}
-
-func NewPetRepository(db *gorm.DB) *PetRepository <span class="cov0" title="0">{
-        return &amp;PetRepository{
-                db: db,
-        }
-}</span>
-
-func (repository *PetRepository) FindAll() ([]Pet, error) <span class="cov0" title="0">{
-        log.Debug().Msg("Retrieve all pets")
-
-        var pets []Pet
-        result := repository.db.Find(&amp;pets)
-        return pets, result.Error
-}</span>
-
-/*
-FindById
-Join query reduces into 1 query by joining 2 tables together through LEFT JOIN.
-
-SELECT "pets"."id","pets"."created_at","pets"."updated_at","pets"."deleted_at","pets"."name","pets"."birth_date",
-
-        "pets"."type_id","pets"."owner_id","Type"."id" AS "Type__id","Type"."created_at" AS "Type__created_at",
-        "Type"."updated_at" AS "Type__updated_at","Type"."deleted_at" AS "Type__deleted_at","Type"."name" AS "Type__name"
-        FROM "pets" LEFT JOIN "types" "Type" ON "pets"."type_id" = "Type"."id"
-        WHERE pets.id = 2 AND "pets"."deleted_at" IS NULL ORDER BY "pets"."id" LIMIT 1
-*/
-func (repository *PetRepository) FindById(id int) (*Pet, error) <span class="cov0" title="0">{
-        log.Debug().Int("id", id).Msg("Search pet by id.")
-
-        var pet Pet
-        result := repository.db.Joins("Type").Where("pets.id = ?", id).First(&amp;pet)
-        return &amp;pet, result.Error
-}</span>
-
-func (repository *PetRepository) FindByIdWithVisits(id int) (*Pet, error) <span class="cov0" title="0">{
-        log.Debug().Int("id", id).Msg("Search pet by id.")
-
-        var pet Pet
-        result := repository.db.Joins("Type").Preload("Visits").Where("pets.id = ?", id).First(&amp;pet)
-        return &amp;pet, result.Error
-}</span>
-
-/*
-FindByName
-SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
-SELECT * FROM "pets" WHERE name = 'Leo' AND "pets"."deleted_at" IS NULL
-*/
-func (repository *PetRepository) FindByName(name string) ([]Pet, error) <span class="cov0" title="0">{
-        log.Debug().Str("name", name).Msg("Search pet by name.")
-
-        var pets []Pet
-        result := repository.db.Preload("Type").Where("name = ?", name).Find(&amp;pets)
-        return pets, result.Error
-}</span>
-
-// Insert - insert a new pet
-func (repository *PetRepository) Insert(pet *Pet) (*Pet, error) <span class="cov0" title="0">{
-        log.Debug().Str("name", pet.Name).Msg("Insert a new pet.")
-
-        err := repository.db.Create(&amp;pet).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to insert new pet.")
-                return nil, err
-        }</span>
-        <span class="cov0" title="0">return pet, err</span>
-}
-
-// Update - update a pet
-func (repository *PetRepository) Update(pet *Pet) (*Pet, error) <span class="cov0" title="0">{
-        //log.Debug().Int("id", pet.ID).Msg("Fail vet id.")
-
-        // Omit the column name from update...
-        err := repository.db.Omit("created_at").Save(&amp;pet).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to update pet.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return pet, err</span>
-}
-</pre>
-		
-		<pre class="file" id="file23" style="display: none">package repository
-
-import (
-        "github.com/rs/zerolog/log"
-        "gorm.io/gorm"
-)
-
-type VetRepositorier interface {
-        FindAllSpecialties() ([]Specialty, error)
-        FindById(id int) (*Vet, error)
-        FindByIdWithSpecialties(id int) (*Vet, error)
-        FindByLastName(lastName string) ([]Vet, error)
-        FindAll() ([]Vet, error)
-        FindAllPreload() ([]Vet, error)
-        Insert(vet *Vet) (*Vet, error)
-        Update(vet *Vet) (*Vet, error)
-}
-
-// VetRepository searches vet from the database
-type VetRepository struct {
-        db *gorm.DB
-}
-
-func NewVetRepository(db *gorm.DB) *VetRepository <span class="cov0" title="0">{
-        return &amp;VetRepository{
-                db: db,
-        }
-}</span>
-
-// FindAllSpecialties - retrieve all veterinarian's specialties
-// SELECT * FROM "specialties" WHERE "specialties"."deleted_at" IS NULL
-func (repository *VetRepository) FindAllSpecialties() ([]Specialty, error) <span class="cov0" title="0">{
-        log.Debug().Msg("get all specialties")
-
-        var specialties []Specialty
-        err := repository.db.Find(&amp;specialties).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to find all specialties.")
-                return nil, err
-        }</span>
-        <span class="cov0" title="0">return specialties, err</span>
-}
-
-// FindById - find a veterinarian by id
-/*
-Many-to-Many relation vets &lt;-- vet_specialties --&gt; specialties
-Preload - eagerly loading the specialties relation and hence,
-3 queries are executed.
-SELECT * FROM "vet_specialties" WHERE "vet_specialties"."vet_id" = 2
-SELECT * FROM "specialties" WHERE "specialties"."id" = 1 AND "specialties"."deleted_at" IS NULL
-SELECT * FROM "vets" WHERE "vets"."id" = 2 AND "vets"."deleted_at" IS NULL ORDER BY "vets"."id" LIMIT 1
-*/
-func (repository *VetRepository) FindById(id int) (*Vet, error) <span class="cov0" title="0">{
-        log.Debug().Int("id", id).Msg("Search vet by id.")
-
-        var vet Vet
-        err := repository.db.First(&amp;vet, id).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Int("id", id).Msg("Fail to find vet by id.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return &amp;vet, err</span>
-}
-
-func (repository *VetRepository) FindByIdWithSpecialties(id int) (*Vet, error) <span class="cov0" title="0">{
-        log.Debug().Int("id", id).Msg("Search vet by id.")
-
-        var vet Vet
-        err := repository.db.Preload("Specialties").First(&amp;vet, id).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Int("id", id).Msg("Fail to find vet by id.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return &amp;vet, err</span>
-}
-
-// FindByLastName
-// SELECT * FROM "vet_specialties" WHERE "vet_specialties"."vet_id" = 5
-// SELECT * FROM "specialties" WHERE "specialties"."id" = 1 AND "specialties"."deleted_at" IS NULL
-// SELECT * FROM "vets" WHERE last_name = 'Stevens' AND "vets"."deleted_at" IS NULL
-func (repository *VetRepository) FindByLastName(lastName string) ([]Vet, error) <span class="cov0" title="0">{
-        log.Debug().Str("lastName", lastName).Msg("Search vet by last name.")
-
-        var vets []Vet
-        err := repository.db.Preload("Specialties").Where("last_name = ?", lastName).Find(&amp;vets).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Str("lastName", lastName).Msg("Fail to find vet by last name.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return vets, nil</span>
-}
-
-/*
-FindAll
-SELECT * FROM "vets" WHERE "vets"."deleted_at" IS NULL
-*/
-func (repository *VetRepository) FindAll() ([]Vet, error) <span class="cov0" title="0">{
-        log.Debug().Msg("get all vets")
-
-        var vets []Vet
-        err := repository.db.Find(&amp;vets).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to find all vets.")
-                return nil, err
-        }</span>
-        <span class="cov0" title="0">return vets, err</span>
-}
-
-/*
-FindAllPreload
-Expect there would be n + 1 queries executed just like in Java Hibernate.  Surprise,
-only 3 queries actually executed.
-
-        SELECT * FROM "vet_specialties" WHERE "vet_specialties"."vet_id" IN (1,2,3,4,5,6)
-        SELECT * FROM "specialties" WHERE "specialties"."id" IN (1,2,3) AND "specialties"."deleted_at" IS NULL
-        SELECT * FROM "vets" WHERE "vets"."deleted_at" IS NULL
-*/
-func (repository *VetRepository) FindAllPreload() ([]Vet, error) <span class="cov0" title="0">{
-        log.Debug().Msg("get all vets with relations preloaded.")
-
-        var vets []Vet
-        err := repository.db.Preload("Specialties").Find(&amp;vets).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to find all vets.")
-                return nil, err
-        }</span>
-        <span class="cov0" title="0">return vets, err</span>
-}
-
-// Insert - insert a new vet
-// INSERT INTO "vets" ("first_name","last_name","created_at","updated_at")
-//
-//        VALUES ('James','Carter','2021-07-25 15:00:00','2021-07-25 15:00:00') RETURN
-func (repository *VetRepository) Insert(vet *Vet) (*Vet, error) <span class="cov0" title="0">{
-        log.Debug().Any("vet", vet).Msg("Fail a new vet.")
-
-        err := repository.db.Create(&amp;vet).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to insert new vet.")
-                return nil, err
-        }</span>
-        <span class="cov0" title="0">return vet, err</span>
-}
-
-// Update - update vet
-// UPDATE "vets" SET "first_name" = 'James', "last_name" = 'Carter' WHERE "id" = 1
-func (repository *VetRepository) Update(vet *Vet) (*Vet, error) <span class="cov0" title="0">{
-        //log.Debug().Int("id", vet.ID).Msg("Fail vet id.")
-
-        // Omit the column name from update...
-        err := repository.db.Omit("created_at").Save(&amp;vet).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to update vet.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return vet, err</span>
-}
-</pre>
-		
-		<pre class="file" id="file24" style="display: none">package repository
-
-import (
-        "github.com/rs/zerolog/log"
-        "gorm.io/gorm"
-)
-
-type VisitRepositorier interface {
-        FindById(id uint) (*Visit, error)
-        FindAll() ([]Visit, error)
-        Insert(visit *Visit) (*Visit, error)
-        Update(visit *Visit) (*Visit, error)
-}
-
-// VisitRepository searches vet from the database
-type VisitRepository struct {
-        pg *gorm.DB
-}
-
-func NewVisitRepository(pg *gorm.DB) *VisitRepository <span class="cov0" title="0">{
-        return &amp;VisitRepository{
-                pg: pg,
-        }
-}</span>
-
-/*
-FindById - search visit by id
-SELECT * FROM "pets" WHERE "pets"."id" = 8 AND "pets"."deleted_at" IS NULL
-SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
-SELECT * FROM "visits" WHERE "visits"."id" = 2 AND "visits"."deleted_at" IS NULL ORDER BY "visits"."id" LIMIT 1
-*/
-func (repository *VisitRepository) FindById(id uint) (*Visit, error) <span class="cov0" title="0">{
-        log.Debug().Uint("id", id).Msg("Search visit by id.")
-
-        var visit Visit
-        err := repository.pg.Preload("Pet.Type").First(&amp;visit, id).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Uint("id", id).Msg("Fail to find visit by id.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return &amp;visit, err</span>
-}
-
-/*
-FindAll - search all visits
-SELECT * FROM "pets" WHERE "pets"."id" IN (7,8) AND "pets"."deleted_at" IS NULL
-SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
-SELECT * FROM "visits" WHERE "visits"."deleted_at" IS NULL
-*/
-func (repository *VisitRepository) FindAll() ([]Visit, error) <span class="cov0" title="0">{
-        log.Debug().Msg("get list of visits")
-
-        var visits []Visit
-        // not needed to preload for all visits - will be a performance if get large result.
-        err := repository.pg.Preload("Pet.Type").Find(&amp;visits).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to find all visits.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return visits, err</span>
-}
-
-// Insert - insert visit
-// INSERT INTO "visits" ("created_at","updated_at","deleted_at","pet_id","visit_date","description")
-//
-//        VALUES ('2021-08-29 15:00:00','2021-08-29 15:00:00',NULL,8,'2021-08-29 15:00:00','test')
-func (repository *VisitRepository) Insert(visit *Visit) (*Visit, error) <span class="cov0" title="0">{
-        log.Debug().Any("visit", visit).Msg("Fail visit.")
-
-        err := repository.pg.Create(visit).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to insert visit.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return visit, err</span>
-}
-
-// Update - update visit
-// UPDATE "visits" SET "visit_date" = '2021-08-01 00:00:00', "description" = 'test', "pet_id" = 8 WHERE "id" = 2
-func (repository *VisitRepository) Update(visit *Visit) (*Visit, error) <span class="cov0" title="0">{
-        log.Debug().Any("visit", visit).Msg("Update visits.")
-
-        err := repository.pg.Save(visit).Error
-        if err != nil </span><span class="cov0" title="0">{
-                log.Error().Err(err).Msg("Fail to update visit,.")
-                return nil, err
-        }</span>
-
-        <span class="cov0" title="0">return visit, err</span>
-}
-</pre>
-		
-		<pre class="file" id="file25" style="display: none">package test
+		<pre class="file" id="file20" style="display: none">package test
 
 import "github.com/gofiber/fiber/v2"
 
@@ -4050,7 +2008,7 @@ func SetupRouter() *fiber.App <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file26" style="display: none">package test
+		<pre class="file" id="file21" style="display: none">package test
 
 import (
         "testing"
@@ -4088,7 +2046,7 @@ func PgStart(t *testing.T, dir string) *embeddedpostgres.EmbeddedPostgres <span 
 }
 </pre>
 		
-		<pre class="file" id="file27" style="display: none">package test
+		<pre class="file" id="file22" style="display: none">package test
 
 import (
         jsoniter "github.com/json-iterator/go"

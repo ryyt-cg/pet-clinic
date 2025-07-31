@@ -14,12 +14,12 @@ type VisitRepositorier interface {
 
 // VisitRepository searches vet from the database
 type VisitRepository struct {
-	pg *gorm.DB
+	db *gorm.DB
 }
 
-func NewVisitRepository(pg *gorm.DB) *VisitRepository {
+func NewVisitRepository(db *gorm.DB) *VisitRepository {
 	return &VisitRepository{
-		pg: pg,
+		db: db,
 	}
 }
 
@@ -33,7 +33,7 @@ func (repository *VisitRepository) FindById(id uint) (*Visit, error) {
 	log.Debug().Uint("id", id).Msg("Search visit by id.")
 
 	var visit Visit
-	err := repository.pg.Preload("Pet.Type").First(&visit, id).Error
+	err := repository.db.Preload("Pet.Type").First(&visit, id).Error
 	if err != nil {
 		log.Error().Err(err).Uint("id", id).Msg("Fail to find visit by id.")
 		return nil, err
@@ -53,7 +53,7 @@ func (repository *VisitRepository) FindAll() ([]Visit, error) {
 
 	var visits []Visit
 	// not needed to preload for all visits - will be a performance if get large result.
-	err := repository.pg.Preload("Pet.Type").Find(&visits).Error
+	err := repository.db.Preload("Pet.Type").Find(&visits).Error
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to find all visits.")
 		return nil, err
@@ -67,9 +67,9 @@ func (repository *VisitRepository) FindAll() ([]Visit, error) {
 //
 //	VALUES ('2021-08-29 15:00:00','2021-08-29 15:00:00',NULL,8,'2021-08-29 15:00:00','test')
 func (repository *VisitRepository) Insert(visit *Visit) (*Visit, error) {
-	log.Debug().Any("visit", visit).Msg("Fail visit.")
+	log.Debug().Any("visit", visit).Msg("insert a new visit.")
 
-	err := repository.pg.Create(visit).Error
+	err := repository.db.Create(visit).Error
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to insert visit.")
 		return nil, err
@@ -83,7 +83,7 @@ func (repository *VisitRepository) Insert(visit *Visit) (*Visit, error) {
 func (repository *VisitRepository) Update(visit *Visit) (*Visit, error) {
 	log.Debug().Any("visit", visit).Msg("Update visits.")
 
-	err := repository.pg.Save(visit).Error
+	err := repository.db.Save(visit).Error
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to update visit,.")
 		return nil, err

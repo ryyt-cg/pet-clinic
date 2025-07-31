@@ -14,7 +14,7 @@ type Request struct {
 }
 
 type AddRequest struct {
-	VisitDate   string `json:"visitDate"`
+	VisitDate   string `json:"visitDate" binding:"required"`
 	Description string `json:"description" binding:"required"`
 	PetID       uint   `json:"petID" binding:"required"`
 }

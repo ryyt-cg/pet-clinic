@@ -51,7 +51,7 @@ func (vetRouter *Router) vetById(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	response, err := vetRouter.service.getVetById(id)
+	response, err := vetRouter.service.getVetById(uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
@@ -122,7 +122,7 @@ func (vetRouter *Router) getVetByIdWithSpecialties(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	response, err := vetRouter.service.getVetByIdWithSpecialties(id)
+	response, err := vetRouter.service.getVetByIdWithSpecialties(uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Error().Err(err).Int("id", id).Msg("Found no vet.")
@@ -138,14 +138,14 @@ func (vetRouter *Router) getVetByIdWithSpecialties(c *fiber.Ctx) error {
 
 // addNewVet - add new vet
 func (vetRouter *Router) create(c *fiber.Ctx) error {
-	var vetRequest Request
+	var vetRequest AddRequest
 	err := c.BodyParser(&vetRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	newVet, err := vetRouter.service.create(ToVet(&vetRequest))
+	newVet, err := vetRouter.service.create(FromAddRequest(&vetRequest))
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to create new vet.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
@@ -154,7 +154,7 @@ func (vetRouter *Router) create(c *fiber.Ctx) error {
 }
 
 func (vetRouter *Router) update(c *fiber.Ctx) error {
-	var vetRequest Request
+	var vetRequest UpdateRequest
 	id, _ := c.ParamsInt("id")
 	err := c.BodyParser(&vetRequest)
 
@@ -163,7 +163,7 @@ func (vetRouter *Router) update(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	vetEntity := ToVet(&vetRequest)
+	vetEntity := FromUpdateRequest(&vetRequest)
 	vetEntity.ID = uint(id)
 	newVet, err := vetRouter.service.update(vetEntity)
 	if err != nil {

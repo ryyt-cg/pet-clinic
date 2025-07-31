@@ -8,8 +8,8 @@ import (
 
 type Servicer interface {
 	getAllSpecialties() (*specialtiesResponse, error)
-	getVetById(id int) (*Response, error)
-	getVetByIdWithSpecialties(id int) (*Response, error)
+	getVetById(id uint) (*Response, error)
+	getVetByIdWithSpecialties(id uint) (*Response, error)
 	getVetByLastName(lastName string) (*Responses, error)
 	getAllVets() (*Responses, error)
 	getAllVetsWithSpecialties() (*Responses, error)
@@ -33,18 +33,16 @@ func (service *Service) getAllSpecialties() (*specialtiesResponse, error) {
 		return nil, err
 	}
 
-	specialtyResponses := ToSpecialtyResponses(specialties)
-
-	return &specialtiesResponse{
-		Specialties: *specialtyResponses,
-	}, nil
+	specialtiesResponses := ToSpecialtiesResponses(specialties)
+	return specialtiesResponses, nil
 }
 
 // getVetById - retrieve vet by id
-func (service *Service) getVetById(id int) (*Response, error) {
+func (service *Service) getVetById(id uint) (*Response, error) {
+	log.Debug().Uint("id", id).Msg("GET vet by id")
 	vet, err := service.repository.FindById(id)
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve vet by id.")
+		log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve vet by id.")
 		return nil, err
 	}
 
@@ -53,10 +51,10 @@ func (service *Service) getVetById(id int) (*Response, error) {
 	return response, nil
 }
 
-func (service *Service) getVetByIdWithSpecialties(id int) (*Response, error) {
+func (service *Service) getVetByIdWithSpecialties(id uint) (*Response, error) {
 	vet, err := service.repository.FindByIdWithSpecialties(id)
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve vet by id with specialties")
+		log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve vet by id with specialties")
 		return nil, err
 	}
 
@@ -99,10 +97,8 @@ func (service *Service) getAllVetsWithSpecialties() (*Responses, error) {
 		log.Error().Err(err).Msg("Fail to retrieve all vets.")
 		return nil, err
 	}
-	log.Debug().Int("count", len(vets)).Msg("counts of all vets.")
-	vetsJson := FromVets(vets)
-	contextJson := model.Context{Count: len(vetsJson)}
-	return &Responses{Vets: vetsJson, Context: contextJson}, nil
+
+	return ToResponses(vets), nil
 }
 
 // create - create new vet
@@ -112,7 +108,7 @@ func (service *Service) create(vet *repository.Vet) (*Response, error) {
 
 	if err != nil {
 		log.Error().Err(err).Msg("Fail new vet failed.")
-		return &Response{}, err
+		return nil, err
 	}
 
 	response := &Response{}

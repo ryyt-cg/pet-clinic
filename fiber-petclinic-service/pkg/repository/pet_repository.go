@@ -87,7 +87,7 @@ func (repository *PetRepository) Insert(pet *Pet) (*Pet, error) {
 
 // Update - update a pet
 func (repository *PetRepository) Update(pet *Pet) (*Pet, error) {
-	//log.Debug().Int("id", pet.ID).Msg("Fail vet id.")
+	log.Debug().Uint("id", pet.ID).Msg("Update vet by id.")
 
 	// Omit the column name from update...
 	err := repository.db.Omit("created_at").Save(&pet).Error

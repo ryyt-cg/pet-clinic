@@ -43,7 +43,7 @@ func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
 	// Pets.Type - Nested Preloading (Eager Loading)
 	err := repository.db.First(&owner, id).Error
 	if err != nil {
-		log.Error().Uint("id", id).Msg("Fail to find owner by id.")
+		log.Error().Err(err).Uint("id", id).Msg("Fail to find owner by id.")
 		return nil, err
 	}
 	return &owner, nil
@@ -53,7 +53,7 @@ func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
 //
 // SELECT * FROM "owners" WHERE last_name = 'Rodriquez' AND "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, error) {
-	log.Debug().Str("lastName", lastName).Msg("Search owner by last name")
+	log.Debug().Str("lastName", lastName).Msg("Search owner by last name.")
 
 	// Pets.Type - Nested Preloading (Eager Loading)
 	var owners []Owner

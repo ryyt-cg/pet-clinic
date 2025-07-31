@@ -26,8 +26,8 @@ func TestResponseFromVet(t *testing.T) {
 	assert.Equal(t, vet.ID, response.ID)
 	assert.Equal(t, vet.FirstName, response.FirstName)
 	assert.Equal(t, vet.LastName, response.LastName)
-	assert.Equal(t, len(vet.Specialties), len(response.Specialties))
-	for i, specialty := range response.Specialties {
+	assert.Equal(t, len(vet.Specialties), len(*response.Specialties))
+	for i, specialty := range *response.Specialties {
 		assert.Equal(t, vet.Specialties[i].ID, specialty.ID)
 		assert.Equal(t, vet.Specialties[i].Name, specialty.Name)
 	}
@@ -65,8 +65,8 @@ func TestFromVets(t *testing.T) {
 		assert.Equal(t, vets[i].ID, response.ID)
 		assert.Equal(t, vets[i].FirstName, response.FirstName)
 		assert.Equal(t, vets[i].LastName, response.LastName)
-		assert.Equal(t, len(vets[i].Specialties), len(response.Specialties))
-		for j, specialty := range response.Specialties {
+		assert.Equal(t, len(vets[i].Specialties), len(*response.Specialties))
+		for j, specialty := range *response.Specialties {
 			assert.Equal(t, vets[i].Specialties[j].ID, specialty.ID)
 			assert.Equal(t, vets[i].Specialties[j].Name, specialty.Name)
 		}
