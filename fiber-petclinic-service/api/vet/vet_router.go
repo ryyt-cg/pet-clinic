@@ -23,9 +23,9 @@ func (vetRouter *Router) Register(route fiber.Router) {
 	route.Get("all", vetRouter.allVets)
 	route.Get(":id", vetRouter.vetById)
 	route.Get(":id/specialties", vetRouter.getVetByIdWithSpecialties)
-	//route.Get("", vetRouter.vetByParam)
 	route.Post("", vetRouter.create)
 	route.Put(":id", vetRouter.update)
+	//route.Get("", vetRouter.vetByParam)
 }
 
 // allSpecialties - retrieve all specialties
@@ -34,55 +34,16 @@ func (vetRouter *Router) allSpecialties(c *fiber.Ctx) error {
 	log.Info().Msg("Retrieving all specialties")
 	responses, err := vetRouter.service.getAllSpecialties()
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Msg("No specialties found.")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No specialties found"))
+		}
 		log.Error().Err(err).Msg("Unable to get all specialties.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
 	return c.Status(fiber.StatusOK).JSON(responses)
 }
-
-// vetById - retrieve vet by id
-func (vetRouter *Router) vetById(c *fiber.Ctx) error {
-	pathID := c.Params("id")
-	log.Info().Str("id", pathID).Msg("Retrieving vet by id")
-
-	id, err := c.ParamsInt("id")
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	}
-
-	response, err := vetRouter.service.getVetById(uint(id))
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
-		}
-
-		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
-	}
-
-	return c.Status(fiber.StatusOK).JSON(response)
-}
-
-//func (vetRouter *Router) vetByParam(c *fiber.Ctx) error {
-//	var nameParam api.NameParam
-//	err := c.BodyParser(&nameParam)
-//	if err != nil {
-//		log.Error().Err(err).Msg("Unable to bind query param.")
-//		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-//	}
-//
-//	return vetRouter.byLastName(c, nameParam)
-//}
-
-// vetByLastName - retrieve vet by last name
-//func (vetRouter *Router) byLastName(c *fiber.Ctx, param api.NameParam) error {
-//	response, err := vetRouter.service.getVetByLastName(param.Name)
-//	if err != nil {
-//		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
-//	}
-//
-//	c.JSON(http.StatusOK, response)
-//}
 
 // AllVets - retrieve all vets
 // @Tags	vets
@@ -109,6 +70,28 @@ func (vetRouter *Router) allVets(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(responses)
+}
+
+// vetById - retrieve vet by id
+func (vetRouter *Router) vetById(c *fiber.Ctx) error {
+	pathID := c.Params("id")
+	log.Info().Str("id", pathID).Msg("Retrieving vet by id")
+
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
+
+	response, err := vetRouter.service.getVetById(uint(id))
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
+		}
+
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+	}
+
+	return c.Status(fiber.StatusOK).JSON(response)
 }
 
 // AllVetsWithSpecialties - retrieve all vets with specialties
@@ -155,9 +138,13 @@ func (vetRouter *Router) create(c *fiber.Ctx) error {
 
 func (vetRouter *Router) update(c *fiber.Ctx) error {
 	var vetRequest UpdateRequest
-	id, _ := c.ParamsInt("id")
-	err := c.BodyParser(&vetRequest)
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		log.Error().Err(err).Msg("Unable to convert ID to integer.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 
+	err = c.BodyParser(&vetRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
@@ -175,3 +162,24 @@ func (vetRouter *Router) update(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusOK).JSON(newVet)
 }
+
+//func (vetRouter *Router) vetByParam(c *fiber.Ctx) error {
+//	var nameParam api.NameParam
+//	err := c.BodyParser(&nameParam)
+//	if err != nil {
+//		log.Error().Err(err).Msg("Unable to bind query param.")
+//		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+//	}
+//
+//	return vetRouter.byLastName(c, nameParam)
+//}
+
+// vetByLastName - retrieve vet by last name
+//func (vetRouter *Router) byLastName(c *fiber.Ctx, param api.NameParam) error {
+//	response, err := vetRouter.service.getVetByLastName(param.Name)
+//	if err != nil {
+//		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+//	}
+//
+//	c.JSON(http.StatusOK, response)
+//}

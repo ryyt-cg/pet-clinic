@@ -4,6 +4,7 @@ import (
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"gorm.io/gorm"
 )
 
 //type Request struct {
@@ -45,6 +46,9 @@ func FromAddRequest(vetRequest *AddRequest) *repository.Vet {
 
 func FromUpdateRequest(vetRequest *UpdateRequest) *repository.Vet {
 	return &repository.Vet{
+		Model: gorm.Model{
+			ID: vetRequest.ID,
+		},
 		Person: model.Person{
 			FirstName: vetRequest.FirstName,
 			LastName:  vetRequest.LastName,
