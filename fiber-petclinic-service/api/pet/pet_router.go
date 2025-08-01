@@ -76,7 +76,7 @@ func (router *Router) getById(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	response, err := router.service.getPetById(id)
+	response, err := router.service.getPetById(uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Error().Err(err).Msg("find no pet by this id.")
@@ -111,7 +111,7 @@ func (router *Router) getWithVisitsById(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	response, err := router.service.getPetWithVisitsById(id)
+	response, err := router.service.getPetWithVisitsById(uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Error().Err(err).Msg("find no pet by this id.")

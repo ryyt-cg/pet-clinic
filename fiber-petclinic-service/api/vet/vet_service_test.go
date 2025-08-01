@@ -41,6 +41,13 @@ func Test_getAllSpecialties(t *testing.T) {
 			expectedError: nil,
 		},
 		{
+			name:          "get no specialties",
+			mockSpecs:     nil,
+			mockError:     gorm.ErrRecordNotFound,
+			expectedSpecs: nil,
+			expectedError: gorm.ErrRecordNotFound,
+		},
+		{
 			name:          "fail to get all specialties",
 			mockSpecs:     nil,
 			mockError:     errors.New("getAllSpecialties: unable to retrieve specialties"),
@@ -102,6 +109,14 @@ func Test_getById(t *testing.T) {
 			expectedError: nil,
 		},
 		{
+			name:          "get no vet by id",
+			id:            2,
+			mockVet:       nil,
+			mockError:     gorm.ErrRecordNotFound,
+			expectedVet:   nil,
+			expectedError: gorm.ErrRecordNotFound,
+		},
+		{
 			name:          "get vet by id with error",
 			id:            2,
 			mockVet:       nil,
@@ -109,7 +124,6 @@ func Test_getById(t *testing.T) {
 			expectedVet:   nil,
 			expectedError: errors.New("getById: unable to find vet by id"),
 		},
-		// Add more test cases as needed
 	}
 
 	for _, tc := range testCases {
@@ -184,6 +198,14 @@ func Test_getByIdWithSpecialties(t *testing.T) {
 			expectedError: nil,
 		},
 		{
+			name:          "get no vet by id with specialties",
+			id:            2,
+			mockVet:       nil,
+			mockError:     gorm.ErrRecordNotFound,
+			expectedVet:   nil,
+			expectedError: gorm.ErrRecordNotFound,
+		},
+		{
 			name:          "fail to get vet by id with specialties",
 			id:            2,
 			mockVet:       nil,
@@ -191,7 +213,6 @@ func Test_getByIdWithSpecialties(t *testing.T) {
 			expectedVet:   nil,
 			expectedError: errors.New("getById: unable to find vet by id"),
 		},
-		// Add more test cases as needed
 	}
 
 	for _, tc := range testCases {
@@ -260,6 +281,14 @@ func Test_getByLastName(t *testing.T) {
 				},
 			},
 			expectedError: nil,
+		},
+		{
+			name:          "get no vet by last namer",
+			lastName:      "DiCaprio",
+			mockVets:      nil,
+			mockError:     gorm.ErrRecordNotFound,
+			expectedVets:  nil,
+			expectedError: gorm.ErrRecordNotFound,
 		},
 		{
 			name:          "fail to get vet by last namer",
@@ -333,6 +362,13 @@ func Test_getAllVets(t *testing.T) {
 				},
 			},
 			expectedError: nil,
+		},
+		{
+			name:          "get no vets",
+			mockVets:      nil,
+			mockError:     gorm.ErrRecordNotFound,
+			expectedVets:  nil,
+			expectedError: gorm.ErrRecordNotFound,
 		},
 		{
 			name:          "fail to get all vets",
@@ -416,6 +452,13 @@ func Test_getAllVetsWithSpecialties(t *testing.T) {
 				},
 			},
 			expectedError: nil,
+		},
+		{
+			name:          "get no vets with specialties",
+			mockVets:      nil,
+			mockError:     gorm.ErrRecordNotFound,
+			expectedVets:  nil,
+			expectedError: gorm.ErrRecordNotFound,
 		},
 		{
 			name:          "fail to get all vets",
@@ -535,6 +578,13 @@ func Test_update(t *testing.T) {
 				LastName:  "DiCaprio",
 			},
 			expectedError: nil,
+		},
+		{
+			name:          "found no vet to update",
+			mockVet:       nil,
+			mockError:     gorm.ErrRecordNotFound,
+			expectedVet:   nil,
+			expectedError: gorm.ErrRecordNotFound,
 		},
 		{
 			name:          "fail to update vet",

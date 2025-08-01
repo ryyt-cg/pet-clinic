@@ -1,15 +1,17 @@
 package pet
 
 import (
+	"errors"
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 )
 
 type Servicer interface {
 	getAllPets() (*Responses, error)
-	getPetById(id int) (*Response, error)
-	getPetWithVisitsById(id int) (*Response, error)
+	getPetById(id uint) (*Response, error)
+	getPetWithVisitsById(id uint) (*Response, error)
 	getPetsByName(name string) ([]Response, error)
 	create(pet *repository.Pet) (*Response, error)
 	update(pet *repository.Pet) (*Response, error)
@@ -28,6 +30,10 @@ func (service *Service) getAllPets() (*Responses, error) {
 	log.Debug().Msg("Retrieve all pets")
 	pets, err := service.repository.FindAll()
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Msg("No pets found.")
+			return nil, gorm.ErrRecordNotFound
+		}
 		log.Error().Err(err).Msg("Fail to retrieve all pets.")
 		return nil, err
 	}
@@ -38,11 +44,15 @@ func (service *Service) getAllPets() (*Responses, error) {
 }
 
 // getPetById - retrieve pet by id
-func (service *Service) getPetById(id int) (*Response, error) {
-	log.Debug().Int("id", id).Msg("Retrieve pet by id.")
+func (service *Service) getPetById(id uint) (*Response, error) {
+	log.Debug().Uint("id", id).Msg("Retrieve pet by id.")
 	petF, err := service.repository.FindById(id)
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve pet by id.")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Uint("id", id).Msg("Pet by id not found.")
+			return nil, gorm.ErrRecordNotFound
+		}
+		log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve pet by id.")
 		return nil, err
 	}
 
@@ -51,11 +61,15 @@ func (service *Service) getPetById(id int) (*Response, error) {
 	return response, nil
 }
 
-func (service *Service) getPetWithVisitsById(id int) (*Response, error) {
-	log.Debug().Int("id", id).Msg("Retrieve pet by id.")
+func (service *Service) getPetWithVisitsById(id uint) (*Response, error) {
+	log.Debug().Uint("id", id).Msg("Retrieve pet by id.")
 	petF, err := service.repository.FindByIdWithVisits(id)
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve pet by id.")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Uint("id", id).Msg("Pet by id not found.")
+			return nil, gorm.ErrRecordNotFound
+		}
+		log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve pet by id.")
 		return nil, err
 	}
 
@@ -70,6 +84,10 @@ func (service *Service) getPetsByName(name string) ([]Response, error) {
 
 	pets, err := service.repository.FindByName(name)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Str("name", name).Msg("No pets found with this name.")
+			return nil, gorm.ErrRecordNotFound
+		}
 		log.Error().Err(err).Str("name", name).Msg("Fail to retrieve pet by name.")
 		return nil, err
 	}
@@ -98,6 +116,10 @@ func (service *Service) update(pet *repository.Pet) (*Response, error) {
 	updatedPet, err := service.repository.Update(pet)
 
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Err(err).Msg("No pet found for update.")
+			return nil, gorm.ErrRecordNotFound
+		}
 		log.Error().Err(err).Msg("Fail to Update pet.")
 		return nil, err
 	}

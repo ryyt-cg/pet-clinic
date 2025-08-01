@@ -48,7 +48,7 @@ func getPetRepository(t *testing.T) *PetRepository {
 func (suite *PetRepoTestSuite) Test_FindById() {
 
 	var testCases = []struct {
-		input    int
+		input    uint
 		expected string
 	}{
 		{1, "Leo"},

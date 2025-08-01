@@ -48,7 +48,7 @@ func getVetRepository(t *testing.T) *VetRepository {
 
 func (suite *VetRepoTestSuite) Test_FindById() {
 	var testCases = []struct {
-		input    int
+		input    uint
 		expected Vet
 	}{
 		{1, Vet{

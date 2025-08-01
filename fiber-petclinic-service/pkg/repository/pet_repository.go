@@ -7,8 +7,8 @@ import (
 
 type PetRepositorier interface {
 	FindAll() ([]Pet, error)
-	FindById(id int) (*Pet, error)
-	FindByIdWithVisits(id int) (*Pet, error)
+	FindById(id uint) (*Pet, error)
+	FindByIdWithVisits(id uint) (*Pet, error)
 	FindByName(name string) ([]Pet, error)
 	Insert(pet *Pet) (*Pet, error)
 	Update(pet *Pet) (*Pet, error)
@@ -44,16 +44,16 @@ SELECT "pets"."id","pets"."created_at","pets"."updated_at","pets"."deleted_at","
 	FROM "pets" LEFT JOIN "types" "Type" ON "pets"."type_id" = "Type"."id"
 	WHERE pets.id = 2 AND "pets"."deleted_at" IS NULL ORDER BY "pets"."id" LIMIT 1
 */
-func (repository *PetRepository) FindById(id int) (*Pet, error) {
-	log.Debug().Int("id", id).Msg("Search pet by id.")
+func (repository *PetRepository) FindById(id uint) (*Pet, error) {
+	log.Debug().Uint("id", id).Msg("Search pet by id.")
 
 	var pet Pet
 	result := repository.db.Joins("Type").Where("pets.id = ?", id).First(&pet)
 	return &pet, result.Error
 }
 
-func (repository *PetRepository) FindByIdWithVisits(id int) (*Pet, error) {
-	log.Debug().Int("id", id).Msg("Search pet by id.")
+func (repository *PetRepository) FindByIdWithVisits(id uint) (*Pet, error) {
+	log.Debug().Uint("id", id).Msg("Search pet by id.")
 
 	var pet Pet
 	result := repository.db.Joins("Type").Preload("Visits").Where("pets.id = ?", id).First(&pet)

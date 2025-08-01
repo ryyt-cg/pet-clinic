@@ -483,7 +483,7 @@ func (_c *MockPetRepositorier_FindAll_Call) RunAndReturn(run func() ([]Pet, erro
 }
 
 // FindById provides a mock function for the type MockPetRepositorier
-func (_mock *MockPetRepositorier) FindById(id int) (*Pet, error) {
+func (_mock *MockPetRepositorier) FindById(id uint) (*Pet, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
@@ -492,17 +492,17 @@ func (_mock *MockPetRepositorier) FindById(id int) (*Pet, error) {
 
 	var r0 *Pet
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(int) (*Pet, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) (*Pet, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(int) *Pet); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) *Pet); ok {
 		r0 = returnFunc(id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Pet)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(int) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(uint) error); ok {
 		r1 = returnFunc(id)
 	} else {
 		r1 = ret.Error(1)
@@ -516,16 +516,16 @@ type MockPetRepositorier_FindById_Call struct {
 }
 
 // FindById is a helper method to define mock.On call
-//   - id int
+//   - id uint
 func (_e *MockPetRepositorier_Expecter) FindById(id interface{}) *MockPetRepositorier_FindById_Call {
 	return &MockPetRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
 }
 
-func (_c *MockPetRepositorier_FindById_Call) Run(run func(id int)) *MockPetRepositorier_FindById_Call {
+func (_c *MockPetRepositorier_FindById_Call) Run(run func(id uint)) *MockPetRepositorier_FindById_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 int
+		var arg0 uint
 		if args[0] != nil {
-			arg0 = args[0].(int)
+			arg0 = args[0].(uint)
 		}
 		run(
 			arg0,
@@ -539,13 +539,13 @@ func (_c *MockPetRepositorier_FindById_Call) Return(pet *Pet, err error) *MockPe
 	return _c
 }
 
-func (_c *MockPetRepositorier_FindById_Call) RunAndReturn(run func(id int) (*Pet, error)) *MockPetRepositorier_FindById_Call {
+func (_c *MockPetRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Pet, error)) *MockPetRepositorier_FindById_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // FindByIdWithVisits provides a mock function for the type MockPetRepositorier
-func (_mock *MockPetRepositorier) FindByIdWithVisits(id int) (*Pet, error) {
+func (_mock *MockPetRepositorier) FindByIdWithVisits(id uint) (*Pet, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
@@ -554,17 +554,17 @@ func (_mock *MockPetRepositorier) FindByIdWithVisits(id int) (*Pet, error) {
 
 	var r0 *Pet
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(int) (*Pet, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) (*Pet, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(int) *Pet); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) *Pet); ok {
 		r0 = returnFunc(id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Pet)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(int) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(uint) error); ok {
 		r1 = returnFunc(id)
 	} else {
 		r1 = ret.Error(1)
@@ -578,16 +578,16 @@ type MockPetRepositorier_FindByIdWithVisits_Call struct {
 }
 
 // FindByIdWithVisits is a helper method to define mock.On call
-//   - id int
+//   - id uint
 func (_e *MockPetRepositorier_Expecter) FindByIdWithVisits(id interface{}) *MockPetRepositorier_FindByIdWithVisits_Call {
 	return &MockPetRepositorier_FindByIdWithVisits_Call{Call: _e.mock.On("FindByIdWithVisits", id)}
 }
 
-func (_c *MockPetRepositorier_FindByIdWithVisits_Call) Run(run func(id int)) *MockPetRepositorier_FindByIdWithVisits_Call {
+func (_c *MockPetRepositorier_FindByIdWithVisits_Call) Run(run func(id uint)) *MockPetRepositorier_FindByIdWithVisits_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 int
+		var arg0 uint
 		if args[0] != nil {
-			arg0 = args[0].(int)
+			arg0 = args[0].(uint)
 		}
 		run(
 			arg0,
@@ -601,7 +601,7 @@ func (_c *MockPetRepositorier_FindByIdWithVisits_Call) Return(pet *Pet, err erro
 	return _c
 }
 
-func (_c *MockPetRepositorier_FindByIdWithVisits_Call) RunAndReturn(run func(id int) (*Pet, error)) *MockPetRepositorier_FindByIdWithVisits_Call {
+func (_c *MockPetRepositorier_FindByIdWithVisits_Call) RunAndReturn(run func(id uint) (*Pet, error)) *MockPetRepositorier_FindByIdWithVisits_Call {
 	_c.Call.Return(run)
 	return _c
 }
