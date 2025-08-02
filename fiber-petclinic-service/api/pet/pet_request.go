@@ -2,6 +2,7 @@ package pet
 
 import (
 	"fiber-petclinic-service/pkg/repository"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -27,12 +28,49 @@ type UpdateRequest struct {
 	OwnerID   uint   `json:"ownerID" binding:"required"`
 }
 
-func ToPet(petRequest *Request) *repository.Pet {
-	birthday, _ := time.Parse(time.DateOnly, petRequest.Birthdate)
-	return &repository.Pet{
+func ToPet(petRequest *Request) (*repository.Pet, error) {
+	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
+	if err != nil {
+		return nil, err
+	}
+
+	petEntity := &repository.Pet{
 		Name:      petRequest.Name,
-		Birthdate: birthday,
+		Birthdate: &birthday,
 		TypeID:    petRequest.TypeID,
 		OwnerID:   petRequest.OwnerID,
 	}
+
+	return petEntity, nil
+}
+
+func FromAddRequest(petRequest *AddRequest) (*repository.Pet, error) {
+	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
+	if err != nil {
+		return nil, err
+	}
+
+	return &repository.Pet{
+		Name:      petRequest.Name,
+		Birthdate: &birthday,
+		TypeID:    petRequest.TypeID,
+		OwnerID:   petRequest.OwnerID,
+	}, nil
+}
+
+func FromUpdateRequest(petRequest *UpdateRequest) (*repository.Pet, error) {
+	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
+	if err != nil {
+		return nil, err
+	}
+
+	return &repository.Pet{
+		Model: gorm.Model{
+			ID: petRequest.ID,
+		},
+		Name:      petRequest.Name,
+		Birthdate: &birthday,
+		TypeID:    petRequest.TypeID,
+		OwnerID:   petRequest.OwnerID,
+	}, nil
 }

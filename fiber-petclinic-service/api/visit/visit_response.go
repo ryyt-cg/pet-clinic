@@ -29,9 +29,12 @@ type Responses struct {
 // Map from repository visit to json visit response
 func (vr *Response) FromVisit(visit *repository.Visit) {
 	vr.ID = visit.ID
-	if visit.VisitDate != nil {
+	if visit.VisitDate == nil {
+		vr.VisitDate = ""
+	} else {
 		vr.VisitDate = visit.VisitDate.Format(time.DateOnly)
 	}
+
 	vr.Description = visit.Description
 	vr.PetID = visit.PetID
 }

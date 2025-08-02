@@ -2,6 +2,7 @@ package owner
 
 import (
 	"fiber-petclinic-service/api/pet"
+	"fiber-petclinic-service/api/visit"
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
 	"github.com/stretchr/testify/assert"
@@ -31,7 +32,7 @@ func Test_ResponseFromOwner(t *testing.T) {
 		Address:   "123 Main St",
 		City:      "Anytown",
 		Telephone: "1234567890",
-		Pets:      nil,
+		Pets:      []pet.Response{},
 	}
 
 	response := &Response{}
@@ -57,7 +58,6 @@ func Test_FromOwners(t *testing.T) {
 			Address:   "123 Main St",
 			City:      "Anytown",
 			Telephone: "1234567890",
-			Pets:      nil,
 		},
 		{
 			Model: gorm.Model{ID: 2},
@@ -66,7 +66,6 @@ func Test_FromOwners(t *testing.T) {
 			Address:   "456 Main St",
 			City:      "Anytown",
 			Telephone: "0987654321",
-			Pets:      []repository.Pet{},
 		},
 		{
 			Model: gorm.Model{ID: 3},
@@ -81,19 +80,23 @@ func Test_FromOwners(t *testing.T) {
 		},
 	}
 
-	exceptionResponses := []Response{
-		{ID: 1, FirstName: "John", LastName: "Doe", Address: "123 Main St", City: "Anytown", Telephone: "1234567890"},
-		{ID: 2, FirstName: "Jane", LastName: "Doe", Address: "456 Main St", City: "Anytown", Telephone: "0987654321"},
+	ownerResponses := []Response{
+		{ID: 1, FirstName: "John", LastName: "Doe", Address: "123 Main St", City: "Anytown", Telephone: "1234567890",
+			Pets: []pet.Response{},
+		},
+		{ID: 2, FirstName: "Jane", LastName: "Doe", Address: "456 Main St", City: "Anytown", Telephone: "0987654321",
+			Pets: []pet.Response{},
+		},
 		{ID: 3, FirstName: "Jane", LastName: "Doe", Address: "456 Main St", City: "Anytown", Telephone: "0987654321",
-			Pets: &[]pet.Response{
-				{ID: 1, Name: "Pet1"},
+			Pets: []pet.Response{
+				{ID: 1, Name: "Pet1", Visits: []visit.Response{}},
 			}},
 	}
 
 	responses := FromOwners(owners)
 
-	assert.Equal(t, len(exceptionResponses), len(responses))
-	for i, owner := range exceptionResponses {
+	assert.Equal(t, len(ownerResponses), len(responses))
+	for i, owner := range ownerResponses {
 		assert.Equal(t, owner, responses[i])
 	}
 }

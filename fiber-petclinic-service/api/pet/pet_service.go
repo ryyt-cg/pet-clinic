@@ -12,7 +12,7 @@ type Servicer interface {
 	getAllPets() (*Responses, error)
 	getPetById(id uint) (*Response, error)
 	getPetWithVisitsById(id uint) (*Response, error)
-	getPetsByName(name string) ([]Response, error)
+	getPetsByName(name string) (*Responses, error)
 	create(pet *repository.Pet) (*Response, error)
 	update(pet *repository.Pet) (*Response, error)
 }
@@ -79,8 +79,8 @@ func (service *Service) getPetWithVisitsById(id uint) (*Response, error) {
 }
 
 // getPetByName - retrieve pet by name
-func (service *Service) getPetsByName(name string) ([]Response, error) {
-	log.Debug().Str("name", name).Msg("Fail pet by name.")
+func (service *Service) getPetsByName(name string) (*Responses, error) {
+	log.Debug().Str("name", name).Msg("retrieve pets by name.")
 
 	pets, err := service.repository.FindByName(name)
 	if err != nil {
@@ -88,11 +88,11 @@ func (service *Service) getPetsByName(name string) ([]Response, error) {
 			log.Error().Str("name", name).Msg("No pets found with this name.")
 			return nil, gorm.ErrRecordNotFound
 		}
-		log.Error().Err(err).Str("name", name).Msg("Fail to retrieve pet by name.")
+		log.Error().Err(err).Str("name", name).Msg("fail to retrieve pets by name.")
 		return nil, err
 	}
 
-	return FromPets(pets), nil
+	return ToResponses(pets), nil
 }
 
 // create - create new pet
@@ -102,7 +102,7 @@ func (service *Service) create(pet *repository.Pet) (*Response, error) {
 
 	if err != nil {
 		log.Error().Err(err).Msg("Fail new pet failed.")
-		return &Response{}, err
+		return nil, err
 	}
 
 	response := &Response{}

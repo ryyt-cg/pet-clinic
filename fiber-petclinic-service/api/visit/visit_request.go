@@ -27,28 +27,32 @@ type UpdateRequest struct {
 }
 
 func FromAddRequest(request *AddRequest) (*repository.Visit, error) {
+	visitEntify := &repository.Visit{
+		Description: request.Description,
+		PetID:       request.PetID,
+	}
+
 	visitDate, err := time.Parse(time.DateOnly, request.VisitDate)
 	if err != nil {
 		return nil, err
 	}
 
-	return &repository.Visit{
-		VisitDate:   &visitDate,
-		Description: request.Description,
-		PetID:       request.PetID,
-	}, nil
+	visitEntify.VisitDate = &visitDate
+	return visitEntify, nil
 }
 
 func FromUpdateRequest(request *UpdateRequest) (*repository.Visit, error) {
+	visitEntify := &repository.Visit{
+		Model:       gorm.Model{ID: request.ID},
+		Description: request.Description,
+		PetID:       request.PetID,
+	}
+
 	visitDate, err := time.Parse(time.DateOnly, request.VisitDate)
 	if err != nil {
 		return nil, err
 	}
 
-	return &repository.Visit{
-		Model:       gorm.Model{ID: request.ID},
-		VisitDate:   &visitDate,
-		Description: request.Description,
-		PetID:       request.PetID,
-	}, nil
+	visitEntify.VisitDate = &visitDate
+	return visitEntify, nil
 }

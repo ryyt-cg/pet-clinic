@@ -33,14 +33,13 @@ func (ur *UpdateResponse) FromUpdateEntity(owner *repository.Owner) {
 
 // Response - owner response
 type Response struct {
-	ID        uint   `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Address   string `json:"address"`
-	City      string `json:"city"`
-	Telephone string `json:"telephone"`
-	// Must set pointer because it could be omitted
-	Pets *[]pet.Response `json:"pets,omitempty"`
+	ID        uint           `json:"id"`
+	FirstName string         `json:"firstName"`
+	LastName  string         `json:"lastName"`
+	Address   string         `json:"address"`
+	City      string         `json:"city"`
+	Telephone string         `json:"telephone"`
+	Pets      []pet.Response `json:"pets,omitempty"`
 }
 
 // Responses - list of owners
@@ -56,12 +55,7 @@ func (resp *Response) FromOwner(owner *repository.Owner) {
 	resp.Address = owner.Address
 	resp.City = owner.City
 	resp.Telephone = owner.Telephone
-	pets := pet.FromPets(owner.Pets)
-	if len(pets) == 0 {
-		resp.Pets = nil
-	} else {
-		resp.Pets = &pets
-	}
+	resp.Pets = pet.FromPets(owner.Pets)
 }
 
 func FromOwners(owners []repository.Owner) []Response {

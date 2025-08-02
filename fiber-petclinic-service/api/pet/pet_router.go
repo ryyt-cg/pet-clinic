@@ -2,9 +2,7 @@ package pet
 
 import (
 	"errors"
-	"fiber-petclinic-service/api"
 	resterr "fiber-petclinic-service/pkg/errors"
-	"fiber-petclinic-service/pkg/repository/model"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
@@ -137,35 +135,31 @@ func (router *Router) getWithVisitsById(c *fiber.Ctx) error {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets 			[get]
 func (router *Router) getByQueryParam(c *fiber.Ctx) error {
-	var nameParam api.NameParam
-	err := c.BodyParser(&nameParam)
-	if err != nil {
-		log.Error().Err(err).Msg("Unable to bind query param.")
-		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	log.Info().Msg("GET pet by query param")
+	val := c.Query("name")
+	if val == "" {
+		log.Error().Msg("param name is empty.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest("pet name is empty"))
 	}
 
-	return router.getByName(c, nameParam)
+	return router.getByName(c, val)
 }
 
 // petByName - get pet by name
-func (router *Router) getByName(c *fiber.Ctx, param api.NameParam) error {
-	pets, err := router.service.getPetsByName(param.Name)
+func (router *Router) getByName(c *fiber.Ctx, param string) error {
+	log.Info().Str("name", param).Msg("GET pet by name")
+
+	responses, err := router.service.getPetsByName(param)
 
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Warn().Str("name", param).Msg("find no pet by this name")
+			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No pets found with name: " + param))
+		}
+		log.Error().Err(err).Msg("Unable to get pets by name.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
 
-	if len(pets) == 0 {
-		log.Warn().Str("name", param.Name).Msg("find no pet by this name")
-		return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No pets found with name: " + param.Name))
-	}
-
-	responses := Responses{
-		Context: model.Context{
-			Count: len(pets),
-		},
-		Pets: pets,
-	}
 	return c.Status(fiber.StatusOK).JSON(responses)
 }
 
@@ -183,7 +177,7 @@ func (router *Router) getByName(c *fiber.Ctx, param api.NameParam) error {
 // @Router		/pets	 		[post]
 func (router *Router) create(c *fiber.Ctx) error {
 	log.Info().Msg("Add a new pet.")
-	var request Request
+	var request *AddRequest
 	err := c.BodyParser(&request)
 
 	if err != nil {
@@ -191,7 +185,13 @@ func (router *Router) create(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	petResponse, err := router.service.create(ToPet(&request))
+	petEntity, err := FromAddRequest(request)
+	if err != nil {
+		log.Error().Err(err).Msg("Invalid request data.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
+
+	petResponse, err := router.service.create(petEntity)
 	return c.Status(fiber.StatusCreated).JSON(petResponse)
 }
 
@@ -228,7 +228,11 @@ func (router *Router) update(c *fiber.Ctx) error {
 	}
 
 	log.Info().Str("name", request.Name).Msg("Update a pet.")
-	petEntity := ToPet(&request)
+	petEntity, err := ToPet(&request)
+	if err != nil {
+		log.Error().Err(err).Msg("Invalid request data.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 	petEntity.ID = uint(id)
 	petResponse, err := router.service.update(petEntity)
 

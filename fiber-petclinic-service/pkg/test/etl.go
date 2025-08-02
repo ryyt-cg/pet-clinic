@@ -11,6 +11,9 @@ func JsonString(obj interface{}) string {
 }
 
 func ToDate(dateStr string) *time.Time {
-	date, _ := time.Parse(time.DateOnly, dateStr)
+	date, err := time.Parse(time.DateOnly, dateStr)
+	if err != nil {
+		return nil
+	}
 	return &date
 }

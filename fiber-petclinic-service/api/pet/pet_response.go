@@ -39,7 +39,13 @@ type AddResponse struct {
 func (pr *Response) FromPet(pet *repository.Pet) {
 	pr.ID = pet.ID
 	pr.Name = pet.Name
-	pr.Birthdate = pet.Birthdate.Format(time.DateOnly)
+
+	if pet.Birthdate == nil {
+		pr.Birthdate = ""
+	} else {
+		// Format the birthdate as a string in the format "YYYY-MM-DD"
+		pr.Birthdate = pet.Birthdate.Format(time.DateOnly)
+	}
 	pr.Type = pet.Type.Name
 	pr.Visits = visit.FromVisits(pet.Visits)
 }
@@ -50,4 +56,10 @@ func FromPets(pets []repository.Pet) []Response {
 		petResponses[i].FromPet(&v)
 	}
 	return petResponses
+}
+
+func ToResponses(pets []repository.Pet) *Responses {
+	petResponses := FromPets(pets)
+	contextJson := model.Context{Count: len(petResponses)}
+	return &Responses{Pets: petResponses, Context: contextJson}
 }

@@ -6,6 +6,7 @@ import (
 	"fiber-petclinic-service/api/visit"
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
+	"fiber-petclinic-service/pkg/test"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
 	"testing"
@@ -247,7 +248,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 		Pets: []repository.Pet{
 			{
 				Name:      "Buddy",
-				Birthdate: time.Date(2010, 1, 1, 0, 0, 0, 0, time.UTC),
+				Birthdate: test.ToDate("2015-02-05"),
 				Type: repository.Type{
 					Name: "Dog",
 				},
@@ -259,10 +260,10 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 		ID:        1,
 		FirstName: "Leo",
 		LastName:  "DiCaprio",
-		Pets: &[]pet.Response{
+		Pets: []pet.Response{
 			{
 				Name:      "Buddy",
-				Birthdate: time.Date(2010, 1, 1, 0, 0, 0, 0, time.UTC).Format(time.DateOnly),
+				Birthdate: "2015-02-05",
 				Type:      "Dog",
 				Visits:    []visit.Response{},
 			},
@@ -308,10 +309,6 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 				assert.Nil(t, result)
 			} else {
 				assert.Equal(t, tc.expectedResult, result)
-				assert.Equal(t, tc.expectedResult.ID, result.ID)
-				assert.Equal(t, tc.expectedResult.FirstName, result.FirstName)
-				assert.Equal(t, tc.expectedResult.LastName, result.LastName)
-				assert.Equal(t, len(*tc.expectedResult.Pets), len(*result.Pets))
 				assert.Nil(t, err)
 			}
 

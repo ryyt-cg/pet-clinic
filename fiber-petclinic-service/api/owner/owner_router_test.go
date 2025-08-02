@@ -138,7 +138,7 @@ func Test_ownerById(t *testing.T) {
 
 	testCases := []struct {
 		name             string
-		id               interface{}
+		id               uint
 		mockOwner        *Response
 		mockError        error
 		route            string
@@ -147,7 +147,7 @@ func Test_ownerById(t *testing.T) {
 	}{
 		{
 			name:             "get owner by ID",
-			id:               int(1),
+			id:               1,
 			mockOwner:        ownerResponse,
 			mockError:        nil,
 			route:            "/v1/owners/1",
@@ -156,7 +156,7 @@ func Test_ownerById(t *testing.T) {
 		},
 		{
 			name:             "get no owner by ID",
-			id:               int(1),
+			id:               1,
 			mockOwner:        nil,
 			mockError:        gorm.ErrRecordNotFound,
 			route:            "/v1/owners/1",
@@ -165,7 +165,7 @@ func Test_ownerById(t *testing.T) {
 		},
 		{
 			name:             "fail to get owner by ID",
-			id:               int(1),
+			id:               1,
 			mockOwner:        nil,
 			mockError:        errors.New("fail to get owner by id"),
 			route:            "/v1/owners/1",
@@ -254,7 +254,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 		Address:   "1234 Elm St",
 		City:      "New York",
 		Telephone: "1234567890",
-		Pets: &[]pet.Response{
+		Pets: []pet.Response{
 			{
 				ID:        1,
 				Name:      "Max",
@@ -283,7 +283,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 
 	testCases := []struct {
 		name             string
-		id               interface{}
+		id               uint
 		mockOwner        *Response
 		mockError        error
 		route            string
@@ -292,7 +292,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 	}{
 		{
 			name:             "get owner with pets by ID",
-			id:               int(1),
+			id:               1,
 			mockOwner:        ownerWithPetsResponse,
 			mockError:        nil,
 			route:            "/v1/owners/1/pets",
@@ -301,7 +301,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 		},
 		{
 			name:             "get owner with no pets by ID",
-			id:               int(2),
+			id:               2,
 			mockOwner:        ownerResponse,
 			mockError:        nil,
 			route:            "/v1/owners/2/pets",
@@ -310,7 +310,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 		},
 		{
 			name:             "get no owner",
-			id:               int(5),
+			id:               5,
 			mockOwner:        nil,
 			mockError:        gorm.ErrRecordNotFound,
 			route:            "/v1/owners/5/pets",
@@ -319,7 +319,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 		},
 		{
 			name:             "fail to get owner by id",
-			id:               int(6),
+			id:               6,
 			mockOwner:        nil,
 			mockError:        resterr.InternalServerError("fail to get owner"),
 			route:            "/v1/owners/6/pets",
@@ -661,7 +661,7 @@ func Test_UpdateOwner(t *testing.T) {
 
 	testCases := []struct {
 		name             string
-		id               interface{}
+		id               uint
 		request          *UpdateRequest
 		mockOwner        *UpdateResponse
 		mockError        error
@@ -671,7 +671,7 @@ func Test_UpdateOwner(t *testing.T) {
 	}{
 		{
 			name:             "update an owner",
-			id:               int(15),
+			id:               15,
 			request:          ownerRequest,
 			mockOwner:        owner,
 			mockError:        nil,
@@ -681,7 +681,7 @@ func Test_UpdateOwner(t *testing.T) {
 		},
 		{
 			name:             "fail to update owner",
-			id:               int(39),
+			id:               39,
 			request:          ownerRequest,
 			mockOwner:        nil,
 			mockError:        errors.New("update: unable to update owner"),
