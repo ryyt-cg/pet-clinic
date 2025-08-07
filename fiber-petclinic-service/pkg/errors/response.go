@@ -2,8 +2,10 @@ package errors
 
 import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-playground/validator/v10"
 	"net/http"
 	"sort"
+	"unicode"
 )
 
 // ErrorResponse is the response that represents an error.
@@ -76,6 +78,31 @@ func BadRequest(msg string) ErrorResponse {
 		Status:  http.StatusBadRequest,
 		Message: msg,
 	}
+}
+
+// BadRequestWithDetails creates a new error response representing a bad request (HTTP 400)
+func BadRequestWithDetails(err error) ErrorResponse {
+	errors, _ := err.(validator.ValidationErrors)
+	e := make(map[string]string)
+	for _, err := range errors {
+		e[lcFirst(err.Field())] = err.Tag()
+	}
+
+	return ErrorResponse{
+		Status:  http.StatusBadRequest,
+		Message: err.Error(),
+		Details: e,
+	}
+}
+
+// lowercase the first letter of the word
+func lcFirst(s string) string {
+	if len(s) > 0 {
+		for i, v := range s {
+			return string(unicode.ToLower(v)) + s[i+1:]
+		}
+	}
+	return s
 }
 
 type invalidField struct {

@@ -61,8 +61,12 @@ func loadConfig() {
 		log.Fatal().Err(err).Msg("Fail to connect the database.")
 	}
 
+	fiberConfig := fiber.Config{
+		AppName:           "fiber-petclinic-service",
+		EnablePrintRoutes: app.Config.Server.EnablePrintRoutes,
+	}
 	// Create a new Fiber instance
-	fiberApp = fiber.New()
+	fiberApp = fiber.New(fiberConfig)
 
 	prometheus := fiberprometheus.New("fiber-petclinic-service")
 	prometheus.RegisterAt(fiberApp, app.Config.Server.BaseURL+"/metrics")
@@ -86,6 +90,7 @@ func loadConfig() {
 		}
 		return c.Next()
 	})
+
 	// Apply global middlewares
 	fiberApp.Use(healthcheck.New())
 	fiberApp.Use(recover.New())   // Recover from panics and continue

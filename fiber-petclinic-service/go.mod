@@ -9,7 +9,6 @@ require (
 	github.com/fergusstrange/embedded-postgres v1.31.0
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/go-playground/validator/v10 v10.27.0
-	github.com/goccy/go-json v0.10.5
 	github.com/gofiber/contrib/circuitbreaker v0.0.1
 	github.com/gofiber/fiber/v2 v2.52.9
 	github.com/json-iterator/go v1.1.12
