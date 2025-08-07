@@ -6,7 +6,7 @@ import (
 )
 
 type VisitRepositorier interface {
-	FindById(id int) (*Visit, error)
+	FindById(id uint) (*Visit, error)
 	FindAll() ([]Visit, error)
 	Insert(visit *Visit) (*Visit, error)
 	Update(visit *Visit) (*Visit, error)
@@ -29,13 +29,13 @@ SELECT * FROM "pets" WHERE "pets"."id" = 8 AND "pets"."deleted_at" IS NULL
 SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
 SELECT * FROM "visits" WHERE "visits"."id" = 2 AND "visits"."deleted_at" IS NULL ORDER BY "visits"."id" LIMIT 1
 */
-func (repository *VisitRepository) FindById(id int) (*Visit, error) {
-	log.Debug().Int("id", id).Msg("Search visit by id.")
+func (repository *VisitRepository) FindById(id uint) (*Visit, error) {
+	log.Debug().Uint("id", id).Msg("Search visit by id.")
 
 	var visit Visit
 	err := repository.db.Preload("Pet.Type").First(&visit, id).Error
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("Fail to find visit by id.")
+		log.Error().Err(err).Uint("id", id).Msg("Fail to find visit by id.")
 		return nil, err
 	}
 

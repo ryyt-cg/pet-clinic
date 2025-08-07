@@ -7,8 +7,8 @@ import (
 
 type VetRepositorier interface {
 	FindAllSpecialties() ([]Specialty, error)
-	FindById(id int) (*Vet, error)
-	FindByIdWithSpecialties(id int) (*Vet, error)
+	FindById(id uint) (*Vet, error)
+	FindByIdWithSpecialties(id uint) (*Vet, error)
 	FindByLastName(lastName string) ([]Vet, error)
 	FindAll() ([]Vet, error)
 	FindAllPreload() ([]Vet, error)
@@ -50,26 +50,26 @@ SELECT * FROM "vet_specialties" WHERE "vet_specialties"."vet_id" = 2
 SELECT * FROM "specialties" WHERE "specialties"."id" = 1 AND "specialties"."deleted_at" IS NULL
 SELECT * FROM "vets" WHERE "vets"."id" = 2 AND "vets"."deleted_at" IS NULL ORDER BY "vets"."id" LIMIT 1
 */
-func (repository *VetRepository) FindById(id int) (*Vet, error) {
-	log.Debug().Int("id", id).Msg("Search vet by id.")
+func (repository *VetRepository) FindById(id uint) (*Vet, error) {
+	log.Debug().Uint("id", id).Msg("Search vet by id.")
 
 	var vet Vet
 	err := repository.db.First(&vet, id).Error
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("Fail to find vet by id.")
+		log.Error().Err(err).Uint("id", id).Msg("Fail to find vet by id.")
 		return nil, err
 	}
 
 	return &vet, err
 }
 
-func (repository *VetRepository) FindByIdWithSpecialties(id int) (*Vet, error) {
-	log.Debug().Int("id", id).Msg("Search vet by id.")
+func (repository *VetRepository) FindByIdWithSpecialties(id uint) (*Vet, error) {
+	log.Debug().Uint("id", id).Msg("Search vet by id.")
 
 	var vet Vet
 	err := repository.db.Preload("Specialties").First(&vet, id).Error
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("Fail to find vet by id.")
+		log.Error().Err(err).Uint("id", id).Msg("Fail to find vet by id.")
 		return nil, err
 	}
 

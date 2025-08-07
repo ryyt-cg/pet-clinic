@@ -1,6 +1,7 @@
 package dbase
 
 import (
+	"context"
 	"gin-petclinic-service/config/app"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -9,12 +10,11 @@ import (
 
 type Sqlite struct{}
 
-func (s *Sqlite) Connect() (*gorm.DB, error) {
+func (s *Sqlite) Connect(ctx context.Context) (*gorm.DB, error) {
 
-	db, err := gorm.Open(sqlite.Open(app.Config.Database.Sqlite.Dsn), &gorm.Config{
+	db, err := gorm.Open(sqlite.Open(app.Config.Databases["primary"].Name), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 		// NamingStrategy: schema.NamingStrategy{SingularTable: true},
-
 	})
 	if err != nil {
 		return nil, err

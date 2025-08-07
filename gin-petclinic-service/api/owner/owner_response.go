@@ -2,9 +2,8 @@ package owner
 
 import (
 	"gin-petclinic-service/api/pet"
-	"gin-petclinic-service/pkg/errors"
-	"gin-petclinic-service/pkg/model"
 	"gin-petclinic-service/pkg/repository"
+	"gin-petclinic-service/pkg/repository/model"
 )
 
 // Owner Responses - A collection of responses (output contracts) for the owner API.
@@ -49,19 +48,14 @@ type Responses struct {
 	Owners  []Response    `json:"owners"`
 }
 
-type exceptionResponse struct {
-	Code          int                  `json:"code"`
-	ErrorResponse errors.ErrorResponse `json:"error"`
-}
-
-func (or *Response) FromOwner(owner *repository.Owner) {
-	or.ID = owner.ID
-	or.FirstName = owner.FirstName
-	or.LastName = owner.LastName
-	or.Address = owner.Address
-	or.City = owner.City
-	or.Telephone = owner.Telephone
-	or.Pets = pet.FromPets(owner.Pets)
+func (resp *Response) FromOwner(owner *repository.Owner) {
+	resp.ID = owner.ID
+	resp.FirstName = owner.FirstName
+	resp.LastName = owner.LastName
+	resp.Address = owner.Address
+	resp.City = owner.City
+	resp.Telephone = owner.Telephone
+	resp.Pets = pet.FromPets(owner.Pets)
 }
 
 func FromOwners(owners []repository.Owner) []Response {

@@ -2,55 +2,73 @@ package visit
 
 import (
 	"errors"
-	repository2 "gin-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/pkg/repository/model"
+	"fiber-petclinic-service/pkg/test"
 	"github.com/stretchr/testify/assert"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"testing"
 )
 
 func Test_getById(t *testing.T) {
+	mockVisit := &repository.Visit{
+		Model: gorm.Model{
+			ID: 1,
+		},
+		VisitDate:   test.ToDate("2023-03-05"),
+		Description: "rabies shot",
+		PetID:       101,
+	}
+	expectedResponse := &Response{
+		ID:          1,
+		VisitDate:   "2023-03-05",
+		Description: "rabies shot",
+		PetID:       101,
+	}
+
 	testCases := []struct {
-		name          string
-		expectedVisit *repository2.Visit
-		expectedError error
+		name           string
+		id             uint
+		mockVisit      *repository.Visit
+		mockError      error
+		expectedResult interface{}
 	}{
 		{
-			name: "Test get visit by id success",
-			expectedVisit: &repository2.Visit{
-				Model: gorm.Model{
-					ID: 1,
-				},
-				VisitDate:   "2023-03-05",
-				Description: "rabies shot",
-			},
-			expectedError: nil,
+			name:           "get visit by id",
+			id:             1,
+			mockVisit:      mockVisit,
+			mockError:      nil,
+			expectedResult: expectedResponse,
 		},
 		{
-			name:          "Test get visit by id with error",
-			expectedVisit: nil,
-			expectedError: errors.New("getById: unable to find visit by id"),
+			name:           "get not visit by id",
+			id:             2,
+			mockVisit:      nil,
+			mockError:      gorm.ErrRecordNotFound,
+			expectedResult: gorm.ErrRecordNotFound,
 		},
-		// Add more test cases as needed
+		{
+			name:           "fail to get visit by id",
+			id:             2,
+			mockVisit:      nil,
+			mockError:      errors.New("getById: unable to find visit by id"),
+			expectedResult: errors.New("getById: unable to find visit by id"),
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			logger := zap.NewNop()
-			//logger := log.New().With(nil, "function", "Test_getById")
-			visitMock := repository2.MockVisitRepositorier{}
+			visitMock := repository.NewMockVisitRepositorier(t)
 
-			visitMock.On("FindById", 1).Return(tc.expectedVisit, tc.expectedError)
-			visitService := NewService(logger, &visitMock)
-			result, err := visitService.getVisitById(1)
+			visitMock.EXPECT().FindById(tc.id).Return(tc.mockVisit, tc.mockError)
+			visitService := NewService(visitMock)
+			result, err := visitService.getVisitById(tc.id)
 
-			if tc.expectedError != nil {
-				assert.Equal(t, tc.expectedError, err)
+			if err != nil {
+				assert.Equal(t, tc.mockError, err)
 				assert.Nil(t, result)
 			} else {
-				assert.Equal(t, tc.expectedVisit.ID, result.ID)
-				assert.Equal(t, tc.expectedVisit.Description, result.Description)
-				assert.Equal(t, tc.expectedVisit.VisitDate, result.VisitDate)
+				assert.Equal(t, tc.expectedResult.(*Response), result)
 				assert.Nil(t, err)
 			}
 
@@ -62,63 +80,202 @@ func Test_getById(t *testing.T) {
 
 // Test_getAllVisits tests the getAllVisits function
 func Test_getAllVisits(t *testing.T) {
+	mockVisits := []repository.Visit{
+		{
+			Model: gorm.Model{
+				ID: 1,
+			},
+			VisitDate:   test.ToDate("2023-03-05"),
+			Description: "rabies shot",
+			PetID:       201,
+		},
+		{
+			Model: gorm.Model{
+				ID: 2,
+			},
+			//VisitDate:   "2023-03-05",
+			Description: "rabies shot",
+			PetID:       202,
+		},
+	}
+	expectedVisits := &Responses{
+		Context: model.Context{
+			Count: 2,
+		},
+		Visits: FromVisits(mockVisits),
+	}
+
 	testCases := []struct {
 		name           string
-		expectedVisits []repository2.Visit
-		expectedError  error
+		mockVisits     []repository.Visit
+		mockError      error
+		expectedVisits interface{}
 	}{
 		{
-			name: "Test get all visits success",
-			expectedVisits: []repository2.Visit{
-				{
-					Model: gorm.Model{
-						ID: 1,
-					},
-					VisitDate:   "2023-03-05",
-					Description: "rabies shot",
-				},
-				{
-					Model: gorm.Model{
-						ID: 2,
-					},
-					VisitDate:   "2023-03-05",
-					Description: "rabies shot",
-				},
-			},
-			expectedError: nil,
+			name:           "get all visits",
+			mockVisits:     mockVisits,
+			mockError:      nil,
+			expectedVisits: expectedVisits,
 		},
 		{
-			name:           "Test get all visits with error",
-			expectedVisits: nil,
-			expectedError:  errors.New("getAllVisits: unable to find all visits"),
+			name:           "get no visits",
+			mockVisits:     nil,
+			mockError:      gorm.ErrRecordNotFound,
+			expectedVisits: gorm.ErrRecordNotFound,
 		},
-		// Add more test cases as needed
+		{
+			name:           "fail get all visits",
+			mockVisits:     nil,
+			mockError:      errors.New("getAllVisits: unable to find all visits"),
+			expectedVisits: errors.New("getAllVisits: unable to find all visits"),
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			//logger := log.New().With(nil, "function", "Test_getAllVisits")
-			logger := zap.NewNop()
-			visitMock := repository2.MockVisitRepositorier{}
+			visitMock := repository.NewMockVisitRepositorier(t)
 
-			visitMock.On("FindAll").Return(tc.expectedVisits, tc.expectedError)
-			visitService := NewService(logger, &visitMock)
+			visitMock.EXPECT().FindAll().Return(tc.mockVisits, tc.mockError)
+			visitService := NewService(visitMock)
 			result, err := visitService.getAllVisits()
 
-			if tc.expectedError != nil {
-				assert.Equal(t, tc.expectedError, err)
+			if err != nil {
+				assert.Equal(t, tc.expectedVisits, err)
 				assert.Nil(t, result)
 			} else {
-				for i, visit := range tc.expectedVisits {
-					assert.Equal(t, visit.ID, result[i].ID)
-					assert.Equal(t, visit.Description, result[i].Description)
-					assert.Equal(t, visit.VisitDate, result[i].VisitDate)
-					assert.Nil(t, err)
-				}
+				assert.Equal(t, tc.expectedVisits.(*Responses), result)
+				assert.Nil(t, err)
 			}
-
 			visitMock.AssertExpectations(t)
 			visitMock.AssertNumberOfCalls(t, "FindAll", 1)
+		})
+	}
+}
+
+func Test_create(t *testing.T) {
+	mockVisit := &repository.Visit{
+		Model: gorm.Model{
+			ID: 1,
+		},
+		VisitDate:   test.ToDate("2023-03-05"),
+		Description: "rabies shot",
+		PetID:       101,
+	}
+	expectedResponse := &Response{
+		ID:          1,
+		VisitDate:   "2023-03-05",
+		Description: "rabies shot",
+		PetID:       101,
+	}
+
+	testCases := []struct {
+		name           string
+		mockVisit      *repository.Visit
+		mockError      error
+		expectedResult interface{}
+	}{
+		{
+			name:           "create visit",
+			mockVisit:      mockVisit,
+			mockError:      nil,
+			expectedResult: expectedResponse,
+		},
+		{
+			name:           "fail to create visit",
+			mockVisit:      mockVisit,
+			mockError:      errors.New("create: unable to create visit"),
+			expectedResult: errors.New("create: unable to create visit"),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			visitMock := repository.NewMockVisitRepositorier(t)
+			if tc.mockError != nil {
+				visitMock.EXPECT().Insert(tc.mockVisit).Return(nil, tc.mockError)
+			} else {
+				visitMock.EXPECT().Insert(tc.mockVisit).Return(tc.mockVisit, tc.mockError)
+			}
+			visitMock.EXPECT().Insert(tc.mockVisit).Return(tc.mockVisit, tc.mockError)
+
+			visitService := NewService(visitMock)
+			result, err := visitService.create(tc.mockVisit)
+
+			if err != nil {
+				assert.Equal(t, tc.expectedResult, err)
+				assert.Nil(t, result)
+			} else {
+				assert.Equal(t, tc.expectedResult.(*Response), result)
+				assert.Nil(t, err)
+			}
+			visitMock.AssertExpectations(t)
+			visitMock.AssertNumberOfCalls(t, "Insert", 1)
+		})
+	}
+}
+
+func Test_update(t *testing.T) {
+	mockVisit := &repository.Visit{
+		Model: gorm.Model{
+			ID: 1,
+		},
+		VisitDate:   test.ToDate("2023-03-05"),
+		Description: "rabies shot",
+		PetID:       101,
+	}
+	expectedResponse := &Response{
+		ID:          1,
+		VisitDate:   "2023-03-05",
+		Description: "rabies shot",
+		PetID:       101,
+	}
+
+	testCases := []struct {
+		name           string
+		mockVisit      *repository.Visit
+		mockError      error
+		expectedResult interface{}
+	}{
+		{
+			name:           "update visit",
+			mockVisit:      mockVisit,
+			mockError:      nil,
+			expectedResult: expectedResponse,
+		},
+		{
+			name:           "get no visits",
+			mockVisit:      mockVisit,
+			mockError:      gorm.ErrRecordNotFound,
+			expectedResult: gorm.ErrRecordNotFound,
+		},
+		{
+			name:           "fail to update visit",
+			mockVisit:      mockVisit,
+			mockError:      errors.New("update: unable to update visit"),
+			expectedResult: errors.New("update: unable to update visit"),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			visitMock := repository.NewMockVisitRepositorier(t)
+			if tc.mockError != nil {
+				visitMock.EXPECT().Update(tc.mockVisit).Return(nil, tc.mockError)
+			} else {
+				visitMock.EXPECT().Update(tc.mockVisit).Return(tc.mockVisit, tc.mockError)
+			}
+			visitService := NewService(visitMock)
+			result, err := visitService.update(tc.mockVisit)
+
+			if err != nil {
+				assert.Equal(t, tc.expectedResult, err)
+				assert.Nil(t, result)
+			} else {
+				assert.Equal(t, tc.expectedResult.(*Response), result)
+				assert.Nil(t, err)
+			}
+			visitMock.AssertExpectations(t)
+			visitMock.AssertNumberOfCalls(t, "Update", 1)
 		})
 	}
 }

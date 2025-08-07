@@ -1,11 +1,14 @@
 package owner
 
 import (
+	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/pkg/repository/model"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 	"testing"
 )
 
-func TestToOwner(t *testing.T) {
+func Test_ToOwner(t *testing.T) {
 	ownerRequest := &AddRequest{
 		FirstName: "John",
 		LastName:  "Doe",
@@ -23,7 +26,7 @@ func TestToOwner(t *testing.T) {
 	assert.Equal(t, ownerRequest.Telephone, owner.Telephone)
 }
 
-func TestToOwnerWithEmptyFields(t *testing.T) {
+func Test_ToOwnerWithEmptyFields(t *testing.T) {
 	ownerRequest := &AddRequest{
 		FirstName: "",
 		LastName:  "",
@@ -41,7 +44,7 @@ func TestToOwnerWithEmptyFields(t *testing.T) {
 	assert.Equal(t, ownerRequest.Telephone, owner.Telephone)
 }
 
-func TestToOwnerWithPartialFields(t *testing.T) {
+func Test_ToOwnerWithPartialFields(t *testing.T) {
 	ownerRequest := &AddRequest{
 		FirstName: "John",
 		LastName:  "Doe",
@@ -57,4 +60,38 @@ func TestToOwnerWithPartialFields(t *testing.T) {
 	assert.Equal(t, ownerRequest.Address, owner.Address)
 	assert.Equal(t, ownerRequest.City, owner.City)
 	assert.Equal(t, ownerRequest.Telephone, owner.Telephone)
+}
+
+func Test_ToOwnerEntityFromUpdateRequest(t *testing.T) {
+	tests := []struct {
+		updateRequest *UpdateRequest
+		ownerEntity   *repository.Owner
+	}{
+		{updateRequest: &UpdateRequest{
+			ID:        101,
+			FirstName: "John",
+			LastName:  "Five",
+			Address:   "123 Main St",
+			City:      "Anytown",
+			Telephone: "1234567890",
+		}, ownerEntity: &repository.Owner{
+			Model: gorm.Model{
+				ID: 101,
+			},
+			Person: model.Person{
+				FirstName: "John",
+				LastName:  "Five",
+			},
+			Address:   "123 Main St",
+			City:      "Anytown",
+			Telephone: "1234567890",
+		}},
+		{updateRequest: &UpdateRequest{}, ownerEntity: &repository.Owner{}},
+	}
+
+	for _, tc := range tests {
+		result := ToOwnerEntityFromUpdateRequest(tc.updateRequest)
+		assert.Equal(t, tc.ownerEntity, result)
+	}
+
 }

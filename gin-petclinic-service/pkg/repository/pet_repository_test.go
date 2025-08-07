@@ -43,15 +43,13 @@ func getPetRepository(t *testing.T) *PetRepository {
 		t.Fatal(err)
 	}
 
-	//logger := log.New().With(nil, "version", "pet_repository_test")
-	logger := zap.NewNop()
-	return NewPetRepository(logger, db)
+	return NewPetRepository(db)
 }
 
 func (suite *PetRepoTestSuite) Test_FindById() {
 
 	var testCases = []struct {
-		input    int
+		input    uint
 		expected string
 	}{
 		{1, "Leo"},

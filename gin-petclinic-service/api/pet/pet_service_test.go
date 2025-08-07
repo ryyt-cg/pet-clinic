@@ -2,13 +2,14 @@ package pet
 
 import (
 	"errors"
-	"gin-petclinic-service/pkg/repository"
-	"go.uber.org/zap"
-	"gorm.io/gorm"
-	"testing"
-
+	"fiber-petclinic-service/api/visit"
+	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/pkg/repository/model"
+	"fiber-petclinic-service/pkg/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"gorm.io/gorm"
+	"testing"
 )
 
 // for learning purpose, how manual mocking can be done.
@@ -19,13 +20,12 @@ type petRepositoryMock struct {
 	mock.Mock
 }
 
-func (petM *petRepositoryMock) FindByIdWithVisits(id int) (*repository.Pet, error) {
-	args := petM.Called(id)
+func (petM *petRepositoryMock) FindAll() ([]repository.Pet, error) {
+	args := petM.Called()
 	intf := args.Get(0)
-	val := intf.(*repository.Pet)
-	ptr := val
+	val := intf.([]repository.Pet)
 
-	return ptr, args.Error(1)
+	return val, args.Error(1)
 }
 
 // FindById is a method on the petRepositoryMock struct. It simulates the behavior of
@@ -44,7 +44,7 @@ func (petM *petRepositoryMock) FindByIdWithVisits(id int) (*repository.Pet, erro
 //
 // The method then returns a pointer to the Pet object and an error. The error is expected to be
 // nil if the method operates as expected, or an instance of error if something goes wrong.
-func (petM *petRepositoryMock) FindById(id int) (*repository.Pet, error) {
+func (petM *petRepositoryMock) FindById(id uint) (*repository.Pet, error) {
 	args := petM.Called(id)
 	intf := args.Get(0)
 	val := intf.(*repository.Pet)
@@ -53,10 +53,10 @@ func (petM *petRepositoryMock) FindById(id int) (*repository.Pet, error) {
 	return ptr, args.Error(1)
 }
 
-func (petM *petRepositoryMock) FindAll() ([]repository.Pet, error) {
-	args := petM.Called()
+func (petM *petRepositoryMock) FindByIdWithVisits(id uint) (*repository.Pet, error) {
+	args := petM.Called(id)
 	intf := args.Get(0)
-	val := intf.([]repository.Pet)
+	val := intf.(*repository.Pet)
 	ptr := val
 
 	return ptr, args.Error(1)
@@ -91,20 +91,108 @@ func (petM *petRepositoryMock) Update(pet *repository.Pet) (*repository.Pet, err
 
 // mocking ends
 
-func Test_getById(t *testing.T) {
+func Test_retrieveAllPets(t *testing.T) {
+	mockPet := []repository.Pet{
+		{
+			Model: gorm.Model{
+				ID: 1,
+			},
+			Name:      "Nash",
+			Birthdate: test.ToDate("2014-10-07"),
+			Type: repository.Type{
+				Model: gorm.Model{
+					ID: 1,
+				},
+				Name: "Dog",
+			},
+		},
+	}
+
+	expectedPets := &Responses{
+		Context: model.Context{
+			Count: len(mockPet),
+		},
+		Pets: []Response{
+			{
+				ID:        1,
+				Name:      "Nash",
+				Birthdate: "2014-10-07",
+				Type:      "Dog",
+				Visits:    []visit.Response{},
+			},
+		},
+	}
+
 	testCases := []struct {
 		name          string
-		expectedPet   *repository.Pet
+		mockPets      []repository.Pet
+		mockError     error
+		expectedPets  *Responses
 		expectedError error
 	}{
 		{
-			name: "Test get pet by id success",
-			expectedPet: &repository.Pet{
+			name:          "get all pets",
+			mockPets:      mockPet,
+			mockError:     nil,
+			expectedPets:  expectedPets,
+			expectedError: nil,
+		},
+		{
+			name:          "get no pet",
+			mockPets:      nil,
+			mockError:     gorm.ErrRecordNotFound,
+			expectedPets:  nil,
+			expectedError: gorm.ErrRecordNotFound,
+		},
+		{
+			name:          "fail to get all pets",
+			mockPets:      nil,
+			mockError:     errors.New("fail to retrieve all pets"),
+			expectedPets:  nil,
+			expectedError: errors.New("fail to retrieve all pets"),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			petMock := petRepositoryMock{}
+			petMock.On("FindAll").Return(tc.mockPets, tc.mockError)
+
+			petService := NewService(&petMock)
+			result, err := petService.getAllPets()
+
+			if tc.expectedError != nil {
+				assert.Equal(t, tc.expectedError, err)
+				assert.Nil(t, result)
+			} else {
+				assert.Equal(t, tc.expectedPets, result)
+				assert.Nil(t, err)
+			}
+
+			petMock.AssertExpectations(t)
+			petMock.AssertNumberOfCalls(t, "FindAll", 1)
+		})
+	}
+}
+
+func Test_getById(t *testing.T) {
+	testCases := []struct {
+		name          string
+		id            uint
+		mockPet       *repository.Pet
+		mockError     error
+		route         string
+		expectedPet   *Response
+		expectedError error
+	}{
+		{
+			name: "get pet by id",
+			mockPet: &repository.Pet{
 				Model: gorm.Model{
 					ID: 1,
 				},
 				Name:      "Nash",
-				Birthdate: "2014-10-07",
+				Birthdate: test.ToDate("2014-10-07"),
 				Type: repository.Type{
 					Model: gorm.Model{
 						ID: 1,
@@ -112,33 +200,50 @@ func Test_getById(t *testing.T) {
 					Name: "Dog",
 				},
 			},
+			mockError: nil,
+			route:     "/v1/pets/1",
+			expectedPet: &Response{
+				ID:        1,
+				Name:      "Nash",
+				Birthdate: "2014-10-07",
+				Type:      "Dog",
+				Visits:    []visit.Response{},
+			},
 			expectedError: nil,
 		},
 		{
-			name:          "Test get pet by id failed",
+			name:          "found no pet by id",
+			id:            1,
+			mockPet:       nil,
+			mockError:     gorm.ErrRecordNotFound,
+			route:         "/v1/pets/1",
 			expectedPet:   nil,
-			expectedError: errors.New("Fail to retrieve pet by id"),
+			expectedError: gorm.ErrRecordNotFound,
 		},
-		// Add more test cases here
+		{
+			name:          "fail to get pet by id",
+			id:            1,
+			mockPet:       nil,
+			mockError:     errors.New("fail to retrieve pet by id"),
+			route:         "/v1/pets/1",
+			expectedPet:   nil,
+			expectedError: errors.New("fail to retrieve pet by id"),
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			//logger := log.New().With(nil, "function", "Test_getById")
-			logger := zap.NewNop()
 			petMock := petRepositoryMock{}
-			petMock.On("FindById", 1).Return(tc.expectedPet, tc.expectedError)
+			petMock.On("FindById", tc.id).Return(tc.mockPet, tc.mockError)
 
-			petService := NewService(logger, &petMock)
-			result, err := petService.getPetById(1)
+			petService := NewService(&petMock)
+			result, err := petService.getPetById(tc.id)
 
 			if tc.expectedError != nil {
 				assert.Equal(t, tc.expectedError, err)
 				assert.Nil(t, result)
 			} else {
-				assert.Equal(t, tc.expectedPet.ID, result.ID, "Pet ID should be the same")
-				assert.Equal(t, tc.expectedPet.Name, result.Name, "Pet Name should be the same")
-				assert.Equal(t, tc.expectedPet.Birthdate, result.Birthdate, "Pet BirthDate should be the same")
+				assert.Equal(t, tc.expectedPet, result)
 				assert.Nil(t, err)
 			}
 
@@ -148,21 +253,119 @@ func Test_getById(t *testing.T) {
 	}
 }
 
-func Test_getByName(t *testing.T) {
+func Test_getByIdWithVisits(t *testing.T) {
 	testCases := []struct {
 		name          string
-		expectedPets  []repository.Pet
+		id            uint
+		mockPet       *repository.Pet
+		mockError     error
+		route         string
+		expectedPet   *Response
 		expectedError error
 	}{
 		{
-			name: "Test get pet by name success",
-			expectedPets: []repository.Pet{
+			name: "get pet by id with visits",
+			mockPet: &repository.Pet{
+				Model: gorm.Model{
+					ID: 1,
+				},
+				Name:      "Nash",
+				Birthdate: test.ToDate("2014-10-07"),
+				Type: repository.Type{
+					Model: gorm.Model{
+						ID: 1,
+					},
+					Name: "Dog",
+				},
+				Visits: []repository.Visit{
+					{
+						Model: gorm.Model{
+							ID: 1,
+						},
+						VisitDate:   test.ToDate("2014-10-07"),
+						Description: "First visit",
+					},
+				},
+			},
+			mockError: nil,
+			route:     "/v1/pets/1/visits",
+			expectedPet: &Response{
+				ID:        1,
+				Name:      "Nash",
+				Birthdate: "2014-10-07",
+				Type:      "Dog",
+				Visits: []visit.Response{
+					{
+						ID:          1,
+						VisitDate:   "2014-10-07",
+						Description: "First visit",
+					},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			name:          "found no pet by id",
+			id:            1,
+			mockPet:       nil,
+			mockError:     gorm.ErrRecordNotFound,
+			route:         "/v1/pets/1/visits",
+			expectedPet:   nil,
+			expectedError: gorm.ErrRecordNotFound,
+		},
+		{
+			name:          "fail to get pet by id",
+			id:            1,
+			mockPet:       nil,
+			mockError:     errors.New("fail to retrieve pet by id"),
+			route:         "/v1/pets/1/visits",
+			expectedPet:   nil,
+			expectedError: errors.New("fail to retrieve pet by id"),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			petMock := petRepositoryMock{}
+			petMock.On("FindByIdWithVisits", tc.id).Return(tc.mockPet, tc.mockError)
+
+			petService := NewService(&petMock)
+			result, err := petService.getPetWithVisitsById(tc.id)
+
+			if tc.expectedError != nil {
+				assert.Equal(t, tc.expectedError, err)
+				assert.Nil(t, result)
+			} else {
+				assert.Equal(t, tc.expectedPet, result)
+				assert.Nil(t, err)
+			}
+
+			petMock.AssertExpectations(t)
+			petMock.AssertNumberOfCalls(t, "FindByIdWithVisits", 1)
+		})
+	}
+}
+
+func Test_getByName(t *testing.T) {
+	testCases := []struct {
+		name          string
+		petName       string
+		mockPets      []repository.Pet
+		mockError     error
+		route         string
+		expectedPets  *Responses
+		expectedError error
+	}{
+		{
+			name:    "get pets by name",
+			petName: "Leo",
+			mockPets: []repository.Pet{
 				{
 					Model: gorm.Model{
 						ID: 1,
 					},
 					Name:      "Leo",
-					Birthdate: "2017-07-02",
+					Birthdate: test.ToDate("2014-10-07"),
 					Type: repository.Type{
 						Model: gorm.Model{
 							ID: 2,
@@ -171,36 +374,58 @@ func Test_getByName(t *testing.T) {
 					},
 				},
 			},
+			mockError: nil,
+			route:     "/v1/pets/name/Leo",
+			expectedPets: &Responses{
+				Context: model.Context{
+					Count: 1,
+				},
+				Pets: []Response{
+					{
+						ID:        1,
+						Name:      "Leo",
+						Birthdate: "2014-10-07",
+						Type:      "Cat",
+						Visits:    []visit.Response{},
+					},
+				},
+			},
 			expectedError: nil,
 		},
 		{
-			name:          "Test get pet by name failed",
+			name:          "found no pets by name",
+			petName:       "Tiger",
+			mockPets:      nil,
+			mockError:     gorm.ErrRecordNotFound,
+			route:         "/v1/pets/name/Tiger",
 			expectedPets:  nil,
-			expectedError: errors.New("Fail to retrieve pet by name"),
+			expectedError: gorm.ErrRecordNotFound,
 		},
-		// Add more test cases here
+		{
+			name:          "fail to get pets by name",
+			petName:       "Teddy",
+			mockPets:      nil,
+			mockError:     errors.New("fail to retrieve pet by name"),
+			expectedPets:  nil,
+			expectedError: errors.New("fail to retrieve pet by name"),
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			//logger := log.New().With(nil, "function", "Test_getByName")
-			logger := zap.NewNop()
 			petMock := petRepositoryMock{}
-			petMock.On("FindByName", "Leo").Return(tc.expectedPets, tc.expectedError)
+			petMock.On("FindByName", tc.petName).Return(tc.mockPets, tc.mockError)
 
-			petService := NewService(logger, &petMock)
-			result, err := petService.getPetsByName("Leo")
+			petService := NewService(&petMock)
+			result, err := petService.getPetsByName(tc.petName)
 
-			if tc.expectedError != nil {
+			if tc.mockError != nil {
 				assert.Equal(t, tc.expectedError, err)
 				assert.Nil(t, result)
 			} else {
-				assert.Equal(t, len(tc.expectedPets), len(result))
-				for i, pet := range tc.expectedPets {
-					assert.Equal(t, pet.ID, result[i].ID, "Pet ID should be the same")
-					assert.Equal(t, pet.Name, result[i].Name, "Pet Name should be the same")
-					assert.Nil(t, err)
-				}
+				assert.Equal(t, tc.expectedPets, result)
+				assert.Nil(t, err)
 			}
 
 			petMock.AssertExpectations(t)
@@ -213,17 +438,19 @@ func Test_getByName(t *testing.T) {
 func Test_update(t *testing.T) {
 	testCases := []struct {
 		name          string
-		expectedPet   *repository.Pet
+		mockPet       *repository.Pet
+		mockError     error
+		expectedPet   *Response
 		expectedError error
 	}{
 		{
-			name: "Test update pet success",
-			expectedPet: &repository.Pet{
+			name: "update a pet",
+			mockPet: &repository.Pet{
 				Model: gorm.Model{
 					ID: 1,
 				},
 				Name:      "Leo",
-				Birthdate: "2017-07-02",
+				Birthdate: test.ToDate("2014-10-07"),
 				Type: repository.Type{
 					Model: gorm.Model{
 						ID: 2,
@@ -231,32 +458,45 @@ func Test_update(t *testing.T) {
 					Name: "Cat",
 				},
 			},
+			mockError: nil,
+			expectedPet: &Response{
+				ID:        1,
+				Name:      "Leo",
+				Birthdate: "2014-10-07",
+				Type:      "Cat",
+				Visits:    []visit.Response{},
+			},
 			expectedError: nil,
 		},
 		{
-			name:          "Test update pet failed",
+			name:          "no pet found to update",
+			mockPet:       nil,
+			mockError:     gorm.ErrRecordNotFound,
 			expectedPet:   nil,
-			expectedError: errors.New("Fail to update pet"),
+			expectedError: gorm.ErrRecordNotFound,
 		},
-		// Add more test cases here
+		{
+			name:          "fail to update pet",
+			mockPet:       nil,
+			mockError:     errors.New("fail to update pet"),
+			expectedPet:   nil,
+			expectedError: errors.New("fail to update pet"),
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			//logger := log.New().With(nil, "function", "Test_update")
-			logger := zap.NewNop()
 			petMock := petRepositoryMock{}
-			petMock.On("Update", tc.expectedPet).Return(tc.expectedPet, tc.expectedError)
+			petMock.On("Update", tc.mockPet).Return(tc.mockPet, tc.mockError)
 
-			petService := NewService(logger, &petMock)
-			result, err := petService.update(tc.expectedPet)
+			petService := NewService(&petMock)
+			result, err := petService.update(tc.mockPet)
 
-			if tc.expectedError != nil {
+			if tc.mockError != nil {
 				assert.Equal(t, tc.expectedError, err)
 				assert.Nil(t, result)
 			} else {
-				assert.Equal(t, tc.expectedPet.ID, result.ID, "Pet ID should be the same")
-				assert.Equal(t, tc.expectedPet.Name, result.Name, "Pet Name should be the same")
+				assert.Equal(t, tc.expectedPet, result)
 				assert.Nil(t, err)
 			}
 
@@ -266,57 +506,82 @@ func Test_update(t *testing.T) {
 	}
 }
 
-//func Test_create(t *testing.T) {
-//	testCases := []struct {
-//		name          string
-//		expectedPet   *repository.Pet
-//		expectedError error
-//	}{
-//		{
-//			name: "Test create pet success",
-//			expectedPet: &repository.Pet{
-//				Model: gorm.Model{
-//					ID: 1,
-//				},
-//				Name:      "Leo",
-//				BirthDate: time.Date(2017, 7, 2, 0, 0, 0, 0, time.UTC),
-//				Type: repository.Type{
-//					Model: gorm.Model{
-//						ID: 2,
-//					},
-//					Name: "Cat",
-//				},
-//			},
-//			expectedError: nil,
-//		},
-//		{
-//			name:          "Test create pet failed",
-//			expectedPet:   nil,
-//			expectedError: errors.New("Fail to insert pet"),
-//		},
-//		// Add more test cases here
-//	}
-//
-//	for _, tc := range testCases {
-//		t.Run(tc.name, func(t *testing.T) {
-//			logger := log.New().With(nil, "function", "Test_insert")
-//			petMock := petRepositoryMock{}
-//			petMock.On("Fail", tc.expectedPet).Return(tc.expectedPet, tc.expectedError)
-//
-//			petService := NewService(logger, &petMock)
-//			result, err := petService.create(tc.expectedPet)
-//
-//			if tc.expectedError != nil {
-//				assert.Equal(t, tc.expectedError, err)
-//				assert.Nil(t, result)
-//			} else {
-//				assert.Equal(t, tc.expectedPet.ID, result.ID, "Pet ID should be the same")
-//				assert.Equal(t, tc.expectedPet.Name, result.Name, "Pet Name should be the same")
-//				assert.Nil(t, err)
-//			}
-//
-//			petMock.AssertExpectations(t)
-//			petMock.AssertNumberOfCalls(t, "Fail", 1)
-//		})
-//	}
-//}
+func Test_create(t *testing.T) {
+	mockPet := &repository.Pet{
+		Model: gorm.Model{
+			ID: 1,
+		},
+		Name:      "Leo",
+		Birthdate: test.ToDate("2014-10-07"),
+		Type: repository.Type{
+			Model: gorm.Model{
+				ID: 2,
+			},
+			Name: "Cat",
+		},
+	}
+
+	testCases := []struct {
+		name          string
+		mockPet       *repository.Pet
+		mockResult    *repository.Pet
+		mockError     error
+		expectedPet   *Response
+		expectedError error
+	}{
+		{
+			name:       "create pet success",
+			mockPet:    mockPet,
+			mockResult: mockPet,
+			mockError:  nil,
+			expectedPet: &Response{
+				ID:        1,
+				Name:      "Leo",
+				Birthdate: "2014-10-07",
+				Type:      "Cat",
+				Visits:    []visit.Response{},
+			},
+			expectedError: nil,
+		},
+		{
+			name:          "fail to create a pet",
+			mockPet:       mockPet,
+			mockResult:    nil,
+			mockError:     errors.New("fail to insert pet"),
+			expectedPet:   nil,
+			expectedError: errors.New("fail to insert pet"),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			petMock := petRepositoryMock{}
+			petMock.On("Insert", tc.mockPet).Return(tc.mockResult, tc.mockError)
+
+			petService := NewService(&petMock)
+			result, err := petService.create(tc.mockPet)
+
+			if tc.mockError != nil {
+				assert.Equal(t, tc.expectedError, err)
+				assert.Nil(t, result)
+			} else {
+				assert.Equal(t, tc.expectedPet, result)
+				assert.Nil(t, err)
+			}
+
+			petMock.AssertExpectations(t)
+			petMock.AssertNumberOfCalls(t, "Insert", 1)
+		})
+	}
+}
+
+/*
+	mockPets := []repository.Pet{
+		{Model: gorm.Model{ID: 1}, Name: "Tom",
+			Birthdate: time.Date(2015, 11, 19, 0, 0, 0, 00, time.UTC),
+			TypeID:    19, OwnerID: 7},
+		{Model: gorm.Model{ID: 2}, Name: "Mike",
+			Birthdate: time.Date(2018, 4, 17, 0, 0, 0, 0, time.UTC),
+			TypeID:    20, OwnerID: 7},
+	}
+*/

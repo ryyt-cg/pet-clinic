@@ -1,6 +1,7 @@
 package dbase
 
 import (
+	"context"
 	"gin-petclinic-service/config/app"
 	"go.uber.org/zap"
 	"gorm.io/gorm/logger"
@@ -11,7 +12,7 @@ import (
 )
 
 type Database interface {
-	Connect() *gorm.DB
+	Connect(context.Context) (*gorm.DB, error)
 }
 
 type Postgres struct {
@@ -19,9 +20,9 @@ type Postgres struct {
 
 // Connect
 // Create connection pooling using GORM postgres driver.
-func (p *Postgres) Connect() *gorm.DB {
+func (p *Postgres) Connect(ctx context.Context) *gorm.DB {
 	log, _ := zap.NewProduction()
-	db, err := gorm.Open(postgres.Open(app.Config.Database.Postgres.Dsn), &gorm.Config{
+	db, err := gorm.Open(postgres.Open(app.Config.Databases["postgres"].Username), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 		//NamingStrategy: schema.NamingStrategy{SingularTable: true},
 	})
@@ -32,9 +33,9 @@ func (p *Postgres) Connect() *gorm.DB {
 
 	// connection pooling configuration
 	sqlDB, _ := db.DB()
-	sqlDB.SetMaxIdleConns(app.Config.Database.MaxIdleConns)
-	sqlDB.SetMaxOpenConns(app.Config.Database.MaxOpenConns)
-	sqlDB.SetConnMaxIdleTime(time.Duration(app.Config.Database.MaxIdleTime) * time.Second)
+	sqlDB.SetMaxIdleConns(app.Config.Databases["postgres"].ConnectionPool.MaxIdleConnection)
+	sqlDB.SetMaxOpenConns(app.Config.Databases["postgres"].ConnectionPool.MaxOpenConnection)
+	sqlDB.SetConnMaxIdleTime(time.Duration(app.Config.Databases["postgres"].ConnectionPool.MaxIdleTime) * time.Second)
 
 	return db
 }

@@ -1,16 +1,18 @@
 package pet
 
 import (
-	"gin-petclinic-service/pkg/model"
+	"errors"
 	"gin-petclinic-service/pkg/repository"
+	"gin-petclinic-service/pkg/repository/model"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 )
 
 type Servicer interface {
 	getAllPets() (*Responses, error)
-	getPetById(id int) (*Response, error)
-	getPetWithVisitsById(id int) (*Response, error)
-	getPetsByName(name string) ([]Response, error)
+	getPetById(id uint) (*Response, error)
+	getPetWithVisitsById(id uint) (*Response, error)
+	getPetsByName(name string) (*Responses, error)
 	create(pet *repository.Pet) (*Response, error)
 	update(pet *repository.Pet) (*Response, error)
 }
@@ -28,22 +30,29 @@ func (service *Service) getAllPets() (*Responses, error) {
 	log.Debug().Msg("Retrieve all pets")
 	pets, err := service.repository.FindAll()
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Msg("No pets found.")
+			return nil, gorm.ErrRecordNotFound
+		}
 		log.Error().Err(err).Msg("Fail to retrieve all pets.")
 		return nil, err
 	}
 
 	petResponses := FromPets(pets)
-
 	contextJson := model.Context{Count: len(petResponses)}
 	return &Responses{Pets: petResponses, Context: contextJson}, nil
 }
 
 // getPetById - retrieve pet by id
-func (service *Service) getPetById(id int) (*Response, error) {
-	log.Debug().Int("id", id).Msg("Fail pet by id.")
+func (service *Service) getPetById(id uint) (*Response, error) {
+	log.Debug().Uint("id", id).Msg("Retrieve pet by id.")
 	petF, err := service.repository.FindById(id)
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve pet by id.")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Uint("id", id).Msg("Pet by id not found.")
+			return nil, gorm.ErrRecordNotFound
+		}
+		log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve pet by id.")
 		return nil, err
 	}
 
@@ -52,11 +61,15 @@ func (service *Service) getPetById(id int) (*Response, error) {
 	return response, nil
 }
 
-func (service *Service) getPetWithVisitsById(id int) (*Response, error) {
-	log.Debug().Int("id", id).Msg("Retrieve pet by id.")
+func (service *Service) getPetWithVisitsById(id uint) (*Response, error) {
+	log.Debug().Uint("id", id).Msg("Retrieve pet by id.")
 	petF, err := service.repository.FindByIdWithVisits(id)
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("Fail to retrieve pet by id.")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Uint("id", id).Msg("Pet by id not found.")
+			return nil, gorm.ErrRecordNotFound
+		}
+		log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve pet by id.")
 		return nil, err
 	}
 
@@ -66,16 +79,20 @@ func (service *Service) getPetWithVisitsById(id int) (*Response, error) {
 }
 
 // getPetByName - retrieve pet by name
-func (service *Service) getPetsByName(name string) ([]Response, error) {
-	log.Debug().Str("name", name).Msg("Retrieve pet by name.")
+func (service *Service) getPetsByName(name string) (*Responses, error) {
+	log.Debug().Str("name", name).Msg("retrieve pets by name.")
 
 	pets, err := service.repository.FindByName(name)
 	if err != nil {
-		log.Error().Err(err).Str("name", name).Msg("Fail to retrieve pet by name.")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Str("name", name).Msg("No pets found with this name.")
+			return nil, gorm.ErrRecordNotFound
+		}
+		log.Error().Err(err).Str("name", name).Msg("fail to retrieve pets by name.")
 		return nil, err
 	}
 
-	return FromPets(pets), nil
+	return ToResponses(pets), nil
 }
 
 // create - create new pet
@@ -84,8 +101,8 @@ func (service *Service) create(pet *repository.Pet) (*Response, error) {
 	newPet, err := service.repository.Insert(pet)
 
 	if err != nil {
-		log.Error().Err(err).Msg("Create a new pet failed.")
-		return &Response{}, err
+		log.Error().Err(err).Msg("Fail new pet failed.")
+		return nil, err
 	}
 
 	response := &Response{}
@@ -95,11 +112,15 @@ func (service *Service) create(pet *repository.Pet) (*Response, error) {
 
 // update - update pet
 func (service *Service) update(pet *repository.Pet) (*Response, error) {
-	log.Debug().Any("pet", pet).Msg("Update a vet.")
+	log.Info().Any("pet", pet).Msg("Update a vet.")
 	updatedPet, err := service.repository.Update(pet)
 
 	if err != nil {
-		log.Error().Err(err).Msg("Update pet failed.")
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Err(err).Msg("No pet found for update.")
+			return nil, gorm.ErrRecordNotFound
+		}
+		log.Error().Err(err).Msg("Fail to Update pet.")
 		return nil, err
 	}
 

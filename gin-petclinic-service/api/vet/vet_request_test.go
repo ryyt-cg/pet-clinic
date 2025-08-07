@@ -1,12 +1,15 @@
 package vet
 
 import (
+	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/pkg/repository/model"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 	"testing"
 )
 
-func TestRequestValidation(t *testing.T) {
-	vetRequest := &Request{
+func Test_AddRequestValidation(t *testing.T) {
+	vetRequest := &AddRequest{
 		FirstName: "John",
 		LastName:  "Doe",
 		//Specialties: []specialtyResponse{
@@ -20,8 +23,8 @@ func TestRequestValidation(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestRequestValidationWithEmptyFields(t *testing.T) {
-	vetRequest := &Request{
+func Test_AddRequestValidationWithEmptyFields(t *testing.T) {
+	vetRequest := &AddRequest{
 		FirstName: "",
 		LastName:  "",
 		//Specialties: []Specialty{},
@@ -32,23 +35,46 @@ func TestRequestValidationWithEmptyFields(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func TestToVet(t *testing.T) {
-	vetRequest := &Request{
+func Test_FromAddRequest(t *testing.T) {
+	vetRequest := &AddRequest{
 		FirstName: "John",
-		LastName:  "Doe",
+		LastName:  "Johnson",
 		//Specialties: []Specialty{
 		//	{ID: 1, Name: "Cardiology"},
 		//	{ID: 2, Name: "Dentistry"},
 		//},
 	}
+	expectedVet := &repository.Vet{
+		Person: model.Person{
+			FirstName: "John",
+			LastName:  "Johnson",
+		},
+	}
 
-	vet := ToVet(vetRequest)
+	vet := FromAddRequest(vetRequest)
+	assert.Equal(t, expectedVet, vet)
+}
 
-	assert.Equal(t, vetRequest.FirstName, vet.FirstName)
-	assert.Equal(t, vetRequest.LastName, vet.LastName)
-	//assert.Equal(t, len(vetRequest.Specialties), len(vet.Specialties))
-	//for i, specialty := range vet.Specialties {
-	//	assert.Equal(t, vetRequest.Specialties[i].ID, specialty.ID)
-	//	assert.Equal(t, vetRequest.Specialties[i].Name, specialty.Name)
-	//}
+func Test_FromUpdateRequest(t *testing.T) {
+	vetRequest := &UpdateRequest{
+		ID:        1,
+		FirstName: "John",
+		LastName:  "Johnson",
+		//Specialties: []Specialty{
+		//	{ID: 1, Name: "Cardiology"},
+		//	{ID: 2, Name: "Dentistry"},
+		//},
+	}
+	expectedVet := &repository.Vet{
+		Model: gorm.Model{
+			ID: 1,
+		},
+		Person: model.Person{
+			FirstName: "John",
+			LastName:  "Johnson",
+		},
+	}
+
+	vet := FromUpdateRequest(vetRequest)
+	assert.Equal(t, expectedVet, vet)
 }

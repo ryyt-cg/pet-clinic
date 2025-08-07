@@ -4,7 +4,7 @@ import (
 	"errors"
 	"gin-petclinic-service/api/pet"
 	resterr "gin-petclinic-service/pkg/errors"
-	"gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/repository/model"
 	"gin-petclinic-service/pkg/test"
 	"go.uber.org/zap"
 	"gorm.io/gorm"

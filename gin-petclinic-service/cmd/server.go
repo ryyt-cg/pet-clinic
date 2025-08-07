@@ -1,10 +1,9 @@
 package main
 
 import (
+	"context"
 	"gin-petclinic-service/api/health"
 	"gin-petclinic-service/api/info"
-	"gin-petclinic-service/api/owner"
-	"gin-petclinic-service/api/pet"
 	"gin-petclinic-service/api/vet"
 	"gin-petclinic-service/api/visit"
 	"gin-petclinic-service/config/app"
@@ -42,7 +41,7 @@ func loadConfig() {
 
 	sqlite := dbase.Sqlite{}
 	var err error
-	db, err = sqlite.Connect()
+	db, err = sqlite.Connect(context.Background())
 	if err != nil {
 		log.Fatal().Err(err).Msg("Fail to connect the database.")
 	}
@@ -71,15 +70,15 @@ func loadComponents() {
 	ipService := info.NewIPService()
 	infoRouter := info.NewRouter(infoService, ipService)
 
-	// Owner
-	ownerRepository := repository.NewOwnerRepository(db)
-	ownerService := owner.NewService(ownerRepository)
-	ownerRouter := owner.NewRouter(ownerService)
-
+	//// Owner
+	//ownerRepository := repository.NewOwnerRepository(db)
+	//ownerService := owner.NewService(ownerRepository)
+	//ownerRouter := owner.NewRouter(ownerService)
+	//
 	// Pet
-	petRepository := repository.NewPetRepository(db)
-	petService := pet.NewService(petRepository)
-	petRouter := pet.NewRouter(petService)
+	//petRepository := repository.NewPetRepository(db)
+	//petService := pet.NewService(petRepository)
+	//petRouter := pet.NewRouter(petService)
 
 	// Vet
 	vetRepository := repository.NewVetRepository(db)
@@ -102,8 +101,8 @@ func loadComponents() {
 
 	healthCheckRouter.Register(home.Group("/health"))
 	infoRouter.Register(home.Group("/info"))
-	ownerRouter.Register(v1.Group("/owners"))
-	petRouter.Register(v1.Group("/pets"))
+	//ownerRouter.Register(v1.Group("/owners"))
+	//petRouter.Register(v1.Group("/pets"))
 	vetRouter.Register(v1.Group("/vets"))
 	visitRouter.Register(v1.Group("/visits"))
 }

@@ -1,8 +1,8 @@
 package owner
 
 import (
-	"gin-petclinic-service/pkg/model"
 	"gin-petclinic-service/pkg/repository"
+	"gin-petclinic-service/pkg/repository/model"
 	"github.com/rs/zerolog/log"
 )
 
@@ -26,10 +26,10 @@ func NewService(repository repository.OwnerRepositorier) *Service {
 
 // getOwnerById - retrieve owner by id
 func (service *Service) getOwnerById(id uint) (*Response, error) {
-	log.Debug().Uint("id", id).Msg("Fail owner by id.")
+	log.Debug().Uint("id", id).Msg("Get owner by id.")
 	owner, err := service.repository.FindById(id)
 	if err != nil {
-		log.Error().Uint("id", id).Err(err).Msg("Fail to retrieve owner by id.")
+		log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve owner by id.")
 		return nil, err
 	}
 
@@ -40,10 +40,11 @@ func (service *Service) getOwnerById(id uint) (*Response, error) {
 
 // getOwnerByLastName - retrieve owners with pets and visits by last name
 func (service *Service) getOwnerByLastName(lastName string) (*Responses, error) {
-	log.Debug().Str("lastName", lastName).Msg("Fail owners by last name.")
+	log.Debug().Str("lastName", lastName).Msg("Get owners by last name.")
 	owners, err := service.repository.FindByLastName(lastName)
+
 	if err != nil {
-		log.Error().Err(err).Str("lastName", lastName).Msg("Fail to retrieve owner by last name.")
+		log.Error().Err(err).Msg("Fail to retrieve owner by last name.")
 		return nil, err
 	}
 
@@ -54,7 +55,7 @@ func (service *Service) getOwnerByLastName(lastName string) (*Responses, error) 
 
 // getAllOwners - retrieve all owners
 func (service *Service) getAllOwners() (*Responses, error) {
-	log.Debug().Msg("Fail all owner")
+	log.Debug().Msg("Get all owner")
 	owners, err := service.repository.FindAll()
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to retrieve all owner.")
@@ -69,10 +70,10 @@ func (service *Service) getAllOwners() (*Responses, error) {
 
 // getOwnerByIdWithPets - retrieve by id with pets
 func (service *Service) getOwnerByIdWithPets(id uint) (*Response, error) {
-	log.Debug().Uint("id", id).Msg("Get owner with pets by id.")
+	log.Debug().Uint("id", id).Msg("Fail owner with pets by id.")
 	owner, err := service.repository.FindByIdWithPets(id)
 	if err != nil {
-		log.Error().Err(err).Uint("id", id).Msg("Fail to get owner by Id.")
+		log.Error().Err(err).Msg("Fail to retrieve all owners.")
 		return nil, err
 	}
 
@@ -99,7 +100,7 @@ func (service *Service) create(ownerRequest *AddRequest) (*Response, error) {
 
 // update - update owner
 func (service *Service) update(id uint, request *UpdateRequest) (*UpdateResponse, error) {
-	log.Debug().Msg("Fail an owner.")
+	log.Debug().Msg("Update an owner.")
 	ownerEntity := ToOwnerEntityFromUpdateRequest(request)
 	ownerEntity.ID = id
 	updatedOwner, err := service.repository.Update(ownerEntity)

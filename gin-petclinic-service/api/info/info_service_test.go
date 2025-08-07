@@ -1,24 +1,28 @@
 package info
 
 import (
+	"fiber-petclinic-service/config/app"
 	"github.com/stretchr/testify/assert"
-	"go.uber.org/zap"
 	"testing"
 )
 
 func Test_getAppInfo(t *testing.T) {
-	//logger := log.New().With(nil, "function", "Test_getAppInfo")
-	logger := zap.NewNop()
-	infoMock := MockServicer{}
-	info := &Info{"Test App", "Info App", "1.0.0", "", ""}
-	infoMock.On("getAppInfo").Return(*info, nil)
+	// instantiate application config object
+	app.Config = app.AppConfig{
+		AppInfo: app.AppInfoConfig{
+			Name:        "Fiber App",
+			Description: "App using Go Fiber",
+			Version:     "1.5.0",
+		},
+		Server: app.ServerConfig{
+			Host: "localhost",
+		},
+	}
 
-	infoService := NewService(logger)
-	result, _ := infoService.getAppInfo()
-	infoMock.AssertExpectations(t)
-	infoMock.AssertNumberOfCalls(t, "getAppInfo", 1)
+	appInfo := NewService()
+	result, _ := appInfo.getAppInfo()
 
-	assert.Equal(t, info.AppName, result.AppName)
-	assert.Equal(t, info.Description, result.Description)
-	assert.Equal(t, info.Version, result.Version)
+	assert.Equal(t, "Fiber App", result.AppName)
+	assert.Equal(t, "1.5.0", result.Version)
+	assert.Equal(t, "App using Go Fiber", result.Description)
 }

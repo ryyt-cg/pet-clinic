@@ -1,8 +1,10 @@
 package visit
 
 import (
-	"gin-petclinic-service/pkg/errors"
+	"errors"
+	resterr "gin-petclinic-service/pkg/errors"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 
@@ -42,13 +44,17 @@ func (r *Router) visitById(c *gin.Context) {
 
 	id, err := strconv.Atoi(pathID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))
+		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
 
-	response, err := r.service.getVisitById(id)
+	response, err := r.service.getVisitById(uint(id))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errors.InternalServerError(err.Error()))
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
 
@@ -69,7 +75,7 @@ func (r *Router) allVisits(c *gin.Context) {
 	log.Info().Msg("get all visits")
 	response, err := r.service.getAllVisits()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errors.InternalServerError(err.Error()))
+		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
 
@@ -78,15 +84,20 @@ func (r *Router) allVisits(c *gin.Context) {
 
 func (r *Router) addNewVisit(c *gin.Context) {
 	log.Info().Msg("add new visit")
-	var visit Request
+	var visit AddRequest
 	if err := c.ShouldBindJSON(&visit); err != nil {
-		c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))
+		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
 
-	response, err := r.service.create(&visit)
+	visitEntity, err := FromAddRequest(&visit)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errors.InternalServerError(err.Error()))
+		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
+		return
+	}
+	response, err := r.service.create(visitEntity)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
 
@@ -107,22 +118,27 @@ func (r *Router) addNewVisit(c *gin.Context) {
 // @Router		/visits/{id} 	[put]
 func (r *Router) updateVisit(c *gin.Context) {
 	log.Info().Msg("update visit")
-	var visit Request
+	var visit UpdateRequest
 	if err := c.ShouldBindJSON(&visit); err != nil {
-		c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))
+		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, errors.BadRequest(err.Error()))
+		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
 
-	visit.ID = id
-	response, err := r.service.update(&visit)
+	visitEntity, err := FromUpdateRequest(&visit)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errors.InternalServerError(err.Error()))
+		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
+		return
+	}
+	visitEntity.ID = uint(id)
+	response, err := r.service.update(visitEntity)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
 

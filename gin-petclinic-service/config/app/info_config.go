@@ -3,9 +3,9 @@ package app
 import validation "github.com/go-ozzo/ozzo-validation/v4"
 
 type AppInfoConfig struct {
-	Name        string
-	Description string
-	Version     string
+	Name        string `yaml:"name"`
+	Description string `yaml:"description"`
+	Version     string `yaml:"version"`
 }
 
 func (aic AppInfoConfig) Validate() error {

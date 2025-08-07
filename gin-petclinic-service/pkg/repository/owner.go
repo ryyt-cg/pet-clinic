@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/repository/model"
 	"gorm.io/gorm"
 )
 

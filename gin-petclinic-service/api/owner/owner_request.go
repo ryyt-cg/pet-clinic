@@ -1,8 +1,9 @@
 package owner
 
 import (
-	"gin-petclinic-service/pkg/model"
 	"gin-petclinic-service/pkg/repository"
+	"gin-petclinic-service/pkg/repository/model"
+	"gorm.io/gorm"
 )
 
 // Owner Requests - A collection of requests (input contracts) for the owner API
@@ -19,7 +20,7 @@ type AddRequest struct {
 }
 
 type UpdateRequest struct {
-	Id        uint   `json:"id"`
+	ID        uint   `json:"id"`
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Address   string `json:"address"`
@@ -42,6 +43,9 @@ func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner {
 
 func ToOwnerEntityFromUpdateRequest(ownerRequest *UpdateRequest) *repository.Owner {
 	return &repository.Owner{
+		Model: gorm.Model{
+			ID: ownerRequest.ID,
+		},
 		Person: model.Person{
 			FirstName: ownerRequest.FirstName,
 			LastName:  ownerRequest.LastName,

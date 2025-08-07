@@ -1,0 +1,21 @@
+all: false
+dir: '{{.InterfaceDir}}'
+force-file-write: true
+formatter: goimports
+include-auto-generated: false
+log-level: info
+structname: '{{.Mock}}{{.InterfaceName}}'
+pkgname: '{{.SrcPackageName}}'
+recursive: true
+require-template-schema-exists: true
+template: testify
+template-schema: '{{.Template}}.schema.json'
+packages:
+  gin-petclinic-service/api:
+    config:
+      filename: mocks_test.go
+      all: true
+  gin-petclinic-service/pkg/repository:
+    config:
+      filename: mocks.go
+      all: true

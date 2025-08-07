@@ -2,60 +2,50 @@ package app
 
 import (
 	"fmt"
+	"github.com/cristalhq/aconfig"
+	"github.com/cristalhq/aconfig/aconfigyaml"
+	"github.com/go-playground/validator/v10"
 	"os"
 	"strings"
-
-	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"github.com/spf13/viper"
 )
 
 // Config stores the application-wide configurations
-var Config appConfig
+var (
+	Config   AppConfig
+	validate *validator.Validate
+)
 
-type appConfig struct {
-	AppInfo  AppInfoConfig
-	Database DatabaseConfig
-	Okta     OktaConfig
-	Server   ServerConfig
+type AppConfig struct {
+	AppInfo   AppInfoConfig             `yaml:"appInfo" validate:"required"`
+	Databases map[string]DatabaseConfig `yaml:"databases" validate:"required"`
+	Server    ServerConfig              `yaml:"server" validate:"required"`
 }
 
 // Validate all config required values are populated.
-func (config appConfig) Validate() error {
+func (config AppConfig) Validate() error {
+	validate = validator.New(validator.WithRequiredStructEnabled())
 
-	if err := config.Server.Validate(); err != nil {
+	if err := validate.Struct(config.AppInfo); err != nil {
 		panic(err.Error())
 	}
-	if err := config.AppInfo.Validate(); err != nil {
-		panic(err.Error())
-	}
-	if err := config.Database.Validate(); err != nil {
-		panic(err.Error())
-	}
-	if err := config.Okta.OAuth2.Validate(); err != nil {
-		panic(err.Error())
-	}
-	return validation.ValidateStruct(&config) //validation.Field(&config.DSN, validation.Required),
+	return nil
 }
 
 // LoadConfig loads configuration from the given list of paths and populates it into the Config variable.
 // The configuration file(s) should be named as app.yaml.
-// Environment variables with the prefix "NGEN_" in their names are also read automatically.
-func LoadConfig(configPaths ...string) error {
-	v := viper.New()
-	v.SetConfigType("yaml")
-	v.AutomaticEnv()
+func LoadConfig(configPath string) error {
 	env := strings.ToUpper(os.Getenv("ENV"))
-	v.SetConfigName(getConfigFile(env))
-	v.SetDefault("error_file", "config/errors.yaml")
+	configFile := configPath + "/" + getConfigFile(env) + ".yaml"
 
-	for _, path := range configPaths {
-		v.AddConfigPath(path)
-	}
-	if err := v.ReadInConfig(); err != nil {
-		return fmt.Errorf("Fail to read the configuration file: %s", err)
-	}
-	if err := v.Unmarshal(&Config); err != nil {
-		return err
+	loader := aconfig.LoaderFor(&Config, aconfig.Config{
+		SkipFlags: true,
+		Files:     []string{configFile},
+		FileDecoders: map[string]aconfig.FileDecoder{
+			".yaml": aconfigyaml.New(), // Register the YAML decoder
+		},
+	})
+	if err := loader.Load(); err != nil {
+		return fmt.Errorf("failed to load configuration file %s: %w", configFile, err)
 	}
 
 	return Config.Validate()
@@ -65,10 +55,6 @@ func getConfigFile(env string) string {
 	switch env {
 	case "PRD":
 		return "app-prd"
-	case "STG":
-		return "app-stg"
-	case "TST":
-		return "app-tst"
 	case "DEV":
 		return "app-dev"
 	default:

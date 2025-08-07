@@ -24,6 +24,6 @@ func (service *Service) getAppInfo() (*Info, error) {
 		Version:     app.Config.AppInfo.Version,
 	}
 
-	log.Debug().Any("info", info).Msg("app info")
+	log.Debug().Any("appInfo", info).Msg("App info")
 	return info, nil
 }

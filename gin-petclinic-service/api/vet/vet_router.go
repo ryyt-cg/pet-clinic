@@ -55,7 +55,7 @@ func (vetRouter *Router) vetById(c *gin.Context) {
 		return
 	}
 
-	response, err := vetRouter.service.getVetById(id)
+	response, err := vetRouter.service.getVetById(uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
@@ -117,7 +117,7 @@ func (vetRouter *Router) getVetByIdWithSpecialties(c *gin.Context) {
 		return
 	}
 
-	response, err := vetRouter.service.getVetByIdWithSpecialties(id)
+	response, err := vetRouter.service.getVetByIdWithSpecialties(uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
@@ -133,7 +133,7 @@ func (vetRouter *Router) getVetByIdWithSpecialties(c *gin.Context) {
 
 // addNewVet - add new vet
 func (vetRouter *Router) create(c *gin.Context) {
-	var vetRequest Request
+	var vetRequest AddRequest
 	err := c.ShouldBindJSON(&vetRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
@@ -141,23 +141,44 @@ func (vetRouter *Router) create(c *gin.Context) {
 		return
 	}
 
-	newVet, err := vetRouter.service.create(ToVet(&vetRequest))
+	vetEntity := FromAddRequest(&vetRequest)
+	newVet, err := vetRouter.service.create(vetEntity)
+	if err != nil {
+		log.Error().Err(err).Msg("Fail to create vet.")
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+			return
+		}
+	}
 	c.JSON(http.StatusCreated, newVet)
 }
 
 func (vetRouter *Router) update(c *gin.Context) {
-	var vetRequest Request
-	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
-	err := c.ShouldBindJSON(&vetRequest)
+	var vetRequest UpdateRequest
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
+		return
+	}
 
+	err = c.ShouldBindJSON(&vetRequest)
+	// ShouldBindJSON will return an error if the request body is not valid JSON
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
 		return
 	}
 
-	vetEntity := ToVet(&vetRequest)
+	vetEntity := FromUpdateRequest(&vetRequest)
 	vetEntity.ID = uint(id)
 	newVet, err := vetRouter.service.update(vetEntity)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+		return
+	}
 	c.JSON(http.StatusCreated, newVet)
 }

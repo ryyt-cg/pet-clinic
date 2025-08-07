@@ -1,11 +1,11 @@
 package repository
 
 import (
-	"gin-petclinic-service/pkg/model"
+	"gin-petclinic-service/pkg/repository/model"
 	"gorm.io/gorm"
 )
 
-// many2many relation by join vet_specialty table
+// Vet many2many relation by join vet_specialty table
 type Vet struct {
 	gorm.Model
 	model.Person
