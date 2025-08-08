@@ -5,14 +5,15 @@ import (
 	"errors"
 	"fiber-petclinic-service/config/app"
 	resterr "fiber-petclinic-service/pkg/errors"
-	"github.com/gofiber/fiber/v2"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"io"
 	"net"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 type infoServiceMock struct {

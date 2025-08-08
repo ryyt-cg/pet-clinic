@@ -3,9 +3,10 @@ package info
 import (
 	"fiber-petclinic-service/config/app"
 	resterr "fiber-petclinic-service/pkg/errors"
+	"strings"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
-	"strings"
 )
 
 type Router struct {
