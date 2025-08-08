@@ -16,8 +16,17 @@ goose-sqlite-up:
 goose-sqlite-down:
 	goose -dir migrations/sqlite sqlite3 pet-clinic.sqlite down
 
+test-coverage:
+	go test -coverprofile=coverage.out ./...
+
+view-test-coverage:
+	go tool cover -html=coverage.out -o coverage.html
+
+live-reload:
+	air -c ./air/.air.linux.conf
+
 run:
-	go run server.go
+	go run cmd/main.go
 
 test:
 	go test -v -cover ./...

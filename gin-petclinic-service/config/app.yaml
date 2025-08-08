@@ -1,26 +1,26 @@
 # app info
 appInfo:
-    name: "Pet Clinic"
-    description: "Golang Pet Clinic Service"
-    version: "1.0.0"
+  name: "Pet Clinic"
+  description: "Golang Pet Clinic Service"
+  version: "1.0.0"
 
 
 databases:
-    primary:
-        driver: sqlite3
-        host: localhost
-        name: pet-clinic.sqlite
-        connectionPool:
-            maxOpenConnection: 10
-            maxIdleConnection: 5
-            maxIdleTime: 30
+  primary:
+    driver: sqlite3
+    host: localhost
+    name: pet-clinic.sqlite
+    connectionPool:
+      maxOpenConnection: 10
+      maxIdleConnection: 5
+      maxIdleTime: 30
 
 server:
-    baseURL: "/api/pet-clinic"
-    host: localhost
-    certFile: "cmd/certs/myCA.pem"
-    keyFile: "cmd/certs/myCA-without-passphrase.key"
-    httpPort: ":8091"
-    logLevel: "info"
-    enablePrintRoutes: false
+  baseURL: "/api/pet-clinic"
+  host: localhost
+  certFile: "cmd/certs/myCA.pem"
+  keyFile: "cmd/certs/myCA-without-passphrase.key"
+  httpPort: ":8091"
+  logLevel: "info"
+  enablePrintRoutes: false
 

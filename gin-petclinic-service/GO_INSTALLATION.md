@@ -1,28 +1,37 @@
 # Golang Environment Setup
 
 ## Mac OS
+
 ### Go Version Manager
+
 There are two popular go version managers:
+
 1) [Simple go version manager](https://github.com/stefanmaric/g)
 2) Go Version Manager [GVM](https://github.com/moovweb/gvm)
 
-I personally chose the first one, simple version. I simply need a feature to install multiple versions of go and switch between them.
+I personally chose the first one, simple version. I simply need a feature to install multiple versions of go and switch
+between them.
 
 ## Windows
+
 ### Go Version Manager
+
 Will update soon.
 
-
 ## Linux
+
 ### Go Version Manager
+
 Will update soon.
 
 ## Install Go Version Manager
+
 ```shell
 curl -sSL https://git.io/g-install | sh -s
 ```
 
 ### Usage
+
 ```
   Usage: g [COMMAND] [options] [args]
 

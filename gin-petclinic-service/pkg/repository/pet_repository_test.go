@@ -2,7 +2,6 @@ package repository
 
 import (
 	"gin-petclinic-service/pkg/test"
-	"go.uber.org/zap"
 	"testing"
 
 	embeddedpostgres "github.com/fergusstrange/embedded-postgres"

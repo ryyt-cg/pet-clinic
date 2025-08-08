@@ -1,24 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites tests="56" errors="3">
-	<testsuite name="gin-petclinic-service/app" tests="11" failures="0" errors="0" id="0" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
-		<testcase name="TestAppInfoConfigValidation" classname="gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestAppInfoConfigValidation/ValidAppInfoConfig" classname="gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingName" classname="gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingDescription" classname="gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingVersion" classname="gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithValidHttpPort" classname="gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithEmptyHttpPort" classname="gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithInvalidHttpPort" classname="gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortMissingColon" classname="gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortMissingColonAndChars" classname="gin-petclinic-service/app" time="0.000"></testcase>
-		<testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortWithChars" classname="gin-petclinic-service/app" time="0.000"></testcase>
-	</testsuite>
-	<testsuite name="gin-petclinic-service/cmd" tests="0" failures="0" errors="0" id="1" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
-	<testsuite name="gin-petclinic-service/docs" tests="0" failures="0" errors="0" id="2" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
-	<testsuite name="gin-petclinic-service/internal/api" tests="0" failures="0" errors="0" id="3" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
-	<testsuite name="gin-petclinic-service/internal/api/health" tests="1" failures="0" errors="1" id="4" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
-		<testcase name="[build failed]" classname="github.com/rhtran/gin-petclinic-service/internal/api/health" time="0.000">
-			<error message="Build error"><![CDATA[internal/api/health/mock_check_servicer_test.go:8:6: MockCheckServicer redeclared in this block
+    <testsuite name="gin-petclinic-service/app" tests="11" failures="0" errors="0" id="0" hostname="ml0227784"
+               time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+        <testcase name="TestAppInfoConfigValidation" classname="gin-petclinic-service/app" time="0.000"></testcase>
+        <testcase name="TestAppInfoConfigValidation/ValidAppInfoConfig" classname="gin-petclinic-service/app"
+                  time="0.000"></testcase>
+        <testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingName"
+                  classname="gin-petclinic-service/app" time="0.000"></testcase>
+        <testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingDescription"
+                  classname="gin-petclinic-service/app" time="0.000"></testcase>
+        <testcase name="TestAppInfoConfigValidation/InvalidAppInfoConfigMissingVersion"
+                  classname="gin-petclinic-service/app" time="0.000"></testcase>
+        <testcase name="TestServerConfigValidationWithValidHttpPort" classname="gin-petclinic-service/app"
+                  time="0.000"></testcase>
+        <testcase name="TestServerConfigValidationWithEmptyHttpPort" classname="gin-petclinic-service/app"
+                  time="0.000"></testcase>
+        <testcase name="TestServerConfigValidationWithInvalidHttpPort" classname="gin-petclinic-service/app"
+                  time="0.000"></testcase>
+        <testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortMissingColon"
+                  classname="gin-petclinic-service/app" time="0.000"></testcase>
+        <testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortMissingColonAndChars"
+                  classname="gin-petclinic-service/app" time="0.000"></testcase>
+        <testcase name="TestServerConfigValidationWithInvalidHttpPort/InvalidPortWithChars"
+                  classname="gin-petclinic-service/app" time="0.000"></testcase>
+    </testsuite>
+    <testsuite name="gin-petclinic-service/cmd" tests="0" failures="0" errors="0" id="1" hostname="ml0227784"
+               time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+    <testsuite name="gin-petclinic-service/docs" tests="0" failures="0" errors="0" id="2" hostname="ml0227784"
+               time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+    <testsuite name="gin-petclinic-service/internal/api" tests="0" failures="0" errors="0" id="3" hostname="ml0227784"
+               time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+    <testsuite name="gin-petclinic-service/internal/api/health" tests="1" failures="0" errors="1" id="4"
+               hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+        <testcase name="[build failed]" classname="github.com/rhtran/gin-petclinic-service/internal/api/health"
+                  time="0.000">
+            <error message="Build error"><![CDATA[internal/api/health/mock_check_servicer_test.go:8:6: MockCheckServicer redeclared in this block
 	internal/api/health/mock_check_servicer.go:8:6: other declaration of MockCheckServicer
 internal/api/health/mock_check_servicer_test.go:12:6: MockCheckServicer_Expecter redeclared in this block
 	internal/api/health/mock_check_servicer.go:12:6: other declaration of MockCheckServicer_Expecter
@@ -33,11 +49,13 @@ internal/api/health/mock_check_servicer_test.go:72:41: method MockCheckServicer_
 internal/api/health/mock_check_servicer_test.go:79:6: NewMockCheckServicer redeclared in this block
 	internal/api/health/mock_check_servicer.go:79:6: other declaration of NewMockCheckServicer
 internal/api/health/mock_check_servicer_test.go:72:41: too many errors]]></error>
-		</testcase>
-	</testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/info" tests="1" failures="0" errors="1" id="5" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
-		<testcase name="[build failed]" classname="github.com/rhtran/gin-petclinic-service/internal/api/info" time="0.000">
-			<error message="Build error"><![CDATA[internal/api/info/mock_ip_servicer_test.go:12:6: MockIPServicer redeclared in this block
+        </testcase>
+    </testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/info" tests="1" failures="0" errors="1" id="5"
+               hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+        <testcase name="[build failed]" classname="github.com/rhtran/gin-petclinic-service/internal/api/info"
+                  time="0.000">
+            <error message="Build error"><![CDATA[internal/api/info/mock_ip_servicer_test.go:12:6: MockIPServicer redeclared in this block
 	internal/api/info/mock_ip_servicer.go:12:6: other declaration of MockIPServicer
 internal/api/info/mock_ip_servicer_test.go:16:6: MockIPServicer_Expecter redeclared in this block
 	internal/api/info/mock_ip_servicer.go:16:6: other declaration of MockIPServicer_Expecter
@@ -56,52 +74,78 @@ internal/api/info/mock_servicer_test.go:51:6: MockServicer_getAppInfo_Call redec
 internal/api/info/mock_servicer_test.go:79:6: NewMockServicer redeclared in this block
 	internal/api/info/mock_servicer.go:79:6: other declaration of NewMockServicer
 internal/api/info/mock_ip_servicer_test.go:25:27: too many errors]]></error>
-		</testcase>
-	</testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/service" tests="0" failures="0" errors="0" id="6" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/owner" tests="6" failures="0" errors="0" id="7" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
-		<testcase name="Test_ownerById" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000"></testcase>
-		<testcase name="Test_ownerById/Get_Owner_By_ID" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000">
-			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |       106.5µs |                 | GET      "/v1/owners/1"]]></system-out>
-		</testcase>
-		<testcase name="Test_OwnerByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000"></testcase>
-		<testcase name="Test_OwnerByLastName/Get_Owner_By_Last_Name" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000">
-			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |      50.042µs |                 | GET      "/v1/owners?last-name=Ward"]]></system-out>
-		</testcase>
-		<testcase name="Test_getById" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000">
-			<system-out><![CDATA[{"level":"info","ts":1713170645.300829,"caller":"owner/owner_service.go:27","msg":"retrieve owner by id: 1","function":"Test_getById"}]]></system-out>
-		</testcase>
-		<testcase name="Test_getByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000">
-			<system-out><![CDATA[{"level":"info","ts":1713170645.301214,"caller":"owner/owner_service.go:40","msg":"retrieve owners by last name: DiCaprio","function":"Test_getByLastName"}]]></system-out>
-		</testcase>
-	</testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/pet" tests="4" failures="0" errors="0" id="8" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
-		<testcase name="Test_PetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet" time="0.000">
-			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |     139.125µs |                 | GET      "/v1/pets/1"]]></system-out>
-		</testcase>
-		<testcase name="Test_PetByName" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet" time="0.000">
-			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |      122.25µs |                 | GET      "/v1/pets?name=Charles"]]></system-out>
-		</testcase>
-		<testcase name="Test_GetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet" time="0.000">
-			<system-out><![CDATA[{"level":"info","ts":1713170645.185819,"caller":"pet/pet_service.go:25","msg":"retrieve pet by id: %v1","function":"Test_GetById"}]]></system-out>
-		</testcase>
-		<testcase name="Test_GetByName" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet" time="0.000">
-			<system-out><![CDATA[{"level":"info","ts":1713170645.1860962,"caller":"pet/pet_service.go:38","msg":"retrieve pet by name: %vLeo","function":"Test_GetByName"}]]></system-out>
-		</testcase>
-	</testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/vet" tests="4" failures="0" errors="0" id="9" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
-		<testcase name="Test_VetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet" time="0.000">
-			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |     210.708µs |                 | GET      "/v1/vets/1"]]></system-out>
-		</testcase>
-		<testcase name="Test_VetByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet" time="0.000">
-			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |      41.875µs |                 | GET      "/v1/vets?last-name=Ward"]]></system-out>
-		</testcase>
-		<testcase name="Test_GetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet" time="0.000"></testcase>
-		<testcase name="Test_GetByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet" time="0.000"></testcase>
-	</testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/middleware" tests="1" failures="0" errors="1" id="10" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
-		<testcase name="[build failed]" classname="github.com/rhtran/gin-petclinic-service/middleware" time="0.000">
-			<error message="Build error"><![CDATA[middleware/mock_authen_servicer_test.go:11:6: MockAuthenServicer redeclared in this block
+        </testcase>
+    </testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/service" tests="0" failures="0" errors="0"
+               id="6" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/owner" tests="6" failures="0" errors="0"
+               id="7" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+        <testcase name="Test_ownerById" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner"
+                  time="0.000"></testcase>
+        <testcase name="Test_ownerById/Get_Owner_By_ID"
+                  classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000">
+            <system-out>
+                <![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |       106.5µs |                 | GET      "/v1/owners/1"]]></system-out>
+        </testcase>
+        <testcase name="Test_OwnerByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner"
+                  time="0.000"></testcase>
+        <testcase name="Test_OwnerByLastName/Get_Owner_By_Last_Name"
+                  classname="github.com/rhtran/gin-petclinic-service/internal/api/owner" time="0.000">
+            <system-out>
+                <![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |      50.042µs |                 | GET      "/v1/owners?last-name=Ward"]]></system-out>
+        </testcase>
+        <testcase name="Test_getById" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner"
+                  time="0.000">
+            <system-out>
+                <![CDATA[{"level":"info","ts":1713170645.300829,"caller":"owner/owner_service.go:27","msg":"retrieve owner by id: 1","function":"Test_getById"}]]></system-out>
+        </testcase>
+        <testcase name="Test_getByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/owner"
+                  time="0.000">
+            <system-out>
+                <![CDATA[{"level":"info","ts":1713170645.301214,"caller":"owner/owner_service.go:40","msg":"retrieve owners by last name: DiCaprio","function":"Test_getByLastName"}]]></system-out>
+        </testcase>
+    </testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/pet" tests="4" failures="0" errors="0" id="8"
+               hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+        <testcase name="Test_PetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet" time="0.000">
+            <system-out>
+                <![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |     139.125µs |                 | GET      "/v1/pets/1"]]></system-out>
+        </testcase>
+        <testcase name="Test_PetByName" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet"
+                  time="0.000">
+            <system-out>
+                <![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |      122.25µs |                 | GET      "/v1/pets?name=Charles"]]></system-out>
+        </testcase>
+        <testcase name="Test_GetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet" time="0.000">
+            <system-out>
+                <![CDATA[{"level":"info","ts":1713170645.185819,"caller":"pet/pet_service.go:25","msg":"retrieve pet by id: %v1","function":"Test_GetById"}]]></system-out>
+        </testcase>
+        <testcase name="Test_GetByName" classname="github.com/rhtran/gin-petclinic-service/internal/api/pet"
+                  time="0.000">
+            <system-out>
+                <![CDATA[{"level":"info","ts":1713170645.1860962,"caller":"pet/pet_service.go:38","msg":"retrieve pet by name: %vLeo","function":"Test_GetByName"}]]></system-out>
+        </testcase>
+    </testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/vet" tests="4" failures="0" errors="0" id="9"
+               hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+        <testcase name="Test_VetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet" time="0.000">
+            <system-out>
+                <![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |     210.708µs |                 | GET      "/v1/vets/1"]]></system-out>
+        </testcase>
+        <testcase name="Test_VetByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet"
+                  time="0.000">
+            <system-out>
+                <![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |      41.875µs |                 | GET      "/v1/vets?last-name=Ward"]]></system-out>
+        </testcase>
+        <testcase name="Test_GetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet"
+                  time="0.000"></testcase>
+        <testcase name="Test_GetByLastName" classname="github.com/rhtran/gin-petclinic-service/internal/api/vet"
+                  time="0.000"></testcase>
+    </testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/middleware" tests="1" failures="0" errors="1" id="10"
+               hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+        <testcase name="[build failed]" classname="github.com/rhtran/gin-petclinic-service/middleware" time="0.000">
+            <error message="Build error"><![CDATA[middleware/mock_authen_servicer_test.go:11:6: MockAuthenServicer redeclared in this block
 	middleware/mock_authen_servicer.go:11:6: other declaration of MockAuthenServicer
 middleware/mock_authen_servicer_test.go:15:6: MockAuthenServicer_Expecter redeclared in this block
 	middleware/mock_authen_servicer.go:15:6: other declaration of MockAuthenServicer_Expecter
@@ -117,38 +161,64 @@ middleware/mock_authen_servicer_test.go:81:40: method MockAuthenServicer_Expecte
 middleware/mock_authen_servicer_test.go:104:6: NewMockAuthenServicer redeclared in this block
 	middleware/mock_authen_servicer.go:104:6: other declaration of NewMockAuthenServicer
 middleware/mock_authen_servicer_test.go:81:40: too many errors]]></error>
-		</testcase>
-	</testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/pkg/dbase" tests="0" failures="0" errors="0" id="11" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/pkg/ds" tests="0" failures="0" errors="0" id="12" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/visit" tests="3" failures="0" errors="0" id="13" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
-		<testcase name="Test_VisitById" classname="github.com/rhtran/gin-petclinic-service/internal/api/visit" time="0.000"></testcase>
-		<testcase name="Test_VisitById/Get_Visit_By_ID" classname="github.com/rhtran/gin-petclinic-service/internal/api/visit" time="0.000">
-			<system-out><![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |       111.5µs |                 | GET      "/v1/visits/1"]]></system-out>
-		</testcase>
-		<testcase name="Test_GetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/visit" time="0.000"></testcase>
-	</testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/middleware/errors" tests="14" failures="0" errors="0" id="14" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
-		<testcase name="TestHandler" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestHandler/normal_processing" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestHandler/error_processing" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestHandler/HTTP_error_processing" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestHandler/panic_processing" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="Test_buildErrorResponse" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestErrorResponse_Error" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestErrorResponse_StatusCode" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestInternalServerError" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestNotFound" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestUnauthorized" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestForbidden" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestBadRequest" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-		<testcase name="TestInvalidInput" classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
-	</testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/pkg/infra/repository/test" tests="0" failures="0" errors="0" id="15" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:24-07:00"></testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/pkg/model" tests="0" failures="0" errors="0" id="16" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:24-07:00"></testsuite>
-	<testsuite name="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" tests="11" failures="0" errors="0" id="17" hostname="ml0227784" time="29.900" timestamp="2024-04-15T02:09:24-07:00">
-		<testcase name="TestOwnerRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="7.740">
-			<system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
+        </testcase>
+    </testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/pkg/dbase" tests="0" failures="0" errors="0" id="11"
+               hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/pkg/ds" tests="0" failures="0" errors="0" id="12"
+               hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00"></testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/internal/api/visit" tests="3" failures="0" errors="0"
+               id="13" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+        <testcase name="Test_VisitById" classname="github.com/rhtran/gin-petclinic-service/internal/api/visit"
+                  time="0.000"></testcase>
+        <testcase name="Test_VisitById/Get_Visit_By_ID"
+                  classname="github.com/rhtran/gin-petclinic-service/internal/api/visit" time="0.000">
+            <system-out>
+                <![CDATA[[GIN] 2024/04/15 - 01:44:05 | 200 |       111.5µs |                 | GET      "/v1/visits/1"]]></system-out>
+        </testcase>
+        <testcase name="Test_GetById" classname="github.com/rhtran/gin-petclinic-service/internal/api/visit"
+                  time="0.000"></testcase>
+    </testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/middleware/errors" tests="14" failures="0" errors="0"
+               id="14" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:23-07:00">
+        <testcase name="TestHandler" classname="github.com/rhtran/gin-petclinic-service/middleware/errors"
+                  time="0.000"></testcase>
+        <testcase name="TestHandler/normal_processing"
+                  classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+        <testcase name="TestHandler/error_processing"
+                  classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+        <testcase name="TestHandler/HTTP_error_processing"
+                  classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+        <testcase name="TestHandler/panic_processing"
+                  classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+        <testcase name="Test_buildErrorResponse" classname="github.com/rhtran/gin-petclinic-service/middleware/errors"
+                  time="0.000"></testcase>
+        <testcase name="TestErrorResponse_Error" classname="github.com/rhtran/gin-petclinic-service/middleware/errors"
+                  time="0.000"></testcase>
+        <testcase name="TestErrorResponse_StatusCode"
+                  classname="github.com/rhtran/gin-petclinic-service/middleware/errors" time="0.000"></testcase>
+        <testcase name="TestInternalServerError" classname="github.com/rhtran/gin-petclinic-service/middleware/errors"
+                  time="0.000"></testcase>
+        <testcase name="TestNotFound" classname="github.com/rhtran/gin-petclinic-service/middleware/errors"
+                  time="0.000"></testcase>
+        <testcase name="TestUnauthorized" classname="github.com/rhtran/gin-petclinic-service/middleware/errors"
+                  time="0.000"></testcase>
+        <testcase name="TestForbidden" classname="github.com/rhtran/gin-petclinic-service/middleware/errors"
+                  time="0.000"></testcase>
+        <testcase name="TestBadRequest" classname="github.com/rhtran/gin-petclinic-service/middleware/errors"
+                  time="0.000"></testcase>
+        <testcase name="TestInvalidInput" classname="github.com/rhtran/gin-petclinic-service/middleware/errors"
+                  time="0.000"></testcase>
+    </testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/pkg/infra/repository/test" tests="0" failures="0"
+               errors="0" id="15" hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:24-07:00"></testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/pkg/model" tests="0" failures="0" errors="0" id="16"
+               hostname="ml0227784" time="0.000" timestamp="2024-04-15T02:09:24-07:00"></testsuite>
+    <testsuite name="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" tests="11" failures="0" errors="0"
+               id="17" hostname="ml0227784" time="29.900" timestamp="2024-04-15T02:09:24-07:00">
+        <testcase name="TestOwnerRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+                  time="7.740">
+            <system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
 This user must also own the server process.
 
 The database cluster will be initialized with this locale configuration:
@@ -190,13 +260,15 @@ waiting for server to start....2024-04-15 01:44:13.236 PDT [62833] LOG:  startin
 server started
 2024/04/15 01:44:13 OK    2020092012000_petclinic.sql
 2024/04/15 01:44:13 goose: no migrations to run. current version: 2020092012000]]></system-out>
-		</testcase>
-		<testcase name="TestOwnerRepoTestSuite/Test_FindById" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.010">
-			<system-out><![CDATA[{"level":"info","ts":1713170653.4151318,"caller":"repository/owner_repository.go:38","msg":"search owner by id: 2","version":"owner_repository_test"}
+        </testcase>
+        <testcase name="TestOwnerRepoTestSuite/Test_FindById"
+                  classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.010">
+            <system-out><![CDATA[{"level":"info","ts":1713170653.4151318,"caller":"repository/owner_repository.go:38","msg":"search owner by id: 2","version":"owner_repository_test"}
 {"level":"info","ts":1713170653.419786,"caller":"repository/owner_repository.go:38","msg":"search owner by id: 5","version":"owner_repository_test"}]]></system-out>
-		</testcase>
-		<testcase name="TestOwnerRepoTestSuite/Test_FindByLastName" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
-			<system-out><![CDATA[{"level":"info","ts":1713170653.4202602,"caller":"repository/owner_repository.go:57","msg":"Search owner by last name: Coleman","version":"owner_repository_test"}
+        </testcase>
+        <testcase name="TestOwnerRepoTestSuite/Test_FindByLastName"
+                  classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
+            <system-out><![CDATA[{"level":"info","ts":1713170653.4202602,"caller":"repository/owner_repository.go:57","msg":"Search owner by last name: Coleman","version":"owner_repository_test"}
 {"level":"info","ts":1713170653.422664,"caller":"repository/owner_repository.go:57","msg":"Search owner by last name: Schroeder","version":"owner_repository_test"}
 2024-04-15 01:44:13.353 PDT [62841] ERROR:  relation "goose_db_version" does not exist at character 36
 2024-04-15 01:44:13.353 PDT [62841] STATEMENT:  SELECT version_id, is_applied from goose_db_version ORDER BY id DESC
@@ -211,9 +283,10 @@ waiting for server to shut down...2024-04-15 01:44:13.434 PDT [62833] LOG:  rece
 2024-04-15 01:44:13.458 PDT [62833] LOG:  database system is shut down
  done
 server stopped]]></system-out>
-		</testcase>
-		<testcase name="TestPetRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="7.320">
-			<system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
+        </testcase>
+        <testcase name="TestPetRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+                  time="7.320">
+            <system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
 This user must also own the server process.
 
 The database cluster will be initialized with this locale configuration:
@@ -255,13 +328,15 @@ waiting for server to start....2024-04-15 01:44:20.582 PDT [62874] LOG:  startin
 server started
 2024/04/15 01:44:20 OK    2020092012000_petclinic.sql
 2024/04/15 01:44:20 goose: no migrations to run. current version: 2020092012000]]></system-out>
-		</testcase>
-		<testcase name="TestPetRepoTestSuite/Test_FindById" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
-			<system-out><![CDATA[{"level":"info","ts":1713170660.7487428,"caller":"repository/pet_repository.go:39","msg":"Search pet by id: 1","version":"pet_repository_test"}
+        </testcase>
+        <testcase name="TestPetRepoTestSuite/Test_FindById"
+                  classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
+            <system-out><![CDATA[{"level":"info","ts":1713170660.7487428,"caller":"repository/pet_repository.go:39","msg":"Search pet by id: 1","version":"pet_repository_test"}
 {"level":"info","ts":1713170660.7517922,"caller":"repository/pet_repository.go:39","msg":"Search pet by id: 2","version":"pet_repository_test"}]]></system-out>
-		</testcase>
-		<testcase name="TestPetRepoTestSuite/Test_FindByName" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
-			<system-out><![CDATA[{"level":"info","ts":1713170660.752084,"caller":"repository/pet_repository.go:51","msg":"Search pet by name: Leo","version":"pet_repository_test"}
+        </testcase>
+        <testcase name="TestPetRepoTestSuite/Test_FindByName"
+                  classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
+            <system-out><![CDATA[{"level":"info","ts":1713170660.752084,"caller":"repository/pet_repository.go:51","msg":"Search pet by name: Leo","version":"pet_repository_test"}
 {"level":"info","ts":1713170660.753075,"caller":"repository/pet_repository.go:51","msg":"Search pet by name: Basil","version":"pet_repository_test"}
 2024-04-15 01:44:20.695 PDT [62882] ERROR:  relation "goose_db_version" does not exist at character 36
 2024-04-15 01:44:20.695 PDT [62882] STATEMENT:  SELECT version_id, is_applied from goose_db_version ORDER BY id DESC
@@ -276,9 +351,10 @@ waiting for server to shut down...2024-04-15 01:44:20.759 PDT [62874] LOG:  rece
 2024-04-15 01:44:20.775 PDT [62874] LOG:  database system is shut down
  done
 server stopped]]></system-out>
-		</testcase>
-		<testcase name="TestVetRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="7.370">
-			<system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
+        </testcase>
+        <testcase name="TestVetRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+                  time="7.370">
+            <system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
 This user must also own the server process.
 
 The database cluster will be initialized with this locale configuration:
@@ -320,13 +396,15 @@ waiting for server to start....2024-04-15 01:44:27.924 PDT [62899] LOG:  startin
 server started
 2024/04/15 01:44:28 OK    2020092012000_petclinic.sql
 2024/04/15 01:44:28 goose: no migrations to run. current version: 2020092012000]]></system-out>
-		</testcase>
-		<testcase name="TestVetRepoTestSuite/Test_FindById" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.010">
-			<system-out><![CDATA[{"level":"info","ts":1713170668.112606,"caller":"repository/vet_repository.go:39","msg":"Search vet by id: 1","version":"vet_repository_test"}
+        </testcase>
+        <testcase name="TestVetRepoTestSuite/Test_FindById"
+                  classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.010">
+            <system-out><![CDATA[{"level":"info","ts":1713170668.112606,"caller":"repository/vet_repository.go:39","msg":"Search vet by id: 1","version":"vet_repository_test"}
 {"level":"info","ts":1713170668.1168199,"caller":"repository/vet_repository.go:39","msg":"Search vet by id: 2","version":"vet_repository_test"}]]></system-out>
-		</testcase>
-		<testcase name="TestVetRepoTestSuite/Test_FindByLastName" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
-			<system-out><![CDATA[{"level":"info","ts":1713170668.118489,"caller":"repository/vet_repository.go:57","msg":"Search vet by last name: Carter","version":"vet_repository_test"}
+        </testcase>
+        <testcase name="TestVetRepoTestSuite/Test_FindByLastName"
+                  classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
+            <system-out><![CDATA[{"level":"info","ts":1713170668.118489,"caller":"repository/vet_repository.go:57","msg":"Search vet by last name: Carter","version":"vet_repository_test"}
 {"level":"info","ts":1713170668.120219,"caller":"repository/vet_repository.go:57","msg":"Search vet by last name: Leary","version":"vet_repository_test"}
 2024-04-15 01:44:28.036 PDT [62907] ERROR:  relation "goose_db_version" does not exist at character 36
 2024-04-15 01:44:28.036 PDT [62907] STATEMENT:  SELECT version_id, is_applied from goose_db_version ORDER BY id DESC
@@ -341,9 +419,10 @@ waiting for server to shut down...2024-04-15 01:44:28.131 PDT [62899] LOG:  rece
 2024-04-15 01:44:28.160 PDT [62899] LOG:  database system is shut down
  done
 server stopped]]></system-out>
-		</testcase>
-		<testcase name="TestVisitRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="7.450">
-			<system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
+        </testcase>
+        <testcase name="TestVisitRepoTestSuite" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository"
+                  time="7.450">
+            <system-out><![CDATA[The files belonging to this database system will be owned by user "ryyt".
 This user must also own the server process.
 
 The database cluster will be initialized with this locale configuration:
@@ -385,9 +464,10 @@ waiting for server to start....2024-04-15 01:44:35.387 PDT [62961] LOG:  startin
 server started
 2024/04/15 01:44:35 OK    2020092012000_petclinic.sql
 2024/04/15 01:44:35 goose: no migrations to run. current version: 2020092012000]]></system-out>
-		</testcase>
-		<testcase name="TestVisitRepoTestSuite/Test_FindById" classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
-			<system-out><![CDATA[{"level":"info","ts":1713170675.566777,"caller":"repository/visit_repository.go:32","msg":"Search visit by id: 2","version":"visit_repository_test"}
+        </testcase>
+        <testcase name="TestVisitRepoTestSuite/Test_FindById"
+                  classname="github.com/rhtran/gin-petclinic-service/pkg/infra/repository" time="0.000">
+            <system-out><![CDATA[{"level":"info","ts":1713170675.566777,"caller":"repository/visit_repository.go:32","msg":"Search visit by id: 2","version":"visit_repository_test"}
 {"level":"info","ts":1713170675.5706408,"caller":"repository/visit_repository.go:32","msg":"Search visit by id: 1","version":"visit_repository_test"}
 2024-04-15 01:44:35.505 PDT [62969] ERROR:  relation "goose_db_version" does not exist at character 36
 2024-04-15 01:44:35.505 PDT [62969] STATEMENT:  SELECT version_id, is_applied from goose_db_version ORDER BY id DESC
@@ -402,6 +482,6 @@ waiting for server to shut down...2024-04-15 01:44:35.579 PDT [62961] LOG:  rece
 2024-04-15 01:44:35.601 PDT [62961] LOG:  database system is shut down
  done
 server stopped]]></system-out>
-		</testcase>
-	</testsuite>
+        </testcase>
+    </testsuite>
 </testsuites>

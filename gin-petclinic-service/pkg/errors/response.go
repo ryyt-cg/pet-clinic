@@ -82,7 +82,7 @@ func BadRequest(msg string) ErrorResponse {
 	}
 }
 
-// BadRequest creates a new error response representing a bad request (HTTP 400)
+// BadRequestWithDetails creates a new error response representing a bad request (HTTP 400)
 func BadRequestWithDetails(err error) ErrorResponse {
 	errors, _ := err.(validator.ValidationErrors)
 	e := make(map[string]string)

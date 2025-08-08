@@ -1,1021 +1,1021 @@
 {
-    "schemes": [
-        "https"
-    ],
-    "swagger": "2.0",
-    "info": {
-        "description": "This is a pet clinic API server.",
-        "title": "Pet Clinic API",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
-        "version": "1.0"
+  "schemes": [
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a pet clinic API server.",
+    "title": "Pet Clinic API",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "name": "API Support",
+      "url": "http://www.swagger.io/support",
+      "email": "support@swagger.io"
     },
-    "host": "localhost:8443",
-    "basePath": "/v1",
-    "paths": {
-        "/owners": {
-            "get": {
-                "description": "Get owners by last name",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "Search owners by last name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Owner last name",
-                        "name": "last-name",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/owner.Responses"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Fail new owner",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "Fail new owner",
-                "parameters": [
-                    {
-                        "description": "Add owner",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/owner.AddRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/owner.UpdateResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0"
+  },
+  "host": "localhost:8443",
+  "basePath": "/v1",
+  "paths": {
+    "/owners": {
+      "get": {
+        "description": "Get owners by last name",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "owners"
+        ],
+        "summary": "Search owners by last name",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Owner last name",
+            "name": "last-name",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/owner.Responses"
             }
-        },
-        "/owners/all": {
-            "get": {
-                "description": "Get all owners",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "List all owners",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/owner.Responses"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
             }
-        },
-        "/owners/{id}": {
-            "get": {
-                "description": "Get owner by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "Search owner by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Owner ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/owner.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update new owner",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "Update owner",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Owner ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update owner",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/owner.UpdateRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/owner.UpdateResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
             }
-        },
-        "/owners/{id}/pets": {
-            "get": {
-                "description": "Get owner that has pets by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "owners"
-                ],
-                "summary": "Search owner that has pets by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Owner ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/owner.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/pets": {
-            "get": {
-                "description": "Get pet by name",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "pets"
-                ],
-                "summary": "Get pet by name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Pet Name",
-                        "name": "name",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/pet.Responses"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Add a new pet",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "pets"
-                ],
-                "summary": "Add a new pet",
-                "parameters": [
-                    {
-                        "description": "Add pet",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/pet.AddRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/pet.Responses"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/pets/all": {
-            "get": {
-                "description": "Get all pets",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "pets"
-                ],
-                "summary": "List all pets",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/pet.Responses"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/pets/{id}": {
-            "get": {
-                "description": "Get pet by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "pets"
-                ],
-                "summary": "Get pet by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Pet ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/pet.Responses"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Fail pet",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "pets"
-                ],
-                "summary": "Fail a pet",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Pet ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update pet",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/pet.UpdateRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/pet.Responses"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/pets/{id}/visits": {
-            "get": {
-                "description": "Get pet with visits by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "pets"
-                ],
-                "summary": "Get pet with visits by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Pet ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/pet.Responses"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/vets/all": {
-            "get": {
-                "description": "Get all vets",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "vets"
-                ],
-                "summary": "List all vets",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/vet.Responses"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/visits/all": {
-            "get": {
-                "description": "Get all visits",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "visits"
-                ],
-                "summary": "List all visits",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/visit.Responses"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/visits/{id}": {
-            "get": {
-                "description": "Get visit by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "visits"
-                ],
-                "summary": "Get visit by id",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Visit ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/visit.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update visit",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "visits"
-                ],
-                "summary": "Update visit",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Visit ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update visit",
-                        "name": "Request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/visit.UpdateRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/visit.Responses"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/errors.ErrorResponse"
-                        }
-                    }
-                }
-            }
+          }
         }
-    },
-    "definitions": {
-        "errors.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "details": {},
-                "message": {
-                    "type": "string",
-                    "example": "status bad request"
-                },
-                "status": {
-                    "type": "integer",
-                    "example": 400
-                }
+      },
+      "post": {
+        "description": "Fail new owner",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "owners"
+        ],
+        "summary": "Fail new owner",
+        "parameters": [
+          {
+            "description": "Add owner",
+            "name": "Request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/owner.AddRequest"
             }
-        },
-        "model.Context": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/owner.UpdateResponse"
             }
-        },
-        "owner.AddRequest": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "city": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "telephone": {
-                    "type": "string"
-                }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
             }
-        },
-        "owner.Response": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "city": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "pets": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/pet.Response"
-                    }
-                },
-                "telephone": {
-                    "type": "string"
-                }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
             }
-        },
-        "owner.Responses": {
-            "type": "object",
-            "properties": {
-                "context": {
-                    "$ref": "#/definitions/model.Context"
-                },
-                "owners": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/owner.Response"
-                    }
-                }
-            }
-        },
-        "owner.UpdateRequest": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "city": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "telephone": {
-                    "type": "string"
-                }
-            }
-        },
-        "owner.UpdateResponse": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "city": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "telephone": {
-                    "type": "string"
-                }
-            }
-        },
-        "pet.AddRequest": {
-            "type": "object",
-            "required": [
-                "birthdate",
-                "name",
-                "ownerID",
-                "typeID"
-            ],
-            "properties": {
-                "birthdate": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "ownerID": {
-                    "type": "integer"
-                },
-                "typeID": {
-                    "type": "integer"
-                }
-            }
-        },
-        "pet.Response": {
-            "type": "object",
-            "properties": {
-                "birthdate": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                },
-                "visits": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/visit.Response"
-                    }
-                }
-            }
-        },
-        "pet.Responses": {
-            "type": "object",
-            "properties": {
-                "context": {
-                    "$ref": "#/definitions/model.Context"
-                },
-                "pets": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/pet.Response"
-                    }
-                }
-            }
-        },
-        "pet.UpdateRequest": {
-            "type": "object",
-            "required": [
-                "birthdate",
-                "id",
-                "name",
-                "ownerID",
-                "typeID"
-            ],
-            "properties": {
-                "birthdate": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "ownerID": {
-                    "type": "integer"
-                },
-                "typeID": {
-                    "type": "integer"
-                }
-            }
-        },
-        "vet.Response": {
-            "type": "object",
-            "properties": {
-                "firstName": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "specialties": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/vet.specialtyResponse"
-                    }
-                }
-            }
-        },
-        "vet.Responses": {
-            "type": "object",
-            "properties": {
-                "context": {
-                    "$ref": "#/definitions/model.Context"
-                },
-                "vets": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/vet.Response"
-                    }
-                }
-            }
-        },
-        "vet.specialtyResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "visit.Response": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "visitDate": {
-                    "type": "string"
-                }
-            }
-        },
-        "visit.Responses": {
-            "type": "object",
-            "properties": {
-                "context": {
-                    "$ref": "#/definitions/model.Context"
-                },
-                "visits": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/visit.Response"
-                    }
-                }
-            }
-        },
-        "visit.UpdateRequest": {
-            "type": "object",
-            "required": [
-                "description",
-                "petId",
-                "visitDate"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "petId": {
-                    "type": "integer"
-                },
-                "visitDate": {
-                    "type": "string"
-                }
-            }
+          }
         }
+      }
     },
-    "externalDocs": {
-        "description": "OpenAPI",
-        "url": "https://swagger.io/resources/open-api/"
+    "/owners/all": {
+      "get": {
+        "description": "Get all owners",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "owners"
+        ],
+        "summary": "List all owners",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/owner.Responses"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/owners/{id}": {
+      "get": {
+        "description": "Get owner by ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "owners"
+        ],
+        "summary": "Search owner by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Owner ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/owner.Response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update new owner",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "owners"
+        ],
+        "summary": "Update owner",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Owner ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Update owner",
+            "name": "Request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/owner.UpdateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/owner.UpdateResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/owners/{id}/pets": {
+      "get": {
+        "description": "Get owner that has pets by ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "owners"
+        ],
+        "summary": "Search owner that has pets by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Owner ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/owner.Response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/pets": {
+      "get": {
+        "description": "Get pet by name",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "pets"
+        ],
+        "summary": "Get pet by name",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Pet Name",
+            "name": "name",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/pet.Responses"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Add a new pet",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "pets"
+        ],
+        "summary": "Add a new pet",
+        "parameters": [
+          {
+            "description": "Add pet",
+            "name": "Request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pet.AddRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/pet.Responses"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/pets/all": {
+      "get": {
+        "description": "Get all pets",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "pets"
+        ],
+        "summary": "List all pets",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/pet.Responses"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/pets/{id}": {
+      "get": {
+        "description": "Get pet by ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "pets"
+        ],
+        "summary": "Get pet by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Pet ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/pet.Responses"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Fail pet",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "pets"
+        ],
+        "summary": "Fail a pet",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Pet ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Update pet",
+            "name": "Request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pet.UpdateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/pet.Responses"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/pets/{id}/visits": {
+      "get": {
+        "description": "Get pet with visits by ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "pets"
+        ],
+        "summary": "Get pet with visits by ID",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Pet ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/pet.Responses"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/vets/all": {
+      "get": {
+        "description": "Get all vets",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "vets"
+        ],
+        "summary": "List all vets",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/vet.Responses"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/visits/all": {
+      "get": {
+        "description": "Get all visits",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "visits"
+        ],
+        "summary": "List all visits",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/visit.Responses"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/visits/{id}": {
+      "get": {
+        "description": "Get visit by ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "visits"
+        ],
+        "summary": "Get visit by id",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Visit ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/visit.Response"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update visit",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "visits"
+        ],
+        "summary": "Update visit",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "Visit ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Update visit",
+            "name": "Request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/visit.UpdateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/visit.Responses"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errors.ErrorResponse"
+            }
+          }
+        }
+      }
     }
+  },
+  "definitions": {
+    "errors.ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "details": {},
+        "message": {
+          "type": "string",
+          "example": "status bad request"
+        },
+        "status": {
+          "type": "integer",
+          "example": 400
+        }
+      }
+    },
+    "model.Context": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        }
+      }
+    },
+    "owner.AddRequest": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "telephone": {
+          "type": "string"
+        }
+      }
+    },
+    "owner.Response": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "pets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/pet.Response"
+          }
+        },
+        "telephone": {
+          "type": "string"
+        }
+      }
+    },
+    "owner.Responses": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "$ref": "#/definitions/model.Context"
+        },
+        "owners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/owner.Response"
+          }
+        }
+      }
+    },
+    "owner.UpdateRequest": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "telephone": {
+          "type": "string"
+        }
+      }
+    },
+    "owner.UpdateResponse": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "telephone": {
+          "type": "string"
+        }
+      }
+    },
+    "pet.AddRequest": {
+      "type": "object",
+      "required": [
+        "birthdate",
+        "name",
+        "ownerID",
+        "typeID"
+      ],
+      "properties": {
+        "birthdate": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "ownerID": {
+          "type": "integer"
+        },
+        "typeID": {
+          "type": "integer"
+        }
+      }
+    },
+    "pet.Response": {
+      "type": "object",
+      "properties": {
+        "birthdate": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "visits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/visit.Response"
+          }
+        }
+      }
+    },
+    "pet.Responses": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "$ref": "#/definitions/model.Context"
+        },
+        "pets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/pet.Response"
+          }
+        }
+      }
+    },
+    "pet.UpdateRequest": {
+      "type": "object",
+      "required": [
+        "birthdate",
+        "id",
+        "name",
+        "ownerID",
+        "typeID"
+      ],
+      "properties": {
+        "birthdate": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "ownerID": {
+          "type": "integer"
+        },
+        "typeID": {
+          "type": "integer"
+        }
+      }
+    },
+    "vet.Response": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "specialties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/vet.specialtyResponse"
+          }
+        }
+      }
+    },
+    "vet.Responses": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "$ref": "#/definitions/model.Context"
+        },
+        "vets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/vet.Response"
+          }
+        }
+      }
+    },
+    "vet.specialtyResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "visit.Response": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "visitDate": {
+          "type": "string"
+        }
+      }
+    },
+    "visit.Responses": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "$ref": "#/definitions/model.Context"
+        },
+        "visits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/visit.Response"
+          }
+        }
+      }
+    },
+    "visit.UpdateRequest": {
+      "type": "object",
+      "required": [
+        "description",
+        "petId",
+        "visitDate"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "petId": {
+          "type": "integer"
+        },
+        "visitDate": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "OpenAPI",
+    "url": "https://swagger.io/resources/open-api/"
+  }
 }

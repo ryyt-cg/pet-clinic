@@ -70,15 +70,15 @@ func loadComponents() {
 	ipService := info.NewIPService()
 	infoRouter := info.NewRouter(infoService, ipService)
 
-	//// Owner
-	//ownerRepository := repository.NewOwnerRepository(db)
-	//ownerService := owner.NewService(ownerRepository)
-	//ownerRouter := owner.NewRouter(ownerService)
-	//
+	// Owner
+	ownerRepository := repository.NewOwnerRepository(db)
+	ownerService := owner.NewService(ownerRepository)
+	ownerRouter := owner.NewRouter(ownerService)
+
 	// Pet
-	//petRepository := repository.NewPetRepository(db)
-	//petService := pet.NewService(petRepository)
-	//petRouter := pet.NewRouter(petService)
+	petRepository := repository.NewPetRepository(db)
+	petService := pet.NewService(petRepository)
+	petRouter := pet.NewRouter(petService)
 
 	// Vet
 	vetRepository := repository.NewVetRepository(db)
@@ -101,8 +101,8 @@ func loadComponents() {
 
 	healthCheckRouter.Register(home.Group("/health"))
 	infoRouter.Register(home.Group("/info"))
-	//ownerRouter.Register(v1.Group("/owners"))
-	//petRouter.Register(v1.Group("/pets"))
+	ownerRouter.Register(v1.Group("/owners"))
+	petRouter.Register(v1.Group("/pets"))
 	vetRouter.Register(v1.Group("/vets"))
 	visitRouter.Register(v1.Group("/visits"))
 }
