@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
+
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )

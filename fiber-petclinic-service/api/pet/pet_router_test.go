@@ -9,12 +9,13 @@ import (
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
 	"fiber-petclinic-service/pkg/test"
-	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 )
 
 func Test_getAllPets(t *testing.T) {

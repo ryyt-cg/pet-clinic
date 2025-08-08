@@ -10,8 +10,12 @@ import (
 	"fiber-petclinic-service/config/app"
 	"fiber-petclinic-service/pkg/dbase"
 	"fiber-petclinic-service/pkg/repository"
+	"os"
+	"time"
+
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/contrib/circuitbreaker"
+	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
@@ -20,7 +24,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"time"
 )
 
 var (
@@ -31,7 +34,7 @@ var (
 // Instantiate zerolog
 // Instantiate fiber router and middlewares
 func loadConfig() {
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
 	log.Info().Msg("Go Fiber Pet Clinic starts")
 
 	// load application configurations
@@ -61,6 +64,11 @@ func loadConfig() {
 		log.Fatal().Err(err).Msg("Fail to connect the database.")
 	}
 
+	// fiberzerolog config
+	fiberLog := fiberzerolog.Config{
+		Logger: &logger,
+	}
+
 	fiberConfig := fiber.Config{
 		AppName:           "fiber-petclinic-service",
 		EnablePrintRoutes: app.Config.Server.EnablePrintRoutes,
@@ -75,6 +83,7 @@ func loadConfig() {
 
 	// Monitor
 	fiberApp.Get(app.Config.Server.BaseURL+"/monitor", monitor.New(monitor.Config{Title: "fiber-petclinic-service Monitor"}))
+	fiberApp.Use(fiberzerolog.New(fiberLog))
 
 	cb := circuitbreaker.New(circuitbreaker.Config{
 		FailureThreshold: app.Config.CircuitBreaker.FailureThreshold,

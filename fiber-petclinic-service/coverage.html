@@ -1,135 +1,176 @@
-
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>info: Go Coverage Report</title>
-		<style>
-			body {
-				background: black;
-				color: rgb(80, 80, 80);
-			}
-			body, pre, #legend span {
-				font-family: Menlo, monospace;
-				font-weight: bold;
-			}
-			#topbar {
-				background: black;
-				position: fixed;
-				top: 0; left: 0; right: 0;
-				height: 42px;
-				border-bottom: 1px solid rgb(80, 80, 80);
-			}
-			#content {
-				margin-top: 50px;
-			}
-			#nav, #legend {
-				float: left;
-				margin-left: 10px;
-			}
-			#legend {
-				margin-top: 12px;
-			}
-			#nav {
-				margin-top: 10px;
-			}
-			#legend span {
-				margin: 0 5px;
-			}
-			.cov0 { color: rgb(192, 0, 0) }
-.cov1 { color: rgb(128, 128, 128) }
-.cov2 { color: rgb(116, 140, 131) }
-.cov3 { color: rgb(104, 152, 134) }
-.cov4 { color: rgb(92, 164, 137) }
-.cov5 { color: rgb(80, 176, 140) }
-.cov6 { color: rgb(68, 188, 143) }
-.cov7 { color: rgb(56, 200, 146) }
-.cov8 { color: rgb(44, 212, 149) }
-.cov9 { color: rgb(32, 224, 152) }
-.cov10 { color: rgb(20, 236, 155) }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>info: Go Coverage Report</title>
+    <style>
+        body {
+            background: black;
+            color: rgb(80, 80, 80);
+        }
 
-		</style>
-	</head>
-	<body>
-		<div id="topbar">
-			<div id="nav">
-				<select id="files">
-				
-				<option value="file0">fiber-petclinic-service/api/info/info_router.go (100.0%)</option>
-				
-				<option value="file1">fiber-petclinic-service/api/info/info_service.go (100.0%)</option>
-				
-				<option value="file2">fiber-petclinic-service/api/info/ip_service.go (100.0%)</option>
-				
-				<option value="file3">fiber-petclinic-service/api/owner/owner_request.go (100.0%)</option>
-				
-				<option value="file4">fiber-petclinic-service/api/owner/owner_response.go (100.0%)</option>
-				
-				<option value="file5">fiber-petclinic-service/api/owner/owner_router.go (97.5%)</option>
-				
-				<option value="file6">fiber-petclinic-service/api/owner/owner_service.go (100.0%)</option>
-				
-				<option value="file7">fiber-petclinic-service/api/pet/pet_request.go (100.0%)</option>
-				
-				<option value="file8">fiber-petclinic-service/api/pet/pet_response.go (100.0%)</option>
-				
-				<option value="file9">fiber-petclinic-service/api/pet/pet_router.go (82.4%)</option>
-				
-				<option value="file10">fiber-petclinic-service/api/pet/pet_service.go (100.0%)</option>
-				
-				<option value="file11">fiber-petclinic-service/api/vet/specialty.go (100.0%)</option>
-				
-				<option value="file12">fiber-petclinic-service/api/vet/vet_request.go (100.0%)</option>
-				
-				<option value="file13">fiber-petclinic-service/api/vet/vet_response.go (100.0%)</option>
-				
-				<option value="file14">fiber-petclinic-service/api/vet/vet_router.go (100.0%)</option>
-				
-				<option value="file15">fiber-petclinic-service/api/vet/vet_service.go (100.0%)</option>
-				
-				<option value="file16">fiber-petclinic-service/api/visit/visit_request.go (100.0%)</option>
-				
-				<option value="file17">fiber-petclinic-service/api/visit/visit_response.go (100.0%)</option>
-				
-				<option value="file18">fiber-petclinic-service/api/visit/visit_router.go (100.0%)</option>
-				
-				<option value="file19">fiber-petclinic-service/api/visit/visit_service.go (100.0%)</option>
-				
-				<option value="file20">fiber-petclinic-service/cmd/server.go (0.0%)</option>
-				
-				<option value="file21">fiber-petclinic-service/config/app/config.go (0.0%)</option>
-				
-				<option value="file22">fiber-petclinic-service/pkg/errors/response.go (100.0%)</option>
-				
-				<option value="file23">fiber-petclinic-service/pkg/pagination/pages.go (100.0%)</option>
-				
-				<option value="file24">fiber-petclinic-service/pkg/repository/mocks.go (0.0%)</option>
-				
-				<option value="file25">fiber-petclinic-service/pkg/repository/owner_repository.go (0.0%)</option>
-				
-				<option value="file26">fiber-petclinic-service/pkg/repository/pet_repository.go (0.0%)</option>
-				
-				<option value="file27">fiber-petclinic-service/pkg/repository/vet_repository.go (0.0%)</option>
-				
-				<option value="file28">fiber-petclinic-service/pkg/repository/visit_repository.go (0.0%)</option>
-				
-				<option value="file29">fiber-petclinic-service/pkg/test/api.go (0.0%)</option>
-				
-				<option value="file30">fiber-petclinic-service/pkg/test/embedded_postgres.go (0.0%)</option>
-				
-				<option value="file31">fiber-petclinic-service/pkg/test/etl.go (0.0%)</option>
-				
-				</select>
-			</div>
-			<div id="legend">
-				<span>not tracked</span>
-			
-				<span class="cov0">not covered</span>
-				<span class="cov8">covered</span>
-			
-			</div>
-		</div>
-		<div id="content">
+        body, pre, #legend span {
+            font-family: Menlo, monospace;
+            font-weight: bold;
+        }
+
+        #topbar {
+            background: black;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 42px;
+            border-bottom: 1px solid rgb(80, 80, 80);
+        }
+
+        #content {
+            margin-top: 50px;
+        }
+
+        #nav, #legend {
+            float: left;
+            margin-left: 10px;
+        }
+
+        #legend {
+            margin-top: 12px;
+        }
+
+        #nav {
+            margin-top: 10px;
+        }
+
+        #legend span {
+            margin: 0 5px;
+        }
+
+        .cov0 {
+            color: rgb(192, 0, 0)
+        }
+
+        .cov1 {
+            color: rgb(128, 128, 128)
+        }
+
+        .cov2 {
+            color: rgb(116, 140, 131)
+        }
+
+        .cov3 {
+            color: rgb(104, 152, 134)
+        }
+
+        .cov4 {
+            color: rgb(92, 164, 137)
+        }
+
+        .cov5 {
+            color: rgb(80, 176, 140)
+        }
+
+        .cov6 {
+            color: rgb(68, 188, 143)
+        }
+
+        .cov7 {
+            color: rgb(56, 200, 146)
+        }
+
+        .cov8 {
+            color: rgb(44, 212, 149)
+        }
+
+        .cov9 {
+            color: rgb(32, 224, 152)
+        }
+
+        .cov10 {
+            color: rgb(20, 236, 155)
+        }
+
+    </style>
+</head>
+<body>
+<div id="topbar">
+    <div id="nav">
+        <select id="files">
+
+            <option value="file0">fiber-petclinic-service/api/info/info_router.go (100.0%)</option>
+
+            <option value="file1">fiber-petclinic-service/api/info/info_service.go (100.0%)</option>
+
+            <option value="file2">fiber-petclinic-service/api/info/ip_service.go (100.0%)</option>
+
+            <option value="file3">fiber-petclinic-service/api/owner/owner_request.go (100.0%)</option>
+
+            <option value="file4">fiber-petclinic-service/api/owner/owner_response.go (100.0%)</option>
+
+            <option value="file5">fiber-petclinic-service/api/owner/owner_router.go (97.5%)</option>
+
+            <option value="file6">fiber-petclinic-service/api/owner/owner_service.go (100.0%)</option>
+
+            <option value="file7">fiber-petclinic-service/api/pet/pet_request.go (100.0%)</option>
+
+            <option value="file8">fiber-petclinic-service/api/pet/pet_response.go (100.0%)</option>
+
+            <option value="file9">fiber-petclinic-service/api/pet/pet_router.go (82.4%)</option>
+
+            <option value="file10">fiber-petclinic-service/api/pet/pet_service.go (100.0%)</option>
+
+            <option value="file11">fiber-petclinic-service/api/vet/specialty.go (100.0%)</option>
+
+            <option value="file12">fiber-petclinic-service/api/vet/vet_request.go (100.0%)</option>
+
+            <option value="file13">fiber-petclinic-service/api/vet/vet_response.go (100.0%)</option>
+
+            <option value="file14">fiber-petclinic-service/api/vet/vet_router.go (100.0%)</option>
+
+            <option value="file15">fiber-petclinic-service/api/vet/vet_service.go (100.0%)</option>
+
+            <option value="file16">fiber-petclinic-service/api/visit/visit_request.go (100.0%)</option>
+
+            <option value="file17">fiber-petclinic-service/api/visit/visit_response.go (100.0%)</option>
+
+            <option value="file18">fiber-petclinic-service/api/visit/visit_router.go (100.0%)</option>
+
+            <option value="file19">fiber-petclinic-service/api/visit/visit_service.go (100.0%)</option>
+
+            <option value="file20">fiber-petclinic-service/cmd/server.go (0.0%)</option>
+
+            <option value="file21">fiber-petclinic-service/config/app/config.go (0.0%)</option>
+
+            <option value="file22">fiber-petclinic-service/pkg/errors/response.go (100.0%)</option>
+
+            <option value="file23">fiber-petclinic-service/pkg/pagination/pages.go (100.0%)</option>
+
+            <option value="file24">fiber-petclinic-service/pkg/repository/mocks.go (0.0%)</option>
+
+            <option value="file25">fiber-petclinic-service/pkg/repository/owner_repository.go (0.0%)</option>
+
+            <option value="file26">fiber-petclinic-service/pkg/repository/pet_repository.go (0.0%)</option>
+
+            <option value="file27">fiber-petclinic-service/pkg/repository/vet_repository.go (0.0%)</option>
+
+            <option value="file28">fiber-petclinic-service/pkg/repository/visit_repository.go (0.0%)</option>
+
+            <option value="file29">fiber-petclinic-service/pkg/test/api.go (0.0%)</option>
+
+            <option value="file30">fiber-petclinic-service/pkg/test/embedded_postgres.go (0.0%)</option>
+
+            <option value="file31">fiber-petclinic-service/pkg/test/etl.go (0.0%)</option>
+
+        </select>
+    </div>
+    <div id="legend">
+        <span>not tracked</span>
+
+        <span class="cov0">not covered</span>
+        <span class="cov8">covered</span>
+
+    </div>
+</div>
+<div id="content">
 		
 		<pre class="file" id="file0" style="display: none">package info
 
@@ -186,8 +227,8 @@ func (infoRouter *Router) appInfo(c *fiber.Ctx) error <span class="cov8" title="
         <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(result)</span>
 }
 </pre>
-		
-		<pre class="file" id="file1" style="display: none">package info
+
+    <pre class="file" id="file1" style="display: none">package info
 
 import (
         "fiber-petclinic-service/config/app"
@@ -217,8 +258,8 @@ func (service *Service) getAppInfo() (*Info, error) <span class="cov8" title="1"
         return info, nil
 }</span>
 </pre>
-		
-		<pre class="file" id="file2" style="display: none">package info
+
+    <pre class="file" id="file2" style="display: none">package info
 
 import (
         "net"
@@ -240,8 +281,8 @@ func (service *IPService) lookupIP(host string) ([]net.IP, error) <span class="c
         return net.LookupIP(host)
 }</span>
 </pre>
-		
-		<pre class="file" id="file3" style="display: none">package owner
+
+    <pre class="file" id="file3" style="display: none">package owner
 
 import (
         "fiber-petclinic-service/pkg/repository"
@@ -300,8 +341,8 @@ func ToOwnerEntityFromUpdateRequest(ownerRequest *UpdateRequest) *repository.Own
         }
 }</span>
 </pre>
-		
-		<pre class="file" id="file4" style="display: none">package owner
+
+    <pre class="file" id="file4" style="display: none">package owner
 
 import (
         "fiber-petclinic-service/api/pet"
@@ -369,8 +410,8 @@ func FromOwners(owners []repository.Owner) []Response <span class="cov8" title="
         <span class="cov8" title="1">return ownerResponses</span>
 }
 </pre>
-		
-		<pre class="file" id="file5" style="display: none">package owner
+
+    <pre class="file" id="file5" style="display: none">package owner
 
 import (
         "errors"
@@ -595,8 +636,8 @@ func (r *Router) updateOwner(c *fiber.Ctx) error <span class="cov8" title="1">{
         <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(updatedOwner)</span>
 }
 </pre>
-		
-		<pre class="file" id="file6" style="display: none">package owner
+
+    <pre class="file" id="file6" style="display: none">package owner
 
 import (
         "fiber-petclinic-service/pkg/repository"
@@ -713,8 +754,8 @@ func (service *Service) update(id uint, request *UpdateRequest) (*UpdateResponse
         return response, nil</span>
 }
 </pre>
-		
-		<pre class="file" id="file7" style="display: none">package pet
+
+    <pre class="file" id="file7" style="display: none">package pet
 
 import (
         "fiber-petclinic-service/pkg/repository"
@@ -785,8 +826,8 @@ func FromUpdateRequest(petRequest *UpdateRequest) (*repository.Pet, error) <span
         }, nil</span>
 }
 </pre>
-		
-		<pre class="file" id="file8" style="display: none">package pet
+
+    <pre class="file" id="file8" style="display: none">package pet
 
 import (
         "fiber-petclinic-service/api/visit"
@@ -852,8 +893,8 @@ func ToResponses(pets []repository.Pet) *Responses <span class="cov8" title="1">
         return &amp;Responses{Pets: petResponses, Context: contextJson}
 }</span>
 </pre>
-		
-		<pre class="file" id="file9" style="display: none">package pet
+
+    <pre class="file" id="file9" style="display: none">package pet
 
 import (
         "errors"
@@ -1095,8 +1136,8 @@ func (router *Router) update(c *fiber.Ctx) error <span class="cov8" title="1">{
         <span class="cov0" title="0">return c.Status(fiber.StatusOK).JSON(petResponse)</span>
 }
 </pre>
-		
-		<pre class="file" id="file10" style="display: none">package pet
+
+    <pre class="file" id="file10" style="display: none">package pet
 
 import (
         "errors"
@@ -1227,8 +1268,8 @@ func (service *Service) update(pet *repository.Pet) (*Response, error) <span cla
         return response, nil</span>
 }
 </pre>
-		
-		<pre class="file" id="file11" style="display: none">package vet
+
+    <pre class="file" id="file11" style="display: none">package vet
 
 import (
         "fiber-petclinic-service/pkg/repository"
@@ -1295,8 +1336,8 @@ func ToSpecialties(specialties []specialtyResponse) *[]repository.Specialty <spa
         <span class="cov8" title="1">return &amp;specialtyEntities</span>
 }
 </pre>
-		
-		<pre class="file" id="file12" style="display: none">package vet
+
+    <pre class="file" id="file12" style="display: none">package vet
 
 import (
         "fiber-petclinic-service/pkg/repository"
@@ -1355,8 +1396,8 @@ func FromUpdateRequest(vetRequest *UpdateRequest) *repository.Vet <span class="c
         }
 }</span>
 </pre>
-		
-		<pre class="file" id="file13" style="display: none">package vet
+
+    <pre class="file" id="file13" style="display: none">package vet
 
 import (
         "fiber-petclinic-service/pkg/repository"
@@ -1396,8 +1437,8 @@ func ToResponses(vets []repository.Vet) *Responses <span class="cov8" title="1">
         return &amp;Responses{Vets: vetsJson, Context: contextJson}
 }</span>
 </pre>
-		
-		<pre class="file" id="file14" style="display: none">package vet
+
+    <pre class="file" id="file14" style="display: none">package vet
 
 import (
         "errors"
@@ -1583,8 +1624,8 @@ func (vetRouter *Router) update(c *fiber.Ctx) error <span class="cov8" title="1"
 //        c.JSON(http.StatusOK, response)
 //}
 </pre>
-		
-		<pre class="file" id="file15" style="display: none">package vet
+
+    <pre class="file" id="file15" style="display: none">package vet
 
 import (
         "errors"
@@ -1749,8 +1790,8 @@ func (service *Service) update(vet *repository.Vet) (*Response, error) <span cla
         return response, nil</span>
 }
 </pre>
-		
-		<pre class="file" id="file16" style="display: none">package visit
+
+    <pre class="file" id="file16" style="display: none">package visit
 
 import (
         "fiber-petclinic-service/pkg/repository"
@@ -1809,8 +1850,8 @@ func FromUpdateRequest(request *UpdateRequest) (*repository.Visit, error) <span 
         return visitEntify, nil</span>
 }
 </pre>
-		
-		<pre class="file" id="file17" style="display: none">package visit
+
+    <pre class="file" id="file17" style="display: none">package visit
 
 import (
         "fiber-petclinic-service/pkg/repository"
@@ -1894,8 +1935,8 @@ func ToResponses(responses []Response) *Responses <span class="cov8" title="1">{
         }</span>
 }
 </pre>
-		
-		<pre class="file" id="file18" style="display: none">package visit
+
+    <pre class="file" id="file18" style="display: none">package visit
 
 import (
         "errors"
@@ -2048,8 +2089,8 @@ func (r *Router) updateVisit(c *fiber.Ctx) error <span class="cov8" title="1">{
         <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(response)</span>
 }
 </pre>
-		
-		<pre class="file" id="file19" style="display: none">package visit
+
+    <pre class="file" id="file19" style="display: none">package visit
 
 import (
         "errors"
@@ -2136,8 +2177,8 @@ func (service *Service) update(visit *repository.Visit) (*Response, error) <span
         return response, nil</span>
 }
 </pre>
-		
-		<pre class="file" id="file20" style="display: none">package main
+
+    <pre class="file" id="file20" style="display: none">package main
 
 import (
         "context"
@@ -2282,8 +2323,8 @@ func main() <span class="cov0" title="0">{
         }</span>
 }
 </pre>
-		
-		<pre class="file" id="file21" style="display: none">package app
+
+    <pre class="file" id="file21" style="display: none">package app
 
 import (
         "fmt"
@@ -2348,8 +2389,8 @@ func getConfigFile(env string) string <span class="cov0" title="0">{
         }
 }
 </pre>
-		
-		<pre class="file" id="file22" style="display: none">package errors
+
+    <pre class="file" id="file22" style="display: none">package errors
 
 import (
         validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -2456,8 +2497,8 @@ func InvalidInput(errs validation.Errors) ErrorResponse <span class="cov8" title
         }</span>
 }
 </pre>
-		
-		<pre class="file" id="file23" style="display: none">// Package pagination provides support for pagination requests and responses.
+
+    <pre class="file" id="file23" style="display: none">// Package pagination provides support for pagination requests and responses.
 package pagination
 
 import (
@@ -2531,7 +2572,8 @@ func parseInt(value string, defaultValue int) int <span class="cov8" title="1">{
         if value == "" </span><span class="cov8" title="1">{
                 return defaultValue
         }</span>
-        <span class="cov8" title="1">if result, err := strconv.Atoi(value); err == nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if result, err := strconv.Atoi(value); err == nil </span><span class="cov8"
+                                                                                                    title="1">{
                 return result
         }</span>
         <span class="cov8" title="1">return defaultValue</span>
@@ -2587,13 +2629,15 @@ func (p *Pages) BuildLinks(baseURL string, defaultPerPage int) [4]string <span c
                 links[0] = fmt.Sprintf("%v%v=%v", baseURL, PageVar, 1)
                 links[1] = fmt.Sprintf("%v%v=%v", baseURL, PageVar, page-1)
         }</span>
-        <span class="cov8" title="1">if pageCount &gt;= 0 &amp;&amp; page &lt; pageCount </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if pageCount &gt;= 0 &amp;&amp; page &lt; pageCount </span><span class="cov8"
+                                                                                                      title="1">{
                 links[2] = fmt.Sprintf("%v%v=%v", baseURL, PageVar, page+1)
                 links[3] = fmt.Sprintf("%v%v=%v", baseURL, PageVar, pageCount)
         }</span> else<span class="cov8" title="1"> if pageCount &lt; 0 </span><span class="cov8" title="1">{
                 links[2] = fmt.Sprintf("%v%v=%v", baseURL, PageVar, page+1)
         }</span>
-        <span class="cov8" title="1">if perPage := p.PerPage; perPage != defaultPerPage </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if perPage := p.PerPage; perPage != defaultPerPage </span><span class="cov8"
+                                                                                                     title="1">{
                 for i := 0; i &lt; 4; i++ </span><span class="cov8" title="1">{
                         if links[i] != "" </span><span class="cov8" title="1">{
                                 links[i] += fmt.Sprintf("&amp;%v=%v", PageSizeVar, perPage)
@@ -2604,8 +2648,8 @@ func (p *Pages) BuildLinks(baseURL string, defaultPerPage int) [4]string <span c
         <span class="cov8" title="1">return links</span>
 }
 </pre>
-		
-		<pre class="file" id="file24" style="display: none">// Code generated by mockery; DO NOT EDIT.
+
+    <pre class="file" id="file24" style="display: none">// Code generated by mockery; DO NOT EDIT.
 // github.com/vektra/mockery
 // template: testify
 
@@ -2655,14 +2699,16 @@ func (_mock *MockOwnerRepositorier) FindAll() ([]Owner, error) <span class="cov0
         if returnFunc, ok := ret.Get(0).(func() ([]Owner, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc()
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Owner); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Owner); ok </span><span class="cov0"
+                                                                                                       title="0">{
                 r0 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).([]Owner)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0"
+                                                                                                     title="0">{
                 r1 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -2680,19 +2726,22 @@ func (_e *MockOwnerRepositorier_Expecter) FindAll() *MockOwnerRepositorier_FindA
         return &amp;MockOwnerRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
 }</span>
 
-func (_c *MockOwnerRepositorier_FindAll_Call) Run(run func()) *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindAll_Call) Run(run func()) *MockOwnerRepositorier_FindAll_Call <span class="cov0"
+                                                                                                        title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 run()
         }</span>)
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockOwnerRepositorier_FindAll_Call) Return(owners []Owner, err error) *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindAll_Call) Return(owners []Owner, err error) *MockOwnerRepositorier_FindAll_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(owners, err)
         return _c
 }</span>
 
-func (_c *MockOwnerRepositorier_FindAll_Call) RunAndReturn(run func() ([]Owner, error)) *MockOwnerRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindAll_Call) RunAndReturn(run func() ([]Owner, error)) *MockOwnerRepositorier_FindAll_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -2710,14 +2759,16 @@ func (_mock *MockOwnerRepositorier) FindById(id uint) (*Owner, error) <span clas
         if returnFunc, ok := ret.Get(0).(func(uint) (*Owner, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(id)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Owner); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Owner); ok </span><span class="cov0"
+                                                                                                          title="0">{
                 r0 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Owner)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -2732,11 +2783,13 @@ type MockOwnerRepositorier_FindById_Call struct {
 
 // FindById is a helper method to define mock.On call
 //   - id uint
-func (_e *MockOwnerRepositorier_Expecter) FindById(id interface{}) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_e *MockOwnerRepositorier_Expecter) FindById(id interface{}) *MockOwnerRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         return &amp;MockOwnerRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
 }</span>
 
-func (_c *MockOwnerRepositorier_FindById_Call) Run(run func(id uint)) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindById_Call) Run(run func(id uint)) *MockOwnerRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 uint
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -2749,12 +2802,14 @@ func (_c *MockOwnerRepositorier_FindById_Call) Run(run func(id uint)) *MockOwner
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockOwnerRepositorier_FindById_Call) Return(owner *Owner, err error) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindById_Call) Return(owner *Owner, err error) *MockOwnerRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(owner, err)
         return _c
 }</span>
 
-func (_c *MockOwnerRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Owner, error)) *MockOwnerRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Owner, error)) *MockOwnerRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -2772,14 +2827,16 @@ func (_mock *MockOwnerRepositorier) FindByIdWithPets(id uint) (*Owner, error) <s
         if returnFunc, ok := ret.Get(0).(func(uint) (*Owner, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(id)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Owner); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Owner); ok </span><span class="cov0"
+                                                                                                          title="0">{
                 r0 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Owner)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -2794,11 +2851,13 @@ type MockOwnerRepositorier_FindByIdWithPets_Call struct {
 
 // FindByIdWithPets is a helper method to define mock.On call
 //   - id uint
-func (_e *MockOwnerRepositorier_Expecter) FindByIdWithPets(id interface{}) *MockOwnerRepositorier_FindByIdWithPets_Call <span class="cov0" title="0">{
+func (_e *MockOwnerRepositorier_Expecter) FindByIdWithPets(id interface{}) *MockOwnerRepositorier_FindByIdWithPets_Call <span
+                class="cov0" title="0">{
         return &amp;MockOwnerRepositorier_FindByIdWithPets_Call{Call: _e.mock.On("FindByIdWithPets", id)}
 }</span>
 
-func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) Run(run func(id uint)) *MockOwnerRepositorier_FindByIdWithPets_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) Run(run func(id uint)) *MockOwnerRepositorier_FindByIdWithPets_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 uint
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -2811,12 +2870,14 @@ func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) Run(run func(id uint)) *M
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) Return(owner *Owner, err error) *MockOwnerRepositorier_FindByIdWithPets_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) Return(owner *Owner, err error) *MockOwnerRepositorier_FindByIdWithPets_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(owner, err)
         return _c
 }</span>
 
-func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) RunAndReturn(run func(id uint) (*Owner, error)) *MockOwnerRepositorier_FindByIdWithPets_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindByIdWithPets_Call) RunAndReturn(run func(id uint) (*Owner, error)) *MockOwnerRepositorier_FindByIdWithPets_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -2834,14 +2895,16 @@ func (_mock *MockOwnerRepositorier) FindByLastName(lastName string) ([]Owner, er
         if returnFunc, ok := ret.Get(0).(func(string) ([]Owner, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(lastName)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(string) []Owner); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(string) []Owner); ok </span><span
+                class="cov0" title="0">{
                 r0 = returnFunc(lastName)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).([]Owner)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0"
+                                                                                                           title="0">{
                 r1 = returnFunc(lastName)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -2856,11 +2919,13 @@ type MockOwnerRepositorier_FindByLastName_Call struct {
 
 // FindByLastName is a helper method to define mock.On call
 //   - lastName string
-func (_e *MockOwnerRepositorier_Expecter) FindByLastName(lastName interface{}) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+func (_e *MockOwnerRepositorier_Expecter) FindByLastName(lastName interface{}) *MockOwnerRepositorier_FindByLastName_Call <span
+                class="cov0" title="0">{
         return &amp;MockOwnerRepositorier_FindByLastName_Call{Call: _e.mock.On("FindByLastName", lastName)}
 }</span>
 
-func (_c *MockOwnerRepositorier_FindByLastName_Call) Run(run func(lastName string)) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindByLastName_Call) Run(run func(lastName string)) *MockOwnerRepositorier_FindByLastName_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 string
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -2873,12 +2938,14 @@ func (_c *MockOwnerRepositorier_FindByLastName_Call) Run(run func(lastName strin
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockOwnerRepositorier_FindByLastName_Call) Return(owners []Owner, err error) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindByLastName_Call) Return(owners []Owner, err error) *MockOwnerRepositorier_FindByLastName_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(owners, err)
         return _c
 }</span>
 
-func (_c *MockOwnerRepositorier_FindByLastName_Call) RunAndReturn(run func(lastName string) ([]Owner, error)) *MockOwnerRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_FindByLastName_Call) RunAndReturn(run func(lastName string) ([]Owner, error)) *MockOwnerRepositorier_FindByLastName_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -2896,14 +2963,16 @@ func (_mock *MockOwnerRepositorier) Insert(owner *Owner) (*Owner, error) <span c
         if returnFunc, ok := ret.Get(0).(func(*Owner) (*Owner, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(owner)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Owner) *Owner); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Owner) *Owner); ok </span><span class="cov0"
+                                                                                                            title="0">{
                 r0 = returnFunc(owner)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Owner)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Owner) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Owner) error); ok </span><span class="cov0"
+                                                                                                           title="0">{
                 r1 = returnFunc(owner)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -2918,11 +2987,13 @@ type MockOwnerRepositorier_Insert_Call struct {
 
 // Insert is a helper method to define mock.On call
 //   - owner *Owner
-func (_e *MockOwnerRepositorier_Expecter) Insert(owner interface{}) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_e *MockOwnerRepositorier_Expecter) Insert(owner interface{}) *MockOwnerRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         return &amp;MockOwnerRepositorier_Insert_Call{Call: _e.mock.On("Insert", owner)}
 }</span>
 
-func (_c *MockOwnerRepositorier_Insert_Call) Run(run func(owner *Owner)) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_Insert_Call) Run(run func(owner *Owner)) *MockOwnerRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 *Owner
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -2935,12 +3006,14 @@ func (_c *MockOwnerRepositorier_Insert_Call) Run(run func(owner *Owner)) *MockOw
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockOwnerRepositorier_Insert_Call) Return(owner1 *Owner, err error) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_Insert_Call) Return(owner1 *Owner, err error) *MockOwnerRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(owner1, err)
         return _c
 }</span>
 
-func (_c *MockOwnerRepositorier_Insert_Call) RunAndReturn(run func(owner *Owner) (*Owner, error)) *MockOwnerRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_Insert_Call) RunAndReturn(run func(owner *Owner) (*Owner, error)) *MockOwnerRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -2958,14 +3031,16 @@ func (_mock *MockOwnerRepositorier) Update(owner *Owner) (*Owner, error) <span c
         if returnFunc, ok := ret.Get(0).(func(*Owner) (*Owner, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(owner)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Owner) *Owner); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Owner) *Owner); ok </span><span class="cov0"
+                                                                                                            title="0">{
                 r0 = returnFunc(owner)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Owner)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Owner) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Owner) error); ok </span><span class="cov0"
+                                                                                                           title="0">{
                 r1 = returnFunc(owner)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -2980,11 +3055,13 @@ type MockOwnerRepositorier_Update_Call struct {
 
 // Update is a helper method to define mock.On call
 //   - owner *Owner
-func (_e *MockOwnerRepositorier_Expecter) Update(owner interface{}) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
+func (_e *MockOwnerRepositorier_Expecter) Update(owner interface{}) *MockOwnerRepositorier_Update_Call <span
+                class="cov0" title="0">{
         return &amp;MockOwnerRepositorier_Update_Call{Call: _e.mock.On("Update", owner)}
 }</span>
 
-func (_c *MockOwnerRepositorier_Update_Call) Run(run func(owner *Owner)) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_Update_Call) Run(run func(owner *Owner)) *MockOwnerRepositorier_Update_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 *Owner
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -2997,12 +3074,14 @@ func (_c *MockOwnerRepositorier_Update_Call) Run(run func(owner *Owner)) *MockOw
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockOwnerRepositorier_Update_Call) Return(owner1 *Owner, err error) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_Update_Call) Return(owner1 *Owner, err error) *MockOwnerRepositorier_Update_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(owner1, err)
         return _c
 }</span>
 
-func (_c *MockOwnerRepositorier_Update_Call) RunAndReturn(run func(owner *Owner) (*Owner, error)) *MockOwnerRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockOwnerRepositorier_Update_Call) RunAndReturn(run func(owner *Owner) (*Owner, error)) *MockOwnerRepositorier_Update_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3047,14 +3126,16 @@ func (_mock *MockPetRepositorier) FindAll() ([]Pet, error) <span class="cov0" ti
         if returnFunc, ok := ret.Get(0).(func() ([]Pet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc()
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Pet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Pet); ok </span><span class="cov0"
+                                                                                                     title="0">{
                 r0 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).([]Pet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0"
+                                                                                                     title="0">{
                 r1 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3072,19 +3153,22 @@ func (_e *MockPetRepositorier_Expecter) FindAll() *MockPetRepositorier_FindAll_C
         return &amp;MockPetRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
 }</span>
 
-func (_c *MockPetRepositorier_FindAll_Call) Run(run func()) *MockPetRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindAll_Call) Run(run func()) *MockPetRepositorier_FindAll_Call <span class="cov0"
+                                                                                                    title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 run()
         }</span>)
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockPetRepositorier_FindAll_Call) Return(pets []Pet, err error) *MockPetRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindAll_Call) Return(pets []Pet, err error) *MockPetRepositorier_FindAll_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(pets, err)
         return _c
 }</span>
 
-func (_c *MockPetRepositorier_FindAll_Call) RunAndReturn(run func() ([]Pet, error)) *MockPetRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindAll_Call) RunAndReturn(run func() ([]Pet, error)) *MockPetRepositorier_FindAll_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3102,14 +3186,16 @@ func (_mock *MockPetRepositorier) FindById(id uint) (*Pet, error) <span class="c
         if returnFunc, ok := ret.Get(0).(func(uint) (*Pet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(id)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Pet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Pet); ok </span><span class="cov0"
+                                                                                                        title="0">{
                 r0 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Pet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3124,11 +3210,13 @@ type MockPetRepositorier_FindById_Call struct {
 
 // FindById is a helper method to define mock.On call
 //   - id uint
-func (_e *MockPetRepositorier_Expecter) FindById(id interface{}) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_e *MockPetRepositorier_Expecter) FindById(id interface{}) *MockPetRepositorier_FindById_Call <span class="cov0"
+                                                                                                          title="0">{
         return &amp;MockPetRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
 }</span>
 
-func (_c *MockPetRepositorier_FindById_Call) Run(run func(id uint)) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindById_Call) Run(run func(id uint)) *MockPetRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 uint
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -3141,12 +3229,14 @@ func (_c *MockPetRepositorier_FindById_Call) Run(run func(id uint)) *MockPetRepo
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockPetRepositorier_FindById_Call) Return(pet *Pet, err error) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindById_Call) Return(pet *Pet, err error) *MockPetRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(pet, err)
         return _c
 }</span>
 
-func (_c *MockPetRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Pet, error)) *MockPetRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Pet, error)) *MockPetRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3164,14 +3254,16 @@ func (_mock *MockPetRepositorier) FindByIdWithVisits(id uint) (*Pet, error) <spa
         if returnFunc, ok := ret.Get(0).(func(uint) (*Pet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(id)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Pet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Pet); ok </span><span class="cov0"
+                                                                                                        title="0">{
                 r0 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Pet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3186,11 +3278,13 @@ type MockPetRepositorier_FindByIdWithVisits_Call struct {
 
 // FindByIdWithVisits is a helper method to define mock.On call
 //   - id uint
-func (_e *MockPetRepositorier_Expecter) FindByIdWithVisits(id interface{}) *MockPetRepositorier_FindByIdWithVisits_Call <span class="cov0" title="0">{
+func (_e *MockPetRepositorier_Expecter) FindByIdWithVisits(id interface{}) *MockPetRepositorier_FindByIdWithVisits_Call <span
+                class="cov0" title="0">{
         return &amp;MockPetRepositorier_FindByIdWithVisits_Call{Call: _e.mock.On("FindByIdWithVisits", id)}
 }</span>
 
-func (_c *MockPetRepositorier_FindByIdWithVisits_Call) Run(run func(id uint)) *MockPetRepositorier_FindByIdWithVisits_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindByIdWithVisits_Call) Run(run func(id uint)) *MockPetRepositorier_FindByIdWithVisits_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 uint
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -3203,12 +3297,14 @@ func (_c *MockPetRepositorier_FindByIdWithVisits_Call) Run(run func(id uint)) *M
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockPetRepositorier_FindByIdWithVisits_Call) Return(pet *Pet, err error) *MockPetRepositorier_FindByIdWithVisits_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindByIdWithVisits_Call) Return(pet *Pet, err error) *MockPetRepositorier_FindByIdWithVisits_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(pet, err)
         return _c
 }</span>
 
-func (_c *MockPetRepositorier_FindByIdWithVisits_Call) RunAndReturn(run func(id uint) (*Pet, error)) *MockPetRepositorier_FindByIdWithVisits_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindByIdWithVisits_Call) RunAndReturn(run func(id uint) (*Pet, error)) *MockPetRepositorier_FindByIdWithVisits_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3226,14 +3322,16 @@ func (_mock *MockPetRepositorier) FindByName(name string) ([]Pet, error) <span c
         if returnFunc, ok := ret.Get(0).(func(string) ([]Pet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(name)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(string) []Pet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(string) []Pet); ok </span><span class="cov0"
+                                                                                                           title="0">{
                 r0 = returnFunc(name)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).([]Pet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0"
+                                                                                                           title="0">{
                 r1 = returnFunc(name)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3248,11 +3346,13 @@ type MockPetRepositorier_FindByName_Call struct {
 
 // FindByName is a helper method to define mock.On call
 //   - name string
-func (_e *MockPetRepositorier_Expecter) FindByName(name interface{}) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
+func (_e *MockPetRepositorier_Expecter) FindByName(name interface{}) *MockPetRepositorier_FindByName_Call <span
+                class="cov0" title="0">{
         return &amp;MockPetRepositorier_FindByName_Call{Call: _e.mock.On("FindByName", name)}
 }</span>
 
-func (_c *MockPetRepositorier_FindByName_Call) Run(run func(name string)) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindByName_Call) Run(run func(name string)) *MockPetRepositorier_FindByName_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 string
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -3265,12 +3365,14 @@ func (_c *MockPetRepositorier_FindByName_Call) Run(run func(name string)) *MockP
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockPetRepositorier_FindByName_Call) Return(pets []Pet, err error) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindByName_Call) Return(pets []Pet, err error) *MockPetRepositorier_FindByName_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(pets, err)
         return _c
 }</span>
 
-func (_c *MockPetRepositorier_FindByName_Call) RunAndReturn(run func(name string) ([]Pet, error)) *MockPetRepositorier_FindByName_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_FindByName_Call) RunAndReturn(run func(name string) ([]Pet, error)) *MockPetRepositorier_FindByName_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3288,14 +3390,16 @@ func (_mock *MockPetRepositorier) Insert(pet *Pet) (*Pet, error) <span class="co
         if returnFunc, ok := ret.Get(0).(func(*Pet) (*Pet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(pet)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Pet) *Pet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Pet) *Pet); ok </span><span class="cov0"
+                                                                                                        title="0">{
                 r0 = returnFunc(pet)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Pet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Pet) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Pet) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(pet)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3310,11 +3414,13 @@ type MockPetRepositorier_Insert_Call struct {
 
 // Insert is a helper method to define mock.On call
 //   - pet *Pet
-func (_e *MockPetRepositorier_Expecter) Insert(pet interface{}) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_e *MockPetRepositorier_Expecter) Insert(pet interface{}) *MockPetRepositorier_Insert_Call <span class="cov0"
+                                                                                                       title="0">{
         return &amp;MockPetRepositorier_Insert_Call{Call: _e.mock.On("Insert", pet)}
 }</span>
 
-func (_c *MockPetRepositorier_Insert_Call) Run(run func(pet *Pet)) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_Insert_Call) Run(run func(pet *Pet)) *MockPetRepositorier_Insert_Call <span class="cov0"
+                                                                                                          title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 *Pet
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -3327,12 +3433,14 @@ func (_c *MockPetRepositorier_Insert_Call) Run(run func(pet *Pet)) *MockPetRepos
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockPetRepositorier_Insert_Call) Return(pet1 *Pet, err error) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_Insert_Call) Return(pet1 *Pet, err error) *MockPetRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(pet1, err)
         return _c
 }</span>
 
-func (_c *MockPetRepositorier_Insert_Call) RunAndReturn(run func(pet *Pet) (*Pet, error)) *MockPetRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_Insert_Call) RunAndReturn(run func(pet *Pet) (*Pet, error)) *MockPetRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3350,14 +3458,16 @@ func (_mock *MockPetRepositorier) Update(pet *Pet) (*Pet, error) <span class="co
         if returnFunc, ok := ret.Get(0).(func(*Pet) (*Pet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(pet)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Pet) *Pet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Pet) *Pet); ok </span><span class="cov0"
+                                                                                                        title="0">{
                 r0 = returnFunc(pet)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Pet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Pet) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Pet) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(pet)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3372,11 +3482,13 @@ type MockPetRepositorier_Update_Call struct {
 
 // Update is a helper method to define mock.On call
 //   - pet *Pet
-func (_e *MockPetRepositorier_Expecter) Update(pet interface{}) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
+func (_e *MockPetRepositorier_Expecter) Update(pet interface{}) *MockPetRepositorier_Update_Call <span class="cov0"
+                                                                                                       title="0">{
         return &amp;MockPetRepositorier_Update_Call{Call: _e.mock.On("Update", pet)}
 }</span>
 
-func (_c *MockPetRepositorier_Update_Call) Run(run func(pet *Pet)) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_Update_Call) Run(run func(pet *Pet)) *MockPetRepositorier_Update_Call <span class="cov0"
+                                                                                                          title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 *Pet
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -3389,12 +3501,14 @@ func (_c *MockPetRepositorier_Update_Call) Run(run func(pet *Pet)) *MockPetRepos
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockPetRepositorier_Update_Call) Return(pet1 *Pet, err error) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_Update_Call) Return(pet1 *Pet, err error) *MockPetRepositorier_Update_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(pet1, err)
         return _c
 }</span>
 
-func (_c *MockPetRepositorier_Update_Call) RunAndReturn(run func(pet *Pet) (*Pet, error)) *MockPetRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockPetRepositorier_Update_Call) RunAndReturn(run func(pet *Pet) (*Pet, error)) *MockPetRepositorier_Update_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3439,14 +3553,16 @@ func (_mock *MockVetRepositorier) FindAll() ([]Vet, error) <span class="cov0" ti
         if returnFunc, ok := ret.Get(0).(func() ([]Vet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc()
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Vet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Vet); ok </span><span class="cov0"
+                                                                                                     title="0">{
                 r0 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).([]Vet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0"
+                                                                                                     title="0">{
                 r1 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3464,19 +3580,22 @@ func (_e *MockVetRepositorier_Expecter) FindAll() *MockVetRepositorier_FindAll_C
         return &amp;MockVetRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
 }</span>
 
-func (_c *MockVetRepositorier_FindAll_Call) Run(run func()) *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindAll_Call) Run(run func()) *MockVetRepositorier_FindAll_Call <span class="cov0"
+                                                                                                    title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 run()
         }</span>)
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVetRepositorier_FindAll_Call) Return(vets []Vet, err error) *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindAll_Call) Return(vets []Vet, err error) *MockVetRepositorier_FindAll_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(vets, err)
         return _c
 }</span>
 
-func (_c *MockVetRepositorier_FindAll_Call) RunAndReturn(run func() ([]Vet, error)) *MockVetRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindAll_Call) RunAndReturn(run func() ([]Vet, error)) *MockVetRepositorier_FindAll_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3494,14 +3613,16 @@ func (_mock *MockVetRepositorier) FindAllPreload() ([]Vet, error) <span class="c
         if returnFunc, ok := ret.Get(0).(func() ([]Vet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc()
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Vet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Vet); ok </span><span class="cov0"
+                                                                                                     title="0">{
                 r0 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).([]Vet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0"
+                                                                                                     title="0">{
                 r1 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3515,23 +3636,27 @@ type MockVetRepositorier_FindAllPreload_Call struct {
 }
 
 // FindAllPreload is a helper method to define mock.On call
-func (_e *MockVetRepositorier_Expecter) FindAllPreload() *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
+func (_e *MockVetRepositorier_Expecter) FindAllPreload() *MockVetRepositorier_FindAllPreload_Call <span class="cov0"
+                                                                                                        title="0">{
         return &amp;MockVetRepositorier_FindAllPreload_Call{Call: _e.mock.On("FindAllPreload")}
 }</span>
 
-func (_c *MockVetRepositorier_FindAllPreload_Call) Run(run func()) *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindAllPreload_Call) Run(run func()) *MockVetRepositorier_FindAllPreload_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 run()
         }</span>)
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVetRepositorier_FindAllPreload_Call) Return(vets []Vet, err error) *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindAllPreload_Call) Return(vets []Vet, err error) *MockVetRepositorier_FindAllPreload_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(vets, err)
         return _c
 }</span>
 
-func (_c *MockVetRepositorier_FindAllPreload_Call) RunAndReturn(run func() ([]Vet, error)) *MockVetRepositorier_FindAllPreload_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindAllPreload_Call) RunAndReturn(run func() ([]Vet, error)) *MockVetRepositorier_FindAllPreload_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3549,14 +3674,16 @@ func (_mock *MockVetRepositorier) FindAllSpecialties() ([]Specialty, error) <spa
         if returnFunc, ok := ret.Get(0).(func() ([]Specialty, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc()
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Specialty); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Specialty); ok </span><span class="cov0"
+                                                                                                           title="0">{
                 r0 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).([]Specialty)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0"
+                                                                                                     title="0">{
                 r1 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3570,23 +3697,27 @@ type MockVetRepositorier_FindAllSpecialties_Call struct {
 }
 
 // FindAllSpecialties is a helper method to define mock.On call
-func (_e *MockVetRepositorier_Expecter) FindAllSpecialties() *MockVetRepositorier_FindAllSpecialties_Call <span class="cov0" title="0">{
+func (_e *MockVetRepositorier_Expecter) FindAllSpecialties() *MockVetRepositorier_FindAllSpecialties_Call <span
+                class="cov0" title="0">{
         return &amp;MockVetRepositorier_FindAllSpecialties_Call{Call: _e.mock.On("FindAllSpecialties")}
 }</span>
 
-func (_c *MockVetRepositorier_FindAllSpecialties_Call) Run(run func()) *MockVetRepositorier_FindAllSpecialties_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindAllSpecialties_Call) Run(run func()) *MockVetRepositorier_FindAllSpecialties_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 run()
         }</span>)
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVetRepositorier_FindAllSpecialties_Call) Return(specialtys []Specialty, err error) *MockVetRepositorier_FindAllSpecialties_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindAllSpecialties_Call) Return(specialtys []Specialty, err error) *MockVetRepositorier_FindAllSpecialties_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(specialtys, err)
         return _c
 }</span>
 
-func (_c *MockVetRepositorier_FindAllSpecialties_Call) RunAndReturn(run func() ([]Specialty, error)) *MockVetRepositorier_FindAllSpecialties_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindAllSpecialties_Call) RunAndReturn(run func() ([]Specialty, error)) *MockVetRepositorier_FindAllSpecialties_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3604,14 +3735,16 @@ func (_mock *MockVetRepositorier) FindById(id uint) (*Vet, error) <span class="c
         if returnFunc, ok := ret.Get(0).(func(uint) (*Vet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(id)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Vet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Vet); ok </span><span class="cov0"
+                                                                                                        title="0">{
                 r0 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Vet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3626,11 +3759,13 @@ type MockVetRepositorier_FindById_Call struct {
 
 // FindById is a helper method to define mock.On call
 //   - id uint
-func (_e *MockVetRepositorier_Expecter) FindById(id interface{}) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_e *MockVetRepositorier_Expecter) FindById(id interface{}) *MockVetRepositorier_FindById_Call <span class="cov0"
+                                                                                                          title="0">{
         return &amp;MockVetRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
 }</span>
 
-func (_c *MockVetRepositorier_FindById_Call) Run(run func(id uint)) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindById_Call) Run(run func(id uint)) *MockVetRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 uint
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -3643,12 +3778,14 @@ func (_c *MockVetRepositorier_FindById_Call) Run(run func(id uint)) *MockVetRepo
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVetRepositorier_FindById_Call) Return(vet *Vet, err error) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindById_Call) Return(vet *Vet, err error) *MockVetRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(vet, err)
         return _c
 }</span>
 
-func (_c *MockVetRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Vet, error)) *MockVetRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Vet, error)) *MockVetRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3666,14 +3803,16 @@ func (_mock *MockVetRepositorier) FindByIdWithSpecialties(id uint) (*Vet, error)
         if returnFunc, ok := ret.Get(0).(func(uint) (*Vet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(id)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Vet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Vet); ok </span><span class="cov0"
+                                                                                                        title="0">{
                 r0 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Vet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3688,11 +3827,13 @@ type MockVetRepositorier_FindByIdWithSpecialties_Call struct {
 
 // FindByIdWithSpecialties is a helper method to define mock.On call
 //   - id uint
-func (_e *MockVetRepositorier_Expecter) FindByIdWithSpecialties(id interface{}) *MockVetRepositorier_FindByIdWithSpecialties_Call <span class="cov0" title="0">{
+func (_e *MockVetRepositorier_Expecter) FindByIdWithSpecialties(id interface{}) *MockVetRepositorier_FindByIdWithSpecialties_Call <span
+                class="cov0" title="0">{
         return &amp;MockVetRepositorier_FindByIdWithSpecialties_Call{Call: _e.mock.On("FindByIdWithSpecialties", id)}
 }</span>
 
-func (_c *MockVetRepositorier_FindByIdWithSpecialties_Call) Run(run func(id uint)) *MockVetRepositorier_FindByIdWithSpecialties_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindByIdWithSpecialties_Call) Run(run func(id uint)) *MockVetRepositorier_FindByIdWithSpecialties_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 uint
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -3705,12 +3846,14 @@ func (_c *MockVetRepositorier_FindByIdWithSpecialties_Call) Run(run func(id uint
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVetRepositorier_FindByIdWithSpecialties_Call) Return(vet *Vet, err error) *MockVetRepositorier_FindByIdWithSpecialties_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindByIdWithSpecialties_Call) Return(vet *Vet, err error) *MockVetRepositorier_FindByIdWithSpecialties_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(vet, err)
         return _c
 }</span>
 
-func (_c *MockVetRepositorier_FindByIdWithSpecialties_Call) RunAndReturn(run func(id uint) (*Vet, error)) *MockVetRepositorier_FindByIdWithSpecialties_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindByIdWithSpecialties_Call) RunAndReturn(run func(id uint) (*Vet, error)) *MockVetRepositorier_FindByIdWithSpecialties_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3728,14 +3871,16 @@ func (_mock *MockVetRepositorier) FindByLastName(lastName string) ([]Vet, error)
         if returnFunc, ok := ret.Get(0).(func(string) ([]Vet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(lastName)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(string) []Vet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(string) []Vet); ok </span><span class="cov0"
+                                                                                                           title="0">{
                 r0 = returnFunc(lastName)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).([]Vet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(string) error); ok </span><span class="cov0"
+                                                                                                           title="0">{
                 r1 = returnFunc(lastName)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3750,11 +3895,13 @@ type MockVetRepositorier_FindByLastName_Call struct {
 
 // FindByLastName is a helper method to define mock.On call
 //   - lastName string
-func (_e *MockVetRepositorier_Expecter) FindByLastName(lastName interface{}) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+func (_e *MockVetRepositorier_Expecter) FindByLastName(lastName interface{}) *MockVetRepositorier_FindByLastName_Call <span
+                class="cov0" title="0">{
         return &amp;MockVetRepositorier_FindByLastName_Call{Call: _e.mock.On("FindByLastName", lastName)}
 }</span>
 
-func (_c *MockVetRepositorier_FindByLastName_Call) Run(run func(lastName string)) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindByLastName_Call) Run(run func(lastName string)) *MockVetRepositorier_FindByLastName_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 string
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -3767,12 +3914,14 @@ func (_c *MockVetRepositorier_FindByLastName_Call) Run(run func(lastName string)
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVetRepositorier_FindByLastName_Call) Return(vets []Vet, err error) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindByLastName_Call) Return(vets []Vet, err error) *MockVetRepositorier_FindByLastName_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(vets, err)
         return _c
 }</span>
 
-func (_c *MockVetRepositorier_FindByLastName_Call) RunAndReturn(run func(lastName string) ([]Vet, error)) *MockVetRepositorier_FindByLastName_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_FindByLastName_Call) RunAndReturn(run func(lastName string) ([]Vet, error)) *MockVetRepositorier_FindByLastName_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3790,14 +3939,16 @@ func (_mock *MockVetRepositorier) Insert(vet *Vet) (*Vet, error) <span class="co
         if returnFunc, ok := ret.Get(0).(func(*Vet) (*Vet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(vet)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Vet) *Vet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Vet) *Vet); ok </span><span class="cov0"
+                                                                                                        title="0">{
                 r0 = returnFunc(vet)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Vet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Vet) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Vet) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(vet)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3812,11 +3963,13 @@ type MockVetRepositorier_Insert_Call struct {
 
 // Insert is a helper method to define mock.On call
 //   - vet *Vet
-func (_e *MockVetRepositorier_Expecter) Insert(vet interface{}) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_e *MockVetRepositorier_Expecter) Insert(vet interface{}) *MockVetRepositorier_Insert_Call <span class="cov0"
+                                                                                                       title="0">{
         return &amp;MockVetRepositorier_Insert_Call{Call: _e.mock.On("Insert", vet)}
 }</span>
 
-func (_c *MockVetRepositorier_Insert_Call) Run(run func(vet *Vet)) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_Insert_Call) Run(run func(vet *Vet)) *MockVetRepositorier_Insert_Call <span class="cov0"
+                                                                                                          title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 *Vet
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -3829,12 +3982,14 @@ func (_c *MockVetRepositorier_Insert_Call) Run(run func(vet *Vet)) *MockVetRepos
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVetRepositorier_Insert_Call) Return(vet1 *Vet, err error) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_Insert_Call) Return(vet1 *Vet, err error) *MockVetRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(vet1, err)
         return _c
 }</span>
 
-func (_c *MockVetRepositorier_Insert_Call) RunAndReturn(run func(vet *Vet) (*Vet, error)) *MockVetRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_Insert_Call) RunAndReturn(run func(vet *Vet) (*Vet, error)) *MockVetRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3852,14 +4007,16 @@ func (_mock *MockVetRepositorier) Update(vet *Vet) (*Vet, error) <span class="co
         if returnFunc, ok := ret.Get(0).(func(*Vet) (*Vet, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(vet)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Vet) *Vet); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Vet) *Vet); ok </span><span class="cov0"
+                                                                                                        title="0">{
                 r0 = returnFunc(vet)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Vet)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Vet) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Vet) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(vet)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3874,11 +4031,13 @@ type MockVetRepositorier_Update_Call struct {
 
 // Update is a helper method to define mock.On call
 //   - vet *Vet
-func (_e *MockVetRepositorier_Expecter) Update(vet interface{}) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
+func (_e *MockVetRepositorier_Expecter) Update(vet interface{}) *MockVetRepositorier_Update_Call <span class="cov0"
+                                                                                                       title="0">{
         return &amp;MockVetRepositorier_Update_Call{Call: _e.mock.On("Update", vet)}
 }</span>
 
-func (_c *MockVetRepositorier_Update_Call) Run(run func(vet *Vet)) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_Update_Call) Run(run func(vet *Vet)) *MockVetRepositorier_Update_Call <span class="cov0"
+                                                                                                          title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 *Vet
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -3891,12 +4050,14 @@ func (_c *MockVetRepositorier_Update_Call) Run(run func(vet *Vet)) *MockVetRepos
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVetRepositorier_Update_Call) Return(vet1 *Vet, err error) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_Update_Call) Return(vet1 *Vet, err error) *MockVetRepositorier_Update_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(vet1, err)
         return _c
 }</span>
 
-func (_c *MockVetRepositorier_Update_Call) RunAndReturn(run func(vet *Vet) (*Vet, error)) *MockVetRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockVetRepositorier_Update_Call) RunAndReturn(run func(vet *Vet) (*Vet, error)) *MockVetRepositorier_Update_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3941,14 +4102,16 @@ func (_mock *MockVisitRepositorier) FindAll() ([]Visit, error) <span class="cov0
         if returnFunc, ok := ret.Get(0).(func() ([]Visit, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc()
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Visit); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func() []Visit); ok </span><span class="cov0"
+                                                                                                       title="0">{
                 r0 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).([]Visit)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func() error); ok </span><span class="cov0"
+                                                                                                     title="0">{
                 r1 = returnFunc()
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -3966,19 +4129,22 @@ func (_e *MockVisitRepositorier_Expecter) FindAll() *MockVisitRepositorier_FindA
         return &amp;MockVisitRepositorier_FindAll_Call{Call: _e.mock.On("FindAll")}
 }</span>
 
-func (_c *MockVisitRepositorier_FindAll_Call) Run(run func()) *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_FindAll_Call) Run(run func()) *MockVisitRepositorier_FindAll_Call <span class="cov0"
+                                                                                                        title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 run()
         }</span>)
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVisitRepositorier_FindAll_Call) Return(visits []Visit, err error) *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_FindAll_Call) Return(visits []Visit, err error) *MockVisitRepositorier_FindAll_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(visits, err)
         return _c
 }</span>
 
-func (_c *MockVisitRepositorier_FindAll_Call) RunAndReturn(run func() ([]Visit, error)) *MockVisitRepositorier_FindAll_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_FindAll_Call) RunAndReturn(run func() ([]Visit, error)) *MockVisitRepositorier_FindAll_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -3996,14 +4162,16 @@ func (_mock *MockVisitRepositorier) FindById(id uint) (*Visit, error) <span clas
         if returnFunc, ok := ret.Get(0).(func(uint) (*Visit, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(id)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Visit); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(uint) *Visit); ok </span><span class="cov0"
+                                                                                                          title="0">{
                 r0 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Visit)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0"
+                                                                                                         title="0">{
                 r1 = returnFunc(id)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -4018,11 +4186,13 @@ type MockVisitRepositorier_FindById_Call struct {
 
 // FindById is a helper method to define mock.On call
 //   - id uint
-func (_e *MockVisitRepositorier_Expecter) FindById(id interface{}) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_e *MockVisitRepositorier_Expecter) FindById(id interface{}) *MockVisitRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         return &amp;MockVisitRepositorier_FindById_Call{Call: _e.mock.On("FindById", id)}
 }</span>
 
-func (_c *MockVisitRepositorier_FindById_Call) Run(run func(id uint)) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_FindById_Call) Run(run func(id uint)) *MockVisitRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 uint
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -4035,12 +4205,14 @@ func (_c *MockVisitRepositorier_FindById_Call) Run(run func(id uint)) *MockVisit
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVisitRepositorier_FindById_Call) Return(visit *Visit, err error) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_FindById_Call) Return(visit *Visit, err error) *MockVisitRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(visit, err)
         return _c
 }</span>
 
-func (_c *MockVisitRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Visit, error)) *MockVisitRepositorier_FindById_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_FindById_Call) RunAndReturn(run func(id uint) (*Visit, error)) *MockVisitRepositorier_FindById_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -4058,14 +4230,16 @@ func (_mock *MockVisitRepositorier) Insert(visit *Visit) (*Visit, error) <span c
         if returnFunc, ok := ret.Get(0).(func(*Visit) (*Visit, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(visit)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Visit) *Visit); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Visit) *Visit); ok </span><span class="cov0"
+                                                                                                            title="0">{
                 r0 = returnFunc(visit)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Visit)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Visit) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Visit) error); ok </span><span class="cov0"
+                                                                                                           title="0">{
                 r1 = returnFunc(visit)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -4080,11 +4254,13 @@ type MockVisitRepositorier_Insert_Call struct {
 
 // Insert is a helper method to define mock.On call
 //   - visit *Visit
-func (_e *MockVisitRepositorier_Expecter) Insert(visit interface{}) *MockVisitRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_e *MockVisitRepositorier_Expecter) Insert(visit interface{}) *MockVisitRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         return &amp;MockVisitRepositorier_Insert_Call{Call: _e.mock.On("Insert", visit)}
 }</span>
 
-func (_c *MockVisitRepositorier_Insert_Call) Run(run func(visit *Visit)) *MockVisitRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_Insert_Call) Run(run func(visit *Visit)) *MockVisitRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 *Visit
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -4097,12 +4273,14 @@ func (_c *MockVisitRepositorier_Insert_Call) Run(run func(visit *Visit)) *MockVi
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVisitRepositorier_Insert_Call) Return(visit1 *Visit, err error) *MockVisitRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_Insert_Call) Return(visit1 *Visit, err error) *MockVisitRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(visit1, err)
         return _c
 }</span>
 
-func (_c *MockVisitRepositorier_Insert_Call) RunAndReturn(run func(visit *Visit) (*Visit, error)) *MockVisitRepositorier_Insert_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_Insert_Call) RunAndReturn(run func(visit *Visit) (*Visit, error)) *MockVisitRepositorier_Insert_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
@@ -4120,14 +4298,16 @@ func (_mock *MockVisitRepositorier) Update(visit *Visit) (*Visit, error) <span c
         if returnFunc, ok := ret.Get(0).(func(*Visit) (*Visit, error)); ok </span><span class="cov0" title="0">{
                 return returnFunc(visit)
         }</span>
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Visit) *Visit); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(0).(func(*Visit) *Visit); ok </span><span class="cov0"
+                                                                                                            title="0">{
                 r0 = returnFunc(visit)
         }</span> else<span class="cov0" title="0"> {
                 if ret.Get(0) != nil </span><span class="cov0" title="0">{
                         r0 = ret.Get(0).(*Visit)
                 }</span>
         }
-        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Visit) error); ok </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if returnFunc, ok := ret.Get(1).(func(*Visit) error); ok </span><span class="cov0"
+                                                                                                           title="0">{
                 r1 = returnFunc(visit)
         }</span> else<span class="cov0" title="0"> {
                 r1 = ret.Error(1)
@@ -4142,11 +4322,13 @@ type MockVisitRepositorier_Update_Call struct {
 
 // Update is a helper method to define mock.On call
 //   - visit *Visit
-func (_e *MockVisitRepositorier_Expecter) Update(visit interface{}) *MockVisitRepositorier_Update_Call <span class="cov0" title="0">{
+func (_e *MockVisitRepositorier_Expecter) Update(visit interface{}) *MockVisitRepositorier_Update_Call <span
+                class="cov0" title="0">{
         return &amp;MockVisitRepositorier_Update_Call{Call: _e.mock.On("Update", visit)}
 }</span>
 
-func (_c *MockVisitRepositorier_Update_Call) Run(run func(visit *Visit)) *MockVisitRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_Update_Call) Run(run func(visit *Visit)) *MockVisitRepositorier_Update_Call <span
+                class="cov0" title="0">{
         _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
                 var arg0 *Visit
                 if args[0] != nil </span><span class="cov0" title="0">{
@@ -4159,18 +4341,20 @@ func (_c *MockVisitRepositorier_Update_Call) Run(run func(visit *Visit)) *MockVi
         <span class="cov0" title="0">return _c</span>
 }
 
-func (_c *MockVisitRepositorier_Update_Call) Return(visit1 *Visit, err error) *MockVisitRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_Update_Call) Return(visit1 *Visit, err error) *MockVisitRepositorier_Update_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(visit1, err)
         return _c
 }</span>
 
-func (_c *MockVisitRepositorier_Update_Call) RunAndReturn(run func(visit *Visit) (*Visit, error)) *MockVisitRepositorier_Update_Call <span class="cov0" title="0">{
+func (_c *MockVisitRepositorier_Update_Call) RunAndReturn(run func(visit *Visit) (*Visit, error)) *MockVisitRepositorier_Update_Call <span
+                class="cov0" title="0">{
         _c.Call.Return(run)
         return _c
 }</span>
 </pre>
-		
-		<pre class="file" id="file25" style="display: none">package repository
+
+    <pre class="file" id="file25" style="display: none">package repository
 
 import (
         "github.com/rs/zerolog/log"
@@ -4310,8 +4494,8 @@ func (repository *OwnerRepository) Update(owner *Owner) (*Owner, error) <span cl
         <span class="cov0" title="0">return owner, nil</span>
 }
 </pre>
-		
-		<pre class="file" id="file26" style="display: none">package repository
+
+    <pre class="file" id="file26" style="display: none">package repository
 
 import (
         "github.com/rs/zerolog/log"
@@ -4412,8 +4596,8 @@ func (repository *PetRepository) Update(pet *Pet) (*Pet, error) <span class="cov
         <span class="cov0" title="0">return pet, err</span>
 }
 </pre>
-		
-		<pre class="file" id="file27" style="display: none">package repository
+
+    <pre class="file" id="file27" style="display: none">package repository
 
 import (
         "github.com/rs/zerolog/log"
@@ -4575,8 +4759,8 @@ func (repository *VetRepository) Update(vet *Vet) (*Vet, error) <span class="cov
         <span class="cov0" title="0">return vet, err</span>
 }
 </pre>
-		
-		<pre class="file" id="file28" style="display: none">package repository
+
+    <pre class="file" id="file28" style="display: none">package repository
 
 import (
         "github.com/rs/zerolog/log"
@@ -4670,8 +4854,8 @@ func (repository *VisitRepository) Update(visit *Visit) (*Visit, error) <span cl
         <span class="cov0" title="0">return visit, err</span>
 }
 </pre>
-		
-		<pre class="file" id="file29" style="display: none">package test
+
+    <pre class="file" id="file29" style="display: none">package test
 
 import "github.com/gofiber/fiber/v2"
 
@@ -4681,8 +4865,8 @@ func SetupRouter() *fiber.App <span class="cov0" title="0">{
         return r
 }</span>
 </pre>
-		
-		<pre class="file" id="file30" style="display: none">package test
+
+    <pre class="file" id="file30" style="display: none">package test
 
 import (
         "testing"
@@ -4719,8 +4903,8 @@ func PgStart(t *testing.T, dir string) *embeddedpostgres.EmbeddedPostgres <span 
         <span class="cov0" title="0">return postgresql</span>
 }
 </pre>
-		
-		<pre class="file" id="file31" style="display: none">package test
+
+    <pre class="file" id="file31" style="display: none">package test
 
 import (
         jsoniter "github.com/json-iterator/go"
@@ -4740,34 +4924,37 @@ func ToDate(dateStr string) *time.Time <span class="cov0" title="0">{
         <span class="cov0" title="0">return &amp;date</span>
 }
 </pre>
-		
-		</div>
-	</body>
-	<script>
-	(function() {
-		var files = document.getElementById('files');
-		var visible;
-		files.addEventListener('change', onChange, false);
-		function select(part) {
-			if (visible)
-				visible.style.display = 'none';
-			visible = document.getElementById(part);
-			if (!visible)
-				return;
-			files.value = part;
-			visible.style.display = 'block';
-			location.hash = part;
-		}
-		function onChange() {
-			select(files.value);
-			window.scrollTo(0, 0);
-		}
-		if (location.hash != "") {
-			select(location.hash.substr(1));
-		}
-		if (!visible) {
-			select("file0");
-		}
-	})();
-	</script>
+
+</div>
+</body>
+<script>
+    (function () {
+        var files = document.getElementById('files');
+        var visible;
+        files.addEventListener('change', onChange, false);
+
+        function select(part) {
+            if (visible)
+                visible.style.display = 'none';
+            visible = document.getElementById(part);
+            if (!visible)
+                return;
+            files.value = part;
+            visible.style.display = 'block';
+            location.hash = part;
+        }
+
+        function onChange() {
+            select(files.value);
+            window.scrollTo(0, 0);
+        }
+
+        if (location.hash != "") {
+            select(location.hash.substr(1));
+        }
+        if (!visible) {
+            select("file0");
+        }
+    })();
+</script>
 </html>

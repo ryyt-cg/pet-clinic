@@ -2,8 +2,9 @@ package pet
 
 import (
 	"fiber-petclinic-service/pkg/repository"
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Request struct {

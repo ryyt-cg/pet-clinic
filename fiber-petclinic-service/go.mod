@@ -10,6 +10,7 @@ require (
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/go-playground/validator/v10 v10.27.0
 	github.com/gofiber/contrib/circuitbreaker v0.0.1
+	github.com/gofiber/contrib/fiberzerolog v1.0.3
 	github.com/gofiber/fiber/v2 v2.52.9
 	github.com/json-iterator/go v1.1.12
 	github.com/pressly/goose v2.7.0+incompatible

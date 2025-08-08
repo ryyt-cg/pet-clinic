@@ -10,7 +10,7 @@ export default () => {
     const url = 'http://localhost:8090/api/gof/v1/authors/' + random;
     const params = {
         headers: {
-        'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
     };
 

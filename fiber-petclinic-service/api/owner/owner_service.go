@@ -3,6 +3,7 @@ package owner
 import (
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
+
 	"github.com/rs/zerolog/log"
 )
 
