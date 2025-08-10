@@ -17,6 +17,7 @@ import (
 	"github.com/gofiber/contrib/circuitbreaker"
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -75,6 +76,9 @@ func loadConfig() {
 	}
 	// Create a new Fiber instance
 	fiberApp = fiber.New(fiberConfig)
+
+	// Initialize default config
+	fiberApp.Use(favicon.New())
 
 	prometheus := fiberprometheus.New("fiber-petclinic-service")
 	prometheus.RegisterAt(fiberApp, app.Config.Server.BaseURL+"/metrics")

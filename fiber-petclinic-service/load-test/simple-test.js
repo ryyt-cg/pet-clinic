@@ -7,7 +7,7 @@ export const options = {
 
 export default () => {
     const random = Math.floor(Math.random() * 3 + 1);
-    const url = 'http://localhost:8090/api/gof/v1/authors/' + random;
+    const url = 'http://localhost:8091/api/pet-clinic/v1/owners/' + random;
     const params = {
         headers: {
             'Content-Type': 'application/json',
