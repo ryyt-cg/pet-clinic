@@ -28,7 +28,7 @@ scrape_configs:
 #     - targets: ['cadvisor:8080']
 
 # Example job for a custom application
-#  - job_name: 'fiber-petclinic-service'
-#    static_configs:
-#     - targets: ['localhost:8091', 'fiber-petclinic-service:8091']
-#    metrics_path: /api/pet-clinic/metrics
+  - job_name: 'fiber-petclinic-service'
+    static_configs:
+     - targets: ['fiber-petclinic-service:8091']
+    metrics_path: /api/pet-clinic/metrics

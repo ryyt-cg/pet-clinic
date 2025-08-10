@@ -39,3 +39,10 @@ services:
     restart: unless-stopped
     volumes:
       - '/:/host:ro,rslave'
+
+  fiber-petclinic-service:
+    image: fiber-petclinic-service:latest
+    container_name: fiber-petclinic-service
+    ports:
+      - 8091:8091
+    restart: unless-stopped

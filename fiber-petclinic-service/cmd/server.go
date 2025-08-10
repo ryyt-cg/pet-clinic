@@ -38,7 +38,7 @@ func loadConfig() {
 	log.Info().Msg("Go Fiber Pet Clinic starts")
 
 	// load application configurations
-	if err := app.LoadConfig("./config"); err != nil {
+	if err := app.LoadConfig("config"); err != nil {
 		log.Fatal().Err(err).
 			Msg("Fail to load application configuration.")
 	}
