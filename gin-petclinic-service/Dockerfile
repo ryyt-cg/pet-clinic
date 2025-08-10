@@ -38,7 +38,7 @@ COPY --from=builder /app/cmd/certs/* cmd/certs/.
 COPY --from=builder /app/pet-clinic.sqlite .
 
 # Expose the port your gin application listens on
-EXPOSE 8443
+EXPOSE 8092
 
 # Command to run the application
 CMD ["./gin-petclinic-service"]

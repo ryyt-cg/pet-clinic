@@ -2,11 +2,12 @@ package app
 
 import (
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/cristalhq/aconfig"
 	"github.com/cristalhq/aconfig/aconfigyaml"
 	"github.com/go-playground/validator/v10"
-	"os"
-	"strings"
 )
 
 // Config stores the application-wide configurations
@@ -19,11 +20,12 @@ type AppConfig struct {
 	AppInfo        AppInfoConfig             `yaml:"appInfo" validate:"required"`
 	CircuitBreaker CircuitBreakerConfig      `yaml:"circuitBreaker" validate:"required"`
 	Databases      map[string]DatabaseConfig `yaml:"databases" validate:"required"`
+	Gorm           GormConfig                `yaml:"gorm"`
 	Server         ServerConfig              `yaml:"server" validate:"required"`
 }
 
 // Validate all config required values are populated.
-func (config AppConfig) Validate() error {
+func (config *AppConfig) Validate() error {
 	validate = validator.New(validator.WithRequiredStructEnabled())
 
 	if err := validate.Struct(config.AppInfo); err != nil {

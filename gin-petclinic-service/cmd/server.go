@@ -138,7 +138,8 @@ func main() {
 	httpRouter := httpServer.HttpRouter()
 
 	g.Go(func() error {
-		return httpRouter.ListenAndServeTLS(app.Config.Server.CertFile, app.Config.Server.KeyFile)
+		//return httpRouter.ListenAndServeTLS(app.Config.Server.CertFile, app.Config.Server.KeyFile)
+		return httpRouter.ListenAndServe()
 	})
 
 	if err := g.Wait(); err != nil {

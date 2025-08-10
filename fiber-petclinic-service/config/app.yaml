@@ -18,6 +18,12 @@ databases:
       maxIdleConnection: 5
       maxIdleTime: 30
 
+gorm:
+  # logLevel - silent(1), error(2), warn(3), info(4))
+  logLevel: 2
+  singularTable: false
+
+
 server:
   baseURL: "/api/pet-clinic"
   host: localhost

@@ -20,7 +20,7 @@ server:
   host: localhost
   certFile: "cmd/certs/myCA.pem"
   keyFile: "cmd/certs/myCA-without-passphrase.key"
-  httpPort: ":8091"
+  httpPort: ":8092"
   logLevel: "info"
   enablePrintRoutes: false
 
