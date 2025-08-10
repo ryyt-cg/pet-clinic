@@ -4,6 +4,8 @@ import (
 	"context"
 	"gin-petclinic-service/api/health"
 	"gin-petclinic-service/api/info"
+	"gin-petclinic-service/api/owner"
+	"gin-petclinic-service/api/pet"
 	"gin-petclinic-service/api/vet"
 	"gin-petclinic-service/api/visit"
 	"gin-petclinic-service/config/app"
@@ -12,6 +14,8 @@ import (
 	"gin-petclinic-service/pkg/dbase"
 	"gin-petclinic-service/pkg/ds"
 	"gin-petclinic-service/pkg/repository"
+	"os"
+
 	"github.com/gin-contrib/location"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
@@ -21,7 +25,6 @@ import (
 	ginprometheus "github.com/zsais/go-gin-prometheus"
 	"golang.org/x/sync/errgroup"
 	"gorm.io/gorm"
-	"os"
 )
 
 var (

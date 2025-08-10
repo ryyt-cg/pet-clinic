@@ -1,29 +1,44 @@
-# build executable binary
-FROM golang:1.15.1-alpine as builder
+# Stage 1: Builder
+FROM golang:1.24-bookworm AS builder
 
-COPY . $GOPATH/src/gin-petclinic-service
-WORKDIR $GOPATH/src/gin-petclinic-service
+ENV CGO_ENABLED=1
 
-RUN mkdir -p /config
-#ADD config /config
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive \
+    apt-get install --no-install-recommends --assume-yes \
+      build-essential \
+      libsqlite3-dev
 
-# git
-RUN apk add --no-cache git
 
-# Install library dependencies
-RUN go mod tidy
+WORKDIR /app
 
-# build the binary
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -o /go/bin/gin-petclinic-service
+# Copy go.mod and go.sum and download dependencies
+COPY go.mod go.sum ./
+RUN go mod download
 
-# build a small image
-FROM scratch
+# Copy the rest of the application source code
+COPY . .
 
-# copy static executable
-COPY --from=builder /go/bin/gin-petclinic-service  /go/bin/gin-petclinic-service
-COPY config/. /config
+# Build the Go application
+RUN go build -o gin-petclinic-service cmd/server.go
 
-ENV PORT 8090
-EXPOSE 8090
+# Stage 2: Final image
+FROM debian:bookworm
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive \
+    apt-get install --no-install-recommends --assume-yes \
+      libsqlite3-0
 
-ENTRYPOINT ["/go/bin/gin-petclinic-service"]
+WORKDIR /root/
+
+# Copy the compiled binary from the builder stage
+COPY --from=builder /app/gin-petclinic-service .
+COPY --from=builder /app/config/*.yaml config/.
+COPY --from=builder /app/cmd/certs/* cmd/certs/.
+COPY --from=builder /app/pet-clinic.sqlite .
+
+# Expose the port your gin application listens on
+EXPOSE 8443
+
+# Command to run the application
+CMD ["./gin-petclinic-service"]

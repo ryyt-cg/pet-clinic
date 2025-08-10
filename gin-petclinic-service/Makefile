@@ -33,3 +33,6 @@ test:
 
 tidy:
 	go mod tidy
+	
+docker-build:
+	docker build -t gin-petclinic-service:latest .
