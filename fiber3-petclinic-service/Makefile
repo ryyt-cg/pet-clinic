@@ -36,3 +36,6 @@ test:
 
 tidy:
 	go mod tidy
+
+docker-build:
+	docker build -t fiber3-petclinic-service:latest .

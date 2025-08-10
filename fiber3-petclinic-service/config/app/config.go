@@ -2,11 +2,12 @@ package app
 
 import (
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/cristalhq/aconfig"
 	"github.com/cristalhq/aconfig/aconfigyaml"
 	"github.com/go-playground/validator/v10"
-	"os"
-	"strings"
 )
 
 // Config stores the application-wide configurations
@@ -19,6 +20,7 @@ type AppConfig struct {
 	AppInfo        AppInfoConfig             `yaml:"appInfo" validate:"required"`
 	CircuitBreaker CircuitBreakerConfig      `yaml:"circuitBreaker" validate:"required"`
 	Databases      map[string]DatabaseConfig `yaml:"databases" validate:"required"`
+	Gorm           GormConfig                `yaml:"gormConfig"`
 	Server         ServerConfig              `yaml:"server" validate:"required"`
 }
 
