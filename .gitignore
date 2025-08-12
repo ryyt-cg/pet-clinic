@@ -2,3 +2,4 @@ gin-petclinic-service/cmd/certs/myCA-without-passphrase.key
 gin-petclinic-service/cmd/certs/myCA.key
 gin-petclinic-service/cmd/certs/myCA.pem
 /axum-petclinic-service/target/
+/fiber-petclinic-service/air/tmp

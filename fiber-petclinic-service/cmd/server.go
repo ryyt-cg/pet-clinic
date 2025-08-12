@@ -89,13 +89,18 @@ func loadConfig() {
 	fiberApp.Get(app.Config.Server.BaseURL+"/monitor", monitor.New(monitor.Config{Title: "fiber-petclinic-service Monitor"}))
 	fiberApp.Use(fiberzerolog.New(fiberLog))
 
+	//if app.Config.CircuitBreaker != nil {
+	//	log.Warn().Msg("Circuit breaker configuration is not set, skipping circuit breaker middleware.")
+	//} else {
+	//	log.Info().Msg("Circuit breaker middleware is enabled.")
+	//}
 	cb := circuitbreaker.New(circuitbreaker.Config{
 		FailureThreshold: app.Config.CircuitBreaker.FailureThreshold,
 		Timeout:          time.Duration(app.Config.CircuitBreaker.Timeout) * time.Second,
 		SuccessThreshold: app.Config.CircuitBreaker.SuccessThreshold,
 	})
-
 	fiberApp.Use(circuitbreaker.Middleware(cb))
+
 	// Middleware for Enforcing Accept only application/json requests
 	fiberApp.Use(func(c *fiber.Ctx) error {
 		if offer := c.Accepts(fiber.MIMEApplicationJSON); offer == "" {
