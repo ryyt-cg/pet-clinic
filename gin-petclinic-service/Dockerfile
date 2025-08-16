@@ -1,5 +1,5 @@
 # Stage 1: Builder
-FROM golang:1.24-bookworm AS builder
+FROM golang:1.25-bookworm AS builder
 
 ENV CGO_ENABLED=1
 
@@ -23,13 +23,16 @@ COPY . .
 RUN go build -o gin-petclinic-service cmd/server.go
 
 # Stage 2: Final image
-FROM debian:bookworm
-RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive \
-    apt-get install --no-install-recommends --assume-yes \
-      libsqlite3-0
+FROM scratch
 
-WORKDIR /root/
+# Uncomment the following lines if you want to use a Debian base image instead of scratch
+#FROM debian:bookworm
+#RUN apt-get update \
+# && DEBIAN_FRONTEND=noninteractive \
+#    apt-get install --no-install-recommends --assume-yes \
+#      libsqlite3-0
+#
+#WORKDIR /root/
 
 # Copy the compiled binary from the builder stage
 COPY --from=builder /app/gin-petclinic-service .
