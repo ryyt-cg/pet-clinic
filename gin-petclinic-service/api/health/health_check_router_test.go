@@ -2,9 +2,10 @@ package health
 
 import (
 	"fiber-petclinic-service/pkg/test"
-	"go.uber.org/zap"
 	"net/http"
 	"testing"
+
+	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"

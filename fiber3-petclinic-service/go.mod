@@ -1,6 +1,6 @@
 module fiber3-petclinic-service
 
-go 1.24.5
+go 1.25.0
 
 require (
 	github.com/cristalhq/aconfig v0.19.0

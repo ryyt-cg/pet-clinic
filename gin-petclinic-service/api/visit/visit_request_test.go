@@ -3,9 +3,10 @@ package visit
 import (
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/test"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
-	"testing"
 )
 
 //var request []Request = []Request{

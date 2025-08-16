@@ -1,25 +1,25 @@
 appInfo:
-    name: "fiber3-petclinic-service"
-    description: "Pet Clinic Web Application using Fiber"
-    version: "1.0.0"
+  name: "fiber3-petclinic-service"
+  description: "Pet Clinic Web Application using Fiber"
+  version: "1.0.0"
 
 circuitBreaker:
-    failureThreshold: 3
-    timeout: 5
-    successThreshold: 2
+  failureThreshold: 3
+  timeout: 5
+  successThreshold: 2
 
 databases:
-    primary:
-        driver: sqlite3
-        host: localhost
-        name: pet-clinic.sqlite
-        connectionPool:
-            maxOpenConnection: 10
-            maxIdleConnection: 5
-            maxIdleTime: 30
+  primary:
+    driver: sqlite3
+    host: localhost
+    name: pet-clinic.sqlite
+    connectionPool:
+      maxOpenConnection: 10
+      maxIdleConnection: 5
+      maxIdleTime: 30
 
 server:
-    baseURL: "/api/pet-clinic"
-    host: localhost
-    httpPort: ":8092"
-    logLevel: "info"
+  baseURL: "/api/pet-clinic"
+  host: localhost
+  httpPort: ":8092"
+  logLevel: "info"

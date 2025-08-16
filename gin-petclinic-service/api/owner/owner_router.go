@@ -2,7 +2,7 @@ package owner
 
 import (
 	"errors"
-	resterr "gin-petclinic-service/pkg/errors"
+	resterr "gin-petclinic-service/internal/errors"
 	"net/http"
 	"strconv"
 

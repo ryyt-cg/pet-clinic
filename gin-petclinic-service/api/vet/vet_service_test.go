@@ -4,8 +4,9 @@ import (
 	"errors"
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
-	"gorm.io/gorm"
 	"testing"
+
+	"gorm.io/gorm"
 
 	"github.com/stretchr/testify/assert"
 )

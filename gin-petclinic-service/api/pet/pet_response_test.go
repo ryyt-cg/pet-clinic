@@ -4,9 +4,10 @@ import (
 	"fiber-petclinic-service/api/visit"
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/test"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
-	"testing"
 )
 
 func Test_FromPet(t *testing.T) {

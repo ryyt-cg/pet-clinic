@@ -1,8 +1,8 @@
 package pet
 
 import (
-	"fiber-petclinic-service/pkg/repository"
-	"fiber-petclinic-service/pkg/test"
+	"fiber-petclinic-service/internal/repository"
+	"fiber-petclinic-service/internal/test"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

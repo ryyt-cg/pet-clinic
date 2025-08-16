@@ -7,10 +7,11 @@ import (
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
 	"fiber-petclinic-service/pkg/test"
-	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 )
 
 // Test_getById tests the getOwnerById function

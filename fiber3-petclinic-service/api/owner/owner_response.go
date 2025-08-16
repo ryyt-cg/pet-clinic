@@ -2,8 +2,8 @@ package owner
 
 import (
 	"fiber3-petclinic-service/api/pet"
-	"fiber3-petclinic-service/pkg/repository"
-	"fiber3-petclinic-service/pkg/repository/model"
+	"fiber3-petclinic-service/internal/repository"
+	"fiber3-petclinic-service/internal/repository/model"
 )
 
 // Owner Responses - A collection of responses (output contracts) for the owner API.

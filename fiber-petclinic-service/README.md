@@ -77,12 +77,13 @@ I recommend reading the [official documentation](https://docs.gofiber.io/contrib
 examples. In this example, I have implemented a basic circuit breaker that applies to all routes.
 
 ## Live Reload
-- Use [Air](https://github.com/air-verse/air) to enable live reloading during development. It automatically detects changes in your Go files and restarts the server, making development faster and more efficient.
+
+- Use [Air](https://github.com/air-verse/air) to enable live reloading during development. It automatically detects
+  changes in your Go files and restarts the server, making development faster and more efficient.
 - Use [Fiber Air](https://docs.gofiber.io/recipes/air/) example to configure the server with live reload
 
-
-
 ### Unit Tests
+
 [Test Driven Design](UNIT_TEST.md) Documentation is available in the `UNIT_TEST.md` file. It includes instructions on
 how to set up and run unit tests, as well as how to use Mockery for mocking dependencies.
 

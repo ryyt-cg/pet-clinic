@@ -2,7 +2,8 @@ package visit
 
 import (
 	"errors"
-	"gin-petclinic-service/pkg/repository"
+	"gin-petclinic-service/internal/repository"
+
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )

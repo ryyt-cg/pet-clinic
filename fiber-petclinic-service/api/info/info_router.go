@@ -2,7 +2,7 @@ package info
 
 import (
 	"fiber-petclinic-service/config/app"
-	resterr "fiber-petclinic-service/pkg/errors"
+	resterr "fiber-petclinic-service/internal/errors"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"

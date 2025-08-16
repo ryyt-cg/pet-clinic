@@ -5,7 +5,7 @@
 package pet
 
 import (
-	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/internal/repository"
 
 	mock "github.com/stretchr/testify/mock"
 )

@@ -2,7 +2,8 @@ package visit
 
 import (
 	"errors"
-	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/internal/repository"
+
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )

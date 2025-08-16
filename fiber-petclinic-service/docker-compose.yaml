@@ -1,0 +1,40 @@
+name: datadog-service-stack
+
+volumes:
+  datadog-agent-data:
+    driver: local
+
+services:
+  datadog-agent:
+    image: datadog/agent:latest
+    container_name: datadog-agent
+    environment:
+      - DD_API_KEY=your_datadog_api_key_here
+      - DD_SITE=datadoghq.com
+      - DD_LOGS_ENABLED=true
+      - DD_APM_ENABLED=true
+      - DD_PROCESS_AGENT_ENABLED=true
+    ports:
+      - "8125:8125/udp"  # DogStatsD
+      - "5000:5000"      # Trace Agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    restart: unless-stopped
+
+  fiber-petclinic-service:
+    image: fiber-petclinic-service:latest
+    container_name: fiber-petclinic-service
+    environment:
+      - DD_API_KEY=XXXXXXXXX
+      - DD_SITE="datadoghq.com"
+      - DD_ENV=local
+      - DD_APM_ENABLED=true
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+    ports:
+      - 8091:8091
+    restart: unless-stopped

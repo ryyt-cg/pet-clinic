@@ -2,8 +2,9 @@ package info
 
 import (
 	"fiber3-petclinic-service/config/app"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_lookupIP(t *testing.T) {

@@ -10,10 +10,10 @@ import (
 	"gin-petclinic-service/api/visit"
 	"gin-petclinic-service/config/app"
 	_ "gin-petclinic-service/docs"
+	"gin-petclinic-service/internal/dbase"
+	"gin-petclinic-service/internal/ds"
+	"gin-petclinic-service/internal/repository"
 	"gin-petclinic-service/middleware"
-	"gin-petclinic-service/pkg/dbase"
-	"gin-petclinic-service/pkg/ds"
-	"gin-petclinic-service/pkg/repository"
 	"os"
 
 	"github.com/gin-contrib/location"

@@ -4,16 +4,17 @@ import (
 	"encoding/json"
 	"errors"
 	"fiber3-petclinic-service/config/app"
-	resterr "fiber3-petclinic-service/pkg/errors"
-	"fiber3-petclinic-service/pkg/test"
-	"github.com/gofiber/fiber/v3"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
+	resterr "fiber3-petclinic-service/internal/errors"
+	"fiber3-petclinic-service/internal/test"
 	"io"
 	"net"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gofiber/fiber/v3"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 type infoServiceMock struct {

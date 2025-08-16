@@ -5,16 +5,17 @@ import (
 	"encoding/json"
 	"errors"
 	"fiber3-petclinic-service/api/pet"
-	resterr "fiber3-petclinic-service/pkg/errors"
-	"fiber3-petclinic-service/pkg/repository/model"
-	"fiber3-petclinic-service/pkg/test"
-	"github.com/gofiber/fiber/v3"
-	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
+	resterr "fiber3-petclinic-service/internal/errors"
+	"fiber3-petclinic-service/internal/repository/model"
+	"fiber3-petclinic-service/internal/test"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gofiber/fiber/v3"
+	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 )
 
 func Test_AllOwners(t *testing.T) {

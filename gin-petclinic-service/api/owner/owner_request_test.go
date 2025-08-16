@@ -3,9 +3,10 @@ package owner
 import (
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
-	"testing"
 )
 
 func Test_ToOwner(t *testing.T) {

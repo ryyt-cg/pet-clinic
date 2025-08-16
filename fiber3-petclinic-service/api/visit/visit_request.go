@@ -1,9 +1,10 @@
 package visit
 
 import (
-	"fiber3-petclinic-service/pkg/repository"
-	"gorm.io/gorm"
+	"fiber3-petclinic-service/internal/repository"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Request struct {

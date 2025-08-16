@@ -1,12 +1,13 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/gofrs/uuid"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gofrs/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSetRequestUUIDWithCorrelationHeader(t *testing.T) {

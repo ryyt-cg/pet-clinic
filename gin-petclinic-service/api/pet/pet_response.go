@@ -2,8 +2,8 @@ package pet
 
 import (
 	"gin-petclinic-service/api/visit"
-	"gin-petclinic-service/pkg/repository"
-	"gin-petclinic-service/pkg/repository/model"
+	"gin-petclinic-service/internal/repository"
+	"gin-petclinic-service/internal/repository/model"
 	"time"
 )
 

@@ -1,7 +1,7 @@
 package pet
 
 import (
-	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/internal/repository"
 	"time"
 
 	"gorm.io/gorm"

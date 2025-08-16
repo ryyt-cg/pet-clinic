@@ -1,10 +1,11 @@
 package vet
 
 import (
-	"fiber3-petclinic-service/pkg/repository"
+	"fiber3-petclinic-service/internal/repository"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
-	"testing"
 )
 
 func Test_FromSpecialty(t *testing.T) {

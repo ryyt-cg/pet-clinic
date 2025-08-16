@@ -1,8 +1,8 @@
 package vet
 
 import (
-	"fiber-petclinic-service/pkg/repository"
-	"fiber-petclinic-service/pkg/repository/model"
+	"fiber-petclinic-service/internal/repository"
+	"fiber-petclinic-service/internal/repository/model"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"gorm.io/gorm"

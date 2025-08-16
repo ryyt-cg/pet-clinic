@@ -20,16 +20,19 @@ RUN go mod download
 COPY . .
 
 # Build the Go application
-RUN go build -o fiber-petclinic-service cmd/server.go
+RUN go build -a -ldflags '-linkmode external -extldflags "-static"' -o fiber-petclinic-service cmd/server.go
 
 # Stage 2: Final image
-FROM debian:bookworm
-RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive \
-    apt-get install --no-install-recommends --assume-yes \
-      libsqlite3-0
+FROM scratch
 
-WORKDIR /root/
+# Uncomment the following lines if you want to use a Debian base image instead of scratch
+#FROM debian:bookworm
+#RUN apt-get update \
+# && DEBIAN_FRONTEND=noninteractive \
+#    apt-get install --no-install-recommends --assume-yes \
+#      libsqlite3-0
+#
+#WORKDIR /root/
 
 # Copy the compiled binary from the builder stage
 COPY --from=builder /app/fiber-petclinic-service .

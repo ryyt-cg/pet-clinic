@@ -2,6 +2,7 @@ package info
 
 import (
 	"fiber3-petclinic-service/config/app"
+
 	"github.com/rs/zerolog/log"
 )
 

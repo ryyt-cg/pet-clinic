@@ -2,10 +2,11 @@ package vet
 
 import (
 	"errors"
-	"fiber-petclinic-service/pkg/repository"
-	"fiber-petclinic-service/pkg/repository/model"
-	"gorm.io/gorm"
+	"fiber-petclinic-service/internal/repository"
+	"fiber-petclinic-service/internal/repository/model"
 	"testing"
+
+	"gorm.io/gorm"
 
 	"github.com/stretchr/testify/assert"
 )

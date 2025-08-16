@@ -3,8 +3,8 @@ package owner
 import (
 	"fiber-petclinic-service/api/pet"
 	"fiber-petclinic-service/api/visit"
-	"fiber-petclinic-service/pkg/repository"
-	"fiber-petclinic-service/pkg/repository/model"
+	"fiber-petclinic-service/internal/repository"
+	"fiber-petclinic-service/internal/repository/model"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

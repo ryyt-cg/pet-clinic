@@ -1,8 +1,8 @@
 package vet
 
 import (
-	"gin-petclinic-service/pkg/repository"
-	"gin-petclinic-service/pkg/repository/model"
+	"gin-petclinic-service/internal/repository"
+	"gin-petclinic-service/internal/repository/model"
 )
 
 type Response struct {

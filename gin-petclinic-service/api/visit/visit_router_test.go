@@ -2,10 +2,11 @@ package visit
 
 import (
 	"encoding/json"
-	"gin-petclinic-service/pkg/test"
-	"go.uber.org/zap"
+	"gin-petclinic-service/internal/test"
 	"net/http"
 	"testing"
+
+	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
 )

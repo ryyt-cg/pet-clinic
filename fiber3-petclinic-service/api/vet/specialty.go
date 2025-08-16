@@ -1,8 +1,9 @@
 package vet
 
 import (
-	"fiber3-petclinic-service/pkg/repository"
-	"fiber3-petclinic-service/pkg/repository/model"
+	"fiber3-petclinic-service/internal/repository"
+	"fiber3-petclinic-service/internal/repository/model"
+
 	"gorm.io/gorm"
 )
 

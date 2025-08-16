@@ -3,16 +3,17 @@ package vet
 import (
 	"bytes"
 	"encoding/json"
-	resterr "fiber-petclinic-service/pkg/errors"
-	"fiber-petclinic-service/pkg/repository"
-	"fiber-petclinic-service/pkg/repository/model"
-	"fiber-petclinic-service/pkg/test"
-	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
+	resterr "fiber-petclinic-service/internal/errors"
+	"fiber-petclinic-service/internal/repository"
+	"fiber-petclinic-service/internal/repository/model"
+	"fiber-petclinic-service/internal/test"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 )
 
 func Test_allSpecialties(t *testing.T) {

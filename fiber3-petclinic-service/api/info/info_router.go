@@ -2,10 +2,11 @@ package info
 
 import (
 	"fiber3-petclinic-service/config/app"
-	resterr "fiber3-petclinic-service/pkg/errors"
+	resterr "fiber3-petclinic-service/internal/errors"
+	"strings"
+
 	"github.com/gofiber/fiber/v3"
 	"github.com/rs/zerolog/log"
-	"strings"
 )
 
 type Router struct {

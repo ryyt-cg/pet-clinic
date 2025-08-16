@@ -1,9 +1,10 @@
 package visit
 
 import (
-	"gin-petclinic-service/pkg/repository"
-	"gorm.io/gorm"
+	"gin-petclinic-service/internal/repository"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Request struct {

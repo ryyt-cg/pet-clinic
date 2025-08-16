@@ -39,3 +39,7 @@ tidy:
 
 docker-build:
 	docker build -t fiber-petclinic-service:latest .
+
+docker-run:
+	docker rm -f fiber-petclinic-service || true
+	docker run -d -p 8091:8091 --name fiber-petclinic-service fiber-petclinic-service:latest

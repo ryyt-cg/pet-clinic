@@ -1,8 +1,9 @@
 package owner
 
 import (
-	"gin-petclinic-service/pkg/repository"
-	"gin-petclinic-service/pkg/repository/model"
+	"gin-petclinic-service/internal/repository"
+	"gin-petclinic-service/internal/repository/model"
+
 	"github.com/rs/zerolog/log"
 )
 

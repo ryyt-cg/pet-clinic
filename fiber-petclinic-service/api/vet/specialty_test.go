@@ -1,7 +1,7 @@
 package vet
 
 import (
-	"fiber-petclinic-service/pkg/repository"
+	"fiber-petclinic-service/internal/repository"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

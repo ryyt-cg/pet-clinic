@@ -2,8 +2,8 @@ package pet
 
 import (
 	"errors"
-	"fiber-petclinic-service/pkg/repository"
-	"fiber-petclinic-service/pkg/repository/model"
+	"fiber-petclinic-service/internal/repository"
+	"fiber-petclinic-service/internal/repository/model"
 
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"

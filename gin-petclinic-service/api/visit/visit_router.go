@@ -2,11 +2,12 @@ package visit
 
 import (
 	"errors"
-	resterr "gin-petclinic-service/pkg/errors"
-	"github.com/rs/zerolog/log"
-	"gorm.io/gorm"
+	resterr "gin-petclinic-service/internal/errors"
 	"net/http"
 	"strconv"
+
+	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
 )

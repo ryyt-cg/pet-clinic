@@ -5,7 +5,7 @@
 package visit
 
 import (
-	"gin-petclinic-service/pkg/repository"
+	"gin-petclinic-service/internal/repository"
 
 	mock "github.com/stretchr/testify/mock"
 )

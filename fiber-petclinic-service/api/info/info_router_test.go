@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fiber-petclinic-service/config/app"
-	resterr "fiber-petclinic-service/pkg/errors"
+	resterr "fiber-petclinic-service/internal/errors"
 	"io"
 	"net"
 	"net/http"

@@ -3,7 +3,7 @@ package pet
 import (
 	"errors"
 	"gin-petclinic-service/api"
-	resterr "gin-petclinic-service/pkg/errors"
+	resterr "gin-petclinic-service/internal/errors"
 	"net/http"
 	"strconv"
 

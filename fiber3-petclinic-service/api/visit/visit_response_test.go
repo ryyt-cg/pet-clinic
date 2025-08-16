@@ -1,12 +1,13 @@
 package visit
 
 import (
-	"fiber3-petclinic-service/pkg/repository"
-	"fiber3-petclinic-service/pkg/repository/model"
-	"fiber3-petclinic-service/pkg/test"
+	"fiber3-petclinic-service/internal/repository"
+	"fiber3-petclinic-service/internal/repository/model"
+	"fiber3-petclinic-service/internal/test"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
-	"testing"
 )
 
 func TestResponse_FromVisit(t *testing.T) {

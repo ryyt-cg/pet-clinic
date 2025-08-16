@@ -2,7 +2,8 @@ package pet
 
 import (
 	"errors"
-	resterr "fiber3-petclinic-service/pkg/errors"
+	resterr "fiber3-petclinic-service/internal/errors"
+
 	"github.com/gofiber/fiber/v3"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"

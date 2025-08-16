@@ -3,9 +3,10 @@ package service
 import (
 	"errors"
 	"fmt"
-	"go.uber.org/zap"
 	"net/http"
 	"strings"
+
+	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
 	jwtverifier "github.com/okta/okta-jwt-verifier-golang"

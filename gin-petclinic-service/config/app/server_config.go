@@ -1,8 +1,9 @@
 package app
 
 import (
-	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"regexp"
+
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 type ServerConfig struct {

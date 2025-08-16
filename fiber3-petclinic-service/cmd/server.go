@@ -8,8 +8,9 @@ import (
 	"fiber3-petclinic-service/api/vet"
 	"fiber3-petclinic-service/api/visit"
 	"fiber3-petclinic-service/config/app"
-	"fiber3-petclinic-service/pkg/dbase"
-	"fiber3-petclinic-service/pkg/repository"
+	"fiber3-petclinic-service/internal/dbase"
+	"fiber3-petclinic-service/internal/repository"
+
 	"github.com/gofiber/contrib/monitor"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/healthcheck"

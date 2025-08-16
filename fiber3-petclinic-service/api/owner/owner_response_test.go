@@ -3,11 +3,12 @@ package owner
 import (
 	"fiber3-petclinic-service/api/pet"
 	"fiber3-petclinic-service/api/visit"
-	"fiber3-petclinic-service/pkg/repository"
-	"fiber3-petclinic-service/pkg/repository/model"
+	"fiber3-petclinic-service/internal/repository"
+	"fiber3-petclinic-service/internal/repository/model"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
-	"testing"
 )
 
 func Test_ResponseFromOwner(t *testing.T) {

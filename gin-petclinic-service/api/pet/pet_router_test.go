@@ -2,11 +2,12 @@ package pet
 
 import (
 	"encoding/json"
-	"gin-petclinic-service/pkg/repository"
-	"go.uber.org/zap"
+	"gin-petclinic-service/internal/repository"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/go-playground/assert.v1"

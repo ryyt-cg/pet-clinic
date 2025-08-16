@@ -3,10 +3,11 @@ package info
 import (
 	"encoding/json"
 	"fiber-petclinic-service/pkg/test"
-	"go.uber.org/zap"
 	"net"
 	"net/http"
 	"testing"
+
+	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
 

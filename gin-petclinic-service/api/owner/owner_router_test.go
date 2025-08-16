@@ -3,14 +3,15 @@ package owner
 import (
 	"errors"
 	"gin-petclinic-service/api/pet"
-	resterr "gin-petclinic-service/pkg/errors"
-	"gin-petclinic-service/pkg/repository/model"
-	"gin-petclinic-service/pkg/test"
-	"go.uber.org/zap"
-	"gorm.io/gorm"
+	resterr "gin-petclinic-service/internal/errors"
+	"gin-petclinic-service/internal/repository/model"
+	"gin-petclinic-service/internal/test"
 	"net/http"
 	"strconv"
 	"testing"
+
+	"go.uber.org/zap"
+	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
 )

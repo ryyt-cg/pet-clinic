@@ -6,10 +6,11 @@ import (
 	"fiber-petclinic-service/pkg/repository"
 	"fiber-petclinic-service/pkg/repository/model"
 	"fiber-petclinic-service/pkg/test"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"gorm.io/gorm"
-	"testing"
 )
 
 // for learning purpose, how manual mocking can be done.

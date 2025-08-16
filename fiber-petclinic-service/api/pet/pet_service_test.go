@@ -3,9 +3,9 @@ package pet
 import (
 	"errors"
 	"fiber-petclinic-service/api/visit"
-	"fiber-petclinic-service/pkg/repository"
-	"fiber-petclinic-service/pkg/repository/model"
-	"fiber-petclinic-service/pkg/test"
+	"fiber-petclinic-service/internal/repository"
+	"fiber-petclinic-service/internal/repository/model"
+	"fiber-petclinic-service/internal/test"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

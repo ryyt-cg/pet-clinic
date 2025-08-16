@@ -2,12 +2,13 @@ package vet
 
 import (
 	"errors"
-	resterr "gin-petclinic-service/pkg/errors"
+	resterr "gin-petclinic-service/internal/errors"
+	"net/http"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"net/http"
-	"strconv"
 )
 
 type Router struct {
