@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fiber-petclinic-service/internal/repository"
 	"fmt"
 	"os"
 	"strings"
@@ -13,6 +14,7 @@ import (
 // Config stores the application-wide configurations
 var (
 	Config   AppConfig
+	PingRepo repository.PingRepositorier
 	validate *validator.Validate
 )
 

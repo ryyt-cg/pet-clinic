@@ -1,4 +1,30 @@
-# server port
+appInfo:
+  name: "fiber-petclinic-service"
+  description: "Pet Clinic Web Application using Fiber"
+  version: "1.0.0"
+
+circuitBreaker:
+  failureThreshold: ${CIRCUIT_BREAKER_FAILURE_THRESHOLD}
+  timeout: ${CIRCUIT_BREAKER_TIMEOUT}
+  successThreshold: ${CIRCUIT_BREAKER_SUCCESS_THRESHOLD}
+
+databases:
+  postgres:
+    driver: postgres
+    host: localhost
+    port: ${DATABASES_POSTGRES_PORT}
+    username: ${DATABASES_POSTGRES_USERNAME}
+    password: ${DATABASES_POSTGRES_PASSWORD}
+    name: pet_clinic
+    sslMode: enable
+    connectionPool:
+      maxOpenConnections: ${DATABASES_POSTGRES_MAX_OPEN_CONNECTIONS}
+      maxIdleConnections: ${DATABASES_POSTGRES_MAX_IDLE_CONNECTIONS}
+      maxIdleTime: ${DATABASES_POSTGRES_MAX_IDLE_TIME}
+
 server:
-  httpPort: ":8090"
-  grpcPort: ":50051"
+  baseURL: "/api/pet-clinic"
+  host: localhost
+  httpPort: ":8091"
+  logLevel: "info"
+  enablePrintRoutes: false

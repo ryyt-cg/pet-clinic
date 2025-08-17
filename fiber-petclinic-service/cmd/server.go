@@ -30,7 +30,7 @@ import (
 
 var (
 	fiberApp *fiber.App
-	sqlite   *gorm.DB
+	gdb      *gorm.DB
 )
 
 // Instantiate zerolog
@@ -60,8 +60,14 @@ func loadConfig() {
 	}
 
 	var err error
-	sqlDB := dbase.Sqlite{}
-	sqlite, err = sqlDB.Connect(context.Background())
+	//sqlDB := dbase.Sqlite{}
+	//gdb, err = sqlDB.Connect(context.Background())
+	//if err != nil {
+	//	log.Fatal().Err(err).Msg("Fail to connect the database.")
+	//}
+
+	sqlDB := dbase.Postgres{}
+	gdb, err = sqlDB.Connect(context.Background())
 	if err != nil {
 		log.Fatal().Err(err).Msg("Fail to connect the database.")
 	}
@@ -106,6 +112,7 @@ func loadConfig() {
 	})
 
 	// Apply global middlewares
+	app.PingRepo = repository.NewPingRepository(gdb)
 	fiberApp.Use(healthcheck.New(ready.Config()))
 	fiberApp.Use(recover.New())   // Recover from panics and continue
 	fiberApp.Use(requestid.New()) // Generate a unique request ID for each request
@@ -117,22 +124,22 @@ func loadComponents() {
 	infoRouter := info.NewRouter(infoService, ipService)
 
 	// Owner
-	ownerRepository := repository.NewOwnerRepository(sqlite)
+	ownerRepository := repository.NewOwnerRepository(gdb)
 	ownerService := owner.NewService(ownerRepository)
 	ownerRouter := owner.NewRouter(ownerService)
 
 	// Pet
-	petRepository := repository.NewPetRepository(sqlite)
+	petRepository := repository.NewPetRepository(gdb)
 	petService := pet.NewService(petRepository)
 	petRouter := pet.NewRouter(petService)
 
 	// Vet
-	vetRepository := repository.NewVetRepository(sqlite)
+	vetRepository := repository.NewVetRepository(gdb)
 	vetService := vet.NewService(vetRepository)
 	vetRouter := vet.NewRouter(vetService)
 
 	// Visit
-	visitRepository := repository.NewVisitRepository(sqlite)
+	visitRepository := repository.NewVisitRepository(gdb)
 	visitService := visit.NewService(visitRepository)
 	visitRouter := visit.NewRouter(visitService)
 

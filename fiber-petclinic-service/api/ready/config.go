@@ -13,10 +13,18 @@ func Config() healthcheck.Config {
 
 	return healthcheck.Config{
 		LivenessProbe: func(c *fiber.Ctx) bool {
+			err := app.PingRepo.Ping()
+			if err != nil {
+				return false
+			}
 			return true
 		},
 		LivenessEndpoint: app.Config.Server.BaseURL + "/live",
 		ReadinessProbe: func(c *fiber.Ctx) bool {
+			err := app.PingRepo.Ping()
+			if err != nil {
+				return false
+			}
 			return true
 		},
 		ReadinessEndpoint: app.Config.Server.BaseURL + "/ready",

@@ -3,3 +3,4 @@ gin-petclinic-service/cmd/certs/myCA.key
 gin-petclinic-service/cmd/certs/myCA.pem
 /axum-petclinic-service/target/
 /fiber-petclinic-service/air/tmp
+fiber-petclinic-service/.env

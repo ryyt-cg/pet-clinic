@@ -9,7 +9,7 @@ circuitBreaker:
   successThreshold: 2
 
 databases:
-  primary:
+  sqlite:
     driver: sqlite3
     host: localhost
     name: pet-clinic.sqlite
