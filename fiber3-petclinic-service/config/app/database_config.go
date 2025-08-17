@@ -7,11 +7,12 @@ type DatabaseConfig struct {
 	Name           string               `yaml:"name" validate:"required"`
 	Username       string               `yaml:"username"`
 	Password       string               `yaml:"password"`
+	SslMode        string               `yaml:"sslMode"`
 	ConnectionPool ConnectionPoolConfig `yaml:"connectionPool"`
 }
 
 type ConnectionPoolConfig struct {
-	MaxIdleConnection int `yaml:"maxIdleConnection" validate:"required"`
-	MaxOpenConnection int `yaml:"maxOpenConnection" validate:"required"`
-	MaxIdleTime       int `yaml:"maxIdleTime" validate:"required"` // in seconds
+	MaxIdleConnections int `yaml:"maxIdleConnections" validate:"required"`
+	MaxOpenConnections int `yaml:"maxOpenConnections" validate:"required"`
+	MaxIdleTime        int `yaml:"maxIdleTime" validate:"required"` // in seconds
 }

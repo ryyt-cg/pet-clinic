@@ -23,7 +23,7 @@ import (
 
 var (
 	fiberApp *fiber.App
-	sqlite   *gorm.DB
+	gdb      *gorm.DB
 )
 
 // Instantiate zerolog
@@ -53,17 +53,37 @@ func loadConfig() {
 	}
 
 	var err error
-	sqlDB := dbase.Sqlite{}
-	sqlite, err = sqlDB.Connect(context.Background())
+	//sqlDB := dbase.Sqlite{}
+	//gdb, err = sqlDB.Connect(context.Background())
+	//if err != nil {
+	//	log.Fatal().Err(err).Msg("Fail to connect the database.")
+	//}
+
+	sqlDB := dbase.Postgres{}
+	gdb, err = sqlDB.Connect(context.Background())
 	if err != nil {
 		log.Fatal().Err(err).Msg("Fail to connect the database.")
 	}
 
+	// fiberzerolog config
+	fiberLog := fiberzerolog.Config{
+		Logger: &logger,
+	}
+
 	fiberConfig := fiber.Config{
-		AppName: "fiber3-petclinic-service",
+		AppName:           "fiber-petclinic-service",
+		EnablePrintRoutes: app.Config.Server.EnablePrintRoutes,
 	}
 	// Create a new Fiber instance
 	fiberApp = fiber.New(fiberConfig)
+
+	// Initialize default config
+	fiberApp.Use(favicon.New())
+
+	prometheus := fiberprometheus.New("fiber-petclinic-service")
+	prometheus.RegisterAt(fiberApp, app.Config.Server.BaseURL+"/metrics")
+	prometheus.SetSkipPaths([]string{"/ping"}) // Optional: Remove some paths from metrics
+	fiberApp.Use(prometheus.Middleware)
 
 	// Monitor
 	fiberApp.Get(app.Config.Server.BaseURL+"/monitor", monitor.New(monitor.Config{Title: "fiber3-petclinic-service Monitor"}))
@@ -85,7 +105,8 @@ func loadConfig() {
 	})
 
 	// Apply global middlewares
-	fiberApp.Use(healthcheck.New())
+	app.PingRepo = repository.NewPingRepository(gdb)
+	fiberApp.Use(healthcheck.New(ready.Config()))
 	fiberApp.Use(recover.New())   // Recover from panics and continue
 	fiberApp.Use(requestid.New()) // Generate a unique request ID for each request
 }
@@ -96,22 +117,22 @@ func loadComponents() {
 	infoRouter := info.NewRouter(infoService, ipService)
 
 	// Owner
-	ownerRepository := repository.NewOwnerRepository(sqlite)
+	ownerRepository := repository.NewOwnerRepository(gdb)
 	ownerService := owner.NewService(ownerRepository)
 	ownerRouter := owner.NewRouter(ownerService)
 
 	// Pet
-	petRepository := repository.NewPetRepository(sqlite)
+	petRepository := repository.NewPetRepository(gdb)
 	petService := pet.NewService(petRepository)
 	petRouter := pet.NewRouter(petService)
 
 	// Vet
-	vetRepository := repository.NewVetRepository(sqlite)
+	vetRepository := repository.NewVetRepository(gdb)
 	vetService := vet.NewService(vetRepository)
 	vetRouter := vet.NewRouter(vetService)
 
 	// Visit
-	visitRepository := repository.NewVisitRepository(sqlite)
+	visitRepository := repository.NewVisitRepository(gdb)
 	visitService := visit.NewService(visitRepository)
 	visitRouter := visit.NewRouter(visitService)
 

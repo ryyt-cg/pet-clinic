@@ -16,6 +16,18 @@ goose-sqlite-up:
 goose-sqlite-down:
 	goose -dir migrations/sqlite sqlite3 pet-clinic.sqlite down
 
+goose-postgres-up:
+	goose -dir migrations/postgres postgres  up
+
+goose-postgres-down:
+	goose -dir migrations/postgres postgres pet-clinic.sqlite down
+
+postgres-start:
+	docker run --name local-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:latest
+
+postgres-stop:
+	docker stop local-postgres || true
+
 test-coverage:
 	go test -coverprofile=coverage.out ./...
 

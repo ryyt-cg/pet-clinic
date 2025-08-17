@@ -18,7 +18,7 @@ func (s *Sqlite) Connect(ctx context.Context) (*gorm.DB, error) {
 		NamingStrategy: schema.NamingStrategy{SingularTable: app.Config.Gorm.SingularTable},
 	}
 
-	db, err := gorm.Open(sqlite.Open(app.Config.Databases["primary"].Name), gormConfig)
+	db, err := gorm.Open(sqlite.Open(app.Config.Databases["sqlite"].Name), gormConfig)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fiber-petclinic-service/internal/repository"
 	"fmt"
 	"os"
 	"strings"
@@ -13,6 +14,7 @@ import (
 // Config stores the application-wide configurations
 var (
 	Config   AppConfig
+	PingRepo repository.PingRepositorier
 	validate *validator.Validate
 )
 
@@ -20,12 +22,12 @@ type AppConfig struct {
 	AppInfo        AppInfoConfig             `yaml:"appInfo" validate:"required"`
 	CircuitBreaker CircuitBreakerConfig      `yaml:"circuitBreaker" validate:"required"`
 	Databases      map[string]DatabaseConfig `yaml:"databases" validate:"required"`
-	Gorm           GormConfig                `yaml:"gormConfig"`
+	Gorm           GormConfig                `yaml:"gorm"`
 	Server         ServerConfig              `yaml:"server" validate:"required"`
 }
 
 // Validate all config required values are populated.
-func (config AppConfig) Validate() error {
+func (config *AppConfig) Validate() error {
 	validate = validator.New(validator.WithRequiredStructEnabled())
 
 	if err := validate.Struct(config.AppInfo); err != nil {
