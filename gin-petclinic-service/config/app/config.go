@@ -8,6 +8,7 @@ import (
 	"github.com/cristalhq/aconfig"
 	"github.com/cristalhq/aconfig/aconfigyaml"
 	"github.com/go-playground/validator/v10"
+	"github.com/vrischmann/envconfig"
 )
 
 // Config stores the application-wide configurations
@@ -48,6 +49,12 @@ func LoadConfig(configPath string) error {
 	})
 	if err := loader.Load(); err != nil {
 		return fmt.Errorf("failed to load configuration file %s: %w", configFile, err)
+	}
+
+	// Override with environment variables
+	err := envconfig.Init(&Config)
+	if err != nil {
+		return fmt.Errorf("failed to parse environment variables: %w", err)
 	}
 
 	return Config.Validate()

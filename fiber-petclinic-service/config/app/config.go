@@ -9,6 +9,7 @@ import (
 	"github.com/cristalhq/aconfig"
 	"github.com/cristalhq/aconfig/aconfigyaml"
 	"github.com/go-playground/validator/v10"
+	"github.com/vrischmann/envconfig"
 )
 
 // Config stores the application-wide configurations
@@ -19,11 +20,11 @@ var (
 )
 
 type AppConfig struct {
-	AppInfo        AppInfoConfig             `yaml:"appInfo" validate:"required"`
-	CircuitBreaker CircuitBreakerConfig      `yaml:"circuitBreaker" validate:"required"`
-	Databases      map[string]DatabaseConfig `yaml:"databases" validate:"required"`
-	Gorm           GormConfig                `yaml:"gorm"`
-	Server         ServerConfig              `yaml:"server" validate:"required"`
+	AppInfo        AppInfoConfig             `yaml:"appInfo" validate:"required" envconfig:"-"`
+	CircuitBreaker CircuitBreakerConfig      `yaml:"circuitBreaker" validate:"required" envconfig:"-"`
+	Databases      map[string]DatabaseConfig `yaml:"databases" validate:"required"  envconfig:"-"`
+	Gorm           GormConfig                `yaml:"gorm"  envconfig:"-"`
+	Server         ServerConfig              `yaml:"server" validate:"required" envconfig:"-"`
 }
 
 // Validate all config required values are populated.
@@ -51,6 +52,12 @@ func LoadConfig(configPath string) error {
 	})
 	if err := loader.Load(); err != nil {
 		return fmt.Errorf("failed to load configuration file %s: %w", configFile, err)
+	}
+
+	// Override with environment variables
+	err := envconfig.Init(&Config)
+	if err != nil {
+		return fmt.Errorf("failed to parse environment variables: %w", err)
 	}
 
 	return Config.Validate()

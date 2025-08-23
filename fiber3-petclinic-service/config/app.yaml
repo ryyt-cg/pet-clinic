@@ -42,5 +42,3 @@ server:
   host: localhost
   httpPort: ":8092"
   logLevel: "info"
-  enablePrintRoutes: false
-

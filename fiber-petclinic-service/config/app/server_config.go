@@ -5,5 +5,7 @@ type ServerConfig struct {
 	Host              string `yaml:"host" validate:"required"`
 	HttpPort          string `yaml:"httpPort" validate:"required"`
 	LogLevel          string `yaml:"logLevel" validate:"required"`
-	EnablePrintRoutes bool   `yaml:"enablePrintRoutes"`
+	EnableCompression bool   `yaml:"enableCompression" default:"false"`
+	CompressionLevel  int    `yaml:"compressionLevel" default:"0"`
+	EnablePrintRoutes bool   `yaml:"enablePrintRoutes" default:"false"`
 }

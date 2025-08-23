@@ -16,6 +16,7 @@ require (
 	github.com/pressly/goose v2.7.0+incompatible
 	github.com/rs/zerolog v1.34.0
 	github.com/stretchr/testify v1.10.0
+	github.com/vrischmann/envconfig v1.4.1
 	gopkg.in/go-playground/assert.v1 v1.2.1
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/driver/sqlite v1.6.0

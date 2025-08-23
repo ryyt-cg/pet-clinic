@@ -18,6 +18,7 @@ import (
 	"github.com/gofiber/contrib/circuitbreaker"
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
@@ -60,13 +61,8 @@ func loadConfig() {
 	}
 
 	var err error
-	//sqlDB := dbase.Sqlite{}
-	//gdb, err = sqlDB.Connect(context.Background())
-	//if err != nil {
-	//	log.Fatal().Err(err).Msg("Fail to connect the database.")
-	//}
-
-	sqlDB := dbase.Postgres{}
+	//sqlDB := dbase.Postgres{}
+	sqlDB := dbase.Sqlite{}
 	gdb, err = sqlDB.Connect(context.Background())
 	if err != nil {
 		log.Fatal().Err(err).Msg("Fail to connect the database.")
@@ -86,6 +82,13 @@ func loadConfig() {
 
 	// Initialize default config
 	fiberApp.Use(favicon.New())
+
+	// Enable Compression
+	if app.Config.Server.EnableCompression {
+		fiberApp.Use(compress.New(compress.Config{
+			Level: compress.Level(app.Config.Server.CompressionLevel),
+		}))
+	}
 
 	prometheus := fiberprometheus.New("fiber-petclinic-service")
 	prometheus.RegisterAt(fiberApp, app.Config.Server.BaseURL+"/metrics")
