@@ -35,4 +35,32 @@ Directory src/components/layout in shadcn-admin contains:
 ```
 
 ## Migration Steps
+Add Shadcn UI components and context providers to your project. Key steps include:
+```bash
+pnpm dlx shadcn@latest add alert
+pnpm dlx shadcn@latest add alert-dialog
+pnpm dlx shadcn@latest add avatar
+pnpm dlx shadcn@latest add button
+pnpm dlx shadcn@latest add command 
+pnpm dlx shadcn@latest add dialog
+pnpm dlx shadcn@latest add drawer
+pnpm dlx shadcn@latest add dropdown-menu
+pnpm dlx shadcn@latest add form
+pnpm dlx shadcn@latest add input
+pnpm dlx shadcn@latest add label
+pnpm dlx shadcn@latest add popover
+pnpm dlx shadcn@latest add scroll-area
+pnpm dlx shadcn@latest add separator
+pnpm dlx shadcn@latest add select
+pnpm dlx shadcn@latest add sonner
+pnpm dlx shadcn@latest add tooltip
 
+
+# install react components
+pnpm add react-top-loading-bar
+pnpm add @radix-ui/react-icons
+
+pnpm install @hookform/resolvers
+pnpm add @faker-js/faker --save-dev
+ pnpm add @radix-ui/react-checkbox
+```
