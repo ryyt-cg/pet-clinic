@@ -164,7 +164,7 @@ func main() {
 	loadConfig()
 	loadComponents()
 
-	// Start the server on port 3000
+	// Start the server on port define in yaml
 	err := fiberApp.Listen(app.Config.Server.HttpPort)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to start the server")
