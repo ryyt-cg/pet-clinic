@@ -11,7 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
-import { Route as AuthenticatedTasksIndexRouteImport } from './routes/_authenticated/tasks/index'
+import { Route as AuthenticatedVisitsIndexRouteImport } from './routes/_authenticated/visits/index'
+import { Route as AuthenticatedVeterinariansIndexRouteImport } from './routes/_authenticated/veterinarians/index'
+import { Route as AuthenticatedOwnersIndexRouteImport } from './routes/_authenticated/owners/index'
+import { Route as AuthenticatedAddOwnerIndexRouteImport } from './routes/_authenticated/add-owner/index'
 import { Route as AuthenticatedAboutIndexRouteImport } from './routes/_authenticated/about/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -23,11 +26,30 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedTasksIndexRoute = AuthenticatedTasksIndexRouteImport.update({
-  id: '/tasks/',
-  path: '/tasks/',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
+const AuthenticatedVisitsIndexRoute =
+  AuthenticatedVisitsIndexRouteImport.update({
+    id: '/visits/',
+    path: '/visits/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedVeterinariansIndexRoute =
+  AuthenticatedVeterinariansIndexRouteImport.update({
+    id: '/veterinarians/',
+    path: '/veterinarians/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedOwnersIndexRoute =
+  AuthenticatedOwnersIndexRouteImport.update({
+    id: '/owners/',
+    path: '/owners/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAddOwnerIndexRoute =
+  AuthenticatedAddOwnerIndexRouteImport.update({
+    id: '/add-owner/',
+    path: '/add-owner/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAboutIndexRoute = AuthenticatedAboutIndexRouteImport.update({
   id: '/about/',
   path: '/about/',
@@ -37,31 +59,49 @@ const AuthenticatedAboutIndexRoute = AuthenticatedAboutIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/about': typeof AuthenticatedAboutIndexRoute
-  '/tasks': typeof AuthenticatedTasksIndexRoute
+  '/add-owner': typeof AuthenticatedAddOwnerIndexRoute
+  '/owners': typeof AuthenticatedOwnersIndexRoute
+  '/veterinarians': typeof AuthenticatedVeterinariansIndexRoute
+  '/visits': typeof AuthenticatedVisitsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/about': typeof AuthenticatedAboutIndexRoute
-  '/tasks': typeof AuthenticatedTasksIndexRoute
+  '/add-owner': typeof AuthenticatedAddOwnerIndexRoute
+  '/owners': typeof AuthenticatedOwnersIndexRoute
+  '/veterinarians': typeof AuthenticatedVeterinariansIndexRoute
+  '/visits': typeof AuthenticatedVisitsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/about/': typeof AuthenticatedAboutIndexRoute
-  '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
+  '/_authenticated/add-owner/': typeof AuthenticatedAddOwnerIndexRoute
+  '/_authenticated/owners/': typeof AuthenticatedOwnersIndexRoute
+  '/_authenticated/veterinarians/': typeof AuthenticatedVeterinariansIndexRoute
+  '/_authenticated/visits/': typeof AuthenticatedVisitsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/tasks'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/add-owner'
+    | '/owners'
+    | '/veterinarians'
+    | '/visits'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/tasks'
+  to: '/' | '/about' | '/add-owner' | '/owners' | '/veterinarians' | '/visits'
   id:
     | '__root__'
     | '/_authenticated'
     | '/_authenticated/'
     | '/_authenticated/about/'
-    | '/_authenticated/tasks/'
+    | '/_authenticated/add-owner/'
+    | '/_authenticated/owners/'
+    | '/_authenticated/veterinarians/'
+    | '/_authenticated/visits/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -84,11 +124,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/tasks/': {
-      id: '/_authenticated/tasks/'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof AuthenticatedTasksIndexRouteImport
+    '/_authenticated/visits/': {
+      id: '/_authenticated/visits/'
+      path: '/visits'
+      fullPath: '/visits'
+      preLoaderRoute: typeof AuthenticatedVisitsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/veterinarians/': {
+      id: '/_authenticated/veterinarians/'
+      path: '/veterinarians'
+      fullPath: '/veterinarians'
+      preLoaderRoute: typeof AuthenticatedVeterinariansIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/owners/': {
+      id: '/_authenticated/owners/'
+      path: '/owners'
+      fullPath: '/owners'
+      preLoaderRoute: typeof AuthenticatedOwnersIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/add-owner/': {
+      id: '/_authenticated/add-owner/'
+      path: '/add-owner'
+      fullPath: '/add-owner'
+      preLoaderRoute: typeof AuthenticatedAddOwnerIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/about/': {
@@ -104,13 +165,19 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAboutIndexRoute: typeof AuthenticatedAboutIndexRoute
-  AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
+  AuthenticatedAddOwnerIndexRoute: typeof AuthenticatedAddOwnerIndexRoute
+  AuthenticatedOwnersIndexRoute: typeof AuthenticatedOwnersIndexRoute
+  AuthenticatedVeterinariansIndexRoute: typeof AuthenticatedVeterinariansIndexRoute
+  AuthenticatedVisitsIndexRoute: typeof AuthenticatedVisitsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedAboutIndexRoute: AuthenticatedAboutIndexRoute,
-  AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
+  AuthenticatedAddOwnerIndexRoute: AuthenticatedAddOwnerIndexRoute,
+  AuthenticatedOwnersIndexRoute: AuthenticatedOwnersIndexRoute,
+  AuthenticatedVeterinariansIndexRoute: AuthenticatedVeterinariansIndexRoute,
+  AuthenticatedVisitsIndexRoute: AuthenticatedVisitsIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
