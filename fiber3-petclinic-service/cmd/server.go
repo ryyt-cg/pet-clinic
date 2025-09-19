@@ -5,6 +5,7 @@ import (
 	"fiber3-petclinic-service/api/info"
 	"fiber3-petclinic-service/api/owner"
 	"fiber3-petclinic-service/api/pet"
+	"fiber3-petclinic-service/api/ready"
 	"fiber3-petclinic-service/api/vet"
 	"fiber3-petclinic-service/api/visit"
 	"fiber3-petclinic-service/config/app"
@@ -13,6 +14,7 @@ import (
 
 	"github.com/gofiber/contrib/monitor"
 	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/favicon"
 	"github.com/gofiber/fiber/v3/middleware/healthcheck"
 	"github.com/gofiber/fiber/v3/middleware/recover"
 	"github.com/gofiber/fiber/v3/middleware/requestid"
@@ -53,37 +55,26 @@ func loadConfig() {
 	}
 
 	var err error
-	//sqlDB := dbase.Sqlite{}
-	//gdb, err = sqlDB.Connect(context.Background())
-	//if err != nil {
-	//	log.Fatal().Err(err).Msg("Fail to connect the database.")
-	//}
-
-	sqlDB := dbase.Postgres{}
+	sqlDB := dbase.Sqlite{}
 	gdb, err = sqlDB.Connect(context.Background())
 	if err != nil {
 		log.Fatal().Err(err).Msg("Fail to connect the database.")
 	}
 
-	// fiberzerolog config
-	fiberLog := fiberzerolog.Config{
-		Logger: &logger,
-	}
+	//sqlDB := dbase.Postgres{}
+	//gdb, err = sqlDB.Connect(context.Background())
+	//if err != nil {
+	//	log.Fatal().Err(err).Msg("Fail to connect the database.")
+	//}
 
 	fiberConfig := fiber.Config{
-		AppName:           "fiber-petclinic-service",
-		EnablePrintRoutes: app.Config.Server.EnablePrintRoutes,
+		AppName: "fiber3-petclinic-service",
 	}
 	// Create a new Fiber instance
 	fiberApp = fiber.New(fiberConfig)
 
 	// Initialize default config
 	fiberApp.Use(favicon.New())
-
-	prometheus := fiberprometheus.New("fiber-petclinic-service")
-	prometheus.RegisterAt(fiberApp, app.Config.Server.BaseURL+"/metrics")
-	prometheus.SetSkipPaths([]string{"/ping"}) // Optional: Remove some paths from metrics
-	fiberApp.Use(prometheus.Middleware)
 
 	// Monitor
 	fiberApp.Get(app.Config.Server.BaseURL+"/monitor", monitor.New(monitor.Config{Title: "fiber3-petclinic-service Monitor"}))
@@ -106,9 +97,10 @@ func loadConfig() {
 
 	// Apply global middlewares
 	app.PingRepo = repository.NewPingRepository(gdb)
-	fiberApp.Use(healthcheck.New(ready.Config()))
 	fiberApp.Use(recover.New())   // Recover from panics and continue
 	fiberApp.Use(requestid.New()) // Generate a unique request ID for each request
+
+	fiberApp.Get(app.Config.Server.BaseURL+"/ready", healthcheck.New(ready.Config()))
 }
 
 func loadComponents() {

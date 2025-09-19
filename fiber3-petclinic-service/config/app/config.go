@@ -1,7 +1,7 @@
 package app
 
 import (
-	"fiber-petclinic-service/internal/repository"
+	"fiber3-petclinic-service/internal/repository"
 	"fmt"
 	"os"
 	"strings"

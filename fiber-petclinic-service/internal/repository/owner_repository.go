@@ -54,7 +54,7 @@ func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
 //
 // SELECT * FROM "owners" WHERE last_name = 'Rodriquez' AND "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, error) {
-	log.Debug().Str("lastName", lastName).Msg("Search owner by last name.")
+	log.Info().Str("lastName", lastName).Msg("Search owner by last name.")
 
 	// Pets.Type - Nested Preloading (Eager Loading)
 	var owners []Owner
@@ -70,7 +70,7 @@ func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, err
 // FindAll
 // SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindAll() ([]Owner, error) {
-	log.Debug().Msg("get list of owners")
+	log.Info().Msg("get list of owners")
 
 	var owners []Owner
 	// Get all owners
@@ -90,7 +90,7 @@ func (repository *OwnerRepository) FindAll() ([]Owner, error) {
 // SELECT * FROM "types" WHERE "types"."id" IN (1,6,2,3,4,5) AND "types"."deleted_at" IS NULL
 // SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
-	log.Debug().Msg("get list of owners with pets")
+	log.Info().Msg("get list of owners with pets")
 
 	var owner Owner
 	/*
@@ -110,7 +110,7 @@ func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
 //
 //	VALUES ('George','Franklin','110 W. Liberty St.','Madison','6085551023','2021-09-26 15:00:00','2021-09-26 15:00:00')
 func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) {
-	log.Debug().Any("owner", owner).Msg("Insert a new owner.")
+	log.Info().Any("owner", owner).Msg("Insert a new owner.")
 	now := time.Now()
 	owner.UpdatedAt = now
 	owner.CreatedAt = now
@@ -126,7 +126,7 @@ func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) {
 // Update - update the owner
 // UPDATE "owners" SET "first_name" = 'George', "last_name" = 'Franklin', "address" = '110 W. Liberty St.',
 func (repository *OwnerRepository) Update(owner *Owner) (*Owner, error) {
-	log.Debug().Uint("id", owner.ID).Msg("Update owner")
+	log.Info().Uint("id", owner.ID).Msg("Update owner")
 	owner.UpdatedAt = time.Now()
 
 	// Omit the column name from update...

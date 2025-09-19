@@ -2,7 +2,7 @@ package dbase
 
 import (
 	"context"
-	"fiber-petclinic-service/config/app"
+	"fiber3-petclinic-service/config/app"
 	"fmt"
 	"time"
 

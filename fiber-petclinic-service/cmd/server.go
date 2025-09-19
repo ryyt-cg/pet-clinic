@@ -19,6 +19,7 @@ import (
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
@@ -80,6 +81,8 @@ func loadConfig() {
 	// Create a new Fiber instance
 	fiberApp = fiber.New(fiberConfig)
 
+	// Use the CORS middleware
+	fiberApp.Use(cors.New())
 	// Initialize default config
 	fiberApp.Use(favicon.New())
 
