@@ -11,7 +11,7 @@ type Response struct {
 	ID        uint             `json:"id"`
 	Name      string           `json:"name"`
 	Birthdate string           `json:"birthdate"`
-	Type      string           `json:"type"`
+	Species   string           `json:"species"`
 	Visits    []visit.Response `json:"visits,omitempty"`
 }
 
@@ -46,7 +46,7 @@ func (pr *Response) FromPet(pet *repository.Pet) {
 		// Format the birthdate as a string in the format "YYYY-MM-DD"
 		pr.Birthdate = pet.Birthdate.Format(time.DateOnly)
 	}
-	pr.Type = pet.Type.Name
+	pr.Species = pet.Species.Name
 	pr.Visits = visit.FromVisits(pet.Visits)
 }
 

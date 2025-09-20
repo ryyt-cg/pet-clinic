@@ -5,6 +5,7 @@ import {ConfigDrawer} from "@/components/config-drawer.tsx";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {Main} from "@/components/layout/main.tsx";
 
 const About = () => {
   return (
@@ -17,7 +18,8 @@ const About = () => {
           </div>
         </Header>
 
-        <div className="container mx-auto py-12">
+        <Main>
+          <div className="container mx-auto py-12">
           {/* Hero Section */}
           <section className="text-center mb-16">
             <h1 className="text-5xl font-bold mb-4">About Pet Clinic</h1>
@@ -29,32 +31,33 @@ const About = () => {
                 <li>3) Database: SQLite, PostgreSQL</li>
               </ul>
             </p>
-            <Button className="mt-8">Learn More</Button>
-          </section>
+              <Button className="mt-8">Learn More</Button>
+            </section>
 
-          {/* My Mission/Values Section */}
-          <section className="grid md:grid-cols-2 gap-8 mb-16">
-            <Card>
-              <CardHeader>
-                <CardTitle>My Goal</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>My goal is to apply best practices and production code.  The project could be used as a template</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>My Values</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul>
-                  <li>Innovation</li>
-                  <li>Integrity</li>
-                </ul>
-              </CardContent>
-            </Card>
-          </section>
-        </div>
+            {/* My Mission/Values Section */}
+            <section className="grid md:grid-cols-2 gap-8 mb-16">
+              <Card>
+                <CardHeader>
+                  <CardTitle>My Goal</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p>My goal is to apply best practices and production code.  The project could be used as a template</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>My Values</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul>
+                    <li>Innovation</li>
+                    <li>Integrity</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </section>
+          </div>
+        </Main>
       </>
   );
 };

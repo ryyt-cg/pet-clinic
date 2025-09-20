@@ -31,7 +31,7 @@ Directory src/components/layout in shadcn-admin contains:
 ├── nav-user.tsx
 ├── team-switcher.tsx
 ├── top-nav.tsx
-└── types.ts
+└── pet-io.ts
 ```
 
 ## Migration Steps

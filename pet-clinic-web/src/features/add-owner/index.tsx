@@ -4,7 +4,7 @@ import {ThemeSwitch} from "@/components/theme-switch.tsx";
 import {ConfigDrawer} from "@/components/config-drawer.tsx";
 import {Main} from "@/components/layout/main.tsx";
 import {GetAllPets} from "@/gateway/pet-gateway.ts";
-import type {Pet} from "@/gateway/types.ts";
+import type {Pet} from "@/gateway/pet-io.ts";
 
 const AddOwner = () => {
   const allPets = GetAllPets()

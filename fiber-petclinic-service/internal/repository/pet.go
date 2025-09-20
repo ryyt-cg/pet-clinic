@@ -16,18 +16,18 @@ Notes:
 	Owner struct has Pets attribute relationship.  Therefore, it creates
 	circular relationship and cycle relationship not allowed
 */
-// Pet type belongs to Type, TypeID is the foreign key
+// Pet species belongs to Species, SpeciesID is the foreign key
 type Pet struct {
 	gorm.Model
 	Name      string     `gorm:"column:name"`
 	Birthdate *time.Time //`gorm:"column:birth_date"`
-	TypeID    uint
+	SpeciesID uint
 	OwnerID   uint
-	Type      Type `gorm:"foreignKey:TypeID"`
+	Species   Species `gorm:"foreignKey:SpeciesID"`
 	Visits    []Visit
 }
 
-type Type struct {
+type Species struct {
 	gorm.Model
 	Name string
 }

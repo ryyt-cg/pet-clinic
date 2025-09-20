@@ -2,6 +2,7 @@ import {Header} from "@/components/layout/header.tsx";
 import {Search} from "@/components/search.tsx";
 import {ThemeSwitch} from "@/components/theme-switch.tsx";
 import {ConfigDrawer} from "@/components/config-drawer.tsx";
+import {Main} from "@/components/layout/main.tsx";
 
 const Visits = () => {
   return (
@@ -13,8 +14,11 @@ const Visits = () => {
             <ConfigDrawer />
           </div>
         </Header>
-
-        Visits Page
+        <Main>
+          <div className='mb-2 flex items-center justify-between space-y-2'>
+            <h1 className='text-2xl font-bold tracking-tight'>Visits Page</h1>
+          </div>
+        </Main>
       </>
   );
 };
