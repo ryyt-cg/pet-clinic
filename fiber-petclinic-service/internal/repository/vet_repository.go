@@ -30,7 +30,7 @@ func NewVetRepository(db *gorm.DB) *VetRepository {
 // FindAllSpecialties - retrieve all veterinarian's specialties
 // SELECT * FROM "specialties" WHERE "specialties"."deleted_at" IS NULL
 func (repository *VetRepository) FindAllSpecialties() ([]Specialty, error) {
-	log.Debug().Msg("get all specialties")
+	log.Info().Msg("get all specialties")
 
 	var specialties []Specialty
 	err := repository.db.Find(&specialties).Error
@@ -51,7 +51,7 @@ SELECT * FROM "specialties" WHERE "specialties"."id" = 1 AND "specialties"."dele
 SELECT * FROM "vets" WHERE "vets"."id" = 2 AND "vets"."deleted_at" IS NULL ORDER BY "vets"."id" LIMIT 1
 */
 func (repository *VetRepository) FindById(id uint) (*Vet, error) {
-	log.Debug().Uint("id", id).Msg("Search vet by id.")
+	log.Info().Uint("id", id).Msg("Search vet by id.")
 
 	var vet Vet
 	err := repository.db.First(&vet, id).Error
@@ -64,7 +64,7 @@ func (repository *VetRepository) FindById(id uint) (*Vet, error) {
 }
 
 func (repository *VetRepository) FindByIdWithSpecialties(id uint) (*Vet, error) {
-	log.Debug().Uint("id", id).Msg("Search vet by id.")
+	log.Info().Uint("id", id).Msg("Search vet by id.")
 
 	var vet Vet
 	err := repository.db.Preload("Specialties").First(&vet, id).Error
@@ -81,7 +81,7 @@ func (repository *VetRepository) FindByIdWithSpecialties(id uint) (*Vet, error) 
 // SELECT * FROM "specialties" WHERE "specialties"."id" = 1 AND "specialties"."deleted_at" IS NULL
 // SELECT * FROM "vets" WHERE last_name = 'Stevens' AND "vets"."deleted_at" IS NULL
 func (repository *VetRepository) FindByLastName(lastName string) ([]Vet, error) {
-	log.Debug().Str("lastName", lastName).Msg("Search vet by last name.")
+	log.Info().Str("lastName", lastName).Msg("Search vet by last name.")
 
 	var vets []Vet
 	err := repository.db.Preload("Specialties").Where("last_name = ?", lastName).Find(&vets).Error
@@ -98,7 +98,7 @@ FindAll
 SELECT * FROM "vets" WHERE "vets"."deleted_at" IS NULL
 */
 func (repository *VetRepository) FindAll() ([]Vet, error) {
-	log.Debug().Msg("get all vets")
+	log.Info().Msg("get all vets")
 
 	var vets []Vet
 	err := repository.db.Find(&vets).Error
@@ -119,7 +119,7 @@ only 3 queries actually executed.
 	SELECT * FROM "vets" WHERE "vets"."deleted_at" IS NULL
 */
 func (repository *VetRepository) FindAllPreload() ([]Vet, error) {
-	log.Debug().Msg("get all vets with relations preloaded.")
+	log.Info().Msg("get all vets with relations preloaded.")
 
 	var vets []Vet
 	err := repository.db.Preload("Specialties").Find(&vets).Error
@@ -135,7 +135,7 @@ func (repository *VetRepository) FindAllPreload() ([]Vet, error) {
 //
 //	VALUES ('James','Carter','2021-07-25 15:00:00','2021-07-25 15:00:00') RETURN
 func (repository *VetRepository) Insert(vet *Vet) (*Vet, error) {
-	log.Debug().Any("vet", vet).Msg("Fail a new vet.")
+	log.Info().Any("vet", vet).Msg("Fail a new vet.")
 
 	err := repository.db.Create(&vet).Error
 	if err != nil {
@@ -148,7 +148,7 @@ func (repository *VetRepository) Insert(vet *Vet) (*Vet, error) {
 // Update - update vet
 // UPDATE "vets" SET "first_name" = 'James', "last_name" = 'Carter' WHERE "id" = 1
 func (repository *VetRepository) Update(vet *Vet) (*Vet, error) {
-	log.Debug().Uint("id", vet.ID).Msg("Update a vet by id.")
+	log.Info().Uint("id", vet.ID).Msg("Update a vet by id.")
 
 	// Omit the column name from update...
 	err := repository.db.Omit("created_at").Save(&vet).Error

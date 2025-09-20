@@ -30,7 +30,7 @@ SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
 SELECT * FROM "visits" WHERE "visits"."id" = 2 AND "visits"."deleted_at" IS NULL ORDER BY "visits"."id" LIMIT 1
 */
 func (repository *VisitRepository) FindById(id uint) (*Visit, error) {
-	log.Debug().Uint("id", id).Msg("Search visit by id.")
+	log.Info().Uint("id", id).Msg("Search visit by id.")
 
 	var visit Visit
 	err := repository.db.Preload("Pet.Type").First(&visit, id).Error
@@ -49,7 +49,7 @@ SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
 SELECT * FROM "visits" WHERE "visits"."deleted_at" IS NULL
 */
 func (repository *VisitRepository) FindAll() ([]Visit, error) {
-	log.Debug().Msg("get list of visits")
+	log.Info().Msg("get list of visits")
 
 	var visits []Visit
 	// not needed to preload for all visits - will be a performance if get large result.
@@ -67,7 +67,7 @@ func (repository *VisitRepository) FindAll() ([]Visit, error) {
 //
 //	VALUES ('2021-08-29 15:00:00','2021-08-29 15:00:00',NULL,8,'2021-08-29 15:00:00','test')
 func (repository *VisitRepository) Insert(visit *Visit) (*Visit, error) {
-	log.Debug().Any("visit", visit).Msg("insert a new visit.")
+	log.Info().Any("visit", visit).Msg("insert a new visit.")
 
 	err := repository.db.Create(visit).Error
 	if err != nil {
@@ -81,7 +81,7 @@ func (repository *VisitRepository) Insert(visit *Visit) (*Visit, error) {
 // Update - update visit
 // UPDATE "visits" SET "visit_date" = '2021-08-01 00:00:00', "description" = 'test', "pet_id" = 8 WHERE "id" = 2
 func (repository *VisitRepository) Update(visit *Visit) (*Visit, error) {
-	log.Debug().Any("visit", visit).Msg("Update visits.")
+	log.Info().Any("visit", visit).Msg("Update visits.")
 
 	err := repository.db.Save(visit).Error
 	if err != nil {
