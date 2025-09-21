@@ -41,7 +41,7 @@ SELECT "pets"."id","pets"."created_at","pets"."updated_at","pets"."deleted_at","
 
 	"pets"."type_id","pets"."owner_id","Type"."id" AS "Type__id","Type"."created_at" AS "Type__created_at",
 	"Type"."updated_at" AS "Type__updated_at","Type"."deleted_at" AS "Type__deleted_at","Type"."name" AS "Type__name"
-	FROM "pets" LEFT JOIN "types" "Type" ON "pets"."type_id" = "Type"."id"
+	FROM "pets" LEFT JOIN "species" "Type" ON "pets"."type_id" = "Type"."id"
 	WHERE pets.id = 2 AND "pets"."deleted_at" IS NULL ORDER BY "pets"."id" LIMIT 1
 */
 func (repository *PetRepository) FindById(id uint) (*Pet, error) {
@@ -62,7 +62,7 @@ func (repository *PetRepository) FindByIdWithVisits(id uint) (*Pet, error) {
 
 /*
 FindByName
-SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
+SELECT * FROM "species" WHERE "species"."id" = 1 AND "species"."deleted_at" IS NULL
 SELECT * FROM "pets" WHERE name = 'Leo' AND "pets"."deleted_at" IS NULL
 */
 func (repository *PetRepository) FindByName(name string) ([]Pet, error) {

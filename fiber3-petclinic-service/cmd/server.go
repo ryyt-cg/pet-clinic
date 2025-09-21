@@ -14,6 +14,7 @@ import (
 
 	"github.com/gofiber/contrib/monitor"
 	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/cors"
 	"github.com/gofiber/fiber/v3/middleware/favicon"
 	"github.com/gofiber/fiber/v3/middleware/healthcheck"
 	"github.com/gofiber/fiber/v3/middleware/recover"
@@ -73,6 +74,8 @@ func loadConfig() {
 	// Create a new Fiber instance
 	fiberApp = fiber.New(fiberConfig)
 
+	// Use the CORS middleware
+	fiberApp.Use(cors.New())
 	// Initialize default config
 	fiberApp.Use(favicon.New())
 
