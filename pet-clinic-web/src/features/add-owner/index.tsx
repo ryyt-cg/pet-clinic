@@ -4,7 +4,6 @@ import {ThemeSwitch} from "@/components/theme-switch.tsx";
 import {ConfigDrawer} from "@/components/config-drawer.tsx";
 import {Main} from "@/components/layout/main.tsx";
 import {GetAllPets} from "@/gateway/pet-gateway.ts";
-import type {Pet} from "@/gateway/pet-io.ts";
 
 const AddOwner = () => {
   const allPets = GetAllPets()
@@ -29,16 +28,14 @@ const AddOwner = () => {
           <div>
             <p>Query function status: {allPets.fetchStatus}</p>
             <p>Query data status: {allPets.status}</p>
-            {allPets.data?.map((pet: Pet) => (
-                <div key={pet.id}>
-                  <div>{pet.id}</div>
-                  <div>{pet.name}</div>
-                  <div>{pet.birthdate}</div>
-                  <div>{pet.type}</div>
-                </div>
+            {allPets.data?.pets.map((pet) => (
+                <ul key={pet.id}>
+                  <li>Pet ID: {pet.id}</li>
+                  <li>Pet Name: {pet.name}</li>
+                  <li>Pet Birth Date: {pet.birthdate}</li>
+                </ul>
             ))}
           </div>
-
         </Main>
 
       </>

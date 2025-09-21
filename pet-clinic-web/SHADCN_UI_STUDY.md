@@ -62,5 +62,17 @@ pnpm add @radix-ui/react-icons
 
 pnpm install @hookform/resolvers
 pnpm add @faker-js/faker --save-dev
- pnpm add @radix-ui/react-checkbox
+pnpm add @radix-ui/react-checkbox
+
+
+# install tanstack components
+pnpm add @tanstack/react-router
+pnpm add -D @tanstack/react-router-devtools
+pnpm add -D @tanstack/router-plugin
+
+pnpm add @tanstack/react-query
+pnmp add #tanstack/react-query-devtools
+pnpm add @tanstack/eslint-plugin-query
+
+pnpm add @tanstack/react-table
 ```

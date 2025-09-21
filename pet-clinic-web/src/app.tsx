@@ -40,6 +40,17 @@ const queryClient = new QueryClient({
   },
 })
 
+// This code is only for TypeScript
+declare global {
+  interface Window {
+    __TANSTACK_QUERY_CLIENT__:
+        import("@tanstack/query-core").QueryClient;
+  }
+}
+
+// This code is for all users
+window.__TANSTACK_QUERY_CLIENT__ = queryClient;
+
 // Create a new router instance
 const router = createRouter({
   routeTree,
@@ -47,7 +58,6 @@ const router = createRouter({
   defaultPreload: 'intent',
   defaultPreloadStaleTime: 0,
 })
-
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
