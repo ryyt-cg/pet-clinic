@@ -90,7 +90,7 @@ func (repository *OwnerRepository) FindAll() ([]Owner, error) {
 // SELECT * FROM "types" WHERE "types"."id" IN (1,6,2,3,4,5) AND "types"."deleted_at" IS NULL
 // SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
-	log.Debug().Msg("get list of owners with pets")
+	log.Debug().Msg("get a owner with pets")
 
 	var owner Owner
 	/*

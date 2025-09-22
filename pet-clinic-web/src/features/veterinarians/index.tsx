@@ -7,10 +7,11 @@ import {GetAllVets, GetVetById, GetVetWithSpecialtiesById} from "@/gateway/vet-g
 import {GetAllOwners, GetOwnerById, GetOwnerWithPetsById} from "@/gateway/owner-gateway.ts";
 import {GetPetWithVisitsById} from "@/gateway/pet-gateway.ts";
 import {GetAllVisits, GetVisitById} from "@/gateway/visit-gateway.ts";
+import {NotFoundError} from "@/features/errors/not-found-error.tsx";
 
 const Veterinarians = () => {
   const allOwners = GetAllOwners()
-  const ownerById = GetOwnerById(2)
+  const ownerById = GetOwnerById(200)
   const ownerWithPetsById = GetOwnerWithPetsById(2)
 
   const petWithVisitsById = GetPetWithVisitsById(7)
@@ -32,6 +33,10 @@ const Veterinarians = () => {
 
   if (allVisits.isPending || visitById.isPending) {
     return <span>Loading...</span>;
+  }
+
+  if (ownerById.isError) {
+    return <NotFoundError/>;
   }
 
 

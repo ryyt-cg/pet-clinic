@@ -1,6 +1,7 @@
 import {PET_CLINIC_HOST_URL} from "@/gateway/host-url.ts";
 import {useQuery, type UseQueryResult} from "@tanstack/react-query";
-import type {Owner, Owners} from "@/gateway/owner-io.ts";
+import type {NewOwner, Owner, Owners} from "@/gateway/owner-io.ts";
+import {buildErrorMessage} from "vite";
 
 export function GetAllOwners(): UseQueryResult<Owners, Error> {
   return useQuery({
@@ -73,3 +74,5 @@ const fetchOwnerWithPetsById = async (id: number): Promise<Owner> => {
   console.log(owner)
   return owner;
 }
+
+// Mutations - POST, PUT, DELETE functions

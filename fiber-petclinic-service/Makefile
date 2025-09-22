@@ -14,13 +14,13 @@ linux-build:
 	GOOS=linux GOARCH=amd64 go build -o bin/fiber-petclinic-service cmd/server.go
 
 goose-sqlite-up:
-	goose -dir migrations/sqlite sqlite3 pet-clinic.sqlite up
+	goose -env .env.sqlite up
 
 goose-sqlite-down:
 	goose -dir migrations/sqlite sqlite3 pet-clinic.sqlite down
 
 goose-postgres-up:
-	goose -dir migrations/postgres postgres up
+	goose -env .env.postgres up
 
 goose-postgres-down:
 	goose -dir migrations/postgres postgres pet-clinic.sqlite down

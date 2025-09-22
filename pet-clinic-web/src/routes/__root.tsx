@@ -3,6 +3,8 @@ import { NavigationProgress } from '@/components/navigation-progress'
 import {TanStackRouterDevtools} from '@tanstack/react-router-devtools'
 import {Toaster} from "sonner";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
+import {NotFoundError} from "@/features/errors/not-found-error.tsx";
+import {GeneralError} from "@/features/errors/general-error.tsx";
 
 export const Route = createRootRoute({
   component: () => (
@@ -18,4 +20,6 @@ export const Route = createRootRoute({
         )}
       </>
   ),
+  notFoundComponent: NotFoundError,
+  errorComponent: GeneralError,
 })

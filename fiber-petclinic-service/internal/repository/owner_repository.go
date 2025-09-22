@@ -38,7 +38,7 @@ func NewOwnerRepository(db *gorm.DB) *OwnerRepository {
 // SELECT * FROM "types" WHERE "types"."id" = 2 AND "types"."deleted_at" IS NULL
 // SELECT * FROM "owners" WHERE "owners"."id" = 1 AND "owners"."deleted_at" IS NULL ORDER BY "owners"."id" LIMIT 1
 func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
-	log.Debug().Uint("id", id).Msg("search owner by id.")
+	log.Info().Uint("id", id).Msg("search owner by id.")
 
 	var owner Owner
 	// Pets.Type - Nested Preloading (Eager Loading)
@@ -90,7 +90,7 @@ func (repository *OwnerRepository) FindAll() ([]Owner, error) {
 // SELECT * FROM "types" WHERE "types"."id" IN (1,6,2,3,4,5) AND "types"."deleted_at" IS NULL
 // SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
-	log.Info().Msg("get list of owners with pets")
+	log.Info().Msg("get a owner with pets")
 
 	var owner Owner
 	/*
