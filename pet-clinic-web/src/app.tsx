@@ -2,7 +2,7 @@ import {createRouter, RouterProvider} from '@tanstack/react-router'
 
 // Import the generated route tree
 import {routeTree} from '@/routeTree.gen'
-import {ThemeProvider} from './context/theme-context.tsx'
+import {ThemeProvider} from './context/theme-provider.tsx'
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {AxiosError} from "axios";
 import {handleServerError} from "@/lib/handle-server-error.ts";

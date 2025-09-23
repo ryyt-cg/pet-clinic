@@ -1,7 +1,6 @@
 import {PET_CLINIC_HOST_URL} from "@/gateway/host-url.ts";
 import {useQuery, type UseQueryResult} from "@tanstack/react-query";
-import type {NewOwner, Owner, Owners} from "@/gateway/owner-io.ts";
-import {buildErrorMessage} from "vite";
+import type {Owner, Owners} from "@/gateway/owner-io.ts";
 
 export function GetAllOwners(): UseQueryResult<Owners, Error> {
   return useQuery({

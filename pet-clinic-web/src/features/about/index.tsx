@@ -25,12 +25,12 @@ const About = () => {
             <h1 className="text-5xl font-bold mb-4">About Pet Clinic</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Rebuild Pet Clinic using
-              <ul>
-                <li>1) Frontend: React, Vite, TailwindCSS </li>
-                <li>2) Backend: Golang, Fiber, GORM</li>
-                <li>3) Database: SQLite, PostgreSQL</li>
-              </ul>
             </p>
+            <ul>
+              <li>1) Frontend: React, Vite, TailwindCSS </li>
+              <li>2) Backend: Golang, Fiber, GORM</li>
+              <li>3) Database: SQLite, PostgreSQL</li>
+            </ul>
               <Button className="mt-8">Learn More</Button>
             </section>
 

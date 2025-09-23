@@ -2,7 +2,7 @@ import {useEffect} from 'react'
 // import { IconCheck, IconMoon, IconSun } from '@tabler/icons-react'
 import {CheckIcon, Moon, Sun} from "lucide-react"
 import {cn} from '@/lib/utils'
-import {useTheme} from '@/context/theme-context'
+import {useTheme} from '@/context/theme-provider'
 import {Button} from '@/components/ui/button'
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from '@/components/ui/dropdown-menu'
 

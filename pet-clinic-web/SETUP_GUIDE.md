@@ -311,7 +311,7 @@ You would see the home page and about page.
 
 ## Step 3: Add Dark Mode Support
 
-* Create a theme provider: context/theme-context.tsx
+* Create a theme provider: context/theme-provider.tsx
 
 ```tsx
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -420,7 +420,7 @@ export default App
 import { useEffect } from 'react'
 import { Moon, Sun, CheckIcon } from "lucide-react"
 import { cn } from '@/lib/utils'
-import { useTheme } from '@/context/theme-context'
+import { useTheme } from '@/context/theme-provider'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,

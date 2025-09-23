@@ -74,5 +74,6 @@ pnpm add @tanstack/react-query
 pnmp add #tanstack/react-query-devtools
 pnpm add @tanstack/eslint-plugin-query
 
+pnpm add @tanstack/react-form
 pnpm add @tanstack/react-table
 ```
