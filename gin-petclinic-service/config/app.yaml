@@ -4,30 +4,29 @@ appInfo:
   description: "Golang Pet Clinic Service"
   version: "1.0.0"
 
-
 databases:
-#  sqlite:
-#    driver: sqlite3
-#    host: localhost
-#    name: pet-clinic.sqlite
-#    connectionPool:
-#      maxOpenConnections: 10
-#      maxIdleConnections: 5
-#      maxIdleTime: 30
-  postgres:
-    driver: postgres
+  sqlite:
+    driver: sqlite3
     host: localhost
-    port: 5432
-    username: pet_user
-    # in production, use environment variables for sensitive data
-    # e.g., DATABASES_POSTGRES_PASSWORD
-    password: pet_user
-    name: pet_clinic
-    sslMode: disable
+    name: pet-clinic.sqlite
     connectionPool:
-      maxOpenConnections: 25
-      maxIdleConnections: 25
-      maxIdleTime: 15
+      maxOpenConnections: 10
+      maxIdleConnections: 5
+      maxIdleTime: 30
+#  postgres:
+#    driver: postgres
+#    host: localhost
+#    port: 5432
+#    username: pet_user
+#    # in production, use environment variables for sensitive data
+#    # e.g., DATABASES_POSTGRES_PASSWORD
+#    password: pet_user
+#    name: pet_clinic
+#    sslMode: disable
+#    connectionPool:
+#      maxOpenConnections: 25
+#      maxIdleConnections: 25
+#      maxIdleTime: 15
 
 gorm:
   # logLevel - silent(1), error(2), warn(3), info(4))

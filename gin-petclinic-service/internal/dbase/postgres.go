@@ -2,6 +2,7 @@ package dbase
 
 import (
 	"context"
+	"fmt"
 	"gin-petclinic-service/config/app"
 	"time"
 

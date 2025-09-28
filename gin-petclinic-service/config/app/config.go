@@ -18,10 +18,10 @@ var (
 )
 
 type AppConfig struct {
-	AppInfo   AppInfoConfig             `yaml:"appInfo" validate:"required"`
-	Databases map[string]DatabaseConfig `yaml:"databases" validate:"required"`
-	Gorm      GormConfig                `yaml:"gorm"`
-	Server    ServerConfig              `yaml:"server" validate:"required"`
+	AppInfo   AppInfoConfig             `yaml:"appInfo" validate:"required" envconfig:"-"`
+	Databases map[string]DatabaseConfig `yaml:"databases" validate:"required" envconfig:"-"`
+	Gorm      GormConfig                `yaml:"gorm" envconfig:"-"`
+	Server    ServerConfig              `yaml:"server" validate:"required" envconfig:"-"`
 }
 
 // Validate all config required values are populated.
