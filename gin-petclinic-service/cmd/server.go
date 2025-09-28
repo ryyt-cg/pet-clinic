@@ -15,6 +15,9 @@ import (
 	"gin-petclinic-service/internal/repository"
 	"gin-petclinic-service/middleware"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-contrib/location"
 	"github.com/gin-gonic/gin"
@@ -146,4 +149,21 @@ func main() {
 		log.Fatal().Err(err).Msg("Fail to run http server.")
 		os.Exit(-1)
 	}
+
+	// Wait for interrupt signal to gracefully shutdown the server with
+	// a timeout of 5 seconds.
+	quit := make(chan os.Signal, 1)
+	// kill (no params) by default sends syscall.SIGTERM
+	// kill -2 is syscall.SIGINT
+	// kill -9 is syscall.SIGKILL but can't be caught, so don't need add it
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Info().Msg("Shutdown Server ...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := httpRouter.Shutdown(ctx); err != nil {
+		log.Error().Err(err).Msg("Server Shutdown:")
+	}
+	log.Info().Msg("Server exiting")
 }
