@@ -13,6 +13,9 @@ windows-build:
 linux-build:
 	GOOS=linux GOARCH=amd64 go build -o bin/fiber-petclinic-service cmd/server.go
 
+swag:
+	swag i -g cmd/server.go
+
 goose-sqlite-up:
 	goose -env .env.sqlite up
 

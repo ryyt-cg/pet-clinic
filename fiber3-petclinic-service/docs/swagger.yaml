@@ -1,0 +1,659 @@
+definitions:
+  errors.ErrorResponse:
+    properties:
+      details: {}
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  model.Context:
+    properties:
+      count:
+        type: integer
+    type: object
+  owner.AddRequest:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      telephone:
+        type: string
+    type: object
+  owner.Response:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      pets:
+        items:
+          $ref: '#/definitions/pet.Response'
+        type: array
+      telephone:
+        type: string
+    type: object
+  owner.Responses:
+    properties:
+      context:
+        $ref: '#/definitions/model.Context'
+      owners:
+        items:
+          $ref: '#/definitions/owner.Response'
+        type: array
+    type: object
+  owner.UpdateRequest:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      telephone:
+        type: string
+    type: object
+  owner.UpdateResponse:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      telephone:
+        type: string
+    type: object
+  pet.AddRequest:
+    properties:
+      birthdate:
+        type: string
+      name:
+        type: string
+      ownerID:
+        type: integer
+      speciesID:
+        type: integer
+    required:
+    - birthdate
+    - name
+    - ownerID
+    - speciesID
+    type: object
+  pet.Response:
+    properties:
+      birthdate:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      species:
+        type: string
+      visits:
+        items:
+          $ref: '#/definitions/visit.Response'
+        type: array
+    type: object
+  pet.Responses:
+    properties:
+      context:
+        $ref: '#/definitions/model.Context'
+      pets:
+        items:
+          $ref: '#/definitions/pet.Response'
+        type: array
+    type: object
+  pet.UpdateRequest:
+    properties:
+      birthdate:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      ownerID:
+        type: integer
+      speciesID:
+        type: integer
+    required:
+    - birthdate
+    - id
+    - name
+    - ownerID
+    - speciesID
+    type: object
+  vet.Response:
+    properties:
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      specialties:
+        items:
+          $ref: '#/definitions/vet.specialtyResponse'
+        type: array
+    type: object
+  vet.Responses:
+    properties:
+      context:
+        $ref: '#/definitions/model.Context'
+      vets:
+        items:
+          $ref: '#/definitions/vet.Response'
+        type: array
+    type: object
+  vet.specialtyResponse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  visit.Response:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      petID:
+        type: integer
+      visitDate:
+        type: string
+    type: object
+  visit.Responses:
+    properties:
+      context:
+        $ref: '#/definitions/model.Context'
+      visits:
+        items:
+          $ref: '#/definitions/visit.Response'
+        type: array
+    type: object
+  visit.UpdateRequest:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      petID:
+        type: integer
+      visitDate:
+        type: string
+    required:
+    - description
+    - petID
+    - visitDate
+    type: object
+info:
+  contact: {}
+paths:
+  /owners:
+    get:
+      description: Get owners by last name
+      parameters:
+      - description: Owner last name
+        in: query
+        name: last-name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/owner.Responses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Search owners by last name
+      tags:
+      - owners
+    post:
+      description: Insert new owner
+      parameters:
+      - description: Add owner
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/owner.AddRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/owner.UpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Insert new owner
+      tags:
+      - owners
+  /owners/{id}:
+    get:
+      description: Get owner by ID
+      parameters:
+      - description: Owner ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/owner.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Search owner by ID
+      tags:
+      - owners
+    put:
+      description: Update new owner
+      parameters:
+      - description: Owner ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update owner
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/owner.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/owner.UpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Update owner
+      tags:
+      - owners
+  /owners/{id}/pets:
+    get:
+      description: Get owner that has pets by ID
+      parameters:
+      - description: Owner ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/owner.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Search owner that has pets by ID
+      tags:
+      - owners
+  /owners/all:
+    get:
+      description: Get all owners
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/owner.Responses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: List all owners
+      tags:
+      - owners
+  /pets:
+    get:
+      description: Get pet by name
+      parameters:
+      - description: Pet Name
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pet.Responses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Get pet by name
+      tags:
+      - pets
+    post:
+      description: Add a new pet
+      parameters:
+      - description: Add pet
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/pet.AddRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pet.Responses'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Add a new pet
+      tags:
+      - pets
+  /pets/{id}:
+    get:
+      description: Get pet by ID
+      parameters:
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pet.Responses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Get pet by ID
+      tags:
+      - pets
+    put:
+      description: update pet
+      parameters:
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update pet
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/pet.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pet.Responses'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: update a pet
+      tags:
+      - pets
+  /pets/{id}/visits:
+    get:
+      description: Get pet with visits by ID
+      parameters:
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pet.Responses'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Get pet with visits by ID
+      tags:
+      - pets
+  /pets/all:
+    get:
+      description: Get all pets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pet.Responses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: List all pets
+      tags:
+      - pets
+  /vets/all:
+    get:
+      description: Get all vets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/vet.Responses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: List all vets
+      tags:
+      - vets
+  /visits/{id}:
+    get:
+      description: Get visit by ID
+      parameters:
+      - description: Visit ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/visit.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Get visit by id
+      tags:
+      - visits
+    put:
+      description: Update visit
+      parameters:
+      - description: Visit ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update visit
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/visit.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/visit.Responses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: Update visit
+      tags:
+      - visits
+  /visits/all:
+    get:
+      description: Get all visits
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/visit.Responses'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: List all visits
+      tags:
+      - visits
+swagger: "2.0"

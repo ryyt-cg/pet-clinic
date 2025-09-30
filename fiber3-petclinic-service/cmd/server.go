@@ -12,6 +12,8 @@ import (
 	"fiber3-petclinic-service/internal/dbase"
 	"fiber3-petclinic-service/internal/repository"
 
+	_ "fiber3-petclinic-service/docs"
+
 	"github.com/gofiber/contrib/monitor"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/cors"
@@ -104,6 +106,7 @@ func loadConfig() {
 	fiberApp.Use(requestid.New()) // Generate a unique request ID for each request
 
 	fiberApp.Get(app.Config.Server.BaseURL+"/ready", healthcheck.New(ready.Config()))
+	//fiberApp.Get(app.Config.Server.BaseURL+"/swagger/*", swagger.HandlerDefault)
 }
 
 func loadComponents() {
@@ -145,6 +148,24 @@ func loadComponents() {
 	visitRouter.Register(v1.Group("/visits"))
 }
 
+// @title           Pet Clinic API
+// @version         1.0
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8092
+// @BasePath  /api/pet-clinic/v1
+
+// @securityDefinitions.basic  BasicAuth
+
+// @externalDocs.description  OpenAPI
+// @externalDocs.url          https://swagger.io/resources/open-api/
 func main() {
 	loadConfig()
 	loadComponents()

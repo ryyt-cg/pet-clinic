@@ -28,6 +28,9 @@ view-test-coverage:
 live-reload:
 	air -c ./air/.air.linux.conf
 
+swag:
+	swag i -g cmd/server.go
+
 run:
 	go run cmd/main.go
 

@@ -1,8 +1,8 @@
-basePath: /v1
+basePath: /api/pet-clinic/v1
 definitions:
   errors.ErrorResponse:
     properties:
-      details: { }
+      details: {}
       message:
         example: status bad request
         type: string
@@ -97,10 +97,10 @@ definitions:
       typeID:
         type: integer
     required:
-      - birthdate
-      - name
-      - ownerID
-      - typeID
+    - birthdate
+    - name
+    - ownerID
+    - typeID
     type: object
   pet.Response:
     properties:
@@ -139,11 +139,11 @@ definitions:
       typeID:
         type: integer
     required:
-      - birthdate
-      - id
-      - name
-      - ownerID
-      - typeID
+    - birthdate
+    - id
+    - name
+    - ownerID
+    - typeID
     type: object
   vet.Response:
     properties:
@@ -180,6 +180,8 @@ definitions:
         type: string
       id:
         type: integer
+      petID:
+        type: integer
       visitDate:
         type: string
     type: object
@@ -198,19 +200,19 @@ definitions:
         type: string
       id:
         type: integer
-      petId:
+      petID:
         type: integer
       visitDate:
         type: string
     required:
-      - description
-      - petId
-      - visitDate
+    - description
+    - petID
+    - visitDate
     type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
-host: localhost:8443
+host: localhost:8092
 info:
   contact:
     email: support@swagger.io
@@ -228,13 +230,13 @@ paths:
     get:
       description: Get owners by last name
       parameters:
-        - description: Owner last name
-          in: query
-          name: last-name
-          required: true
-          type: string
+      - description: Owner last name
+        in: query
+        name: last-name
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -250,18 +252,18 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Search owners by last name
       tags:
-        - owners
+      - owners
     post:
       description: Insert new owner
       parameters:
-        - description: Add owner
-          in: body
-          name: Request
-          required: true
-          schema:
-            $ref: '#/definitions/owner.AddRequest'
+      - description: Add owner
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/owner.AddRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -277,18 +279,18 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Insert new owner
       tags:
-        - owners
+      - owners
   /owners/{id}:
     get:
       description: Get owner by ID
       parameters:
-        - description: Owner ID
-          in: path
-          name: id
-          required: true
-          type: integer
+      - description: Owner ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -308,23 +310,23 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Search owner by ID
       tags:
-        - owners
+      - owners
     put:
       description: Update new owner
       parameters:
-        - description: Owner ID
-          in: path
-          name: id
-          required: true
-          type: integer
-        - description: Update owner
-          in: body
-          name: Request
-          required: true
-          schema:
-            $ref: '#/definitions/owner.UpdateRequest'
+      - description: Owner ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update owner
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/owner.UpdateRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -340,18 +342,18 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Update owner
       tags:
-        - owners
+      - owners
   /owners/{id}/pets:
     get:
       description: Get owner that has pets by ID
       parameters:
-        - description: Owner ID
-          in: path
-          name: id
-          required: true
-          type: integer
+      - description: Owner ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -371,12 +373,12 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Search owner that has pets by ID
       tags:
-        - owners
+      - owners
   /owners/all:
     get:
       description: Get all owners
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -392,18 +394,18 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: List all owners
       tags:
-        - owners
+      - owners
   /pets:
     get:
       description: Get pet by name
       parameters:
-        - description: Pet Name
-          in: query
-          name: name
-          required: true
-          type: string
+      - description: Pet Name
+        in: query
+        name: name
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -419,18 +421,18 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Get pet by name
       tags:
-        - pets
+      - pets
     post:
       description: Add a new pet
       parameters:
-        - description: Add pet
-          in: body
-          name: Request
-          required: true
-          schema:
-            $ref: '#/definitions/pet.AddRequest'
+      - description: Add pet
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/pet.AddRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -450,18 +452,18 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Add a new pet
       tags:
-        - pets
+      - pets
   /pets/{id}:
     get:
       description: Get pet by ID
       parameters:
-        - description: Pet ID
-          in: path
-          name: id
-          required: true
-          type: integer
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -477,23 +479,23 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Get pet by ID
       tags:
-        - pets
+      - pets
     put:
       description: update pet
       parameters:
-        - description: Pet ID
-          in: path
-          name: id
-          required: true
-          type: integer
-        - description: Update pet
-          in: body
-          name: Request
-          required: true
-          schema:
-            $ref: '#/definitions/pet.UpdateRequest'
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update pet
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/pet.UpdateRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -513,18 +515,18 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: update a pet
       tags:
-        - pets
+      - pets
   /pets/{id}/visits:
     get:
       description: Get pet with visits by ID
       parameters:
-        - description: Pet ID
-          in: path
-          name: id
-          required: true
-          type: integer
+      - description: Pet ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -544,12 +546,12 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Get pet with visits by ID
       tags:
-        - pets
+      - pets
   /pets/all:
     get:
       description: Get all pets
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -565,12 +567,12 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: List all pets
       tags:
-        - pets
+      - pets
   /vets/all:
     get:
       description: Get all vets
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -586,18 +588,18 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: List all vets
       tags:
-        - vets
+      - vets
   /visits/{id}:
     get:
       description: Get visit by ID
       parameters:
-        - description: Visit ID
-          in: path
-          name: id
-          required: true
-          type: integer
+      - description: Visit ID
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -617,23 +619,23 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Get visit by id
       tags:
-        - visits
+      - visits
     put:
       description: Update visit
       parameters:
-        - description: Visit ID
-          in: path
-          name: id
-          required: true
-          type: integer
-        - description: Update visit
-          in: body
-          name: Request
-          required: true
-          schema:
-            $ref: '#/definitions/visit.UpdateRequest'
+      - description: Visit ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update visit
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/visit.UpdateRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -649,12 +651,12 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: Update visit
       tags:
-        - visits
+      - visits
   /visits/all:
     get:
       description: Get all visits
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
@@ -670,7 +672,5 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       summary: List all visits
       tags:
-        - visits
-schemes:
-  - https
+      - visits
 swagger: "2.0"

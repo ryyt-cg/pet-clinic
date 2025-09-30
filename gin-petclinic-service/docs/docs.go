@@ -65,14 +65,14 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Fail new owner",
+                "description": "Insert new owner",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "owners"
                 ],
-                "summary": "Fail new owner",
+                "summary": "Insert new owner",
                 "parameters": [
                     {
                         "description": "Add owner",
@@ -441,14 +441,14 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Fail pet",
+                "description": "update pet",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "pets"
                 ],
-                "summary": "Fail a pet",
+                "summary": "update a pet",
                 "parameters": [
                     {
                         "type": "integer",
@@ -975,6 +975,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "petID": {
+                    "type": "integer"
+                },
                 "visitDate": {
                     "type": "string"
                 }
@@ -998,7 +1001,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "description",
-                "petId",
+                "petID",
                 "visitDate"
             ],
             "properties": {
@@ -1008,7 +1011,7 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "petId": {
+                "petID": {
                     "type": "integer"
                 },
                 "visitDate": {
@@ -1026,9 +1029,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8443",
-	BasePath:         "/v1",
-	Schemes:          []string{"https"},
+	Host:             "localhost:8092",
+	BasePath:         "/api/pet-clinic/v1",
+	Schemes:          []string{},
 	Title:            "Pet Clinic API",
 	Description:      "This is a pet clinic API server.",
 	InfoInstanceName: "swagger",

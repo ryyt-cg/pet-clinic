@@ -14,6 +14,8 @@ import (
 	"os"
 	"time"
 
+	_ "fiber-petclinic-service/docs"
+
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/contrib/circuitbreaker"
 	"github.com/gofiber/contrib/fiberzerolog"
@@ -25,6 +27,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
+	"github.com/gofiber/swagger"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
@@ -122,6 +125,7 @@ func loadConfig() {
 	fiberApp.Use(healthcheck.New(ready.Config()))
 	fiberApp.Use(recover.New())   // Recover from panics and continue
 	fiberApp.Use(requestid.New()) // Generate a unique request ID for each request
+	fiberApp.Get(app.Config.Server.BaseURL+"/swagger/*", swagger.HandlerDefault)
 }
 
 func loadComponents() {
@@ -163,6 +167,24 @@ func loadComponents() {
 	visitRouter.Register(v1.Group("/visits"))
 }
 
+// @title           Pet Clinic API
+// @version         1.0
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8091
+// @BasePath  /api/pet-clinic/v1
+
+// @securityDefinitions.basic  BasicAuth
+
+// @externalDocs.description  OpenAPI
+// @externalDocs.url          https://swagger.io/resources/open-api/
 func main() {
 	loadConfig()
 	loadComponents()

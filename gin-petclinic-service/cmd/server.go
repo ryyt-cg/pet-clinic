@@ -59,6 +59,7 @@ func loadConfig() {
 	// Logger middleware will write the logs to gin.DefaultWriter even if you set with GIN_MODE=release.
 	// By default, gin.DefaultWriter = os.Stdout
 	r.Use(gin.Logger())
+	r.Use(middleware.JSONContentType())
 
 	// Recovery middleware recovers from any panics and writes a 500 if there was one.
 	r.Use(gin.Recovery())
@@ -101,8 +102,8 @@ func loadComponents() {
 	// config prometheus & endpoint group
 	p := ginprometheus.NewPrometheus("gin")
 	p.Use(r)
-	home := r.Group("/")
-	v1 := r.Group("/v1")
+	home := r.Group(app.Config.Server.BaseURL)
+	v1 := r.Group(app.Config.Server.BaseURL + "/v1")
 	//v1.Use(middleware.Authenticate(authenService))
 
 	healthCheckRouter.Register(home.Group("/health"))
@@ -124,9 +125,9 @@ func loadComponents() {
 //	@license.name	Apache 2.0
 //	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 
-//	@Schemes	https
-//  @Host		localhost:8443
-//	@BasePath	/v1
+//	@Schemas	https
+//  @Host		localhost:8092
+//	@BasePath	/api/pet-clinic/v1
 
 // @externalDocs.description	OpenAPI
 // @externalDocs.url			https://swagger.io/resources/open-api/
@@ -134,15 +135,15 @@ func main() {
 	loadConfig()
 	loadComponents()
 	// add swagger endpoint
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET(app.Config.Server.BaseURL+"/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	//r.Run(":8080")
 	httpServer := ds.NewHttpServer(r)
 	httpRouter := httpServer.HttpRouter()
 
 	g.Go(func() error {
-		//return httpRouter.ListenAndServeTLS(app.Config.Server.CertFile, app.Config.Server.KeyFile)
-		return httpRouter.ListenAndServe()
+		return httpRouter.ListenAndServeTLS(app.Config.Server.CertFile, app.Config.Server.KeyFile)
+		//return httpRouter.ListenAndServe()
 	})
 
 	if err := g.Wait(); err != nil {
