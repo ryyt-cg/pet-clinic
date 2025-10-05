@@ -31,7 +31,7 @@ func (r *Router) Register(router fiber.Router) {
 // allOwners - get all owners
 // @Tags		owners
 //
-//	@Summary	List all owners
+// @Summary	List all owners
 //
 // @Description	Get all owners
 // @Produce		json
