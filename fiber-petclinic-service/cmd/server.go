@@ -12,6 +12,8 @@ import (
 	"fiber-petclinic-service/internal/dbase"
 	"fiber-petclinic-service/internal/repository"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	_ "fiber-petclinic-service/docs"
@@ -41,8 +43,9 @@ var (
 // Instantiate zerolog
 // Instantiate fiber router and middlewares
 func loadConfig() {
-	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
-	log.Info().Msg("Go Fiber Pet Clinic starts")
+	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
+	log.Logger = logger
+	log.Info().Msg("Fiber Pet Clinic starts")
 
 	// load application configurations
 	if err := app.LoadConfig("config"); err != nil {
@@ -189,10 +192,32 @@ func main() {
 	loadConfig()
 	loadComponents()
 
-	// Start the server on port define in yaml
-	err := fiberApp.Listen(app.Config.Server.HttpPort)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to start the server")
-		return
+	// Start the server on port define in yaml in a goroutine
+	go func() {
+		err := fiberApp.Listen(app.Config.Server.HttpPort)
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to start the server")
+			return
+		}
+	}()
+
+	// Create a channel to listen for OS signals
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	// Block until a signal is received
+	<-quit
+
+	log.Info().Msg("Shutting down server gracefully...")
+
+	// Create a context with a timeout for graceful shutdown
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// Shutdown the Fiber app
+	if err := fiberApp.ShutdownWithContext(ctx); err != nil {
+		log.Error().Err(err).Msg("error during server shutdown")
 	}
+
+	log.Info().Msg("Fiber Pet Clinic stops.")
 }

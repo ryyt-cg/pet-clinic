@@ -11,6 +11,12 @@ import (
 	"fiber3-petclinic-service/config/app"
 	"fiber3-petclinic-service/internal/dbase"
 	"fiber3-petclinic-service/internal/repository"
+	"fmt"
+	"os"
+	"os/signal"
+	"strings"
+	"syscall"
+	"time"
 
 	_ "fiber3-petclinic-service/docs"
 
@@ -31,11 +37,29 @@ var (
 	gdb      *gorm.DB
 )
 
+func logConfig() {
+	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}
+	output.FormatLevel = func(i interface{}) string {
+		return strings.ToUpper(fmt.Sprintf("| %-6s|", i))
+	}
+	output.FormatMessage = func(i interface{}) string {
+		return fmt.Sprintf("%s", i)
+	}
+	output.FormatFieldName = func(i interface{}) string {
+		return fmt.Sprintf("%s:", i)
+	}
+	output.FormatFieldValue = func(i interface{}) string {
+		return strings.ToUpper(fmt.Sprintf("%s", i))
+	}
+
+	log.Logger = zerolog.New(output).With().Timestamp().Logger()
+}
+
 // Instantiate zerolog
 // Instantiate fiber router and middlewares
 func loadConfig() {
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	log.Info().Msg("Go Fiber Pet Clinic starts")
+	logConfig()
+	log.Info().Msg("Fiber 3 Pet Clinic starts")
 
 	// load application configurations
 	if err := app.LoadConfig("./config"); err != nil {
@@ -170,10 +194,32 @@ func main() {
 	loadConfig()
 	loadComponents()
 
-	// Start the server on port 3000
-	err := fiberApp.Listen(app.Config.Server.HttpPort)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to start the server")
-		return
+	// Start the server on port define in yaml in a goroutine
+	go func() {
+		err := fiberApp.Listen(app.Config.Server.HttpPort)
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to start the server")
+			return
+		}
+	}()
+
+	// Create a channel to listen for OS signals
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	// Block until a signal is received
+	<-quit
+
+	log.Info().Msg("Shutting down server gracefully...")
+
+	// Create a context with a timeout for graceful shutdown
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// Shutdown the Fiber app
+	if err := fiberApp.ShutdownWithContext(ctx); err != nil {
+		log.Error().Err(err).Msg("error during server shutdown")
 	}
+
+	log.Info().Msg("Fiber 3 Pet Clinic stops.")
 }
