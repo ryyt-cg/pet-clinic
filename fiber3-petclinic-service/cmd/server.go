@@ -204,7 +204,7 @@ func main() {
 	// Start the server on port define in yaml in a goroutine
 	go func() {
 		err := fiberApp.Listen(app.Config.Server.HttpPort, fiber.ListenConfig{
-			EnablePrefork: true,
+			EnablePrefork: app.Config.Server.EnablePrefork,
 			CertFile:      app.Config.Server.CertFile,
 			CertKeyFile:   app.Config.Server.KeyFile,
 		})

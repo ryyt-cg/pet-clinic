@@ -80,7 +80,7 @@ func loadConfig() {
 	}
 
 	fiberConfig := fiber.Config{
-		Prefork:           true,
+		Prefork:           app.Config.Server.Prefork,
 		AppName:           "fiber-petclinic-service",
 		EnablePrintRoutes: app.Config.Server.EnablePrintRoutes,
 	}
