@@ -22,6 +22,7 @@ import (
 
 	"github.com/gofiber/contrib/monitor"
 	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/compress"
 	"github.com/gofiber/fiber/v3/middleware/cors"
 	"github.com/gofiber/fiber/v3/middleware/favicon"
 	"github.com/gofiber/fiber/v3/middleware/healthcheck"
@@ -104,6 +105,12 @@ func loadConfig() {
 	fiberApp.Use(cors.New())
 	// Initialize default config
 	fiberApp.Use(favicon.New())
+	// Enable Compression
+	if app.Config.Server.EnableCompression {
+		fiberApp.Use(compress.New(compress.Config{
+			Level: compress.Level(app.Config.Server.CompressionLevel),
+		}))
+	}
 
 	// Monitor
 	fiberApp.Get(app.Config.Server.BaseURL+"/monitor", monitor.New(monitor.Config{Title: "fiber3-petclinic-service Monitor"}))
@@ -196,7 +203,11 @@ func main() {
 
 	// Start the server on port define in yaml in a goroutine
 	go func() {
-		err := fiberApp.Listen(app.Config.Server.HttpPort)
+		err := fiberApp.Listen(app.Config.Server.HttpPort, fiber.ListenConfig{
+			EnablePrefork: true,
+			CertFile:      app.Config.Server.CertFile,
+			CertKeyFile:   app.Config.Server.KeyFile,
+		})
 		if err != nil {
 			log.Fatal().Err(err).Msg("failed to start the server")
 			return

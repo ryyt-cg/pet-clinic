@@ -40,5 +40,10 @@ gorm:
 server:
   baseURL: "/api/pet-clinic"
   host: localhost
+  certFile: "cmd/certs/myCA.pem"
+  keyFile: "cmd/certs/myCA-without-passphrase.key"
   httpPort: ":8092"
+  enableCompression: true
+  # LevelDisabled(-1), LevelDefault(0), LevelBestSpeed(1), LevelBestCompression(2)
+  compressionLevel: 2
   logLevel: "info"

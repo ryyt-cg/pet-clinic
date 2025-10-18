@@ -43,8 +43,7 @@ var (
 // Instantiate zerolog
 // Instantiate fiber router and middlewares
 func loadConfig() {
-	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
-	log.Logger = logger
+	log.Logger = zerolog.New(os.Stdout).With().Timestamp().Logger()
 	log.Info().Msg("Fiber Pet Clinic starts")
 
 	// load application configurations
@@ -77,10 +76,11 @@ func loadConfig() {
 
 	// fiberzerolog config
 	fiberLog := fiberzerolog.Config{
-		Logger: &logger,
+		Logger: &log.Logger,
 	}
 
 	fiberConfig := fiber.Config{
+		Prefork:           true,
 		AppName:           "fiber-petclinic-service",
 		EnablePrintRoutes: app.Config.Server.EnablePrintRoutes,
 	}
@@ -194,7 +194,7 @@ func main() {
 
 	// Start the server on port define in yaml in a goroutine
 	go func() {
-		err := fiberApp.Listen(app.Config.Server.HttpPort)
+		err := fiberApp.ListenTLS(app.Config.Server.HttpPort, app.Config.Server.CertFile, app.Config.Server.KeyFile)
 		if err != nil {
 			log.Fatal().Err(err).Msg("failed to start the server")
 			return
