@@ -40,7 +40,7 @@ COPY --from=builder /app/config/*.yaml config/.
 COPY --from=builder /app/pet-clinic.sqlite .
 
 # Expose the port your Fiber application listens on
-EXPOSE 8091
+EXPOSE 8092
 
 # Command to run the application
 CMD ["./fiber3-petclinic-service"]
