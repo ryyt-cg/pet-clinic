@@ -66,43 +66,43 @@ The goal of this repository is to implement a pet clinic API in different langua
       <td>Search Owner Page</td>
       <td>Search Owners by Last Name.  A text box to search owner(s) by last name.</td>
       <td><img alt="search-owner-page" src="/pet-clinic-page-screenshots/02-find-owners.png"/></td>
-      <td>Get /v1/owners?last-name={lastName}</td>
+      <td>GET /v1/owners?last-name={lastName}</td>
     </tr>
     <tr>
       <td>Display Owner Info Page</td>
       <td>Display owner info & pet info.  Allow to update owner info and update pet info</td>
       <td><img alt="display-owner-page" src="/pet-clinic-page-screenshots/03-owner-page.png"/></td>
-      <td>Put /v1/owners <br/> Put and Post /v1/pets <br/> Post /v1/visits</td>
+      <td>PUT /v1/owners <br/> PUT and POST /v1/pets <br/> POST /v1/visits</td>
     </tr>
     <tr>
       <td>Update Owner Info Page</td>
       <td>Update owner info</td>
       <td><img alt="update-owner" src="/pet-clinic-page-screenshots/04-update-owner-page.png"/></td>
-      <td>Put /v1/owners</td>
+      <td>PUT /v1/owners</td>
     </tr>
     <tr>
       <td>Add new Owner Page</td>
       <td>Add a new owner</td>
       <td><img alt="add-owner" src="/pet-clinic-page-screenshots/05-add-owner-page.png"/></td>
-      <td>Post /v1/owners</td>
+      <td>POST /v1/owners</td>
     </tr>
     <tr>
       <td>Add new Pet Page</td>
       <td>Add new pet</td>
       <td><img alt="add-pet" src="/pet-clinic-page-screenshots/05-update-pet-page.png"/></td>
-      <td>Post /v1/pets</td>
+      <td>POST /v1/pets</td>
     </tr>
     <tr>
       <td>Add Visit Page</td>
       <td>Add visit to a pet</td>
       <td><img alt="add-visit" src="/pet-clinic-page-screenshots/06-add-visit-page.png"/></td>
-      <td>Post /v1/visits</td>
+      <td>POST /v1/visits</td>
     </tr>
     <tr>
       <td>Update Pet Page</td>
       <td>Update pet info</td>
       <td><img alt="update-pet" src="/pet-clinic-page-screenshots/07-update-pet-page.png"/></td>
-      <td>Put /v1/pets</td>
+      <td>PUT /v1/pets</td>
     </tr>
     <tr>
       <td>Error Page</td>
