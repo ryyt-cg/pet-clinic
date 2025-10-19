@@ -51,37 +51,68 @@ The goal of this repository is to implement a pet clinic API in different langua
     <tr>
       <th>Page</th>
       <th>Description</th>
-      <th>Endpoints</th>
-      <th>Page Screenshots</th>
+      <th>Endpoint</th>
+      <th>Page Screenshot</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>Home Page</td>
-      <td>This is Pet Clinic Home Page to display the pet photos.  This page will not invoke any API. Click on pet image to display Search Owner Page</td>
-      <td><img src="/pet-clinic-page-screenshots/01-home-page.png"/></td>
-      <td>GET /owners?last-name={lastname}</td>
+      <td>Pet Clinic Home Page displaying the pet photos and navigation menu</td>
+      <td><img alt="home-page" src="/pet-clinic-page-screenshots/01-home-page.png"/></td>
+      <td>No endpoint</td>
     </tr>
     <tr>
       <td>Search Owner Page</td>
-      <td>Search Owner Page provides a Last Name text box to search owner(s) by last name.  </td>
-      <td>![02-find-owners.png](pet-clinic-page-screnshots/02-find-owners.png)   </td>
-      <td>Row 1, Cell 3</td>
+      <td>Search Owners by Last Name.  A text box to search owner(s) by last name.</td>
+      <td><img alt="search-owner-page" src="/pet-clinic-page-screenshots/02-find-owners.png"/></td>
+      <td>Get /v1/owners?last-name={lastName}</td>
+    </tr>
+    <tr>
+      <td>Display Owner Info Page</td>
+      <td>Display owner info & pet info.  Allow to update owner info and update pet info</td>
+      <td><img alt="display-owner-page" src="/pet-clinic-page-screenshots/03-owner-page.png"/></td>
+      <td>Put /v1/owners <br/> Put and Post /v1/pets <br/> Post /v1/visits</td>
+    </tr>
+    <tr>
+      <td>Update Owner Info Page</td>
+      <td>Update owner info</td>
+      <td><img alt="update-owner" src="/pet-clinic-page-screenshots/04-update-owner-page.png"/></td>
+      <td>Put /v1/owners</td>
+    </tr>
+    <tr>
+      <td>Add new Owner Page</td>
+      <td>Add a new owner</td>
+      <td><img alt="add-owner" src="/pet-clinic-page-screenshots/05-add-owner-page.png"/></td>
+      <td>Post /v1/owners</td>
+    </tr>
+    <tr>
+      <td>Add new Pet Page</td>
+      <td>Add new pet</td>
+      <td><img alt="add-pet" src="/pet-clinic-page-screenshots/05-update-pet-page.png"/></td>
+      <td>Post /v1/pets</td>
+    </tr>
+    <tr>
+      <td>Add Visit Page</td>
+      <td>Add visit to a pet</td>
+      <td><img alt="add-visit" src="/pet-clinic-page-screenshots/06-add-visit-page.png"/></td>
+      <td>Post /v1/visits</td>
+    </tr>
+    <tr>
+      <td>Update Pet Page</td>
+      <td>Update pet info</td>
+      <td><img alt="update-pet" src="/pet-clinic-page-screenshots/07-update-pet-page.png"/></td>
+      <td>Put /v1/pets</td>
+    </tr>
+    <tr>
+      <td>Error Page</td>
+      <td>Display Error page where an error occurs</td>
+      <td><img alt="error-page" src="/pet-clinic-page-screenshots/08-error-page.png"/></td>
+      <td>No endpoint</td>
     </tr>
   </tbody>
 </table>
 
-
-| Page | Description | Endpoints    | Page Screenshot                                                              |
-|------|-------------|--------------|------------------------------------------------------------------------------|
-|      |             |              | ![02-find-owners.png](pet-clinic-page-screenshots/02-find-owners.png)         |
-|      |             |              | ![03-owner-page.png](pet-clinic-page-screenshots/03-owner-page.png)           |
-|      |             | POST /owners | ![05-add-owner-page.png](pet-clinic-page-screenshots/05-add-owner-page.png)   |
-|      |             |              | ![05-update-pet-page.png](pet-clinic-page-screenshots/05-update-pet-page.png) |
-|      |             |              | ![06-add-visit-page.png](pet-clinic-page-screenshots/06-add-visit-page.png)   |
-|      |             |              | ![07-update-pet-page.png](pet-clinic-page-screenshots/07-update-pet-page.png) |
-|      |             |              | ![08-error-page.png](pet-clinic-page-screenshots/08-error-page.png)           |
-|      |             |              |                                                                              |
 
 
 
