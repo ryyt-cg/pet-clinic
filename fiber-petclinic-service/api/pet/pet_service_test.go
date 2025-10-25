@@ -100,7 +100,7 @@ func Test_retrieveAllPets(t *testing.T) {
 			},
 			Name:      "Nash",
 			Birthdate: test.ToDate("2014-10-07"),
-			Type: repository.Type{
+			Species: repository.Species{
 				Model: gorm.Model{
 					ID: 1,
 				},
@@ -118,7 +118,7 @@ func Test_retrieveAllPets(t *testing.T) {
 				ID:        1,
 				Name:      "Nash",
 				Birthdate: "2014-10-07",
-				Type:      "Dog",
+				Species:   "Dog",
 				Visits:    []visit.Response{},
 			},
 		},
@@ -194,7 +194,7 @@ func Test_getById(t *testing.T) {
 				},
 				Name:      "Nash",
 				Birthdate: test.ToDate("2014-10-07"),
-				Type: repository.Type{
+				Species: repository.Species{
 					Model: gorm.Model{
 						ID: 1,
 					},
@@ -207,7 +207,7 @@ func Test_getById(t *testing.T) {
 				ID:        1,
 				Name:      "Nash",
 				Birthdate: "2014-10-07",
-				Type:      "Dog",
+				Species:   "Dog",
 				Visits:    []visit.Response{},
 			},
 			expectedError: nil,
@@ -272,7 +272,7 @@ func Test_getByIdWithVisits(t *testing.T) {
 				},
 				Name:      "Nash",
 				Birthdate: test.ToDate("2014-10-07"),
-				Type: repository.Type{
+				Species: repository.Species{
 					Model: gorm.Model{
 						ID: 1,
 					},
@@ -294,7 +294,7 @@ func Test_getByIdWithVisits(t *testing.T) {
 				ID:        1,
 				Name:      "Nash",
 				Birthdate: "2014-10-07",
-				Type:      "Dog",
+				Species:   "Dog",
 				Visits: []visit.Response{
 					{
 						ID:          1,
@@ -367,7 +367,7 @@ func Test_getByName(t *testing.T) {
 					},
 					Name:      "Leo",
 					Birthdate: test.ToDate("2014-10-07"),
-					Type: repository.Type{
+					Species: repository.Species{
 						Model: gorm.Model{
 							ID: 2,
 						},
@@ -386,7 +386,7 @@ func Test_getByName(t *testing.T) {
 						ID:        1,
 						Name:      "Leo",
 						Birthdate: "2014-10-07",
-						Type:      "Cat",
+						Species:   "Cat",
 						Visits:    []visit.Response{},
 					},
 				},
@@ -452,7 +452,7 @@ func Test_update(t *testing.T) {
 				},
 				Name:      "Leo",
 				Birthdate: test.ToDate("2014-10-07"),
-				Type: repository.Type{
+				Species: repository.Species{
 					Model: gorm.Model{
 						ID: 2,
 					},
@@ -464,7 +464,7 @@ func Test_update(t *testing.T) {
 				ID:        1,
 				Name:      "Leo",
 				Birthdate: "2014-10-07",
-				Type:      "Cat",
+				Species:   "Cat",
 				Visits:    []visit.Response{},
 			},
 			expectedError: nil,
@@ -514,7 +514,7 @@ func Test_create(t *testing.T) {
 		},
 		Name:      "Leo",
 		Birthdate: test.ToDate("2014-10-07"),
-		Type: repository.Type{
+		Species: repository.Species{
 			Model: gorm.Model{
 				ID: 2,
 			},
@@ -539,7 +539,7 @@ func Test_create(t *testing.T) {
 				ID:        1,
 				Name:      "Leo",
 				Birthdate: "2014-10-07",
-				Type:      "Cat",
+				Species:   "Cat",
 				Visits:    []visit.Response{},
 			},
 			expectedError: nil,

@@ -13,13 +13,13 @@ func Test_ToPet(t *testing.T) {
 	petRequest := &Request{
 		Name:      "Five Miles",
 		Birthdate: "2017-05-03",
-		TypeID:    1,
+		SpeciesID: 1,
 		OwnerID:   20,
 	}
 	pet := &repository.Pet{
 		Name:      "Five Miles",
 		Birthdate: test.ToDate("2017-05-03"),
-		TypeID:    1,
+		SpeciesID: 1,
 		OwnerID:   20,
 	}
 
@@ -39,13 +39,13 @@ func Test_FromAddRequest(t *testing.T) {
 			petRequest: &AddRequest{
 				Name:      "Five Miles",
 				Birthdate: "2017-05-03",
-				TypeID:    1,
+				SpeciesID: 1,
 				OwnerID:   20,
 			},
 			expectedPet: &repository.Pet{
 				Name:      "Five Miles",
 				Birthdate: test.ToDate("2017-05-03"),
-				TypeID:    1,
+				SpeciesID: 1,
 				OwnerID:   20,
 			},
 		},
@@ -54,7 +54,7 @@ func Test_FromAddRequest(t *testing.T) {
 			petRequest: &AddRequest{
 				Name:      "Invalid Date",
 				Birthdate: "invalid-date",
-				TypeID:    1,
+				SpeciesID: 1,
 				OwnerID:   20,
 			},
 			expectedPet: nil, // Expecting an error, so no expected pet
@@ -86,7 +86,7 @@ func Test_FromUpdateRequest(t *testing.T) {
 				ID:        1,
 				Name:      "Five Miles",
 				Birthdate: "2017-05-03",
-				TypeID:    1,
+				SpeciesID: 1,
 				OwnerID:   20,
 			},
 			expectedPet: &repository.Pet{
@@ -95,7 +95,7 @@ func Test_FromUpdateRequest(t *testing.T) {
 				},
 				Name:      "Five Miles",
 				Birthdate: test.ToDate("2017-05-03"),
-				TypeID:    1,
+				SpeciesID: 1,
 				OwnerID:   20,
 			},
 		},
@@ -104,7 +104,7 @@ func Test_FromUpdateRequest(t *testing.T) {
 			petRequest: &UpdateRequest{
 				Name:      "Invalid Date",
 				Birthdate: "invalid-date",
-				TypeID:    1,
+				SpeciesID: 1,
 				OwnerID:   20,
 			},
 			expectedPet: nil, // Expecting an error, so no expected pet

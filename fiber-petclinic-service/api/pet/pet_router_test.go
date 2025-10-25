@@ -23,11 +23,11 @@ func Test_getAllPets(t *testing.T) {
 		{Model: gorm.Model{ID: 1}, Name: "Tom",
 			Birthdate: test.ToDate("2015-11-19"),
 			Visits:    nil,
-			TypeID:    19, OwnerID: 7},
+			SpeciesID: 19, OwnerID: 7},
 		{Model: gorm.Model{ID: 2}, Name: "Mike",
 			Birthdate: test.ToDate("2018-04-17"),
 			Visits:    nil,
-			TypeID:    20, OwnerID: 7},
+			SpeciesID: 20, OwnerID: 7},
 	}
 
 	mockPets := &Responses{
@@ -255,7 +255,7 @@ func Test_getPetByIdWithVisits(t *testing.T) {
 		ID:        1,
 		Name:      "Running Water",
 		Birthdate: "2018-02-26",
-		Type:      "Dog",
+		Species:   "Dog",
 		Visits: []visit.Response{
 			{
 				ID:          1,
@@ -550,14 +550,14 @@ func Test_createNewPet(t *testing.T) {
 		ID:        1,
 		Name:      "Tom",
 		Birthdate: "2015-11-19",
-		Type:      "Dog",
+		Species:   "Dog",
 		Visits:    nil,
 	}
 
 	petEntity := &repository.Pet{
 		Name:      "ton",
 		Birthdate: test.ToDate("2015-11-19"),
-		TypeID:    19,
+		SpeciesID: 19,
 		OwnerID:   7,
 	}
 
@@ -687,7 +687,7 @@ func Test_updatePet(t *testing.T) {
 		ID:        1,
 		Name:      "Tom",
 		Birthdate: "2015-11-19",
-		Type:      "Dog",
+		Species:   "Dog",
 		Visits:    nil,
 	}
 
@@ -695,7 +695,7 @@ func Test_updatePet(t *testing.T) {
 		Model:     gorm.Model{ID: 1},
 		Name:      "Tom",
 		Birthdate: test.ToDate("2015-11-19"),
-		TypeID:    19,
+		SpeciesID: 19,
 		OwnerID:   7,
 	}
 
