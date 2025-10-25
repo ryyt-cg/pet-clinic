@@ -5,4 +5,7 @@ gin-petclinic-service/cmd/certs/myCA.pem
 /fiber-petclinic-service/air/tmp
 fiber-petclinic-service/.env
 /.zig-cache
+/zap_petclinic_service/.zig-cache
+AI/video_scripts.md
+AI/ai_prompt_template.md
 /zap-petclinic-service/.zig-cache

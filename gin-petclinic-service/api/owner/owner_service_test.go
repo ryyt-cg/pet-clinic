@@ -2,11 +2,11 @@ package owner
 
 import (
 	"errors"
-	"fiber-petclinic-service/api/pet"
-	"fiber-petclinic-service/api/visit"
-	"fiber-petclinic-service/pkg/repository"
-	"fiber-petclinic-service/pkg/repository/model"
-	"fiber-petclinic-service/pkg/test"
+	"gin-petclinic-service/api/pet"
+	"gin-petclinic-service/api/visit"
+	"gin-petclinic-service/internal/repository"
+	"gin-petclinic-service/internal/repository/model"
+	"gin-petclinic-service/internal/test"
 	"testing"
 	"time"
 

@@ -40,7 +40,7 @@ gorm:
 server:
   baseURL: "/api/pet-clinic"
   host: localhost
-  prefork: true
+  prefork: false
   httpPort: ":8091"
   certFile: "cmd/certs/myCA.pem"
   keyFile: "cmd/certs/myCA-without-passphrase.key"

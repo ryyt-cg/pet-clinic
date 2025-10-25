@@ -10,6 +10,9 @@ windows-build:
 linux-build:
 	GOOS=linux GOARCH=amd64 go build -o bin/server server.go
 
+mock:
+	mockery
+
 swag:
 	swag i -g cmd/server.go
 
@@ -41,7 +44,7 @@ live-reload:
 	air -c ./air/.air.linux.conf
 
 run:
-	go run cmd/main.go
+	go run cmd/server.go
 
 test:
 	go test -v -cover ./...

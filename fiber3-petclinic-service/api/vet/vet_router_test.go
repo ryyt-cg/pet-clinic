@@ -301,12 +301,14 @@ func Test_vetByID_BadRequest(t *testing.T) {
 		name           string
 		id             interface{}
 		route          string
+		mockVet        *Response
 		expectedResult resterr.ErrorResponse
 	}{
 		{
 			name:           "bad request with invalid id",
 			id:             "invalid",
 			route:          "/v1/vets/invalid",
+			mockVet:        nil,
 			expectedResult: resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid\": invalid syntax"),
 		},
 	}
@@ -315,6 +317,9 @@ func Test_vetByID_BadRequest(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Create a mock service
 			vetMock := NewMockServicer(t)
+			vetMock.EXPECT().getVetById(tc.id).Return(tc.mockVet, tc.expectedResult)
+
+			// Create a new router with the mock service
 			vetRouter := NewRouter(vetMock)
 			r := test.SetupRouter()
 			v1 := r.Group("/v1")

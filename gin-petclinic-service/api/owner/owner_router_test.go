@@ -10,10 +10,9 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-
-	"github.com/gin-gonic/gin"
 )
 
 // config the gin engine for testing purpose
@@ -24,9 +23,6 @@ func setupRouter() *gin.Engine {
 }
 
 func Test_ownerById(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("Owner by ID endpoint", zap.String("function", "Test_ownerById"))
-
 	ownerResponse := &Response{
 		ID:        1,
 		FirstName: "Nat",
@@ -82,7 +78,7 @@ func Test_ownerById(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ownerMock := MockServicer{}
 			ownerMock.On("getOwnerById", uint(1)).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerRouter := NewRouter(&ownerMock)
 
 			r := setupRouter()
 			v1 := r.Group("/v1")
@@ -197,7 +193,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 			ownerMock := MockServicer{}
 			id, _ := strconv.Atoi(tc.pathParam)
 			ownerMock.On("getOwnerByIdWithPets", uint(id)).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerRouter := NewRouter(&ownerMock)
 
 			r := setupRouter()
 			v1 := r.Group("/v1")
@@ -280,7 +276,7 @@ func Test_OwnerByLastName(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ownerMock := MockServicer{}
 			ownerMock.On("getOwnerByLastName", tc.queryParam).Return(tc.expectedOwners, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerRouter := NewRouter(&ownerMock)
 
 			r := setupRouter()
 			v1 := r.Group("/v1")
@@ -360,7 +356,7 @@ func Test_AllOwners(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ownerMock := MockServicer{}
 			ownerMock.On("getAllOwners").Return(tc.expectedOwners, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerRouter := NewRouter(&ownerMock)
 
 			r := setupRouter()
 			v1 := r.Group("/v1")
@@ -426,7 +422,7 @@ func Test_CreateOwner(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ownerMock := MockServicer{}
 			ownerMock.On("create", tc.request).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerRouter := NewRouter(&ownerMock)
 
 			r := setupRouter()
 			v1 := r.Group("/v1")
@@ -520,7 +516,7 @@ func Test_UpdateOwner(t *testing.T) {
 			ownerMock := MockServicer{}
 			id, _ := strconv.Atoi(tc.requestID)
 			ownerMock.On("update", uint(id), tc.request).Return(tc.expectedOwner, tc.expectedError)
-			ownerRouter := NewRouter(logger, &ownerMock)
+			ownerRouter := NewRouter(&ownerMock)
 
 			r := setupRouter()
 			v1 := r.Group("/v1")

@@ -61,13 +61,15 @@
 				
 				<option value="file2">gin-petclinic-service/docs/docs.go (0.0%)</option>
 				
-				<option value="file3">gin-petclinic-service/pkg/ds/http_server.go (100.0%)</option>
+				<option value="file3">gin-petclinic-service/internal/ds/http_server.go (85.7%)</option>
 				
-				<option value="file4">gin-petclinic-service/pkg/log/logger.go (100.0%)</option>
+				<option value="file4">gin-petclinic-service/internal/errors/response.go (73.5%)</option>
 				
-				<option value="file5">gin-petclinic-service/pkg/log/mock_logger.go (0.0%)</option>
+				<option value="file5">gin-petclinic-service/internal/log/logger.go (100.0%)</option>
 				
-				<option value="file6">gin-petclinic-service/pkg/pagination/pages.go (100.0%)</option>
+				<option value="file6">gin-petclinic-service/internal/log/mock_logger.go (0.0%)</option>
+				
+				<option value="file7">gin-petclinic-service/internal/pagination/pages.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -86,9 +88,10 @@
 import (
         "errors"
         "fmt"
-        "go.uber.org/zap"
         "net/http"
         "strings"
+
+        "go.uber.org/zap"
 
         "github.com/gin-gonic/gin"
         jwtverifier "github.com/okta/okta-jwt-verifier-golang"
@@ -147,11 +150,14 @@ import (
         "gin-petclinic-service/api/visit"
         "gin-petclinic-service/config/app"
         _ "gin-petclinic-service/docs"
+        "gin-petclinic-service/internal/dbase"
+        "gin-petclinic-service/internal/ds"
+        "gin-petclinic-service/internal/repository"
         "gin-petclinic-service/middleware"
-        "gin-petclinic-service/pkg/dbase"
-        "gin-petclinic-service/pkg/ds"
-        "gin-petclinic-service/pkg/repository"
         "os"
+        "os/signal"
+        "syscall"
+        "time"
 
         "github.com/gin-contrib/location"
         "github.com/gin-gonic/gin"
@@ -193,6 +199,7 @@ func loadConfig() <span class="cov0" title="0">{
         // Logger middleware will write the logs to gin.DefaultWriter even if you set with GIN_MODE=release.
         // By default, gin.DefaultWriter = os.Stdout
         r.Use(gin.Logger())
+        r.Use(middleware.JSONContentType())
 
         // Recovery middleware recovers from any panics and writes a 500 if there was one.
         r.Use(gin.Recovery())
@@ -235,8 +242,8 @@ func loadComponents() <span class="cov0" title="0">{
         // config prometheus &amp; endpoint group
         p := ginprometheus.NewPrometheus("gin")
         p.Use(r)
-        home := r.Group("/")
-        v1 := r.Group("/v1")
+        home := r.Group(app.Config.Server.BaseURL)
+        v1 := r.Group(app.Config.Server.BaseURL + "/v1")
         //v1.Use(middleware.Authenticate(authenService))
 
         healthCheckRouter.Register(home.Group("/health"))
@@ -258,9 +265,9 @@ func loadComponents() <span class="cov0" title="0">{
 //        @license.name        Apache 2.0
 //        @license.url        http://www.apache.org/licenses/LICENSE-2.0.html
 
-//        @Schemes        https
-//  @Host                localhost:8443
-//        @BasePath        /v1
+//        @Schemas        https
+//  @Host                localhost:8092
+//        @BasePath        /api/pet-clinic/v1
 
 // @externalDocs.description        OpenAPI
 // @externalDocs.url                        https://swagger.io/resources/open-api/
@@ -268,21 +275,38 @@ func main() <span class="cov0" title="0">{
         loadConfig()
         loadComponents()
         // add swagger endpoint
-        r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+        r.GET(app.Config.Server.BaseURL+"/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
         //r.Run(":8080")
         httpServer := ds.NewHttpServer(r)
         httpRouter := httpServer.HttpRouter()
 
         g.Go(func() error </span><span class="cov0" title="0">{
-                //return httpRouter.ListenAndServeTLS(app.Config.Server.CertFile, app.Config.Server.KeyFile)
-                return httpRouter.ListenAndServe()
+                return httpRouter.ListenAndServeTLS(app.Config.Server.CertFile, app.Config.Server.KeyFile)
+                //return httpRouter.ListenAndServe()
         }</span>)
 
         <span class="cov0" title="0">if err := g.Wait(); err != nil </span><span class="cov0" title="0">{
                 log.Fatal().Err(err).Msg("Fail to run http server.")
                 os.Exit(-1)
         }</span>
+
+        // Wait for interrupt signal to gracefully shutdown the server with
+        // a timeout of 5 seconds.
+        <span class="cov0" title="0">quit := make(chan os.Signal, 1)
+        // kill (no params) by default sends syscall.SIGTERM
+        // kill -2 is syscall.SIGINT
+        // kill -9 is syscall.SIGKILL but can't be caught, so don't need add it
+        signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+        &lt;-quit
+        log.Info().Msg("Shutdown Server ...")
+
+        ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+        defer cancel()
+        if err := httpRouter.Shutdown(ctx); err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Server Shutdown:")
+        }</span>
+        <span class="cov0" title="0">log.Info().Msg("Server exiting")</span>
 }
 </pre>
 		
@@ -353,14 +377,14 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Fail new owner",
+                "description": "Insert new owner",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "owners"
                 ],
-                "summary": "Fail new owner",
+                "summary": "Insert new owner",
                 "parameters": [
                     {
                         "description": "Add owner",
@@ -729,14 +753,14 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Fail pet",
+                "description": "update pet",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "pets"
                 ],
-                "summary": "Fail a pet",
+                "summary": "update a pet",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1263,6 +1287,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "petID": {
+                    "type": "integer"
+                },
                 "visitDate": {
                     "type": "string"
                 }
@@ -1286,7 +1313,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "description",
-                "petId",
+                "petID",
                 "visitDate"
             ],
             "properties": {
@@ -1296,7 +1323,7 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "petId": {
+                "petID": {
                     "type": "integer"
                 },
                 "visitDate": {
@@ -1314,9 +1341,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &amp;swag.Spec{
         Version:          "1.0",
-        Host:             "localhost:8443",
-        BasePath:         "/v1",
-        Schemes:          []string{"https"},
+        Host:             "localhost:8092",
+        BasePath:         "/api/pet-clinic/v1",
+        Schemes:          []string{},
         Title:            "Pet Clinic API",
         Description:      "This is a pet clinic API server.",
         InfoInstanceName: "swagger",
@@ -1333,10 +1360,13 @@ func init() <span class="cov0" title="0">{
 		<pre class="file" id="file3" style="display: none">package ds
 
 import (
+        "crypto/tls"
         "gin-petclinic-service/config/app"
         "net/http"
 
         "github.com/gin-gonic/gin"
+        "github.com/rs/zerolog/log"
+        "golang.org/x/net/http2"
 )
 
 type HttpServer struct {
@@ -1352,25 +1382,179 @@ func NewHttpServer(r *gin.Engine) *HttpServer <span class="cov8" title="1">{
 // HttpRouter is a method on the HttpServer struct that sets up and returns a new http.Server instance.
 // The http.Server instance uses the gin.Engine instance from the HttpServer struct to handle HTTP requests.
 func (httpSrv *HttpServer) HttpRouter() *http.Server <span class="cov8" title="1">{
+        // Create a TLS configuration
+        tlsConfig := &amp;tls.Config{
+                MinVersion: tls.VersionTLS13,
+        }
+
         srv := &amp;http.Server{
                 Addr:    app.Config.Server.HttpPort,
                 Handler: httpSrv.r,
+                // Good practice: enforce timeouts for servers you create!
+                //ReadTimeout:  10 * 60, // 10 minutes
+                //WriteTimeout: 10 * 60, // 10 minutes
+                //IdleTimeout:  10 * 60, // 10 minutes
+
+                TLSConfig: tlsConfig,
         }
 
-        return srv
-}</span>
+        err := http2.ConfigureServer(srv, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal().Err(err).Msg("Failed to configure HTTP/2 server")
+        }</span>
+
+        <span class="cov8" title="1">return srv</span>
+}
 </pre>
 		
-		<pre class="file" id="file4" style="display: none">// Package log provides context-aware and structured logging capabilities.
+		<pre class="file" id="file4" style="display: none">package errors
+
+import (
+        "net/http"
+        "sort"
+        "unicode"
+
+        "github.com/go-playground/validator/v10"
+
+        validation "github.com/go-ozzo/ozzo-validation/v4"
+)
+
+// ErrorResponse is the response that represents an error.
+type ErrorResponse struct {
+        Status  int         `json:"status" example:"400"`
+        Message string      `json:"message" example:"status bad request"`
+        Details interface{} `json:"details,omitempty"`
+}
+
+// Error is required by the error interface.
+func (e ErrorResponse) Error() string <span class="cov8" title="1">{
+        return e.Message
+}</span>
+
+// StatusCode is required by routing.HTTPError interface.
+func (e ErrorResponse) StatusCode() int <span class="cov8" title="1">{
+        return e.Status
+}</span>
+
+// InternalServerError creates a new error response representing an internal server error (HTTP 500)
+func InternalServerError(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "We encountered an error while processing your request."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusInternalServerError,
+                Message: msg,
+        }</span>
+}
+
+// NotFound creates a new error response representing a resource-not-found error (HTTP 404)
+func NotFound(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "The requested resource was not found."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusNotFound,
+                Message: msg,
+        }</span>
+}
+
+// Unauthorized creates a new error response representing an authentication/authorization failure (HTTP 401)
+func Unauthorized(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "You are not authenticated to perform the requested action."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusUnauthorized,
+                Message: msg,
+        }</span>
+}
+
+// Forbidden creates a new error response representing an authorization failure (HTTP 403)
+func Forbidden(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "You are not authorized to perform the requested action."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusForbidden,
+                Message: msg,
+        }</span>
+}
+
+// BadRequest creates a new error response representing a bad request (HTTP 400)
+func BadRequest(msg string) ErrorResponse <span class="cov8" title="1">{
+        if msg == "" </span><span class="cov8" title="1">{
+                msg = "Your request is in a bad format."
+        }</span>
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusBadRequest,
+                Message: msg,
+        }</span>
+}
+
+// BadRequestWithDetails creates a new error response representing a bad request (HTTP 400)
+func BadRequestWithDetails(err error) ErrorResponse <span class="cov0" title="0">{
+        errors, _ := err.(validator.ValidationErrors)
+        e := make(map[string]string)
+        for _, err := range errors </span><span class="cov0" title="0">{
+                e[lcFirst(err.Field())] = err.Tag()
+        }</span>
+
+        <span class="cov0" title="0">return ErrorResponse{
+                Status:  http.StatusBadRequest,
+                Message: err.Error(),
+                Details: e,
+        }</span>
+}
+
+// lowercase the first letter of the word
+func lcFirst(s string) string <span class="cov0" title="0">{
+        if len(s) &gt; 0 </span><span class="cov0" title="0">{
+                for i, v := range s </span><span class="cov0" title="0">{
+                        return string(unicode.ToLower(v)) + s[i+1:]
+                }</span>
+        }
+        <span class="cov0" title="0">return s</span>
+}
+
+type invalidField struct {
+        Field string `json:"field"`
+        Error string `json:"error"`
+}
+
+// InvalidInput creates a new error response representing a data validation error (HTTP 400).
+func InvalidInput(errs validation.Errors) ErrorResponse <span class="cov8" title="1">{
+        var details []invalidField
+        var fields []string
+        for field := range errs </span><span class="cov8" title="1">{
+                fields = append(fields, field)
+        }</span>
+        <span class="cov8" title="1">sort.Strings(fields)
+        for _, field := range fields </span><span class="cov8" title="1">{
+                details = append(details, invalidField{
+                        Field: field,
+                        Error: errs[field].Error(),
+                })
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                Status:  http.StatusBadRequest,
+                Message: "There is some problem with the data you submitted.",
+                Details: details,
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">// Package log provides context-aware and structured logging capabilities.
 package log
 
 import (
         "context"
+        "net/http"
+
         "github.com/google/uuid"
         "go.uber.org/zap"
         "go.uber.org/zap/zapcore"
         "go.uber.org/zap/zaptest/observer"
-        "net/http"
 )
 
 // Logger is a logger that supports log levels, context and structured logging.
@@ -1467,7 +1651,7 @@ func getRequestID(req *http.Request) string <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file5" style="display: none">// Code generated by mockery v2.52.2. DO NOT EDIT.
+		<pre class="file" id="file6" style="display: none">// Code generated by mockery v2.52.2. DO NOT EDIT.
 
 package log
 
@@ -1822,7 +2006,7 @@ func NewMockLogger(t interface {
 }
 </pre>
 		
-		<pre class="file" id="file6" style="display: none">// Package pagination provides support for pagination requests and responses.
+		<pre class="file" id="file7" style="display: none">// Package pagination provides support for pagination requests and responses.
 package pagination
 
 import (
