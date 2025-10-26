@@ -2,12 +2,10 @@ package info
 
 import (
 	"encoding/json"
-	"fiber-petclinic-service/pkg/test"
+	"gin-petclinic-service/internal/test"
 	"net"
 	"net/http"
 	"testing"
-
-	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
 
@@ -46,18 +44,16 @@ func setupRouter() *gin.Engine {
 func TestInfoRouter(t *testing.T) {
 	infoMock := infoServiceMock{}
 	info := &Info{"Test App", "Info App", "1.0.0", "", ""}
-	expectInfo := &Info{"Test App", "Info App", "1.0.0", "127.0.0.1", ""}
+	expectInfo := &Info{"Test App", "Info App", "1.0.0", "127.0.0.1;", ""}
 	infoMock.On("getAppInfo").Return(*info, nil)
 
 	ipServiceMock := ipServiceMock{}
 	ipServiceMock.On("lookupIP", "localhost").Return([]net.IP{net.ParseIP("127.0.0.1")}, nil)
 
-	//logger := log.New().With(context.TODO(), "version", "test")
-	logger := zap.NewNop()
 	r := setupRouter()
 	home := r.Group("/")
 
-	router := NewRouter(logger, &infoMock, &ipServiceMock)
+	router := NewRouter(&infoMock, &ipServiceMock)
 	router.Register(home.Group("/info"))
 
 	tc1, _ := json.Marshal(expectInfo)

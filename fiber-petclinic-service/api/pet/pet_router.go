@@ -210,11 +210,10 @@ func (router *Router) create(c *fiber.Ctx) error {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets/{id}	 	[put]
 func (router *Router) update(c *fiber.Ctx) error {
-	log.Info().Msg("Update a new pet.")
 	var request Request
 
 	strID := c.Params("id")
-	log.Info().Str("id", strID).Msg("GET pet by ID")
+	log.Info().Str("id", strID).Msg("Update pet by ID")
 
 	id, err := c.ParamsInt("id")
 	if err != nil {
@@ -224,7 +223,7 @@ func (router *Router) update(c *fiber.Ctx) error {
 
 	err = c.BodyParser(&request)
 	if err != nil {
-		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+		log.Error().Err(err).Any("request", request).Msg("Unable to Unmarshal JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 

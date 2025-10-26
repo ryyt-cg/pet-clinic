@@ -368,10 +368,10 @@ func Test_getByIdWithVisits_BadRequest(t *testing.T) {
 			name:             "get pet by invalid id",
 			id:               "invalid_id",
 			mockPet:          nil,
-			mockError:        resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
+			mockError:        resterr.BadRequest("strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
 			route:            "/v1/pets/invalid_id/visits",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
+			expectedResponse: resterr.BadRequest("strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
 		},
 	}
 
@@ -789,10 +789,10 @@ func Test_updatePet_BadRequest(t *testing.T) {
 			id:               "invalid_id",
 			request:          &UpdateRequest{Name: "Tom", Birthdate: "2015-11-19"},
 			mockPet:          nil,
-			mockError:        resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
+			mockError:        resterr.BadRequest("strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
 			route:            "/v1/pets/invalid_id",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
+			expectedResponse: resterr.BadRequest("strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
 		},
 		{
 			name:             "update pet with invalid birthdate",

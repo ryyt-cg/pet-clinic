@@ -1,11 +1,9 @@
 package health
 
 import (
-	"fiber-petclinic-service/pkg/test"
+	"gin-petclinic-service/internal/test"
 	"net/http"
 	"testing"
-
-	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
@@ -30,8 +28,6 @@ func (hsm *healthServiceMock) check() (*Check, error) {
 
 // TestHealthRouter tests the HealthCheckRouter.
 func TestHealthRouter(t *testing.T) {
-	//logger := log.New().With(context.TODO(), "version", "test")
-	logger := zap.NewNop()
 	r := gin.Default()
 	home := r.Group("/")
 
@@ -39,7 +35,7 @@ func TestHealthRouter(t *testing.T) {
 	healthUp := &Check{"UP"}
 	healthMock.On("check").Return(*healthUp, nil)
 
-	router := NewRouter(&healthMock, logger)
+	router := NewRouter(&healthMock)
 	router.Register(home.Group("/health"))
 
 	tests := []test.APITestCase{
@@ -52,7 +48,6 @@ func TestHealthRouter(t *testing.T) {
 
 func TestHealthRouter_IsDown(t *testing.T) {
 	//logger := log.New().With(context.TODO(), "version", "test")
-	logger := zap.NewNop()
 	r := gin.Default()
 	home := r.Group("/")
 
@@ -60,7 +55,7 @@ func TestHealthRouter_IsDown(t *testing.T) {
 	healthDown := &Check{"DOWN"}
 	healthMock.On("check").Return(*healthDown, nil)
 
-	router := NewRouter(&healthMock, logger)
+	router := NewRouter(&healthMock)
 	router.Register(home.Group("/health"))
 
 	tests := []test.APITestCase{

@@ -63,23 +63,41 @@
 				
 				<option value="file3">fiber3-petclinic-service/api/ready/config.go (0.0%)</option>
 				
-				<option value="file4">fiber3-petclinic-service/cmd/server.go (0.0%)</option>
+				<option value="file4">fiber3-petclinic-service/api/vet/specialty.go (100.0%)</option>
 				
-				<option value="file5">fiber3-petclinic-service/config/app/config.go (0.0%)</option>
+				<option value="file5">fiber3-petclinic-service/api/vet/vet_request.go (100.0%)</option>
 				
-				<option value="file6">fiber3-petclinic-service/docs/docs.go (0.0%)</option>
+				<option value="file6">fiber3-petclinic-service/api/vet/vet_response.go (100.0%)</option>
 				
-				<option value="file7">fiber3-petclinic-service/internal/errors/response.go (100.0%)</option>
+				<option value="file7">fiber3-petclinic-service/api/vet/vet_router.go (100.0%)</option>
 				
-				<option value="file8">fiber3-petclinic-service/internal/pagination/pages.go (100.0%)</option>
+				<option value="file8">fiber3-petclinic-service/api/vet/vet_service.go (100.0%)</option>
 				
-				<option value="file9">fiber3-petclinic-service/internal/test/api.go (0.0%)</option>
+				<option value="file9">fiber3-petclinic-service/api/visit/visit_request.go (100.0%)</option>
 				
-				<option value="file10">fiber3-petclinic-service/internal/test/embedded_postgres.go (0.0%)</option>
+				<option value="file10">fiber3-petclinic-service/api/visit/visit_response.go (100.0%)</option>
 				
-				<option value="file11">fiber3-petclinic-service/internal/test/etl.go (0.0%)</option>
+				<option value="file11">fiber3-petclinic-service/api/visit/visit_router.go (100.0%)</option>
 				
-				<option value="file12">fiber3-petclinic-service/internal/validator/struct_validator.go (0.0%)</option>
+				<option value="file12">fiber3-petclinic-service/api/visit/visit_service.go (100.0%)</option>
+				
+				<option value="file13">fiber3-petclinic-service/cmd/server.go (0.0%)</option>
+				
+				<option value="file14">fiber3-petclinic-service/config/app/config.go (0.0%)</option>
+				
+				<option value="file15">fiber3-petclinic-service/docs/docs.go (0.0%)</option>
+				
+				<option value="file16">fiber3-petclinic-service/internal/errors/response.go (100.0%)</option>
+				
+				<option value="file17">fiber3-petclinic-service/internal/pagination/pages.go (100.0%)</option>
+				
+				<option value="file18">fiber3-petclinic-service/internal/test/api.go (0.0%)</option>
+				
+				<option value="file19">fiber3-petclinic-service/internal/test/embedded_postgres.go (0.0%)</option>
+				
+				<option value="file20">fiber3-petclinic-service/internal/test/etl.go (0.0%)</option>
+				
+				<option value="file21">fiber3-petclinic-service/internal/validator/struct_validator.go (0.0%)</option>
 				
 				</select>
 			</div>
@@ -228,7 +246,927 @@ func Config() healthcheck.Config <span class="cov0" title="0">{
 }
 </pre>
 		
-		<pre class="file" id="file4" style="display: none">package main
+		<pre class="file" id="file4" style="display: none">package vet
+
+import (
+        "fiber3-petclinic-service/internal/repository"
+        "fiber3-petclinic-service/internal/repository/model"
+
+        "gorm.io/gorm"
+)
+
+type specialtyResponse struct {
+        ID   uint   `json:"id"`
+        Name string `json:"name"`
+}
+
+type specialtiesResponse struct {
+        Context     model.Context       `json:"context"`
+        Specialties []specialtyResponse `json:"specialties"`
+}
+
+func (s *specialtyResponse) FromSpecialty(specialty *repository.Specialty) <span class="cov8" title="1">{
+        s.ID = specialty.ID
+        s.Name = specialty.Name
+}</span>
+
+func ToSpecialtyResponses(specialties []repository.Specialty) *[]specialtyResponse <span class="cov8" title="1">{
+        if len(specialties) == 0 </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">specialtyResponses := make([]specialtyResponse, len(specialties))
+        for i, s := range specialties </span><span class="cov8" title="1">{
+                specialtyResponses[i].ID = s.ID
+                specialtyResponses[i].Name = s.Name
+        }</span>
+        <span class="cov8" title="1">return &amp;specialtyResponses</span>
+}
+
+func ToSpecialtiesResponses(specialties []repository.Specialty) *specialtiesResponse <span class="cov8" title="1">{
+        specialtyResponses := make([]specialtyResponse, len(specialties))
+        for i, s := range specialties </span><span class="cov8" title="1">{
+                specialtyResponses[i].ID = s.ID
+                specialtyResponses[i].Name = s.Name
+        }</span>
+        <span class="cov8" title="1">specialtiesResponse := &amp;specialtiesResponse{
+                Context:     model.Context{Count: len(specialtyResponses)},
+                Specialties: specialtyResponses,
+        }
+        return specialtiesResponse</span>
+}
+
+func ToSpecialty(specialty *specialtyResponse) *repository.Specialty <span class="cov8" title="1">{
+        return &amp;repository.Specialty{
+                Model: gorm.Model{
+                        ID: specialty.ID,
+                },
+                Name: specialty.Name,
+        }
+}</span>
+
+func ToSpecialties(specialties []specialtyResponse) *[]repository.Specialty <span class="cov8" title="1">{
+        specialtyEntities := make([]repository.Specialty, len(specialties))
+        for i, s := range specialties </span><span class="cov8" title="1">{
+                specialtyEntities[i] = *ToSpecialty(&amp;s)
+        }</span>
+
+        <span class="cov8" title="1">return &amp;specialtyEntities</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package vet
+
+import (
+        "fiber3-petclinic-service/internal/repository"
+        "fiber3-petclinic-service/internal/repository/model"
+
+        validation "github.com/go-ozzo/ozzo-validation/v4"
+        "gorm.io/gorm"
+)
+
+//type Request struct {
+//        FirstName string `json:"firstName" binding:"required"`
+//        LastName  string `json:"lastName" binding:"required"`
+//        //Specialties []Specialty `json:"specialties" binding:"required"`
+//}
+
+type AddRequest struct {
+        FirstName   string `json:"firstName" binding:"required"`
+        LastName    string `json:"lastName" binding:"required"`
+        Specialties []uint `json:"specialties" binding:"required"`
+}
+
+type UpdateRequest struct {
+        ID          uint   `json:"id" binding:"required"`
+        FirstName   string `json:"firstName" binding:"required"`
+        LastName    string `json:"lastName" binding:"required"`
+        Specialties []uint `json:"specialties" binding:"required"`
+}
+
+func (vr AddRequest) Validate() error <span class="cov8" title="1">{
+        return validation.ValidateStruct(&amp;vr,
+                validation.Field(&amp;vr.FirstName, validation.Required),
+                validation.Field(&amp;vr.LastName, validation.Required),
+                //validation.Field(&amp;vr.Specialties, validation.Required),
+        )
+}</span>
+
+func FromAddRequest(vetRequest *AddRequest) *repository.Vet <span class="cov8" title="1">{
+        return &amp;repository.Vet{
+                Person: model.Person{
+                        FirstName: vetRequest.FirstName,
+                        LastName:  vetRequest.LastName,
+                },
+                //Specialties: *ToSpecialties(vetRequest.Specialties),
+        }
+}</span>
+
+func FromUpdateRequest(vetRequest *UpdateRequest) *repository.Vet <span class="cov8" title="1">{
+        return &amp;repository.Vet{
+                Model: gorm.Model{
+                        ID: vetRequest.ID,
+                },
+                Person: model.Person{
+                        FirstName: vetRequest.FirstName,
+                        LastName:  vetRequest.LastName,
+                },
+                //Specialties: *ToSpecialties(vetRequest.Specialties),
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package vet
+
+import (
+        "fiber3-petclinic-service/internal/repository"
+        "fiber3-petclinic-service/internal/repository/model"
+)
+
+type Response struct {
+        ID          uint                 `json:"id"`
+        FirstName   string               `json:"firstName"`
+        LastName    string               `json:"lastName"`
+        Specialties *[]specialtyResponse `json:"specialties,omitempty"`
+}
+
+type Responses struct {
+        Context model.Context `json:"context"`
+        Vets    []Response    `json:"vets"`
+}
+
+func (vr *Response) FromVet(vet *repository.Vet) <span class="cov8" title="1">{
+        vr.ID = vet.ID
+        vr.FirstName = vet.FirstName
+        vr.LastName = vet.LastName
+        vr.Specialties = ToSpecialtyResponses(vet.Specialties)
+}</span>
+
+func FromVets(vets []repository.Vet) []Response <span class="cov8" title="1">{
+        vetResponses := make([]Response, len(vets))
+        for i, v := range vets </span><span class="cov8" title="1">{
+                vetResponses[i].FromVet(&amp;v)
+        }</span>
+        <span class="cov8" title="1">return vetResponses</span>
+}
+
+func ToResponses(vets []repository.Vet) *Responses <span class="cov8" title="1">{
+        vetsJson := FromVets(vets)
+        contextJson := model.Context{Count: len(vetsJson)}
+        return &amp;Responses{Vets: vetsJson, Context: contextJson}
+}</span>
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package vet
+
+import (
+        "errors"
+        resterr "fiber3-petclinic-service/internal/errors"
+        "strconv"
+
+        "github.com/gofiber/fiber/v3"
+        "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
+)
+
+type Router struct {
+        service Servicer
+}
+
+func NewRouter(service Servicer) *Router <span class="cov8" title="1">{
+        return &amp;Router{service}
+}</span>
+
+// Register
+// register vet endpoints
+func (vetRouter *Router) Register(route fiber.Router) <span class="cov8" title="1">{
+        route.Get("specialties", vetRouter.allSpecialties)
+        route.Get("all", vetRouter.allVets)
+        route.Get(":id", vetRouter.vetById)
+        route.Get(":id/specialties", vetRouter.getVetByIdWithSpecialties)
+        route.Post("", vetRouter.create)
+        route.Put(":id", vetRouter.update)
+        //route.Get("", vetRouter.vetByParam)
+}</span>
+
+// allSpecialties - retrieve all specialties
+
+func (vetRouter *Router) allSpecialties(c fiber.Ctx) error <span class="cov8" title="1">{
+        log.Info().Msg("Retrieving all specialties")
+        responses, err := vetRouter.service.getAllSpecialties()
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Msg("No specialties found.")
+                        return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No specialties found"))
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Unable to get all specialties.")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))</span>
+        }
+
+        <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(responses)</span>
+}
+
+// AllVets - retrieve all vets
+// @Tags        vets
+//
+//        @Summary        List all vets
+//
+// @Description        Get all vets
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /vets/all                 [get]
+func (vetRouter *Router) allVets(c fiber.Ctx) error <span class="cov8" title="1">{
+        log.Info().Msg("Retrieving all vets.")
+        responses, err := vetRouter.service.getAllVets()
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Msg("No vets found.")
+                        return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No vets found"))
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to get all vets.")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))</span>
+
+        }
+
+        <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(responses)</span>
+}
+
+// vetById - retrieve vet by id
+func (vetRouter *Router) vetById(c fiber.Ctx) error <span class="cov8" title="1">{
+        pathID := c.Params("id")
+        log.Info().Str("id", pathID).Msg("Retrieving vet by id")
+
+        id, err := strconv.Atoi(pathID)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Str("id", pathID).Msg("Invalid vet ID")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">response, err := vetRouter.service.getVetById(uint(id))
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
+                }</span>
+
+                <span class="cov8" title="1">return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))</span>
+        }
+
+        <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(response)</span>
+}
+
+// AllVetsWithSpecialties - retrieve all vets with specialties
+func (vetRouter *Router) getVetByIdWithSpecialties(c fiber.Ctx) error <span class="cov8" title="1">{
+        strID := c.Params("id")
+        log.Info().Str("id", strID).Msg("GET vet with specialties by ID")
+
+        id, err := strconv.Atoi(strID)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Str("id", strID).Msg("Invalid vet ID")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">response, err := vetRouter.service.getVetByIdWithSpecialties(uint(id))
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Int("id", id).Msg("Found no vet.")
+                        return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound(err.Error()))
+                }</span>
+
+                <span class="cov8" title="1">log.Error().Err(err).Int("id", id).Msg("Fail to get vet with specialties by ID.")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))</span>
+        }
+
+        <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(response)</span>
+}
+
+// addNewVet - add new vet
+func (vetRouter *Router) create(c fiber.Ctx) error <span class="cov8" title="1">{
+        var vetRequest AddRequest
+        err := c.Bind().Body(&amp;vetRequest)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">newVet, err := vetRouter.service.create(FromAddRequest(&amp;vetRequest))
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Unable to create new vet.")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+        }</span>
+        <span class="cov8" title="1">return c.Status(fiber.StatusCreated).JSON(newVet)</span>
+}
+
+func (vetRouter *Router) update(c fiber.Ctx) error <span class="cov8" title="1">{
+        strID := c.Params("id")
+        id, err := strconv.Atoi(strID)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Unable to convert ID to integer.")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">var vetRequest UpdateRequest
+        err = c.Bind().Body(&amp;vetRequest)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">vetEntity := FromUpdateRequest(&amp;vetRequest)
+        vetEntity.ID = uint(id)
+        newVet, err := vetRouter.service.update(vetEntity)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Unable to update vet.")
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("Vet not found with ID: " + c.Params("id")))
+                }</span>
+                <span class="cov8" title="1">return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))</span>
+        }
+        <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(newVet)</span>
+}
+
+//func (vetRouter *Router) vetByParam(c fiber.Ctx) error {
+//        var nameParam api.NameParam
+//        err := c.BodyParser(&amp;nameParam)
+//        if err != nil {
+//                log.Error().Err(err).Msg("Unable to bind query param.")
+//                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+//        }
+//
+//        return vetRouter.byLastName(c, nameParam)
+//}
+
+// vetByLastName - retrieve vet by last name
+//func (vetRouter *Router) byLastName(c fiber.Ctx, param api.NameParam) error {
+//        response, err := vetRouter.service.getVetByLastName(param.Name)
+//        if err != nil {
+//                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+//        }
+//
+//        c.JSON(http.StatusOK, response)
+//}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package vet
+
+import (
+        "errors"
+        "fiber3-petclinic-service/internal/repository"
+        "fiber3-petclinic-service/internal/repository/model"
+
+        "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
+)
+
+type Servicer interface {
+        getAllSpecialties() (*specialtiesResponse, error)
+        getVetById(id uint) (*Response, error)
+        getVetByIdWithSpecialties(id uint) (*Response, error)
+        getVetByLastName(lastName string) (*Responses, error)
+        getAllVets() (*Responses, error)
+        getAllVetsWithSpecialties() (*Responses, error)
+        create(vet *repository.Vet) (*Response, error)
+        update(vet *repository.Vet) (*Response, error)
+}
+
+type Service struct {
+        repository repository.VetRepositorier
+}
+
+func NewService(repository repository.VetRepositorier) *Service <span class="cov8" title="1">{
+        return &amp;Service{repository: repository}
+}</span>
+
+// getAllSpecialties - retrieve all specialties
+func (service *Service) getAllSpecialties() (*specialtiesResponse, error) <span class="cov8" title="1">{
+        specialties, err := service.repository.FindAllSpecialties()
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Msg("No specialties found.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve all specialties.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">specialtiesResponses := ToSpecialtiesResponses(specialties)
+        return specialtiesResponses, nil</span>
+}
+
+// getVetById - retrieve vet by id
+func (service *Service) getVetById(id uint) (*Response, error) <span class="cov8" title="1">{
+        log.Debug().Uint("id", id).Msg("GET vet by id")
+        vet, err := service.repository.FindById(id)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Uint("id", id).Msg("Vet by id not found.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+
+                <span class="cov8" title="1">log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve vet by id.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromVet(vet)
+        return response, nil</span>
+}
+
+func (service *Service) getVetByIdWithSpecialties(id uint) (*Response, error) <span class="cov8" title="1">{
+        vet, err := service.repository.FindByIdWithSpecialties(id)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Uint("id", id).Msg("Vet by id not found with specialties.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve vet by id with specialties")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromVet(vet)
+        return response, nil</span>
+}
+
+func (service *Service) getVetByLastName(lastName string) (*Responses, error) <span class="cov8" title="1">{
+        vets, err := service.repository.FindByLastName(lastName)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Str("lastName", lastName).Msg("No vets found with this last name.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Str("lastName", lastName).Msg("Fail to retrieve the vets by last name.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">vetsJson := FromVets(vets)
+        contextJson := model.Context{Count: len(vetsJson)}
+        return &amp;Responses{Vets: vetsJson, Context: contextJson}, nil</span>
+}
+
+// getAllVets - retrieve all vets
+func (service *Service) getAllVets() (*Responses, error) <span class="cov8" title="1">{
+        vets, err := service.repository.FindAll()
+
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Msg("No vets found.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve all vets.")
+                return nil, err</span>
+        }
+        <span class="cov8" title="1">log.Debug().Msg("counts of all vets")
+
+        vetsJson := FromVets(vets)
+        contextJson := model.Context{Count: len(vetsJson)}
+        return &amp;Responses{Vets: vetsJson, Context: contextJson}, nil</span>
+}
+
+func (service *Service) getAllVetsWithSpecialties() (*Responses, error) <span class="cov8" title="1">{
+        vets, err := service.repository.FindAllPreload()
+
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Msg("No vets found with specialties.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve all vets.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">return ToResponses(vets), nil</span>
+}
+
+// create - create new vet
+func (service *Service) create(vet *repository.Vet) (*Response, error) <span class="cov8" title="1">{
+        log.Info().Any("vet", vet).Msg("Create new vet.")
+        newVet, err := service.repository.Insert(vet)
+
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Fail new vet failed.")
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromVet(newVet)
+        return response, nil</span>
+}
+
+// update - update vet
+func (service *Service) update(vet *repository.Vet) (*Response, error) <span class="cov8" title="1">{
+        log.Info().Any("vet", vet).Msg("Update a vet.")
+        updatedVet, err := service.repository.Update(vet)
+
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Msg("No vet found for update.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Update vet failed.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromVet(updatedVet)
+        return response, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package visit
+
+import (
+        "fiber3-petclinic-service/internal/repository"
+        "time"
+
+        "gorm.io/gorm"
+)
+
+type Request struct {
+        ID          uint   `json:"id"`
+        VisitDate   string `json:"visitDate" binding:"required"`
+        Description string `json:"description" binding:"required"`
+        PetID       uint   `json:"petID" binding:"required"`
+}
+
+type AddRequest struct {
+        VisitDate   string `json:"visitDate" binding:"required"`
+        Description string `json:"description" binding:"required"`
+        PetID       uint   `json:"petID" binding:"required"`
+}
+
+type UpdateRequest struct {
+        ID          uint   `json:"id"`
+        VisitDate   string `json:"visitDate" binding:"required"`
+        Description string `json:"description" binding:"required"`
+        PetID       uint   `json:"petID" binding:"required"`
+}
+
+func FromAddRequest(request *AddRequest) (*repository.Visit, error) <span class="cov8" title="1">{
+        visitEntify := &amp;repository.Visit{
+                Description: request.Description,
+                PetID:       request.PetID,
+        }
+
+        visitDate, err := time.Parse(time.DateOnly, request.VisitDate)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">visitEntify.VisitDate = &amp;visitDate
+        return visitEntify, nil</span>
+}
+
+func FromUpdateRequest(request *UpdateRequest) (*repository.Visit, error) <span class="cov8" title="1">{
+        visitEntify := &amp;repository.Visit{
+                Model:       gorm.Model{ID: request.ID},
+                Description: request.Description,
+                PetID:       request.PetID,
+        }
+
+        visitDate, err := time.Parse(time.DateOnly, request.VisitDate)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">visitEntify.VisitDate = &amp;visitDate
+        return visitEntify, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package visit
+
+import (
+        "fiber3-petclinic-service/internal/repository"
+        "fiber3-petclinic-service/internal/repository/model"
+        "time"
+)
+
+type Response struct {
+        ID          uint   `json:"id"`
+        VisitDate   string `json:"visitDate"`
+        Description string `json:"description"`
+        PetID       uint   `json:"petID"`
+}
+
+type UpdateResponse struct {
+        ID          uint   `json:"id"`
+        VisitDate   string `json:"visitDate"`
+        Description string `json:"description"`
+        PetID       uint   `json:"petII"`
+}
+
+type Responses struct {
+        Context model.Context `json:"context"`
+        Visits  []Response    `json:"visits"`
+}
+
+// FromVisit
+// Map from repository visit to json visit response
+func (vr *Response) FromVisit(visit *repository.Visit) <span class="cov8" title="1">{
+        vr.ID = visit.ID
+        if visit.VisitDate == nil </span><span class="cov8" title="1">{
+                vr.VisitDate = ""
+        }</span> else<span class="cov8" title="1"> {
+                vr.VisitDate = visit.VisitDate.Format(time.DateOnly)
+        }</span>
+
+        <span class="cov8" title="1">vr.Description = visit.Description
+        vr.PetID = visit.PetID</span>
+}
+
+func FromVisits(visits []repository.Visit) []Response <span class="cov8" title="1">{
+        visitResponses := make([]Response, len(visits))
+        for i, v := range visits </span><span class="cov8" title="1">{
+                visitResponses[i].FromVisit(&amp;v)
+        }</span>
+
+        <span class="cov8" title="1">return visitResponses</span>
+}
+
+// FromVisitsToResponses
+// Map from repository visit list to json list of visit response
+func FromVisitsToResponses(visits []repository.Visit) *Responses <span class="cov8" title="1">{
+        visitResponses := make([]Response, len(visits))
+        for i, v := range visits </span><span class="cov8" title="1">{
+                visitResponses[i].FromVisit(&amp;v)
+        }</span>
+
+        <span class="cov8" title="1">responses := &amp;Responses{
+                Context: model.Context{
+                        Count: len(visits),
+                },
+                Visits: visitResponses,
+        }
+        return responses</span>
+}
+
+func ToResponses(responses []Response) *Responses <span class="cov8" title="1">{
+        result := make([]Response, len(responses))
+        for i, v := range responses </span><span class="cov8" title="1">{
+                result[i].ID = v.ID
+                result[i].VisitDate = v.VisitDate
+                result[i].Description = v.Description
+                result[i].PetID = v.PetID
+        }</span>
+
+        <span class="cov8" title="1">return &amp;Responses{
+                Context: model.Context{
+                        Count: len(responses),
+                },
+                Visits: result,
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package visit
+
+import (
+        "errors"
+        resterr "fiber3-petclinic-service/internal/errors"
+        "strconv"
+
+        "github.com/gofiber/fiber/v3"
+        "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
+)
+
+type Router struct {
+        service Servicer
+}
+
+func NewRouter(service Servicer) *Router <span class="cov8" title="1">{
+        return &amp;Router{service}
+}</span>
+
+func (r *Router) Register(router fiber.Router) <span class="cov8" title="1">{
+        router.Get("/all", r.allVisits)
+        router.Get(":id", r.visitById)
+        router.Post("", r.addNewVisit)
+        router.Put(":id", r.updateVisit)
+}</span>
+
+// visitById - get visit by ID
+// @Tags                visits
+// @Summary                Get visit by id
+//
+// @Description        Get visit by ID
+// @Param                id        path        int        true        "Visit ID"
+// @Produce                json
+// @Success                200        {object}        Response
+// @Failure                400        {object}        errors.ErrorResponse
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /visits/{id}         [get]
+func (r *Router) visitById(c fiber.Ctx) error <span class="cov8" title="1">{
+        strID := c.Params("id")
+        log.Info().Str("id", strID).Msg("Visit by id.")
+
+        id, err := strconv.Atoi(strID)
+        if id == 0 </span><span class="cov8" title="1">{
+                log.Error().Err(err).Str("id", strID).Msg("Invalid visit ID")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">response, err := r.service.getVisitById(uint(id))
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Str("id", strID).Msg("Visit by id not found")
+                        return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("get no visit by id"))
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Str("id", strID).Msg("fail to get a visit by id")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))</span>
+        }
+
+        <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(response)</span>
+}
+
+// allVisits - get all visits
+// @Tags        visits
+// @Summary        List all visits
+//
+// @Description        Get all visits
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /visits/all                [get]
+func (r *Router) allVisits(c fiber.Ctx) error <span class="cov8" title="1">{
+        log.Info().Msg("All visits.")
+        responses, err := r.service.getAllVisits()
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Msg("No visits found.")
+                        return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No visits found"))
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to get all visits.")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))</span>
+        }
+
+        <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(responses)</span>
+}
+
+func (r *Router) addNewVisit(c fiber.Ctx) error <span class="cov8" title="1">{
+        log.Info().Msg("Post a new visit.")
+        var addRequest *AddRequest
+        if err := c.Bind().Body(&amp;addRequest); err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Fail to Unmarshal visit JSON.")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">addVisit, err := FromAddRequest(addRequest)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Invalid Add Request.")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">response, err := r.service.create(addVisit)
+        if err != nil </span><span class="cov8" title="1">{
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">return c.Status(fiber.StatusCreated).JSON(response)</span>
+}
+
+// updateVisit - update visit
+// @Tags                visits
+// @Summary                Update visit
+//
+// @Description        Update visit
+// @Produce                json
+// @Param                id        path                int        true        "Visit ID"
+// @Param                Request                        body                UpdateRequest        true        "Update visit"
+// @Success                200        {object}        Responses
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /visits/{id}         [put]
+func (r *Router) updateVisit(c fiber.Ctx) error <span class="cov8" title="1">{
+        log.Info().Msg("Update a visit.")
+        strID := c.Params("id")
+
+        id, err := strconv.Atoi(strID)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Str("id", strID).Msg("Invalid visit ID")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">var updateRequest *UpdateRequest
+        if err := c.Bind().Body(&amp;updateRequest); err != nil </span><span class="cov8" title="1">{
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+
+        <span class="cov8" title="1">visit, err := FromUpdateRequest(updateRequest)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Invalid Update Request.")
+                return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+        }</span>
+        <span class="cov8" title="1">visit.ID = uint(id)
+        response, err := r.service.update(visit)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Str("id", strID).Msg("Visit by id not found")
+                        return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("visit not found"))
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to update visit.")
+                return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))</span>
+        }
+
+        <span class="cov8" title="1">return c.Status(fiber.StatusOK).JSON(response)</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package visit
+
+import (
+        "errors"
+        "fiber3-petclinic-service/internal/repository"
+
+        "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
+)
+
+type Servicer interface {
+        getVisitById(id uint) (*Response, error)
+        getAllVisits() (*Responses, error)
+        create(visit *repository.Visit) (*Response, error)
+        update(visit *repository.Visit) (*Response, error)
+}
+
+type Service struct {
+        repository repository.VisitRepositorier
+}
+
+func NewService(repository repository.VisitRepositorier) *Service <span class="cov8" title="1">{
+        return &amp;Service{repository: repository}
+}</span>
+
+func (service *Service) getVisitById(id uint) (*Response, error) <span class="cov8" title="1">{
+        visit, err := service.repository.FindById(id)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Uint("id", id).Msg("Visit by id not found.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve visit by id.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromVisit(visit)
+        return response, nil</span>
+}
+
+func (service *Service) getAllVisits() (*Responses, error) <span class="cov8" title="1">{
+        visits, err := service.repository.FindAll()
+
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Msg("No visits found.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve all visits.")
+                return nil, err</span>
+        }
+        <span class="cov8" title="1">log.Debug().Int("count", len(visits)).Msg("counts of all visits")
+
+        // convert to []Response &amp; model.Context
+        responses := FromVisitsToResponses(visits)
+        return responses, nil</span>
+}
+
+func (service *Service) create(visit *repository.Visit) (*Response, error) <span class="cov8" title="1">{
+        newVisit, err := service.repository.Insert(visit)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Fail to create visit.")
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromVisit(newVisit)
+        return response, nil</span>
+}
+
+func (service *Service) update(visit *repository.Visit) (*Response, error) <span class="cov8" title="1">{
+        updatedVisit, err := service.repository.Update(visit)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Uint("id", visit.ID).Msg("No visit found for update.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to update visit.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := &amp;Response{}
+        response.FromVisit(updatedVisit)
+        return response, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package main
 
 import (
         "context"
@@ -466,7 +1404,7 @@ func main() <span class="cov0" title="0">{
 }
 </pre>
 		
-		<pre class="file" id="file5" style="display: none">package app
+		<pre class="file" id="file14" style="display: none">package app
 
 import (
         "fiber3-petclinic-service/internal/repository"
@@ -536,7 +1474,7 @@ func getConfigFile(env string) string <span class="cov0" title="0">{
 }
 </pre>
 		
-		<pre class="file" id="file6" style="display: none">// Package docs Code generated by swaggo/swag. DO NOT EDIT
+		<pre class="file" id="file15" style="display: none">// Package docs Code generated by swaggo/swag. DO NOT EDIT
 package docs
 
 import "github.com/swaggo/swag"
@@ -1568,7 +2506,7 @@ func init() <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file7" style="display: none">package errors
+		<pre class="file" id="file16" style="display: none">package errors
 
 import (
         "net/http"
@@ -1677,7 +2615,7 @@ func InvalidInput(errs validation.Errors) ErrorResponse <span class="cov8" title
 }
 </pre>
 		
-		<pre class="file" id="file8" style="display: none">// Package pagination provides support for pagination requests and responses.
+		<pre class="file" id="file17" style="display: none">// Package pagination provides support for pagination requests and responses.
 package pagination
 
 import (
@@ -1825,7 +2763,7 @@ func (p *Pages) BuildLinks(baseURL string, defaultPerPage int) [4]string <span c
 }
 </pre>
 		
-		<pre class="file" id="file9" style="display: none">package test
+		<pre class="file" id="file18" style="display: none">package test
 
 import "github.com/gofiber/fiber/v3"
 
@@ -1836,7 +2774,7 @@ func SetupRouter() *fiber.App <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file10" style="display: none">package test
+		<pre class="file" id="file19" style="display: none">package test
 
 import (
         "testing"
@@ -1874,7 +2812,7 @@ func PgStart(t *testing.T, dir string) *embeddedpostgres.EmbeddedPostgres <span 
 }
 </pre>
 		
-		<pre class="file" id="file11" style="display: none">package test
+		<pre class="file" id="file20" style="display: none">package test
 
 import (
         "time"
@@ -1896,7 +2834,7 @@ func ToDate(dateStr string) *time.Time <span class="cov0" title="0">{
 }
 </pre>
 		
-		<pre class="file" id="file12" style="display: none">package validator
+		<pre class="file" id="file21" style="display: none">package validator
 
 import "github.com/go-playground/validator/v10"
 

@@ -1,7 +1,7 @@
 package info
 
 import (
-	"fiber-petclinic-service/config/app"
+	"gin-petclinic-service/config/app"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

@@ -1,108 +1,200 @@
-const httpz = @import("httpz");
-const pg = @import("pg");
 const std = @import("std");
+const zap = @import("zap");
 
-
-const App = struct {
-    pool: *pg.Pool,
-    allocator: std.mem.Allocator,
+// Product structure
+const Product = struct {
+    id: u32,
+    name: []const u8,
+    price: f64,
+    description: []const u8,
+    stock: u32,
 };
 
-pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{
-        .thread_safe = true,
-    }){};
-    const allocator = gpa.allocator();
+// In-memory storage (in production, use a database)
+var products = std.ArrayListUnmanaged(Product);
+var next_id: u32 = 1;
+var gpa = std.heap.GeneralPurposeAllocator(.{}){};
 
-    var pool = try pg.Pool.init(allocator, .{ .size = 5, .connect = .{
-        .port = 5432,
-        .host = "127.0.0.1",
-    }, .auth = .{
-        .username = "zap_user",
-        .database = "zap_db",
-        .password = "abc123",
-        .timeout = 10_000,
-    } });
-    defer pool.deinit();
+// Handler for GET /products - List all products
+fn getProducts(r: zap.Request) void {
+    r.setContentType(.JSON) catch return;
 
-    _ = try pool.exec("create table if not exists users (id serial primary key, name text)", .{});
+    var buf = std.ArrayList(u8).init(gpa.allocator());
+    defer buf.deinit();
 
-    var app = App{
-        .pool = pool,
-        .allocator = allocator,
-    };
+    var writer = buf.writer();
+    writer.writeAll("[") catch return;
 
-    var server = try httpz.ServerApp(*App).init(allocator, .{ .port = 3000 }, &app);
-    defer {
-        // clean shutdown, finishes serving any live request
-        server.stop();
-        server.deinit();
+    for (products.items, 0..) |p, i| {
+        if (i > 0) writer.writeAll(",") catch return;
+        std.fmt.format(writer,
+            \\{{"id":{d},"name":"{s}","price":{d:.2},"description":"{s}","stock":{d}}}
+        , .{p.id, p.name, p.price, p.description, p.stock}) catch return;
     }
 
-    var router = server.router();
-    router.get("/users", getUsers);
-    router.get("/users/:id", getUser);
-    router.post("/users", saveUser);
-    router.delete("/users/:id", deleteUser);
-    // blocks
-    try server.listen();
+    writer.writeAll("]") catch return;
+    r.sendBody(buf.items) catch return;
 }
 
-const User = struct {
-    id: i32,
-    name: []const u8,
-};
-
-const NewUserReq = struct {
-    name: []const u8,
-};
-
-pub fn getUsers(app: *App, _: *httpz.Request, res: *httpz.Response) !void {
-    var result = try app.pool.query("select id, name from users", .{});
-    defer result.deinit();
-
-    var users = std.ArrayList(User).init(app.allocator);
-    while (try result.next()) |row| {
-        const id = row.get(i32, 0);
-        const name = row.get([]u8, 1);
-        try users.append(User{ .id = id, .name = name });
-    }
-
-    const usersSlice = try users.toOwnedSlice();
-    defer app.allocator.free(usersSlice);
-    try res.json(usersSlice, .{});
-}
-
-pub fn saveUser(app: *App, req: *httpz.Request, res: *httpz.Response) !void {
-    if (try req.json(NewUserReq)) |body| {
-        _ = app.pool.exec("insert into users (name) values ($1)", .{body.name}) catch {
-            res.status = 500;
+// Handler for GET /products/:id - Get single product
+fn getProduct(r: zap.Request) void {
+    if (r.getParamStr("id")) |id_str| {
+        const id = std.fmt.parseInt(u32, id_str, 10) catch {
+            r.setStatus(.bad_request) catch return;
+            r.sendBody("Invalid ID") catch return;
             return;
         };
+
+        for (products.items) |p| {
+            if (p.id == id) {
+                r.setContentType(.JSON) catch return;
+                var buf: [512]u8 = undefined;
+                const json = std.fmt.bufPrint(&buf,
+                    \\{{"id":{d},"name":"{s}","price":{d:.2},"description":"{s}","stock":{d}}}
+                , .{p.id, p.name, p.price, p.description, p.stock}) catch return;
+                r.sendBody(json) catch return;
+                return;
+            }
+        }
+
+        r.setStatus(.not_found) catch return;
+        r.sendBody("Product not found") catch return;
     }
 }
 
-pub fn getUser(app: *App, req: *httpz.Request, res: *httpz.Response) !void {
-    const userId = req.param("id").?;
-    const result = try app.pool.row("select id, name from users where id = $1", .{userId});
-    if (result) |r| {
-        const user = User{
-            .id = r.get(i32, 0),
-            .name = r.get([]const u8, 1),
+// Handler for POST /products - Create product
+fn createProduct(r: zap.Request) void {
+    if (r.body) |body| {
+        // Simple JSON parsing (in production, use a proper JSON library)
+        // Expected format: {"name":"Product","price":99.99,"description":"Desc","stock":10}
+
+        var name: []const u8 = "";
+        var price: f64 = 0;
+        var description: []const u8 = "";
+        var stock: u32 = 0;
+
+        // Basic parsing (this is simplified - use std.json in real code)
+        var iter = std.mem.split(u8, body, ",");
+        while (iter.next()) |field| {
+            if (std.mem.indexOf(u8, field, "\"name\"") != null) {
+                if (std.mem.lastIndexOf(u8, field, "\"")) |end| {
+                    if (std.mem.indexOf(u8, field[0..end], ":\"")) |start| {
+                        name = field[start+2..end];
+                    }
+                }
+            } else if (std.mem.indexOf(u8, field, "\"price\"") != null) {
+                if (std.mem.indexOf(u8, field, ":")) |colon| {
+                    const val = std.mem.trim(u8, field[colon+1..], " \t\r\n}");
+                    price = std.fmt.parseFloat(f64, val) catch 0;
+                }
+            } else if (std.mem.indexOf(u8, field, "\"description\"") != null) {
+                if (std.mem.lastIndexOf(u8, field, "\"")) |end| {
+                    if (std.mem.indexOf(u8, field[0..end], ":\"")) |start| {
+                        description = field[start+2..end];
+                    }
+                }
+            } else if (std.mem.indexOf(u8, field, "\"stock\"") != null) {
+                if (std.mem.indexOf(u8, field, ":")) |colon| {
+                    const val = std.mem.trim(u8, field[colon+1..], " \t\r\n}");
+                    stock = std.fmt.parseInt(u32, val, 10) catch 0;
+                }
+            }
+        }
+
+        const product = Product{
+            .id = next_id,
+            .name = name,
+            .price = price,
+            .description = description,
+            .stock = stock,
         };
 
-        try res.json(user, .{});
-    } else {
-        res.status = 404;
+        next_id += 1;
+        products.append(product) catch return;
+
+        r.setStatus(.created) catch return;
+        r.setContentType(.JSON) catch return;
+        var buf: [512]u8 = undefined;
+        const json = std.fmt.bufPrint(&buf,
+            \\{{"id":{d},"name":"{s}","price":{d:.2},"description":"{s}","stock":{d}}}
+        , .{product.id, product.name, product.price, product.description, product.stock}) catch return;
+        r.sendBody(json) catch return;
     }
-    return;
 }
 
-pub fn deleteUser(app: *App, req: *httpz.Request, res: *httpz.Response) !void {
-    const userId = req.param("id").?;
-    _ = app.pool.exec("delete from users where id = $1", .{userId}) catch {
-        res.status = 500;
-        return;
-    };
-    res.status = 204;
+// Handler for DELETE /products/:id
+fn deleteProduct(r: zap.Request) void {
+    if (r.getParamStr("id")) |id_str| {
+        const id = std.fmt.parseInt(u32, id_str, 10) catch {
+            r.setStatus(.bad_request) catch return;
+            r.sendBody("Invalid ID") catch return;
+            return;
+        };
+
+        for (products.items, 0..) |p, i| {
+            if (p.id == id) {
+                _ = products.orderedRemove(i);
+                r.setStatus(.no_content) catch return;
+                r.sendBody("") catch return;
+                return;
+            }
+        }
+
+        r.setStatus(.not_found) catch return;
+        r.sendBody("Product not found") catch return;
+    }
+}
+
+pub fn main() !void {
+    // Add some sample products
+    try products.append(.{
+        .id = next_id,
+        .name = "Laptop",
+        .price = 999.99,
+        .description = "High-performance laptop",
+        .stock = 5,
+    });
+    next_id += 1;
+
+    try products.append(.{
+        .id = next_id,
+        .name = "Mouse",
+        .price = 29.99,
+        .description = "Wireless mouse",
+        .stock = 20,
+    });
+    next_id += 1;
+
+    // Setup routes
+    var listener = zap.HttpListener.init(.{
+        .port = 3000,
+        .on_request = null,
+        .log = true,
+    });
+    defer listener.deinit();
+
+    var router = zap.Router.init(gpa.allocator(), .{});
+    defer router.deinit();
+
+    // Register routes
+    try router.handle_func("/products", getProducts, .GET);
+    try router.handle_func("/products", createProduct, .POST);
+    try router.handle_func("/products/:id", getProduct, .GET);
+    try router.handle_func("/products/:id", deleteProduct, .DELETE);
+
+    listener.on_request = router.on_request_handler();
+
+    std.debug.print("Server running on http://localhost:3000\n", .{});
+    std.debug.print("Endpoints:\n", .{});
+    std.debug.print("  GET    /products     - List all products\n", .{});
+    std.debug.print("  GET    /products/:id - Get product by ID\n", .{});
+    std.debug.print("  POST   /products     - Create new product\n", .{});
+    std.debug.print("  DELETE /products/:id - Delete product\n", .{});
+
+    try listener.listen();
+
+    zap.start(.{
+        .threads = 2,
+        .workers = 2,
+    });
 }

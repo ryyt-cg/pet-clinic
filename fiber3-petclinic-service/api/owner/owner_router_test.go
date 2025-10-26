@@ -223,7 +223,7 @@ func Test_ownerById(t *testing.T) {
 }
 
 func Test_ownerWithBadId(t *testing.T) {
-	badRequest := resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid-id\": invalid syntax")
+	badRequest := resterr.BadRequest("strconv.Atoi: parsing \"invalid-id\": invalid syntax")
 	ownerMock := NewMockServicer(t)
 
 	r := test.SetupRouter()
@@ -378,7 +378,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 }
 
 func Test_ownerByIdWithPetsBadID(t *testing.T) {
-	response := resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"notID\": invalid syntax")
+	response := resterr.BadRequest("strconv.Atoi: parsing \"notID\": invalid syntax")
 	ownerMock := NewMockServicer(t)
 
 	r := test.SetupRouter()
@@ -757,7 +757,7 @@ func Test_updateOwnerWithBadRequest(t *testing.T) {
 	}
 	updateRequestJSON, _ := json.Marshal(updateRequest)
 
-	badResponse := resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"a1\": invalid syntax")
+	badResponse := resterr.BadRequest("strconv.Atoi: parsing \"a1\": invalid syntax")
 	badResponse2 := resterr.BadRequest("json: cannot unmarshal number into Go struct field UpdateRequest.lastName of type string")
 
 	testCases := []struct {

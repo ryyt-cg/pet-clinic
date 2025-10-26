@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"testing"
 
-	"go.uber.org/zap"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,8 +17,6 @@ func setupRouter() *gin.Engine {
 }
 
 func Test_VisitById(t *testing.T) {
-	//logger := log.New().With(nil, "function", "Test_VisitById")
-	logger := zap.NewNop()
 	visitMock := MockServicer{}
 
 	visitResponse := &Response{
@@ -30,7 +26,7 @@ func Test_VisitById(t *testing.T) {
 	}
 
 	visitMock.On("getVisitById", 1).Return(visitResponse, nil)
-	visitRouter := NewRouter(logger, &visitMock)
+	visitRouter := NewRouter(&visitMock)
 
 	r := setupRouter()
 	v1 := r.Group("/v1")

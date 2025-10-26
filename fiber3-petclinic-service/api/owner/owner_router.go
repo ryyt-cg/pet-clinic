@@ -3,6 +3,7 @@ package owner
 import (
 	"errors"
 	resterr "fiber3-petclinic-service/internal/errors"
+	"strconv"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/rs/zerolog/log"
@@ -71,12 +72,11 @@ func (r *Router) ownerById(c fiber.Ctx) error {
 	strID := c.Params("id")
 	log.Info().Str("id", strID).Msg("GET owner by ID")
 
-	id := fiber.Params[int](c, "id")
-	//id, err := c.ParamsInt("id")
-	//if err != nil {
-	//	log.Error().Err(err).Str("id", strID).Msg("Invalid owner ID")
-	//	return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	//}
+	id, err := strconv.Atoi(strID)
+	if err != nil {
+		log.Error().Err(err).Str("id", strID).Msg("Invalid owner ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 
 	response, err := r.service.getOwnerById(uint(id))
 	if err != nil {
@@ -108,12 +108,11 @@ func (r *Router) ownerByIdWithPets(c fiber.Ctx) error {
 	strID := c.Params("id")
 	log.Info().Str("id", strID).Msg("GET owner with pets by ID")
 
-	id := fiber.Params[int](c, "id")
-	//id, err := c.ParamsInt("id")
-	//if err != nil {
-	//	log.Error().Err(err).Str("id", strID).Msg("Invalid owner ID")
-	//	return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	//}
+	id, err := strconv.Atoi(strID)
+	if err != nil {
+		log.Error().Err(err).Str("id", strID).Msg("Invalid owner ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 
 	response, err := r.service.getOwnerByIdWithPets(uint(id))
 	if err != nil {
@@ -203,15 +202,14 @@ func (r *Router) updateOwner(c fiber.Ctx) error {
 	strID := c.Params("id")
 	log.Info().Str("id", strID).Msg("PUT update owner by ID")
 
-	id := fiber.Params[int](c, "id")
-	//id, err := c.ParamsInt("id")
-	//if err != nil {
-	//	log.Error().Err(err).Str("id", strID).Msg("Invalid owner ID")
-	//	return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	//}
+	id, err := strconv.Atoi(strID)
+	if err != nil {
+		log.Error().Err(err).Str("id", strID).Msg("Invalid owner ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 
 	var ownerRequest UpdateRequest
-	err := c.Bind().Body(&ownerRequest)
+	err = c.Bind().Body(&ownerRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to Unmarshal owner JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
