@@ -130,7 +130,7 @@ func Test_visitById_BadRequest(t *testing.T) {
 		return
 	}
 	assert.Equal(t, http.StatusBadRequest, actualErrorResponse.Status)
-	assert.Equal(t, resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid-id\": invalid syntax").Message, actualErrorResponse.Message)
+	assert.Equal(t, resterr.BadRequest("strconv.Atoi: parsing \"invalid-id\": invalid syntax").Message, actualErrorResponse.Message)
 }
 
 func Test_allVisits(t *testing.T) {
@@ -379,7 +379,7 @@ func Test_updateVisit_BadRequest(t *testing.T) {
 			id:               "invalid-id",
 			route:            "/v1/visits/invalid-id",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid-id\": invalid syntax"),
+			expectedResponse: resterr.BadRequest("strconv.Atoi: parsing \"invalid-id\": invalid syntax"),
 		},
 		{
 			name:             "update visit by ID with bad request",

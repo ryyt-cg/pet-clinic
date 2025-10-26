@@ -309,7 +309,7 @@ func Test_vetByID_BadRequest(t *testing.T) {
 			id:             "invalid",
 			route:          "/v1/vets/invalid",
 			mockVet:        nil,
-			expectedResult: resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid\": invalid syntax"),
+			expectedResult: resterr.BadRequest("strconv.Atoi: parsing \"invalid\": invalid syntax"),
 		},
 	}
 
@@ -317,7 +317,6 @@ func Test_vetByID_BadRequest(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Create a mock service
 			vetMock := NewMockServicer(t)
-			vetMock.EXPECT().getVetById(tc.id).Return(tc.mockVet, tc.expectedResult)
 
 			// Create a new router with the mock service
 			vetRouter := NewRouter(vetMock)
@@ -327,18 +326,17 @@ func Test_vetByID_BadRequest(t *testing.T) {
 
 			req, _ := http.NewRequest("GET", tc.route, nil)
 			resp, _ := r.Test(req, fiber.TestConfig{})
+			actualVetsResponse := &resterr.ErrorResponse{}
 
-			assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
-			actualVetResponse := &resterr.ErrorResponse{}
 			// Read the response body
 			body, _ := io.ReadAll(resp.Body)
-			err := json.Unmarshal(body, actualVetResponse)
+			err := json.Unmarshal(body, actualVetsResponse)
 			if err != nil {
 				t.Errorf("Error unmarshalling response body: %v", err)
 				return
 			}
-			assert.Equal(t, tc.expectedResult.Status, actualVetResponse.Status)
-			assert.Equal(t, tc.expectedResult.Message, actualVetResponse.Message)
+			assert.Equal(t, tc.expectedResult.Status, resp.StatusCode)
+			assert.Equal(t, tc.expectedResult.Message, actualVetsResponse.Message)
 		})
 	}
 }
@@ -455,7 +453,7 @@ func Test_vetByIDWithSpecialties_BadRequest(t *testing.T) {
 			name:           "bad request with invalid id",
 			id:             "invalid",
 			route:          "/v1/vets/invalid/specialties",
-			expectedResult: resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid\": invalid syntax"),
+			expectedResult: resterr.BadRequest("strconv.Atoi: parsing \"invalid\": invalid syntax"),
 		},
 	}
 
@@ -781,7 +779,7 @@ func Test_updateVet_BadRequest(t *testing.T) {
 			request:          vetRequest,
 			route:            "/v1/vets/invalid-id",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid-id\": invalid syntax"),
+			expectedResponse: resterr.BadRequest("strconv.Atoi: parsing \"invalid-id\": invalid syntax"),
 		},
 		{
 			name:             "update vet by ID with bad request",

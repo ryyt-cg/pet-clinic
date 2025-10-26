@@ -43,6 +43,9 @@ The goal of this repository is to implement a pet clinic API in different langua
 | PUT    | /v1/vets/{id}                   | Update veterinarian                        |
 |        |                                 |                                            |
 
+## Application Architecture 
+![api-by-features.png](api-by-features.png)
+
 
 ## Spring Pet Clinic Wireframe
 

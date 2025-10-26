@@ -3,6 +3,7 @@ package vet
 import (
 	"errors"
 	resterr "fiber3-petclinic-service/internal/errors"
+	"strconv"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/rs/zerolog/log"
@@ -78,11 +79,11 @@ func (vetRouter *Router) vetById(c fiber.Ctx) error {
 	pathID := c.Params("id")
 	log.Info().Str("id", pathID).Msg("Retrieving vet by id")
 
-	id := fiber.Params[int](c, "id")
-	//id, err := c.ParamsInt("id")
-	//if err != nil {
-	//	return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	//}
+	id, err := strconv.Atoi(pathID)
+	if err != nil {
+		log.Error().Err(err).Str("id", pathID).Msg("Invalid vet ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 
 	response, err := vetRouter.service.getVetById(uint(id))
 	if err != nil {
@@ -101,12 +102,11 @@ func (vetRouter *Router) getVetByIdWithSpecialties(c fiber.Ctx) error {
 	strID := c.Params("id")
 	log.Info().Str("id", strID).Msg("GET vet with specialties by ID")
 
-	id := fiber.Params[int](c, "id")
-	//id, err := c.ParamsInt("id")
-	//if err != nil {
-	//	log.Error().Err(err).Str("id", strID).Msg("Invalid vet ID")
-	//	return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	//}
+	id, err := strconv.Atoi(strID)
+	if err != nil {
+		log.Error().Err(err).Str("id", strID).Msg("Invalid vet ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 
 	response, err := vetRouter.service.getVetByIdWithSpecialties(uint(id))
 	if err != nil {
@@ -140,15 +140,15 @@ func (vetRouter *Router) create(c fiber.Ctx) error {
 }
 
 func (vetRouter *Router) update(c fiber.Ctx) error {
-	id := fiber.Params[int](c, "id")
-	//id, err := c.ParamsInt("id")
-	//if err != nil {
-	//	log.Error().Err(err).Msg("Unable to convert ID to integer.")
-	//	return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	//}
+	strID := c.Params("id")
+	id, err := strconv.Atoi(strID)
+	if err != nil {
+		log.Error().Err(err).Msg("Unable to convert ID to integer.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 
 	var vetRequest UpdateRequest
-	err := c.Bind().Body(&vetRequest)
+	err = c.Bind().Body(&vetRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))

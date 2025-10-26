@@ -22,11 +22,11 @@ func Test_getAllPets(t *testing.T) {
 	mockEntityPets := []repository.Pet{
 		{Model: gorm.Model{ID: 1}, Name: "Tom",
 			Birthdate: test.ToDate("2015-11-19"),
-			Visits:    nil,
+			//Visits:    nil,
 			SpeciesID: 19, OwnerID: 7},
 		{Model: gorm.Model{ID: 2}, Name: "Mike",
 			Birthdate: test.ToDate("2018-04-17"),
-			Visits:    nil,
+			//Visits:    nil,
 			SpeciesID: 20, OwnerID: 7},
 	}
 
@@ -542,8 +542,8 @@ func Test_createNewPet(t *testing.T) {
 	addRequest := &AddRequest{
 		Name:      "Tom",
 		Birthdate: "2015-11-19",
-		//TypeID:    19,
-		//OwnerID:   7,
+		SpeciesID: 19,
+		OwnerID:   7,
 	}
 
 	mockPet := &Response{
