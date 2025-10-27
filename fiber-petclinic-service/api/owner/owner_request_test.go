@@ -27,6 +27,11 @@ func Test_ToOwner(t *testing.T) {
 	assert.Equal(t, ownerRequest.Telephone, owner.Telephone)
 }
 
+func Test_ToOwnerEntityWithNil(t *testing.T) {
+	owner := ToOwnerEntity(nil)
+	assert.Nil(t, owner)
+}
+
 func Test_ToOwnerWithEmptyFields(t *testing.T) {
 	ownerRequest := &AddRequest{
 		FirstName: "",
@@ -88,11 +93,11 @@ func Test_ToOwnerEntityFromUpdateRequest(t *testing.T) {
 			Telephone: "1234567890",
 		}},
 		{updateRequest: &UpdateRequest{}, ownerEntity: &repository.Owner{}},
+		{updateRequest: nil, ownerEntity: nil},
 	}
 
 	for _, tc := range tests {
 		result := ToOwnerEntityFromUpdateRequest(tc.updateRequest)
 		assert.Equal(t, tc.ownerEntity, result)
 	}
-
 }

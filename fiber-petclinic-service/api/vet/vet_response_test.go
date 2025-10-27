@@ -76,8 +76,6 @@ func TestFromVets(t *testing.T) {
 
 func TestFromVetsWithEmptySlice(t *testing.T) {
 	vets := []repository.Vet{}
-
 	responses := FromVets(vets)
-
 	assert.Equal(t, 0, len(responses))
 }

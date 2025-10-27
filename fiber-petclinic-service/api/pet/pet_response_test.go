@@ -1,7 +1,6 @@
 package pet
 
 import (
-	"fiber-petclinic-service/api/visit"
 	"fiber-petclinic-service/internal/repository"
 	"fiber-petclinic-service/internal/test"
 	"testing"
@@ -24,13 +23,11 @@ func Test_FromPet(t *testing.T) {
 				},
 				Name:      "Buddy",
 				Birthdate: nil,
-				Visits:    []repository.Visit{}, // No visits
 			},
 			expected: Response{
 				ID:        1,
 				Name:      "Buddy",
-				Birthdate: "",                 // Empty birthdate
-				Visits:    []visit.Response{}, // No visits
+				Birthdate: "", // Empty birthdate
 			},
 		},
 		{
@@ -41,13 +38,11 @@ func Test_FromPet(t *testing.T) {
 				},
 				Name:      "Mittens",
 				Birthdate: test.ToDate("2023-01-01"),
-				Visits:    []repository.Visit{}, // No visits
 			},
 			expected: Response{
 				ID:        2,
 				Name:      "Mittens",
-				Birthdate: "2023-01-01",       // Formatted birthdate
-				Visits:    []visit.Response{}, // No visits
+				Birthdate: "2023-01-01", // Formatted birthdate
 			},
 		},
 	}
@@ -57,7 +52,6 @@ func Test_FromPet(t *testing.T) {
 			var response Response
 			response.FromPet(tc.pet)
 			assert.Equal(t, tc.expected, response)
-
 		})
 	}
 }

@@ -11,7 +11,7 @@ const Product = struct {
 };
 
 // In-memory storage (in production, use a database)
-var products = std.ArrayListUnmanaged(Product);
+var products = std.ArrayListUnmanaged(Product){};
 var next_id: u32 = 1;
 var gpa = std.heap.GeneralPurposeAllocator(.{}){};
 

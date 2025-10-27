@@ -2,7 +2,6 @@ package owner
 
 import (
 	"fiber-petclinic-service/api/pet"
-	"fiber-petclinic-service/api/visit"
 	"fiber-petclinic-service/internal/repository"
 	"fiber-petclinic-service/internal/repository/model"
 	"testing"
@@ -36,9 +35,7 @@ func Test_ResponseFromOwner(t *testing.T) {
 		Pets:      []pet.Response{},
 	}
 
-	response := &Response{}
-	response.FromOwner(owner)
-
+	response := ToResponse(owner)
 	assert.Equal(t, expectedResponse.ID, response.ID)
 	assert.Equal(t, expectedResponse.FirstName, response.FirstName)
 	assert.Equal(t, expectedResponse.LastName, response.LastName)
@@ -90,7 +87,7 @@ func Test_FromOwners(t *testing.T) {
 		},
 		{ID: 3, FirstName: "Jane", LastName: "Doe", Address: "456 Main St", City: "Anytown", Telephone: "0987654321",
 			Pets: []pet.Response{
-				{ID: 1, Name: "Pet1", Visits: []visit.Response{}},
+				{ID: 1, Name: "Pet1", Visits: nil},
 			}},
 	}
 
@@ -128,8 +125,7 @@ func Test_FromUpdateEntity(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		result := &UpdateResponse{}
-		result.FromUpdateEntity(tc.updateEntity)
+		result := ToUpdateResponse(tc.updateEntity)
 		assert.Equal(t, result, tc.updateResponse)
 	}
 }

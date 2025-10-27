@@ -3,6 +3,7 @@ package pet
 import (
 	"errors"
 	resterr "fiber-petclinic-service/internal/errors"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
@@ -186,12 +187,15 @@ func (router *Router) create(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	petEntity, err := FromAddRequest(request)
+	// Date validation
+	_, err = time.Parse(time.DateOnly, request.Birthdate)
 	if err != nil {
-		log.Error().Err(err).Msg("Invalid request data.")
+		log.Error().Str("birthday", request.Birthdate).
+			Err(err).Msg("Invalid birthdate.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
+	petEntity := FromAddRequest(request)
 	petResponse, err := router.service.create(petEntity)
 	return c.Status(fiber.StatusCreated).JSON(petResponse)
 }

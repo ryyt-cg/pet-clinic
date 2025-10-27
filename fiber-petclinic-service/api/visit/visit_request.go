@@ -27,6 +27,8 @@ type UpdateRequest struct {
 	PetID       uint   `json:"petID" binding:"required"`
 }
 
+// FromAddRequest
+// Map an AddRequest to repository.Visit
 func FromAddRequest(request *AddRequest) (*repository.Visit, error) {
 	visitEntify := &repository.Visit{
 		Description: request.Description,
@@ -42,6 +44,8 @@ func FromAddRequest(request *AddRequest) (*repository.Visit, error) {
 	return visitEntify, nil
 }
 
+// FromUpdateRequest
+// Map a UpdateRequest to repository.Visit
 func FromUpdateRequest(request *UpdateRequest) (*repository.Visit, error) {
 	visitEntify := &repository.Visit{
 		Model:       gorm.Model{ID: request.ID},

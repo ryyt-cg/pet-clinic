@@ -542,8 +542,8 @@ func Test_createNewPet(t *testing.T) {
 	addRequest := &AddRequest{
 		Name:      "Tom",
 		Birthdate: "2015-11-19",
-		SpeciesID: 19,
-		OwnerID:   7,
+		//SpeciesID: 19,
+		//OwnerID:   7,
 	}
 
 	mockPet := &Response{
@@ -555,10 +555,10 @@ func Test_createNewPet(t *testing.T) {
 	}
 
 	petEntity := &repository.Pet{
-		Name:      "ton",
+		Name:      "Tom",
 		Birthdate: test.ToDate("2015-11-19"),
-		SpeciesID: 19,
-		OwnerID:   7,
+		//SpeciesID: 19,
+		//OwnerID:   7,
 	}
 
 	tests := []struct {
@@ -581,6 +581,7 @@ func Test_createNewPet(t *testing.T) {
 		},
 		{
 			name:             "fail to create new pet",
+			request:          addRequest,
 			mockPet:          nil,
 			mockError:        errors.New("failed to create pet"),
 			route:            "/v1/pets",
@@ -600,8 +601,9 @@ func Test_createNewPet(t *testing.T) {
 			petRouter := NewRouter(petMock)
 			petRouter.Register(v1.Group("/pets"))
 
-			reqBody, _ := json.Marshal(tc.mockPet)
+			reqBody, _ := json.Marshal(tc.request)
 			req := httptest.NewRequest("POST", tc.route, bytes.NewBuffer(reqBody))
+			req.Header.Set("Content-Type", "application/json")
 			resp, _ := r.Test(req, 5)
 
 			switch resp.StatusCode {
@@ -643,10 +645,10 @@ func Test_createNewPet_BadRequest(t *testing.T) {
 			name:             "create new pet with invalid birthdate",
 			request:          &AddRequest{Name: "Tom", Birthdate: "2015-11-31"},
 			mockPet:          nil,
-			mockError:        resterr.BadRequest("pet name is empty"),
+			mockError:        resterr.BadRequest("parsing time \"2015-11-31\": day out of range"),
 			route:            "/v1/pets",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("pet name is empty"),
+			expectedResponse: resterr.BadRequest("parsing time \"2015-11-31\": day out of range"),
 		},
 	}
 
@@ -681,8 +683,6 @@ func Test_updatePet(t *testing.T) {
 	updateRequest := &UpdateRequest{
 		Name:      "Tom",
 		Birthdate: "2015-11-19",
-		SpeciesID: 1,
-		OwnerID:   1,
 	}
 
 	mockPet := &Response{
@@ -697,8 +697,6 @@ func Test_updatePet(t *testing.T) {
 		Model:     gorm.Model{ID: 1},
 		Name:      "Tom",
 		Birthdate: test.ToDate("2015-11-19"),
-		//SpeciesID: 19,
-		//OwnerID:   7,
 	}
 
 	tests := []struct {
@@ -721,16 +719,16 @@ func Test_updatePet(t *testing.T) {
 			statusCode:       http.StatusOK,
 			expectedResponse: mockPet,
 		},
-		//{
-		//	name:             "fail to update pet",
-		//	id:               1,
-		//	request:          updateRequest,
-		//	mockPet:          nil,
-		//	mockError:        errors.New("failed to update pet"),
-		//	route:            "/v1/pets/1",
-		//	statusCode:       http.StatusInternalServerError,
-		//	expectedResponse: resterr.InternalServerError("failed to update pet"),
-		//},
+		{
+			name:             "fail to update pet",
+			id:               1,
+			request:          updateRequest,
+			mockPet:          nil,
+			mockError:        errors.New("failed to update pet"),
+			route:            "/v1/pets/1",
+			statusCode:       http.StatusInternalServerError,
+			expectedResponse: resterr.InternalServerError("failed to update pet"),
+		},
 	}
 
 	for _, tc := range tests {

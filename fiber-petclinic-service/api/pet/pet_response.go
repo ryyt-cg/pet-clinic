@@ -36,6 +36,8 @@ type AddResponse struct {
 	OwnerID   uint   `json:"ownerID"`
 }
 
+// FromPet
+// Map a repository.Pet to Response
 func (pr *Response) FromPet(pet *repository.Pet) {
 	pr.ID = pet.ID
 	pr.Name = pet.Name
@@ -48,6 +50,20 @@ func (pr *Response) FromPet(pet *repository.Pet) {
 	}
 	pr.Species = pet.Species.Name
 	pr.Visits = visit.FromVisits(pet.Visits)
+}
+
+func ToResponse(pet *repository.Pet) *Response {
+	if pet == nil {
+		return nil
+	}
+
+	return &Response{
+		ID:        pet.ID,
+		Name:      pet.Name,
+		Birthdate: pet.Birthdate.Format(time.DateOnly),
+		Species:   pet.Species.Name,
+		Visits:    visit.FromVisits(pet.Visits),
+	}
 }
 
 func FromPets(pets []repository.Pet) []Response {

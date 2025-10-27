@@ -3,7 +3,6 @@ package owner
 import (
 	"errors"
 	"fiber-petclinic-service/api/pet"
-	"fiber-petclinic-service/api/visit"
 	"fiber-petclinic-service/internal/repository"
 	"fiber-petclinic-service/internal/repository/model"
 	"fiber-petclinic-service/internal/test"
@@ -266,7 +265,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 				Name:      "Buddy",
 				Birthdate: "2015-02-05",
 				Species:   "Dog",
-				Visits:    []visit.Response{},
+				Visits:    nil,
 			},
 		},
 	}

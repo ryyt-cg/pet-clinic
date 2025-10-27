@@ -17,7 +17,7 @@ type UpdateResponse struct {
 	ID          uint   `json:"id"`
 	VisitDate   string `json:"visitDate"`
 	Description string `json:"description"`
-	PetID       uint   `json:"petII"`
+	PetID       uint   `json:"petID"`
 }
 
 type Responses struct {
@@ -26,7 +26,7 @@ type Responses struct {
 }
 
 // FromVisit
-// Map from repository visit to json visit response
+// Map from repository.Visit to json Response
 func (vr *Response) FromVisit(visit *repository.Visit) {
 	vr.ID = visit.ID
 	if visit.VisitDate == nil {
@@ -39,7 +39,13 @@ func (vr *Response) FromVisit(visit *repository.Visit) {
 	vr.PetID = visit.PetID
 }
 
+// FromVisits
+// Map from repository.Visit list to Response list
 func FromVisits(visits []repository.Visit) []Response {
+	if len(visits) == 0 {
+		return nil
+	}
+
 	visitResponses := make([]Response, len(visits))
 	for i, v := range visits {
 		visitResponses[i].FromVisit(&v)
@@ -49,8 +55,17 @@ func FromVisits(visits []repository.Visit) []Response {
 }
 
 // FromVisitsToResponses
-// Map from repository visit list to json list of visit response
+// Map from repository.Visit list to Responses
 func FromVisitsToResponses(visits []repository.Visit) *Responses {
+	if len(visits) == 0 {
+		return &Responses{
+			Context: model.Context{
+				Count: len(visits),
+			},
+			Visits: nil,
+		}
+	}
+
 	visitResponses := make([]Response, len(visits))
 	for i, v := range visits {
 		visitResponses[i].FromVisit(&v)
@@ -65,7 +80,18 @@ func FromVisitsToResponses(visits []repository.Visit) *Responses {
 	return responses
 }
 
+// ToResponses
+// Map list of Response to Responses
 func ToResponses(responses []Response) *Responses {
+	if len(responses) == 0 {
+		return &Responses{
+			Context: model.Context{
+				Count: len(responses),
+			},
+			Visits: nil,
+		}
+	}
+
 	result := make([]Response, len(responses))
 	for i, v := range responses {
 		result[i].ID = v.ID
