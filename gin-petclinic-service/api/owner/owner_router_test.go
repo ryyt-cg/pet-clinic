@@ -210,9 +210,6 @@ func Test_ownerByIdWithPets(t *testing.T) {
 }
 
 func Test_OwnerByLastName(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("Owner by Last Name endpoint", zap.String("function", "Test_OwnerByLastName"))
-
 	ownersResponse := &Responses{
 		Context: model.Context{Count: 2},
 		Owners: []Response{

@@ -83,15 +83,13 @@ func setupRouter() *gin.Engine {
 }
 
 func Test_PetById(t *testing.T) {
-	//logger := log.New().With(nil, "function", "Test_PetById")
-	logger, _ := zap.NewProduction()
 	petMock := petServiceMock{}
 	petResponse := &Response{
 		ID:   1,
 		Name: "Nash",
 	}
 	petMock.On("getPetById", 1).Return(*petResponse, nil)
-	petRouter := NewRouter(logger, &petMock)
+	petRouter := NewRouter(&petMock)
 
 	r := setupRouter()
 	v1 := r.Group("/v1")
@@ -113,8 +111,6 @@ func Test_PetById(t *testing.T) {
 }
 
 func Test_PetsByName(t *testing.T) {
-	//logger := log.New().With(nil, "function", "Test_PetByName")
-	logger, _ := zap.NewProduction()
 	petMock := petServiceMock{}
 
 	petResponses := make([]Response, 1)
@@ -125,7 +121,7 @@ func Test_PetsByName(t *testing.T) {
 	petResponses[0] = *petRespopnse
 
 	petMock.On("getPetsByName", "Charles").Return(petResponses, nil)
-	petRouter := NewRouter(logger, &petMock)
+	petRouter := NewRouter(&petMock)
 
 	r := setupRouter()
 	v1 := r.Group("/v1")

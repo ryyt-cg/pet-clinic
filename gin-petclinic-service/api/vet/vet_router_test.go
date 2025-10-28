@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	jsoniter "github.com/json-iterator/go"
-	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/go-playground/assert.v1"
@@ -29,7 +28,7 @@ func (vetM *vetServiceMock) allSpecialties() (*specialtiesResponse, error) {
 	return ptr, args.Error(1)
 }
 
-func (vetM *vetServiceMock) getVetById(id int) (*Response, error) {
+func (vetM *vetServiceMock) getVetById(id uint) (*Response, error) {
 	args := vetM.Called(id)
 	intf := args.Get(0)
 	val := intf.(Response)
@@ -91,8 +90,6 @@ func setupRouter() *gin.Engine {
 }
 
 func Test_VetById(t *testing.T) {
-	//logger := log.New().With(nil, "function", "Test_VetById")
-	logger := zap.NewNop()
 	vetMock := vetServiceMock{}
 
 	vetResponse := &Response{
@@ -102,7 +99,7 @@ func Test_VetById(t *testing.T) {
 	}
 
 	vetMock.On("getVetById", 1).Return(*vetResponse, nil)
-	vetRouter := NewRouter(logger, &vetMock)
+	vetRouter := NewRouter(&vetMock)
 
 	r := setupRouter()
 	v1 := r.Group("/v1")
@@ -125,8 +122,6 @@ func Test_VetById(t *testing.T) {
 }
 
 func Test_VetByLastName(t *testing.T) {
-	//logger := log.New().With(nil, "function", "Test_VetByLastName")
-	logger := zap.NewNop()
 	vetMock := vetServiceMock{}
 
 	var vetResponses = make([]Response, 1)
@@ -138,7 +133,7 @@ func Test_VetByLastName(t *testing.T) {
 	vetResponses[0] = *vetResponse
 
 	vetMock.On("getVetByLastName", "Ward").Return(vetResponses, nil)
-	vetRouter := NewRouter(logger, &vetMock)
+	vetRouter := NewRouter(&vetMock)
 
 	r := setupRouter()
 	v1 := r.Group("/v1")
