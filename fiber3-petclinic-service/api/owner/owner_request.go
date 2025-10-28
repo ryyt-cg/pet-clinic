@@ -29,6 +29,8 @@ type UpdateRequest struct {
 	Telephone string `json:"telephone"`
 }
 
+// ToOwnerEntity
+// Map an AddRequest to repository.Owner
 func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner {
 	return &repository.Owner{
 		Person: model.Person{
@@ -42,6 +44,8 @@ func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner {
 	}
 }
 
+// ToOwnerEntityFromUpdateRequest
+// Map an UpdateRequest to repository.Owner
 func ToOwnerEntityFromUpdateRequest(ownerRequest *UpdateRequest) *repository.Owner {
 	return &repository.Owner{
 		Model: gorm.Model{

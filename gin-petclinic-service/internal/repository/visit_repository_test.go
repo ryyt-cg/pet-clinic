@@ -48,7 +48,7 @@ func getVisitRepository(t *testing.T) *VisitRepository {
 
 func (suite *VisitRepoTestSuite) Test_FindById() {
 	var testCases = []struct {
-		input    int
+		input    uint
 		expected Visit
 	}{
 		{input: 2, expected: Visit{

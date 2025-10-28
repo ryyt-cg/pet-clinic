@@ -45,6 +45,8 @@ func TestResponse_FromVisit(t *testing.T) {
 
 }
 
+// Test_FromVisits
+// Return nil when fromResponses is nil or empty slice.
 func Test_FromVisits(t *testing.T) {
 	mockVisits := []repository.Visit{
 		{Model: gorm.Model{ID: 10}, Description: "Flu Shot", VisitDate: test.ToDate("2023-07-12"), PetID: 1},
@@ -63,6 +65,14 @@ func Test_FromVisits(t *testing.T) {
 			fromVisits:  mockVisits,
 			toResponses: mockResponses,
 		},
+		{
+			fromVisits:  []repository.Visit{},
+			toResponses: nil,
+		},
+		{
+			fromVisits:  nil,
+			toResponses: nil,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -78,14 +88,21 @@ func Test_ToResponses(t *testing.T) {
 	}
 
 	testCases := []struct {
-		fromResponse []Response
-		toResponses  *Responses
+		fromResponses []Response
+		toResponses   *Responses
 	}{
 		{
-			fromResponse: mockResponses,
+			fromResponses: mockResponses,
 			toResponses: &Responses{
 				Context: model.Context{Count: 2},
 				Visits:  mockResponses,
+			},
+		},
+		{
+			fromResponses: nil,
+			toResponses: &Responses{
+				Context: model.Context{Count: 0},
+				Visits:  nil,
 			},
 		},
 	}

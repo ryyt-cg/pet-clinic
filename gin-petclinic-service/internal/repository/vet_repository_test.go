@@ -1,7 +1,7 @@
 package repository
 
 import (
-	model2 "gin-petclinic-service/internal/repository/model"
+	"gin-petclinic-service/internal/repository/model"
 	"gin-petclinic-service/internal/test"
 	"testing"
 
@@ -56,7 +56,7 @@ func (suite *VetRepoTestSuite) Test_FindById() {
 			Model: gorm.Model{
 				ID: 1,
 			},
-			Person: model2.Person{
+			Person: model.Person{
 				FirstName: "James",
 				LastName:  "Carter",
 			},
@@ -65,7 +65,7 @@ func (suite *VetRepoTestSuite) Test_FindById() {
 			Model: gorm.Model{
 				ID: 2,
 			},
-			Person: model2.Person{
+			Person: model.Person{
 				FirstName: "Helen",
 				LastName:  "Leary",
 			},
@@ -85,13 +85,13 @@ func (suite *VetRepoTestSuite) Test_FindByLastName() {
 		expected Vet
 	}{
 		{"Carter", Vet{
-			Person: model2.Person{
+			Person: model.Person{
 				FirstName: "James",
 				LastName:  "Carter",
 			},
 		}},
 		{"Leary", Vet{
-			Person: model2.Person{
+			Person: model.Person{
 				FirstName: "Helen",
 				LastName:  "Leary",
 			},

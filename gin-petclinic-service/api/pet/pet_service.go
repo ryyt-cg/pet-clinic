@@ -57,8 +57,7 @@ func (service *Service) getPetById(id uint) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromPet(petF)
+	response := ToResponse(petF)
 	return response, nil
 }
 
@@ -74,8 +73,7 @@ func (service *Service) getPetWithVisitsById(id uint) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromPet(petF)
+	response := ToResponse(petF)
 	return response, nil
 }
 
@@ -106,8 +104,7 @@ func (service *Service) create(pet *repository.Pet) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromPet(newPet)
+	response := ToResponse(newPet)
 	return response, nil
 }
 
@@ -125,7 +122,6 @@ func (service *Service) update(pet *repository.Pet) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromPet(updatedPet)
+	response := ToResponse(updatedPet)
 	return response, nil
 }

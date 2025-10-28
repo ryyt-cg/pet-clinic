@@ -21,9 +21,9 @@ type Pet struct {
 	gorm.Model
 	Name      string     `gorm:"column:name"`
 	Birthdate *time.Time //`gorm:"column:birth_date"`
-	TypeID    uint
+	SpeciesID uint
 	OwnerID   uint
-	Type      Type `gorm:"foreignKey:TypeID"`
+	Species   Type `gorm:"foreignKey:SpeciesID"`
 	Visits    []Visit
 }
 

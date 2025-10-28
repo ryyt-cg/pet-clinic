@@ -15,7 +15,7 @@ packages:
     config:
       filename: mocks_test.go
       all: true
-  gin-petclinic-service/pkg/repository:
+  gin-petclinic-service/internal:
     config:
       filename: mocks.go
       all: true

@@ -30,7 +30,7 @@ func TestOwnerFields(t *testing.T) {
 func TestOwnerFieldsWithPets(t *testing.T) {
 	pet := Pet{
 		Name: "Fido",
-		Type: Type{
+		Species: Species{
 			Name: "Dog",
 		},
 	}
@@ -53,5 +53,5 @@ func TestOwnerFieldsWithPets(t *testing.T) {
 	assert.Equal(t, "1234567890", owner.Telephone)
 	assert.NotEmpty(t, owner.Pets)
 	assert.Equal(t, "Fido", owner.Pets[0].Name)
-	assert.Equal(t, "Dog", owner.Pets[0].Type.Name)
+	assert.Equal(t, "Dog", owner.Pets[0].Species.Name)
 }

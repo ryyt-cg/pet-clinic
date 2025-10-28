@@ -11,7 +11,7 @@ type Response struct {
 	ID        uint             `json:"id"`
 	Name      string           `json:"name"`
 	Birthdate string           `json:"birthdate"`
-	Type      string           `json:"type"`
+	Species   string           `json:"species"`
 	Visits    []visit.Response `json:"visits,omitempty"`
 }
 
@@ -32,28 +32,40 @@ type AddResponse struct {
 	ID        uint   `json:"id"`
 	Name      string `json:"name"`
 	Birthdate string `json:"birthdate"`
-	TypeID    uint   `json:"typeID"`
+	SpeciesID uint   `json:"speciesID"`
 	OwnerID   uint   `json:"ownerID"`
 }
 
-func (pr *Response) FromPet(pet *repository.Pet) {
-	pr.ID = pet.ID
-	pr.Name = pet.Name
-
-	if pet.Birthdate == nil {
-		pr.Birthdate = ""
-	} else {
-		// Format the birthdate as a string in the format "YYYY-MM-DD"
-		pr.Birthdate = pet.Birthdate.Format(time.DateOnly)
+// ToResponse
+// Map a repository.Pet to Response
+func ToResponse(pet *repository.Pet) *Response {
+	if pet == nil {
+		return nil
 	}
-	pr.Type = pet.Type.Name
-	pr.Visits = visit.FromVisits(pet.Visits)
+
+	responseBirthday := ""
+
+	if pet.Birthdate != nil {
+		responseBirthday = pet.Birthdate.Format(time.DateOnly)
+	}
+
+	return &Response{
+		ID:        pet.ID,
+		Name:      pet.Name,
+		Birthdate: responseBirthday,
+		Species:   pet.Species.Name,
+		Visits:    visit.FromVisits(pet.Visits),
+	}
 }
 
 func FromPets(pets []repository.Pet) []Response {
+	if len(pets) == 0 {
+		return nil
+	}
+	
 	petResponses := make([]Response, len(pets))
-	for i, v := range pets {
-		petResponses[i].FromPet(&v)
+	for i, pet := range pets {
+		petResponses[i] = *ToResponse(&pet)
 	}
 	return petResponses
 }

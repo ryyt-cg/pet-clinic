@@ -15,7 +15,7 @@ packages:
     config:
       filename: mocks_test.go
       all: true
-  fiber3-petclinic-service/pkg:
+  fiber3-petclinic-service/internal:
     config:
       filename: mocks.go
       all: true

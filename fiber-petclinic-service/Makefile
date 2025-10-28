@@ -36,6 +36,7 @@ postgres-stop:
 
 test-coverage:
 	go test -coverprofile=coverage.out ./...
+	go tool cover -html=coverage.out -o coverage.html
 
 view-test-coverage:
 	go tool cover -html=coverage.out -o coverage.html

@@ -21,14 +21,21 @@ type UpdateResponse struct {
 	Telephone string `json:"telephone"`
 }
 
-// FromUpdateEntity - convert owner entity to response
-func (ur *UpdateResponse) FromUpdateEntity(owner *repository.Owner) {
-	ur.ID = owner.ID
-	ur.FirstName = owner.FirstName
-	ur.LastName = owner.LastName
-	ur.Address = owner.Address
-	ur.City = owner.City
-	ur.Telephone = owner.Telephone
+// ToUpdateResponse
+// Map a repository.Owner to UpdateResponse
+func ToUpdateResponse(owner *repository.Owner) *UpdateResponse {
+	if owner == nil {
+		return nil
+	}
+
+	return &UpdateResponse{
+		ID:        owner.ID,
+		FirstName: owner.FirstName,
+		LastName:  owner.LastName,
+		Address:   owner.Address,
+		City:      owner.City,
+		Telephone: owner.Telephone,
+	}
 }
 
 // Response - owner response
@@ -48,20 +55,28 @@ type Responses struct {
 	Owners  []Response    `json:"owners"`
 }
 
-func (resp *Response) FromOwner(owner *repository.Owner) {
-	resp.ID = owner.ID
-	resp.FirstName = owner.FirstName
-	resp.LastName = owner.LastName
-	resp.Address = owner.Address
-	resp.City = owner.City
-	resp.Telephone = owner.Telephone
-	resp.Pets = pet.FromPets(owner.Pets)
+// ToResponse
+// Map a repository.Owner to Response
+func ToResponse(owner *repository.Owner) *Response {
+	if owner == nil {
+		return nil
+	}
+
+	return &Response{
+		ID:        owner.ID,
+		FirstName: owner.FirstName,
+		LastName:  owner.LastName,
+		Address:   owner.Address,
+		City:      owner.City,
+		Telephone: owner.Telephone,
+		Pets:      pet.FromPets(owner.Pets),
+	}
 }
 
 func FromOwners(owners []repository.Owner) []Response {
 	ownerResponses := make([]Response, len(owners))
 	for i, v := range owners {
-		ownerResponses[i].FromOwner(&v)
+		ownerResponses[i] = *ToResponse(&v)
 	}
 	return ownerResponses
 }

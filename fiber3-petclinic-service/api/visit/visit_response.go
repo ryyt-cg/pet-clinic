@@ -39,6 +39,8 @@ func (vr *Response) FromVisit(visit *repository.Visit) {
 	vr.PetID = visit.PetID
 }
 
+// FromVisits
+// Map from repository.Visit list to Response list
 func FromVisits(visits []repository.Visit) []Response {
 	visitResponses := make([]Response, len(visits))
 	for i, v := range visits {
@@ -51,6 +53,15 @@ func FromVisits(visits []repository.Visit) []Response {
 // FromVisitsToResponses
 // Map from repository visit list to json list of visit response
 func FromVisitsToResponses(visits []repository.Visit) *Responses {
+	if len(visits) == 0 {
+		return &Responses{
+			Context: model.Context{
+				Count: len(visits),
+			},
+			Visits: nil,
+		}
+	}
+
 	visitResponses := make([]Response, len(visits))
 	for i, v := range visits {
 		visitResponses[i].FromVisit(&v)
@@ -65,7 +76,18 @@ func FromVisitsToResponses(visits []repository.Visit) *Responses {
 	return responses
 }
 
+// ToResponses
+// Map list of Response to Responses
 func ToResponses(responses []Response) *Responses {
+	if len(responses) == 0 {
+		return &Responses{
+			Context: model.Context{
+				Count: len(responses),
+			},
+			Visits: nil,
+		}
+	}
+
 	result := make([]Response, len(responses))
 	for i, v := range responses {
 		result[i].ID = v.ID

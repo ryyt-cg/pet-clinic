@@ -26,14 +26,14 @@ func NewVisitRepository(db *gorm.DB) *VisitRepository {
 /*
 FindById - search visit by id
 SELECT * FROM "pets" WHERE "pets"."id" = 8 AND "pets"."deleted_at" IS NULL
-SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
+SELECT * FROM "species" WHERE "species"."id" = 1 AND "species"."deleted_at" IS NULL
 SELECT * FROM "visits" WHERE "visits"."id" = 2 AND "visits"."deleted_at" IS NULL ORDER BY "visits"."id" LIMIT 1
 */
 func (repository *VisitRepository) FindById(id uint) (*Visit, error) {
 	log.Info().Uint("id", id).Msg("Search visit by id.")
 
 	var visit Visit
-	err := repository.db.Preload("Pet.Type").First(&visit, id).Error
+	err := repository.db.Preload("Pet.Species").First(&visit, id).Error
 	if err != nil {
 		log.Error().Err(err).Uint("id", id).Msg("Fail to find visit by id.")
 		return nil, err
@@ -45,7 +45,7 @@ func (repository *VisitRepository) FindById(id uint) (*Visit, error) {
 /*
 FindAll - search all visits
 SELECT * FROM "pets" WHERE "pets"."id" IN (7,8) AND "pets"."deleted_at" IS NULL
-SELECT * FROM "types" WHERE "types"."id" = 1 AND "types"."deleted_at" IS NULL
+SELECT * FROM "species" WHERE "species"."id" = 1 AND "species"."deleted_at" IS NULL
 SELECT * FROM "visits" WHERE "visits"."deleted_at" IS NULL
 */
 func (repository *VisitRepository) FindAll() ([]Visit, error) {
@@ -53,7 +53,7 @@ func (repository *VisitRepository) FindAll() ([]Visit, error) {
 
 	var visits []Visit
 	// not needed to preload for all visits - will be a performance if get large result.
-	err := repository.db.Preload("Pet.Type").Find(&visits).Error
+	err := repository.db.Preload("Pet.Species").Find(&visits).Error
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to find all visits.")
 		return nil, err

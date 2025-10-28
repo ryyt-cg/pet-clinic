@@ -250,7 +250,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 			{
 				Name:      "Buddy",
 				Birthdate: test.ToDate("2015-02-05"),
-				Type: repository.Type{
+				Species: repository.Species{
 					Name: "Dog",
 				},
 			},
@@ -265,8 +265,8 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 			{
 				Name:      "Buddy",
 				Birthdate: "2015-02-05",
-				Type:      "Dog",
-				Visits:    []visit.Response{},
+				Species:   "Dog",
+				Visits:    nil,
 			},
 		},
 	}

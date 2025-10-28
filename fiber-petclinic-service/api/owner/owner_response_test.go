@@ -4,6 +4,7 @@ import (
 	"fiber-petclinic-service/api/pet"
 	"fiber-petclinic-service/internal/repository"
 	"fiber-petclinic-service/internal/repository/model"
+	"fiber-petclinic-service/internal/test"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,7 +23,7 @@ func Test_ResponseFromOwner(t *testing.T) {
 		Address:   "123 Main St",
 		City:      "Anytown",
 		Telephone: "1234567890",
-		Pets:      []repository.Pet{},
+		Pets:      nil,
 	}
 
 	expectedResponse := Response{
@@ -32,7 +33,7 @@ func Test_ResponseFromOwner(t *testing.T) {
 		Address:   "123 Main St",
 		City:      "Anytown",
 		Telephone: "1234567890",
-		Pets:      []pet.Response{},
+		Pets:      nil,
 	}
 
 	response := ToResponse(owner)
@@ -73,22 +74,23 @@ func Test_FromOwners(t *testing.T) {
 			City:      "Anytown",
 			Telephone: "0987654321",
 			Pets: []repository.Pet{
-				{Model: gorm.Model{ID: 1}, Name: "Pet1"},
+				{Model: gorm.Model{ID: 1}, Name: "Pet1", Birthdate: test.ToDate("2019-04-07")},
 			},
 		},
 	}
 
 	ownerResponses := []Response{
 		{ID: 1, FirstName: "John", LastName: "Doe", Address: "123 Main St", City: "Anytown", Telephone: "1234567890",
-			Pets: []pet.Response{},
+			Pets: nil,
 		},
 		{ID: 2, FirstName: "Jane", LastName: "Doe", Address: "456 Main St", City: "Anytown", Telephone: "0987654321",
-			Pets: []pet.Response{},
+			Pets: nil,
 		},
 		{ID: 3, FirstName: "Jane", LastName: "Doe", Address: "456 Main St", City: "Anytown", Telephone: "0987654321",
 			Pets: []pet.Response{
-				{ID: 1, Name: "Pet1", Visits: nil},
-			}},
+				{ID: 1, Name: "Pet1", Birthdate: "2019-04-07", Visits: nil},
+			},
+		},
 	}
 
 	responses := FromOwners(owners)

@@ -9,11 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func Test_FromPet(t *testing.T) {
+func Test_Response(t *testing.T) {
 	testCases := []struct {
 		name     string
 		pet      *repository.Pet
-		expected Response
+		expected *Response
 	}{
 		{
 			name: "Valid Pet",
@@ -24,7 +24,7 @@ func Test_FromPet(t *testing.T) {
 				Name:      "Buddy",
 				Birthdate: nil,
 			},
-			expected: Response{
+			expected: &Response{
 				ID:        1,
 				Name:      "Buddy",
 				Birthdate: "", // Empty birthdate
@@ -39,21 +39,27 @@ func Test_FromPet(t *testing.T) {
 				Name:      "Mittens",
 				Birthdate: test.ToDate("2023-01-01"),
 			},
-			expected: Response{
+			expected: &Response{
 				ID:        2,
 				Name:      "Mittens",
 				Birthdate: "2023-01-01", // Formatted birthdate
 			},
 		},
+		{
+			name:     "Nil Pet",
+			pet:      nil,
+			expected: nil,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			var response Response
-			response.FromPet(tc.pet)
+			response := ToResponse(tc.pet)
 			assert.Equal(t, tc.expected, response)
 		})
 	}
 }
 
-func Test_FromPets(t *testing.T) {}
+func Test_FromPets(t *testing.T) {
+
+}

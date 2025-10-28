@@ -10,14 +10,14 @@ import (
 type Request struct {
 	Name      string `json:"name" binding:"required"`
 	Birthdate string `json:"birthdate" binding:"required"`
-	TypeID    uint   `json:"typeID" binding:"required"`
+	SpeciesID uint   `json:"speciesID" binding:"required"`
 	OwnerID   uint   `json:"ownerID" binding:"required"`
 }
 
 type AddRequest struct {
 	Name      string `json:"name" binding:"required"`
 	Birthdate string `json:"birthdate" binding:"required"`
-	TypeID    uint   `json:"typeID" binding:"required"`
+	SpeciesID uint   `json:"speciesID" binding:"required"`
 	OwnerID   uint   `json:"ownerID" binding:"required"`
 }
 
@@ -25,7 +25,7 @@ type UpdateRequest struct {
 	ID        uint   `json:"id" binding:"required"`
 	Name      string `json:"name" binding:"required"`
 	Birthdate string `json:"birthdate" binding:"required"`
-	TypeID    uint   `json:"typeID" binding:"required"`
+	SpeciesID uint   `json:"speciesID" binding:"required"`
 	OwnerID   uint   `json:"ownerID" binding:"required"`
 }
 
@@ -38,25 +38,29 @@ func ToPet(petRequest *Request) (*repository.Pet, error) {
 	petEntity := &repository.Pet{
 		Name:      petRequest.Name,
 		Birthdate: &birthday,
-		TypeID:    petRequest.TypeID,
+		SpeciesID: petRequest.SpeciesID,
 		OwnerID:   petRequest.OwnerID,
 	}
 
 	return petEntity, nil
 }
 
-func FromAddRequest(petRequest *AddRequest) (*repository.Pet, error) {
+func FromAddRequest(petRequest *AddRequest) *repository.Pet {
+	if petRequest == nil {
+		return nil
+	}
+
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
-		return nil, err
+		return nil
 	}
 
 	return &repository.Pet{
 		Name:      petRequest.Name,
 		Birthdate: &birthday,
-		TypeID:    petRequest.TypeID,
+		SpeciesID: petRequest.SpeciesID,
 		OwnerID:   petRequest.OwnerID,
-	}, nil
+	}
 }
 
 func FromUpdateRequest(petRequest *UpdateRequest) (*repository.Pet, error) {
@@ -71,7 +75,7 @@ func FromUpdateRequest(petRequest *UpdateRequest) (*repository.Pet, error) {
 		},
 		Name:      petRequest.Name,
 		Birthdate: &birthday,
-		TypeID:    petRequest.TypeID,
+		SpeciesID: petRequest.SpeciesID,
 		OwnerID:   petRequest.OwnerID,
 	}, nil
 }

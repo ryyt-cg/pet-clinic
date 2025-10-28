@@ -8,12 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-//type Request struct {
-//	FirstName string `json:"firstName" binding:"required"`
-//	LastName  string `json:"lastName" binding:"required"`
-//	//Specialties []Specialty `json:"specialties" binding:"required"`
-//}
-
 type AddRequest struct {
 	FirstName   string `json:"firstName" binding:"required"`
 	LastName    string `json:"lastName" binding:"required"`
@@ -35,6 +29,8 @@ func (vr AddRequest) Validate() error {
 	)
 }
 
+// FromAddRequest
+// Map an AddRequest to repository.Vet
 func FromAddRequest(vetRequest *AddRequest) *repository.Vet {
 	return &repository.Vet{
 		Person: model.Person{
@@ -45,6 +41,8 @@ func FromAddRequest(vetRequest *AddRequest) *repository.Vet {
 	}
 }
 
+// FromUpdateRequest
+// Map an UpdateRequest to repository.Vet
 func FromUpdateRequest(vetRequest *UpdateRequest) *repository.Vet {
 	return &repository.Vet{
 		Model: gorm.Model{

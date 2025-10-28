@@ -193,12 +193,12 @@ func (router *Router) create(c *gin.Context) {
 	}
 
 	log.Info().Str("name", request.Name).Msg("Add a new pet.")
-	petEntity, err := FromAddRequest(&request)
-	if err != nil {
-		log.Error().Err(err).Msg("Unable to convert request to pet entity.")
-		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
-		return
-	}
+	petEntity := FromAddRequest(&request)
+	//if err != nil {
+	//	log.Error().Err(err).Msg("Unable to convert request to pet entity.")
+	//	c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+	//	return
+	//}
 
 	petResponse, err := router.service.create(petEntity)
 	if err != nil {

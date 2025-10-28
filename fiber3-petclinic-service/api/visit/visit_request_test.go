@@ -9,21 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-//var request []Request = []Request{
-//	{
-//		ID:          1,
-//		VisitDate:   "2024-12-05",
-//		Description: "Nail Clip",
-//		PetID:       21,
-//	},
-//	{
-//		ID:          50,
-//		VisitDate:   "2025-01-25",
-//		Description: "Flu Shot",
-//		PetID:       25,
-//	},
-//}
-
 func Test_FromAddRequest(t *testing.T) {
 	testCases := []struct {
 		fromAddRequest *AddRequest

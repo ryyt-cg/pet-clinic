@@ -24,13 +24,11 @@ func Test_FromPet(t *testing.T) {
 				},
 				Name:      "Buddy",
 				Birthdate: nil,
-				Visits:    []repository.Visit{}, // No visits
 			},
 			expected: Response{
 				ID:        1,
 				Name:      "Buddy",
-				Birthdate: "",                 // Empty birthdate
-				Visits:    []visit.Response{}, // No visits
+				Birthdate: "", // Empty birthdate
 			},
 		},
 		{
@@ -41,13 +39,11 @@ func Test_FromPet(t *testing.T) {
 				},
 				Name:      "Mittens",
 				Birthdate: test.ToDate("2023-01-01"),
-				Visits:    []repository.Visit{}, // No visits
 			},
 			expected: Response{
 				ID:        2,
 				Name:      "Mittens",
-				Birthdate: "2023-01-01",       // Formatted birthdate
-				Visits:    []visit.Response{}, // No visits
+				Birthdate: "2023-01-01", // Formatted birthdate
 			},
 		},
 	}

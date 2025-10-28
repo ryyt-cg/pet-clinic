@@ -24,10 +24,6 @@ type UpdateResponse struct {
 // ToUpdateResponse
 // Map a repository.Owner to UpdateResponse
 func ToUpdateResponse(owner *repository.Owner) *UpdateResponse {
-	if owner == nil {
-		return nil
-	}
-
 	return &UpdateResponse{
 		ID:        owner.ID,
 		FirstName: owner.FirstName,
@@ -58,10 +54,6 @@ type Responses struct {
 // ToResponse
 // Map a repository.Owner to Response
 func ToResponse(owner *repository.Owner) *Response {
-	if owner == nil {
-		return nil
-	}
-
 	return &Response{
 		ID:        owner.ID,
 		FirstName: owner.FirstName,

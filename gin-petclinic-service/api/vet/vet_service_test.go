@@ -2,8 +2,8 @@ package vet
 
 import (
 	"errors"
-	"fiber-petclinic-service/pkg/repository"
-	"fiber-petclinic-service/pkg/repository/model"
+	"gin-petclinic-service/internal/repository"
+	"gin-petclinic-service/internal/repository/model"
 	"testing"
 
 	"gorm.io/gorm"

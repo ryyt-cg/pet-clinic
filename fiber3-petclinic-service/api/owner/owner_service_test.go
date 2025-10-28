@@ -266,7 +266,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 				Name:      "Buddy",
 				Birthdate: "2015-02-05",
 				Species:   "Dog",
-				Visits:    []visit.Response{},
+				Visits:    nil,
 			},
 		},
 	}

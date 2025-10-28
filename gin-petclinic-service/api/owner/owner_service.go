@@ -34,8 +34,7 @@ func (service *Service) getOwnerById(id uint) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromOwner(owner)
+	response := ToResponse(owner)
 	return response, nil
 }
 
@@ -78,8 +77,7 @@ func (service *Service) getOwnerByIdWithPets(id uint) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromOwner(owner)
+	response := ToResponse(owner)
 	return response, nil
 }
 
@@ -94,8 +92,7 @@ func (service *Service) create(ownerRequest *AddRequest) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromOwner(newOwner)
+	response := ToResponse(newOwner)
 	return response, nil
 }
 
@@ -111,7 +108,6 @@ func (service *Service) update(id uint, request *UpdateRequest) (*UpdateResponse
 		return nil, err
 	}
 
-	response := &UpdateResponse{}
-	response.FromUpdateEntity(updatedOwner)
+	response := ToUpdateResponse(updatedOwner)
 	return response, nil
 }

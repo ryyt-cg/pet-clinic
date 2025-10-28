@@ -35,7 +35,7 @@ func NewOwnerRepository(db *gorm.DB) *OwnerRepository {
 //
 // SELECT * FROM "pets" WHERE "pets"."owner_id" = 3 AND "pets"."deleted_at" IS NULL
 // SELECT * FROM `visits` WHERE `visits`.`pet_id` = 6 AND `visits`.`deleted_at` IS NULL
-// SELECT * FROM "types" WHERE "types"."id" = 2 AND "types"."deleted_at" IS NULL
+// SELECT * FROM "species" WHERE "species"."id" = 2 AND "species"."deleted_at" IS NULL
 // SELECT * FROM "owners" WHERE "owners"."id" = 1 AND "owners"."deleted_at" IS NULL ORDER BY "owners"."id" LIMIT 1
 func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
 	log.Info().Uint("id", id).Msg("search owner by id.")
@@ -87,7 +87,7 @@ func (repository *OwnerRepository) FindAll() ([]Owner, error) {
 // FindByIdWithPets Find all owners with pets & visits and its nested associations.
 //
 // SELECT * FROM "pets" WHERE "pets"."owner_id" IN (1,2,3,4,5,6,7,8,9,10) AND "pets"."deleted_at" IS NULL
-// SELECT * FROM "types" WHERE "types"."id" IN (1,6,2,3,4,5) AND "types"."deleted_at" IS NULL
+// SELECT * FROM "species" WHERE "species"."id" IN (1,6,2,3,4,5) AND "species"."deleted_at" IS NULL
 // SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
 	log.Info().Msg("get a owner with pets")
@@ -96,7 +96,7 @@ func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
 	/*
 	 clause.Associations won’t preload nested associations, but can use it with Nested Preloading together
 	*/
-	err := repository.db.Preload("Pets.Type").Preload("Pets.Visits").Preload(clause.Associations).First(&owner, id).Error
+	err := repository.db.Preload("Pets.Species").Preload("Pets.Visits").Preload(clause.Associations).First(&owner, id).Error
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to find owners with pets by id.")
 		return nil, err

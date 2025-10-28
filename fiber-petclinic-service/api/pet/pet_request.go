@@ -47,10 +47,6 @@ func ToPet(petRequest *Request) (*repository.Pet, error) {
 }
 
 func FromAddRequest(petRequest *AddRequest) *repository.Pet {
-	if petRequest == nil {
-		return nil
-	}
-
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
 		return nil
