@@ -108,7 +108,7 @@ func Test_ToResponses(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		result := ToResponses(tc.fromResponse)
+		result := ToResponses(tc.fromResponses)
 		assert.Equal(t, tc.toResponses, result)
 	}
 }

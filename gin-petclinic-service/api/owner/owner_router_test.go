@@ -110,13 +110,13 @@ func Test_ownerByIdWithPets(t *testing.T) {
 				ID:        1,
 				Name:      "Max",
 				Birthdate: "2010-09-07",
-				Type:      "Dog",
+				Species:   "Dog",
 			},
 			{
 				ID:        2,
 				Name:      "Lucky",
 				Birthdate: "2015-09-07",
-				Type:      "Dog",
+				Species:   "Dog",
 			},
 		},
 	}

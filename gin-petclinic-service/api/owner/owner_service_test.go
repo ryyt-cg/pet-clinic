@@ -3,7 +3,6 @@ package owner
 import (
 	"errors"
 	"gin-petclinic-service/api/pet"
-	"gin-petclinic-service/api/visit"
 	"gin-petclinic-service/internal/repository"
 	"gin-petclinic-service/internal/repository/model"
 	"gin-petclinic-service/internal/test"

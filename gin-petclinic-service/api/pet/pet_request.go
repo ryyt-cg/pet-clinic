@@ -30,6 +30,7 @@ type UpdateRequest struct {
 }
 
 func ToPet(petRequest *Request) (*repository.Pet, error) {
+	// TODO need to add data validation
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
 		return nil, err

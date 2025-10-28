@@ -42,6 +42,10 @@ func (vr *Response) FromVisit(visit *repository.Visit) {
 // FromVisits
 // Map from repository.Visit list to Response list
 func FromVisits(visits []repository.Visit) []Response {
+	if len(visits) == 0 {
+		return nil
+	}
+
 	visitResponses := make([]Response, len(visits))
 	for i, v := range visits {
 		visitResponses[i].FromVisit(&v)
