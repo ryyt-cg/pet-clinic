@@ -46,10 +46,10 @@ func ToPet(petRequest *Request) (*repository.Pet, error) {
 	return petEntity, nil
 }
 
-func FromAddRequest(petRequest *AddRequest) (*repository.Pet, error) {
+func FromAddRequest(petRequest *AddRequest) *repository.Pet {
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
-		return nil, err
+		return nil
 	}
 
 	return &repository.Pet{
@@ -57,7 +57,7 @@ func FromAddRequest(petRequest *AddRequest) (*repository.Pet, error) {
 		Birthdate: &birthday,
 		SpeciesID: petRequest.SpeciesID,
 		OwnerID:   petRequest.OwnerID,
-	}, nil
+	}
 }
 
 func FromUpdateRequest(petRequest *UpdateRequest) (*repository.Pet, error) {

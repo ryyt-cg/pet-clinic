@@ -32,6 +32,10 @@ type UpdateRequest struct {
 // ToOwnerEntity
 // Map an AddRequest to repository.Owner
 func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner {
+	if ownerRequest == nil {
+		return nil
+	}
+
 	return &repository.Owner{
 		Person: model.Person{
 			FirstName: ownerRequest.FirstName,
@@ -47,6 +51,10 @@ func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner {
 // ToOwnerEntityFromUpdateRequest
 // Map an UpdateRequest to repository.Owner
 func ToOwnerEntityFromUpdateRequest(ownerRequest *UpdateRequest) *repository.Owner {
+	if ownerRequest == nil {
+		return nil
+	}
+
 	return &repository.Owner{
 		Model: gorm.Model{
 			ID: ownerRequest.ID,

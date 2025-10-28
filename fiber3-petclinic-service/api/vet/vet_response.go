@@ -29,6 +29,10 @@ func (vr *Response) FromVet(vet *repository.Vet) {
 // FromVets
 // Map a list of repository.Vet to a list of Response
 func FromVets(vets []repository.Vet) []Response {
+	if len(vets) == 0 {
+		return nil
+	}
+
 	vetResponses := make([]Response, len(vets))
 	for i, v := range vets {
 		vetResponses[i].FromVet(&v)

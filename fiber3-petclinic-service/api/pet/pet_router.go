@@ -188,11 +188,7 @@ func (router *Router) create(c fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	petEntity, err := FromAddRequest(request)
-	if err != nil {
-		log.Error().Err(err).Msg("Invalid request data.")
-		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	}
+	petEntity := FromAddRequest(request)
 
 	petResponse, err := router.service.create(petEntity)
 	return c.Status(fiber.StatusCreated).JSON(petResponse)
