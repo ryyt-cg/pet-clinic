@@ -43,8 +43,7 @@ func ToResponse(pet *repository.Pet) *Response {
 		return nil
 	}
 
-	responseBirthday := ""
-
+	var responseBirthday string
 	if pet.Birthdate != nil {
 		responseBirthday = pet.Birthdate.Format(time.DateOnly)
 	}
@@ -62,7 +61,7 @@ func FromPets(pets []repository.Pet) []Response {
 	if len(pets) == 0 {
 		return nil
 	}
-	
+
 	petResponses := make([]Response, len(pets))
 	for i, pet := range pets {
 		petResponses[i] = *ToResponse(&pet)

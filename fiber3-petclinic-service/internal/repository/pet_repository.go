@@ -29,21 +29,19 @@ func (repository *PetRepository) FindAll() ([]Pet, error) {
 	log.Info().Msg("Retrieve all pets")
 
 	var pets []Pet
-	result := repository.db.Find(&pets)
+	result := repository.db.Joins("Species").Find(&pets)
 	return pets, result.Error
 }
 
-/*
-FindById
-Join query reduces into 1 query by joining 2 tables together through LEFT JOIN.
-
-SELECT "pets"."id","pets"."created_at","pets"."updated_at","pets"."deleted_at","pets"."name","pets"."birth_date",
-
-	"pets"."type_id","pets"."owner_id","Type"."id" AS "Type__id","Type"."created_at" AS "Type__created_at",
-	"Type"."updated_at" AS "Type__updated_at","Type"."deleted_at" AS "Type__deleted_at","Type"."name" AS "Type__name"
-	FROM "pets" LEFT JOIN "species" "Type" ON "pets"."type_id" = "Type"."id"
-	WHERE pets.id = 2 AND "pets"."deleted_at" IS NULL ORDER BY "pets"."id" LIMIT 1
-*/
+// FindById
+// Join query reduces into 1 query by joining 2 tables together through LEFT JOIN.
+//
+// SELECT "pets"."id","pets"."created_at","pets"."updated_at","pets"."deleted_at","pets"."name","pets"."birth_date",
+//
+//	"pets"."type_id","pets"."owner_id","Type"."id" AS "Type__id","Type"."created_at" AS "Type__created_at",
+//	"Type"."updated_at" AS "Type__updated_at","Type"."deleted_at" AS "Type__deleted_at","Type"."name" AS "Type__name"
+//	FROM "pets" LEFT JOIN "species" "Type" ON "pets"."type_id" = "Type"."id"
+//	WHERE pets.id = 2 AND "pets"."deleted_at" IS NULL ORDER BY "pets"."id" LIMIT 1
 func (repository *PetRepository) FindById(id uint) (*Pet, error) {
 	log.Info().Uint("id", id).Msg("Search pet by id.")
 

@@ -154,14 +154,14 @@ func (r *Router) ownersByLastName(c fiber.Ctx) error {
 //
 // @Description	Insert new owner
 // @Produce		json
-// @Param		Request			body	AddRequest	true	"Add owner"
+// @Param		Request			body	addRequest	true	"Add owner"
 // @Success		200	{object}	UpdateResponse
 // @Failure		400	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/owners 		[post]
 func (r *Router) addNewOwner(c fiber.Ctx) error {
 	log.Info().Msg("Post a new owner.")
-	ownerRequest := new(AddRequest)
+	ownerRequest := new(addRequest)
 	err := c.Bind().Body(ownerRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to Unmarshal owner JSON.")
@@ -199,7 +199,7 @@ func (r *Router) updateOwner(c fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	var ownerRequest UpdateRequest
+	var ownerRequest updateRequest
 	err = c.Bind().Body(&ownerRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to Unmarshal owner JSON.")

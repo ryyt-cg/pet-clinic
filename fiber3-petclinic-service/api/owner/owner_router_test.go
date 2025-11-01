@@ -19,9 +19,9 @@ import (
 )
 
 func Test_AllOwners(t *testing.T) {
-	ownersResponses := &Responses{
+	ownersResponses := &responses{
 		Context: model.Context{Count: 2},
-		Owners: []Response{
+		Owners: []response{
 			{
 				ID:        35,
 				FirstName: "Charles",
@@ -40,16 +40,16 @@ func Test_AllOwners(t *testing.T) {
 		},
 	}
 
-	noOwnersFoundResponse := &Responses{
+	noOwnersFoundResponse := &responses{
 		Context: model.Context{Count: 0},
-		Owners:  []Response{},
+		Owners:  []response{},
 	}
 
 	errorResponse := resterr.InternalServerError("fail to get all owners")
 
 	testCases := []struct {
 		name             string
-		mockAllOwner     *Responses
+		mockAllOwner     *responses
 		mockError        error
 		route            string
 		statusCode       int
@@ -104,7 +104,7 @@ func Test_AllOwners(t *testing.T) {
 
 			switch tc.statusCode {
 			case http.StatusOK | http.StatusNotFound:
-				actualPetResponses := &Responses{}
+				actualPetResponses := &responses{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualPetResponses)
@@ -113,9 +113,9 @@ func Test_AllOwners(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResponse.(*Responses), actualPetResponses)
-				assert.Equal(t, tc.expectedResponse.(*Responses).Context.Count, actualPetResponses.Context.Count)
-				assert.Equal(t, tc.expectedResponse.(*Responses).Owners, actualPetResponses.Owners)
+				assert.Equal(t, tc.expectedResponse.(*responses), actualPetResponses)
+				assert.Equal(t, tc.expectedResponse.(*responses).Context.Count, actualPetResponses.Context.Count)
+				assert.Equal(t, tc.expectedResponse.(*responses).Owners, actualPetResponses.Owners)
 			case http.StatusInternalServerError:
 				actualPetResponses := &resterr.ErrorResponse{}
 				// Read the response body
@@ -135,7 +135,7 @@ func Test_AllOwners(t *testing.T) {
 }
 
 func Test_ownerById(t *testing.T) {
-	ownerResponse := &Response{
+	ownerResponse := &response{
 		ID:        1,
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -149,7 +149,7 @@ func Test_ownerById(t *testing.T) {
 	testCases := []struct {
 		name             string
 		id               uint
-		mockOwner        *Response
+		mockOwner        *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -199,7 +199,7 @@ func Test_ownerById(t *testing.T) {
 
 			switch tc.statusCode {
 			case http.StatusOK:
-				actualOwnerResponse := &Response{}
+				actualOwnerResponse := &response{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualOwnerResponse)
@@ -209,9 +209,9 @@ func Test_ownerById(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResponse.(*Response), actualOwnerResponse)
-				assert.Equal(t, tc.expectedResponse.(*Response).ID, actualOwnerResponse.ID)
-				assert.Equal(t, tc.expectedResponse.(*Response).City, actualOwnerResponse.City)
+				assert.Equal(t, tc.expectedResponse.(*response), actualOwnerResponse)
+				assert.Equal(t, tc.expectedResponse.(*response).ID, actualOwnerResponse.ID)
+				assert.Equal(t, tc.expectedResponse.(*response).City, actualOwnerResponse.City)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualOwnerResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -257,7 +257,7 @@ func Test_ownerWithBadId(t *testing.T) {
 }
 
 func Test_ownerByIdWithPets(t *testing.T) {
-	ownerWithPetsResponse := &Response{
+	ownerWithPetsResponse := &response{
 		ID:        1,
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -280,7 +280,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 		},
 	}
 
-	ownerResponse := &Response{
+	ownerResponse := &response{
 		ID:        2,
 		FirstName: "John",
 		LastName:  "Smith",
@@ -294,7 +294,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 	testCases := []struct {
 		name             string
 		id               uint
-		mockOwner        *Response
+		mockOwner        *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -353,7 +353,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 
 			switch tc.statusCode {
 			case http.StatusOK:
-				actualOwnerResponse := &Response{}
+				actualOwnerResponse := &response{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualOwnerResponse)
@@ -363,10 +363,10 @@ func Test_ownerByIdWithPets(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResponse.(*Response), actualOwnerResponse)
-				assert.Equal(t, tc.expectedResponse.(*Response).ID, actualOwnerResponse.ID)
-				assert.Equal(t, tc.expectedResponse.(*Response).City, actualOwnerResponse.City)
-				assert.Equal(t, tc.expectedResponse.(*Response).Pets, actualOwnerResponse.Pets)
+				assert.Equal(t, tc.expectedResponse.(*response), actualOwnerResponse)
+				assert.Equal(t, tc.expectedResponse.(*response).ID, actualOwnerResponse.ID)
+				assert.Equal(t, tc.expectedResponse.(*response).City, actualOwnerResponse.City)
+				assert.Equal(t, tc.expectedResponse.(*response).Pets, actualOwnerResponse.Pets)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualOwnerResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -412,9 +412,9 @@ func Test_ownerByIdWithPetsBadID(t *testing.T) {
 }
 
 func Test_OwnerByLastName(t *testing.T) {
-	ownersResponse := &Responses{
+	ownersResponse := &responses{
 		Context: model.Context{Count: 2},
-		Owners: []Response{
+		Owners: []response{
 			{
 				ID:        15,
 				FirstName: "Charles",
@@ -428,9 +428,9 @@ func Test_OwnerByLastName(t *testing.T) {
 		},
 	}
 
-	noOwnersFoundResponse := &Responses{
+	noOwnersFoundResponse := &responses{
 		Context: model.Context{Count: 0},
-		Owners:  []Response{},
+		Owners:  []response{},
 	}
 
 	errorResponse := resterr.InternalServerError("unexpected error occurred")
@@ -438,7 +438,7 @@ func Test_OwnerByLastName(t *testing.T) {
 	testCases := []struct {
 		name             string
 		lastName         string
-		mockOwners       *Responses
+		mockOwners       *responses
 		mockError        error
 		route            string
 		statusCode       int
@@ -488,7 +488,7 @@ func Test_OwnerByLastName(t *testing.T) {
 
 			switch tc.statusCode {
 			case http.StatusOK:
-				actualOwnersResponse := &Responses{}
+				actualOwnersResponse := &responses{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualOwnersResponse)
@@ -498,8 +498,8 @@ func Test_OwnerByLastName(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResponse.(*Responses), actualOwnersResponse)
-				assert.Equal(t, tc.expectedResponse.(*Responses).Context.Count, actualOwnersResponse.Context.Count)
+				assert.Equal(t, tc.expectedResponse.(*responses), actualOwnersResponse)
+				assert.Equal(t, tc.expectedResponse.(*responses).Context.Count, actualOwnersResponse.Context.Count)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualOwnerResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -519,7 +519,7 @@ func Test_OwnerByLastName(t *testing.T) {
 }
 
 func Test_addNewOwner(t *testing.T) {
-	ownerRequest := &AddRequest{
+	ownerRequest := &addRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",
 		Address:   "1234 Elm St",
@@ -527,7 +527,7 @@ func Test_addNewOwner(t *testing.T) {
 		Telephone: "1234567890",
 	}
 
-	owner := &Response{
+	owner := &response{
 		ID:        1,
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -539,8 +539,8 @@ func Test_addNewOwner(t *testing.T) {
 	internalError := resterr.InternalServerError("fail to add a new owner")
 	testCases := []struct {
 		name             string
-		request          *AddRequest
-		mockOwner        *Response
+		request          *addRequest
+		mockOwner        *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -585,7 +585,7 @@ func Test_addNewOwner(t *testing.T) {
 
 			switch resp.StatusCode {
 			case http.StatusCreated:
-				actualOwnerResponse := &Response{}
+				actualOwnerResponse := &response{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualOwnerResponse)
@@ -595,7 +595,7 @@ func Test_addNewOwner(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResponse.(*Response), actualOwnerResponse)
+				assert.Equal(t, tc.expectedResponse.(*response), actualOwnerResponse)
 			case http.StatusInternalServerError:
 				actualOwnerResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -650,7 +650,7 @@ func Test_addNewOwnerWithBadRequest(t *testing.T) {
 }
 
 func Test_UpdateOwner(t *testing.T) {
-	ownerRequest := &UpdateRequest{
+	ownerRequest := &updateRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",
 		Address:   "1234 Elm St",
@@ -658,7 +658,7 @@ func Test_UpdateOwner(t *testing.T) {
 		Telephone: "1234567890",
 	}
 
-	owner := &UpdateResponse{
+	owner := &updateResponse{
 		ID:        15,
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -672,8 +672,8 @@ func Test_UpdateOwner(t *testing.T) {
 	testCases := []struct {
 		name             string
 		id               uint
-		request          *UpdateRequest
-		mockOwner        *UpdateResponse
+		request          *updateRequest
+		mockOwner        *updateResponse
 		mockError        error
 		route            string
 		statusCode       int
@@ -719,7 +719,7 @@ func Test_UpdateOwner(t *testing.T) {
 
 			switch resp.StatusCode {
 			case http.StatusCreated:
-				actualOwnerResponse := &UpdateResponse{}
+				actualOwnerResponse := &updateResponse{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualOwnerResponse)
@@ -729,7 +729,7 @@ func Test_UpdateOwner(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResponse.(*UpdateResponse), actualOwnerResponse)
+				assert.Equal(t, tc.expectedResponse.(*updateResponse), actualOwnerResponse)
 			case http.StatusInternalServerError:
 				actualOwnerResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -750,7 +750,7 @@ func Test_UpdateOwner(t *testing.T) {
 }
 
 func Test_updateOwnerWithBadRequest(t *testing.T) {
-	ownerRequest := &UpdateRequest{
+	ownerRequest := &updateRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",
 		Address:   "1234 Elm St",
@@ -758,15 +758,15 @@ func Test_updateOwnerWithBadRequest(t *testing.T) {
 		Telephone: "1234567890",
 	}
 	// assign number to lastName to purposely fail JSON unmarshalling
-	updateRequest := map[string]interface{}{
+	inputUpdateRequest := map[string]interface{}{
 		"firstName": "James",
 		"lastName":  5,
 		"address":   "123 Main St.",
 	}
-	updateRequestJSON, _ := json.Marshal(updateRequest)
+	updateRequestJSON, _ := json.Marshal(inputUpdateRequest)
 
 	badResponse := resterr.BadRequest("strconv.Atoi: parsing \"a1\": invalid syntax")
-	badResponse2 := resterr.BadRequest("json: cannot unmarshal number into Go struct field UpdateRequest.lastName of type string")
+	badResponse2 := resterr.BadRequest("json: cannot unmarshal number into Go struct field updateRequest.lastName of type string")
 
 	testCases := []struct {
 		name             string
@@ -786,7 +786,7 @@ func Test_updateOwnerWithBadRequest(t *testing.T) {
 		},
 		{
 			name:             "bad update owner request",
-			id:               int(17),
+			id:               uint(17),
 			request:          updateRequestJSON,
 			route:            "/v1/owners/17",
 			statusCode:       http.StatusBadRequest,

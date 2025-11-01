@@ -31,14 +31,14 @@ func Test_getById(t *testing.T) {
 		id             uint
 		mockResult     *repository.Owner
 		mockError      error
-		expectedResult *Response
+		expectedResult *response
 		expectedError  error
 	}{
 		{
 			id:         1,
 			mockResult: owner,
 			mockError:  nil,
-			expectedResult: &Response{
+			expectedResult: &response{
 				ID:        1,
 				FirstName: "Nat",
 				LastName:  "Cole",
@@ -88,7 +88,7 @@ func Test_getByLastName(t *testing.T) {
 		lastName       string
 		mockResult     []repository.Owner
 		mockError      error
-		expectedResult *Responses
+		expectedResult *responses
 		expectedError  error
 	}{
 		{
@@ -107,11 +107,11 @@ func Test_getByLastName(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedResult: &Responses{
+			expectedResult: &responses{
 				Context: model.Context{
 					Count: 1,
 				},
-				Owners: []Response{
+				Owners: []response{
 					{ID: 1, FirstName: "Leo", LastName: "DiCaprio", City: "Boston"},
 				},
 			},
@@ -122,9 +122,9 @@ func Test_getByLastName(t *testing.T) {
 			lastName:   "DiCaprio",
 			mockResult: nil,
 			mockError:  gorm.ErrRecordNotFound,
-			expectedResult: &Responses{
+			expectedResult: &responses{
 				Context: model.Context{},
-				Owners:  []Response{},
+				Owners:  []response{},
 			},
 			expectedError: nil,
 		},
@@ -170,16 +170,16 @@ func Test_getByLastName(t *testing.T) {
 }
 
 func Test_getAllOwners(t *testing.T) {
-	noOwnerFound := &Responses{
+	noOwnerFound := &responses{
 		Context: model.Context{Count: 0},
-		Owners:  []Response{},
+		Owners:  []response{},
 	}
 
 	tests := []struct {
 		tcName         string
 		mockResult     []repository.Owner
 		mockError      error
-		expectedResult *Responses
+		expectedResult *responses
 		expectedError  error
 	}{
 		{
@@ -205,11 +205,11 @@ func Test_getAllOwners(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedResult: &Responses{
+			expectedResult: &responses{
 				Context: model.Context{
 					Count: 2,
 				},
-				Owners: []Response{
+				Owners: []response{
 					{ID: 1, FirstName: "Leo", LastName: "DiCaprio"},
 					{ID: 2, FirstName: "Tom", LastName: "Hanks"},
 				},
@@ -279,7 +279,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 		},
 	}
 
-	expectedResult := &Response{
+	expectedResult := &response{
 		ID:        1,
 		FirstName: "Leo",
 		LastName:  "DiCaprio",
@@ -298,7 +298,7 @@ func Test_getOwnerByIdWithPets(t *testing.T) {
 		id             uint
 		mockOwner      *repository.Owner
 		mockError      error
-		expectedResult *Response
+		expectedResult *response
 		expectedError  error
 	}{
 		{
@@ -364,45 +364,45 @@ func Test_update(t *testing.T) {
 		},
 	}
 
-	updateRequest := &UpdateRequest{
+	inputUpdateRequest := &updateRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",
 	}
 
-	expectedResult := &Response{
+	expectedResult := &response{
 		ID:        1,
 		FirstName: "Nat",
 		LastName:  "Cole",
 	}
 	testCases := []struct {
-		name           string
-		id             uint
-		mockOwner      *repository.Owner
-		mockError      error
-		updatedOwner   *repository.Owner
-		updateRequest  *UpdateRequest
-		expectedResult *Response
-		expectedError  error
+		name               string
+		id                 uint
+		mockOwner          *repository.Owner
+		mockError          error
+		updatedOwner       *repository.Owner
+		inputUpdateRequest *updateRequest
+		expectedResult     *response
+		expectedError      error
 	}{
 		{
-			name:           "Test update owner success",
-			id:             1,
-			mockOwner:      mockOwner,
-			mockError:      nil,
-			updatedOwner:   updatedOwner,
-			updateRequest:  updateRequest,
-			expectedResult: expectedResult,
-			expectedError:  nil,
+			name:               "Test update owner success",
+			id:                 1,
+			mockOwner:          mockOwner,
+			mockError:          nil,
+			updatedOwner:       updatedOwner,
+			inputUpdateRequest: inputUpdateRequest,
+			expectedResult:     expectedResult,
+			expectedError:      nil,
 		},
 		{
-			name:           "fail to update owner",
-			id:             1,
-			mockOwner:      mockOwner,
-			mockError:      errors.New("unable to update owner"),
-			updatedOwner:   nil,
-			updateRequest:  updateRequest,
-			expectedResult: nil,
-			expectedError:  errors.New("unable to update owner"),
+			name:               "fail to update owner",
+			id:                 1,
+			mockOwner:          mockOwner,
+			mockError:          errors.New("unable to update owner"),
+			updatedOwner:       nil,
+			inputUpdateRequest: inputUpdateRequest,
+			expectedResult:     nil,
+			expectedError:      errors.New("unable to update owner"),
 		},
 	}
 
@@ -412,7 +412,7 @@ func Test_update(t *testing.T) {
 			ownerMock.EXPECT().Update(tc.mockOwner).Return(tc.updatedOwner, tc.expectedError)
 
 			ownerService := NewService(ownerMock)
-			result, err := ownerService.update(tc.id, tc.updateRequest)
+			result, err := ownerService.update(tc.id, tc.inputUpdateRequest)
 
 			if err != nil {
 				assert.Equal(t, tc.expectedError, err)
@@ -453,12 +453,12 @@ func Test_create(t *testing.T) {
 		},
 	}
 
-	addRequest := &AddRequest{
+	expectedAddRequest := &addRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",
 	}
 
-	expectedResult := &Response{
+	expectedResult := &response{
 		//ID:        int(1),
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -468,8 +468,8 @@ func Test_create(t *testing.T) {
 		mockOwner      *repository.Owner
 		mockError      error
 		newOwner       *repository.Owner
-		addRequest     *AddRequest
-		expectedResult *Response
+		addRequest     *addRequest
+		expectedResult *response
 		expectedError  error
 	}{
 		{
@@ -477,7 +477,7 @@ func Test_create(t *testing.T) {
 			mockOwner:      mockOwner,
 			mockError:      nil,
 			newOwner:       newOwner,
-			addRequest:     addRequest,
+			addRequest:     expectedAddRequest,
 			expectedResult: expectedResult,
 			expectedError:  nil,
 		},
@@ -486,7 +486,7 @@ func Test_create(t *testing.T) {
 			mockOwner:      mockOwner,
 			mockError:      errors.New("unable to add new owner"),
 			newOwner:       nil,
-			addRequest:     addRequest,
+			addRequest:     expectedAddRequest,
 			expectedResult: nil,
 			expectedError:  errors.New("unable to add new owner"),
 		},

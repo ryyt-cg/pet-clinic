@@ -38,6 +38,8 @@ type UpdateRequest struct {
 //	"ownerID":   z.Uint(),
 //})
 
+// ToPet
+// Map Request to repository.Pet
 func ToPet(petRequest *Request) (*repository.Pet, error) {
 	// TODO need to add data validation
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
@@ -55,6 +57,8 @@ func ToPet(petRequest *Request) (*repository.Pet, error) {
 	return petEntity, nil
 }
 
+// FromAddRequest
+// Map AddRequest to repository.Pet
 func FromAddRequest(petRequest *AddRequest) (*repository.Pet, error) {
 	if petRequest == nil {
 		return nil, nil
@@ -73,6 +77,8 @@ func FromAddRequest(petRequest *AddRequest) (*repository.Pet, error) {
 	}, nil
 }
 
+// FromUpdateRequest
+// Map UpdateRequest to repository.Pet
 func FromUpdateRequest(petRequest *UpdateRequest) (*repository.Pet, error) {
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
