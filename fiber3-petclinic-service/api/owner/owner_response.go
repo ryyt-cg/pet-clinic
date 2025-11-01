@@ -12,7 +12,7 @@ import (
 // 3. Composes the error handling functions to handle the errors.
 
 // UpdateResponse - owner add/update response
-type UpdateResponse struct {
+type updateResponse struct {
 	ID        uint   `json:"id"`
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
@@ -21,14 +21,14 @@ type UpdateResponse struct {
 	Telephone string `json:"telephone"`
 }
 
-// ToUpdateResponse
+// toUpdateResponse
 // Map a repository.Owner to UpdateResponse
-func ToUpdateResponse(owner *repository.Owner) *UpdateResponse {
+func toUpdateResponse(owner *repository.Owner) *updateResponse {
 	if owner == nil {
 		return nil
 	}
 
-	return &UpdateResponse{
+	return &updateResponse{
 		ID:        owner.ID,
 		FirstName: owner.FirstName,
 		LastName:  owner.LastName,
@@ -39,7 +39,7 @@ func ToUpdateResponse(owner *repository.Owner) *UpdateResponse {
 }
 
 // Response - owner response
-type Response struct {
+type response struct {
 	ID        uint           `json:"id"`
 	FirstName string         `json:"firstName"`
 	LastName  string         `json:"lastName"`
@@ -50,19 +50,19 @@ type Response struct {
 }
 
 // Responses - list of owners
-type Responses struct {
+type responses struct {
 	Context model.Context `json:"context"`
-	Owners  []Response    `json:"owners"`
+	Owners  []response    `json:"owners"`
 }
 
-// ToResponse
+// toResponse
 // Map a repository.Owner to Response
-func ToResponse(owner *repository.Owner) *Response {
+func toResponse(owner *repository.Owner) *response {
 	if owner == nil {
 		return nil
 	}
 
-	return &Response{
+	return &response{
 		ID:        owner.ID,
 		FirstName: owner.FirstName,
 		LastName:  owner.LastName,
@@ -73,10 +73,29 @@ func ToResponse(owner *repository.Owner) *Response {
 	}
 }
 
-func FromOwners(owners []repository.Owner) []Response {
-	ownerResponses := make([]Response, len(owners))
-	for i, v := range owners {
-		ownerResponses[i] = *ToResponse(&v)
+// toResponse
+// Map a repository.Owner to Response
+func toResponses(owner *repository.Owner) *response {
+	if owner == nil {
+		return nil
 	}
+
+	return &response{
+		ID:        owner.ID,
+		FirstName: owner.FirstName,
+		LastName:  owner.LastName,
+		Address:   owner.Address,
+		City:      owner.City,
+		Telephone: owner.Telephone,
+		Pets:      pet.FromPets(owner.Pets),
+	}
+}
+
+func fromOwners(owners []repository.Owner) []response {
+	ownerResponses := make([]response, len(owners))
+	for i, v := range owners {
+		ownerResponses[i] = *toResponse(&v)
+	}
+
 	return ownerResponses
 }
