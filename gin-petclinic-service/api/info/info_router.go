@@ -1,10 +1,13 @@
 package info
 
 import (
+	"gin-petclinic-service/config/app"
+	resterr "gin-petclinic-service/internal/errors"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
 type Router struct {
@@ -14,7 +17,10 @@ type Router struct {
 
 // NewRouter creates a new Router
 func NewRouter(infoService Servicer, ipService IPServicer) *Router {
-	return &Router{infoService, ipService}
+	return &Router{
+		infoService: infoService,
+		ipService:   ipService,
+	}
 }
 
 // Register registers the router to the gin engine
@@ -24,20 +30,28 @@ func (infoRouter *Router) Register(router *gin.RouterGroup) {
 
 // appInfo	Show app info
 func (infoRouter *Router) appInfo(c *gin.Context) {
+	log.Info().Msg("Fetching app info")
 	result, err := infoRouter.infoService.getAppInfo()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		log.Error().Err(err).Msg("Error fetching app info")
+		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+		return
 	}
 
-	ips, err := infoRouter.ipService.lookupIP("localhost")
+	ips, err := infoRouter.ipService.lookupIP(app.Config.Server.Host)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to lookup IP address")
 		result.Ip = "Unknown host"
 	} else {
-		for _, ip := range ips {
-			result.Ip += ip.String() + "; "
+		// Convert IP addresses to string and join them with commas
+		strIPs := make([]string, len(ips))
+		for i, ip := range ips {
+			strIPs[i] = ip.String()
 		}
-		result.Ip = strings.TrimSpace(result.Ip)
+		log.Debug().Str("host", app.Config.Server.Host).Strs("ips", strIPs).Msg("IP addresses for host")
+		result.Ip = strings.Join(strIPs, ",")
 	}
 
+	// Content-Type will be application/json by c.JSON
 	c.JSON(http.StatusOK, result)
 }

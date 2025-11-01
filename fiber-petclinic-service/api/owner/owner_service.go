@@ -1,10 +1,12 @@
 package owner
 
 import (
+	"errors"
 	"fiber-petclinic-service/internal/repository"
 	"fiber-petclinic-service/internal/repository/model"
 
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 )
 
 // Servicer - owner service interface
@@ -44,6 +46,11 @@ func (service *Service) getOwnerByLastName(lastName string) (*Responses, error) 
 	owners, err := service.repository.FindByLastName(lastName)
 
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return &Responses{
+				Owners: []Response{},
+			}, nil
+		}
 		log.Error().Err(err).Msg("Fail to retrieve owner by last name.")
 		return nil, err
 	}
@@ -58,6 +65,9 @@ func (service *Service) getAllOwners() (*Responses, error) {
 	log.Debug().Msg("Get all owner")
 	owners, err := service.repository.FindAll()
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return &Responses{Owners: []Response{}, Context: model.Context{}}, nil
+		}
 		log.Error().Err(err).Msg("Fail to retrieve all owner.")
 		return nil, err
 	}

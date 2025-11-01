@@ -119,10 +119,13 @@ func Test_getAllVisits(t *testing.T) {
 			expectedVisits: expectedVisits,
 		},
 		{
-			name:           "get no visits",
-			mockVisits:     nil,
-			mockError:      gorm.ErrRecordNotFound,
-			expectedVisits: gorm.ErrRecordNotFound,
+			name:       "get no visits",
+			mockVisits: nil,
+			mockError:  gorm.ErrRecordNotFound,
+			expectedVisits: &Responses{
+				Context: model.Context{},
+				Visits:  []Response{},
+			},
 		},
 		{
 			name:           "fail get all visits",

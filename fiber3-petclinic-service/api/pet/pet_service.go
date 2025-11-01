@@ -32,8 +32,10 @@ func (service *Service) getAllPets() (*Responses, error) {
 	pets, err := service.repository.FindAll()
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No pets found.")
-			return nil, gorm.ErrRecordNotFound
+			return &Responses{
+				Context: model.Context{},
+				Pets:    []Response{},
+			}, nil
 		}
 		log.Error().Err(err).Msg("Fail to retrieve all pets.")
 		return nil, err
@@ -84,8 +86,10 @@ func (service *Service) getPetsByName(name string) (*Responses, error) {
 	pets, err := service.repository.FindByName(name)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Str("name", name).Msg("No pets found with this name.")
-			return nil, gorm.ErrRecordNotFound
+			return &Responses{
+				Context: model.Context{},
+				Pets:    []Response{},
+			}, nil
 		}
 		log.Error().Err(err).Str("name", name).Msg("fail to retrieve pets by name.")
 		return nil, err

@@ -84,8 +84,12 @@ func (service *Service) getPetsByName(name string) (*Responses, error) {
 	pets, err := service.repository.FindByName(name)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Str("name", name).Msg("No pets found with this name.")
-			return nil, gorm.ErrRecordNotFound
+			return &Responses{
+				Context: model.Context{
+					Count: 0,
+				},
+				Pets: []Response{},
+			}, nil
 		}
 		log.Error().Err(err).Str("name", name).Msg("fail to retrieve pets by name.")
 		return nil, err

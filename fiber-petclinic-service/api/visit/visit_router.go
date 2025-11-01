@@ -73,10 +73,6 @@ func (r *Router) allVisits(c *fiber.Ctx) error {
 	log.Info().Msg("All visits.")
 	responses, err := r.service.getAllVisits()
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No visits found.")
-			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No visits found"))
-		}
 		log.Error().Err(err).Msg("Fail to get all visits.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}

@@ -105,12 +105,11 @@ func (router *Router) getWithVisitsById(c fiber.Ctx) error {
 	strID := c.Params("id")
 	log.Info().Str("id", strID).Msg("GET pet with visits by ID")
 
-	id := fiber.Params[int](c, "id")
-	//id, err := c.ParamsInt("id")
-	//if err != nil {
-	//	log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid pet ID")
-	//	return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	//}
+	id, err := strconv.Atoi(strID)
+	if err != nil {
+		log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid pet ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 
 	response, err := router.service.getPetWithVisitsById(uint(id))
 	if err != nil {
@@ -188,7 +187,11 @@ func (router *Router) create(c fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	petEntity := FromAddRequest(request)
+	petEntity, err := FromAddRequest(request)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to convert request to pet entity.")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 
 	petResponse, err := router.service.create(petEntity)
 	return c.Status(fiber.StatusCreated).JSON(petResponse)

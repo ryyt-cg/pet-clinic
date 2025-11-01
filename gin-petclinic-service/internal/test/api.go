@@ -7,8 +7,17 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
+
+// SetupRouter
+// Configure default Gin engine
+func SetupRouter() *gin.Engine {
+	gin.SetMode(gin.TestMode)
+	r := gin.Default()
+	return r
+}
 
 // APITestCase represents the data needed to describe an API test case.
 type APITestCase struct {

@@ -3,6 +3,7 @@ package visit
 import (
 	"errors"
 	"fiber-petclinic-service/internal/repository"
+	"fiber-petclinic-service/internal/repository/model"
 
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
@@ -44,8 +45,10 @@ func (service *Service) getAllVisits() (*Responses, error) {
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No visits found.")
-			return nil, gorm.ErrRecordNotFound
+			return &Responses{
+				Context: model.Context{},
+				Visits:  []Response{},
+			}, nil
 		}
 
 		log.Error().Err(err).Msg("Fail to retrieve all visits.")

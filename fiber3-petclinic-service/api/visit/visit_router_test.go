@@ -158,8 +158,11 @@ func Test_allVisits(t *testing.T) {
 		},
 	}
 
-	noVisitsFoundResponse := resterr.NotFound("get no visits found")
 	errorResponse := resterr.InternalServerError("fail to get all visits")
+	noVisitsResponse := &Responses{
+		Context: model.Context{Count: 0},
+		Visits:  []Response{},
+	}
 
 	testCases := []struct {
 		name              string
@@ -179,11 +182,11 @@ func Test_allVisits(t *testing.T) {
 		},
 		{
 			name:              "get no owner",
-			mockAllVisits:     nil,
-			mockError:         gorm.ErrRecordNotFound,
+			mockAllVisits:     noVisitsResponse,
+			mockError:         nil,
 			route:             "/v1/visits/all",
-			statusCode:        http.StatusNotFound,
-			expectedResponses: &noVisitsFoundResponse,
+			statusCode:        http.StatusOK,
+			expectedResponses: noVisitsResponse,
 		},
 		{
 			name:              "fail to get all owners",

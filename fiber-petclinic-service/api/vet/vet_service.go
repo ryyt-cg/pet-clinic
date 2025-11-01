@@ -33,8 +33,10 @@ func (service *Service) getAllSpecialties() (*specialtiesResponse, error) {
 	specialties, err := service.repository.FindAllSpecialties()
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No specialties found.")
-			return nil, gorm.ErrRecordNotFound
+			return &specialtiesResponse{
+				Context:     model.Context{},
+				Specialties: []specialtyResponse{},
+			}, nil
 		}
 
 		log.Error().Err(err).Msg("Fail to retrieve all specialties.")
@@ -84,8 +86,10 @@ func (service *Service) getVetByLastName(lastName string) (*Responses, error) {
 	vets, err := service.repository.FindByLastName(lastName)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Str("lastName", lastName).Msg("No vets found with this last name.")
-			return nil, gorm.ErrRecordNotFound
+			return &Responses{
+				Context: model.Context{},
+				Vets:    []Response{},
+			}, nil
 		}
 		log.Error().Err(err).Str("lastName", lastName).Msg("Fail to retrieve the vets by last name.")
 		return nil, err
@@ -102,8 +106,10 @@ func (service *Service) getAllVets() (*Responses, error) {
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No vets found.")
-			return nil, gorm.ErrRecordNotFound
+			return &Responses{
+				Context: model.Context{},
+				Vets:    []Response{},
+			}, nil
 		}
 		log.Error().Err(err).Msg("Fail to retrieve all vets.")
 		return nil, err
@@ -120,8 +126,10 @@ func (service *Service) getAllVetsWithSpecialties() (*Responses, error) {
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No vets found with specialties.")
-			return nil, gorm.ErrRecordNotFound
+			return &Responses{
+				Context: model.Context{},
+				Vets:    []Response{},
+			}, nil
 		}
 		log.Error().Err(err).Msg("Fail to retrieve all vets.")
 		return nil, err

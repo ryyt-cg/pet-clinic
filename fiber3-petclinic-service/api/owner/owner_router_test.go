@@ -68,8 +68,16 @@ func Test_AllOwners(t *testing.T) {
 			mockAllOwner:     noOwnersFoundResponse,
 			mockError:        nil,
 			route:            "/v1/owners/all",
-			statusCode:       http.StatusNotFound,
+			statusCode:       http.StatusOK,
 			expectedResponse: noOwnersFoundResponse,
+		},
+		{
+			name:             "fail to get all owners",
+			mockAllOwner:     nil,
+			mockError:        gorm.ErrRecordNotFound,
+			route:            "/v1/owners/all",
+			statusCode:       http.StatusNotFound,
+			expectedResponse: resterr.NotFound("Find no owners"),
 		},
 		{
 			name:             "fail to get all owners",

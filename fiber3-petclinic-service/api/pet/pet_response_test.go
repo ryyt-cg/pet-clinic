@@ -1,7 +1,6 @@
 package pet
 
 import (
-	"fiber3-petclinic-service/api/visit"
 	"fiber3-petclinic-service/internal/repository"
 	"fiber3-petclinic-service/internal/test"
 	"testing"

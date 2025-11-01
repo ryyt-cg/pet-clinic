@@ -139,11 +139,14 @@ func Test_retrieveAllPets(t *testing.T) {
 			expectedError: nil,
 		},
 		{
-			name:          "get no pet",
-			mockPets:      nil,
-			mockError:     gorm.ErrRecordNotFound,
-			expectedPets:  nil,
-			expectedError: gorm.ErrRecordNotFound,
+			name:      "get no pet",
+			mockPets:  nil,
+			mockError: gorm.ErrRecordNotFound,
+			expectedPets: &Responses{
+				Context: model.Context{},
+				Pets:    []Response{},
+			},
+			expectedError: nil,
 		},
 		{
 			name:          "fail to get all pets",
@@ -182,7 +185,6 @@ func Test_getById(t *testing.T) {
 		id            uint
 		mockPet       *repository.Pet
 		mockError     error
-		route         string
 		expectedPet   *Response
 		expectedError error
 	}{
@@ -202,7 +204,6 @@ func Test_getById(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			route:     "/v1/pets/1",
 			expectedPet: &Response{
 				ID:        1,
 				Name:      "Nash",
@@ -217,7 +218,6 @@ func Test_getById(t *testing.T) {
 			id:            1,
 			mockPet:       nil,
 			mockError:     gorm.ErrRecordNotFound,
-			route:         "/v1/pets/1",
 			expectedPet:   nil,
 			expectedError: gorm.ErrRecordNotFound,
 		},
@@ -226,7 +226,6 @@ func Test_getById(t *testing.T) {
 			id:            1,
 			mockPet:       nil,
 			mockError:     errors.New("fail to retrieve pet by id"),
-			route:         "/v1/pets/1",
 			expectedPet:   nil,
 			expectedError: errors.New("fail to retrieve pet by id"),
 		},
@@ -260,7 +259,6 @@ func Test_getByIdWithVisits(t *testing.T) {
 		id            uint
 		mockPet       *repository.Pet
 		mockError     error
-		route         string
 		expectedPet   *Response
 		expectedError error
 	}{
@@ -289,7 +287,6 @@ func Test_getByIdWithVisits(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			route:     "/v1/pets/1/visits",
 			expectedPet: &Response{
 				ID:        1,
 				Name:      "Nash",
@@ -310,7 +307,6 @@ func Test_getByIdWithVisits(t *testing.T) {
 			id:            1,
 			mockPet:       nil,
 			mockError:     gorm.ErrRecordNotFound,
-			route:         "/v1/pets/1/visits",
 			expectedPet:   nil,
 			expectedError: gorm.ErrRecordNotFound,
 		},
@@ -319,7 +315,6 @@ func Test_getByIdWithVisits(t *testing.T) {
 			id:            1,
 			mockPet:       nil,
 			mockError:     errors.New("fail to retrieve pet by id"),
-			route:         "/v1/pets/1/visits",
 			expectedPet:   nil,
 			expectedError: errors.New("fail to retrieve pet by id"),
 		},
@@ -353,7 +348,6 @@ func Test_getByName(t *testing.T) {
 		petName       string
 		mockPets      []repository.Pet
 		mockError     error
-		route         string
 		expectedPets  *Responses
 		expectedError error
 	}{
@@ -376,7 +370,6 @@ func Test_getByName(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			route:     "/v1/pets/name/Leo",
 			expectedPets: &Responses{
 				Context: model.Context{
 					Count: 1,
@@ -394,13 +387,15 @@ func Test_getByName(t *testing.T) {
 			expectedError: nil,
 		},
 		{
-			name:          "found no pets by name",
-			petName:       "Tiger",
-			mockPets:      nil,
-			mockError:     gorm.ErrRecordNotFound,
-			route:         "/v1/pets/name/Tiger",
-			expectedPets:  nil,
-			expectedError: gorm.ErrRecordNotFound,
+			name:      "found no pets by name",
+			petName:   "Tiger",
+			mockPets:  nil,
+			mockError: gorm.ErrRecordNotFound,
+			expectedPets: &Responses{
+				Context: model.Context{},
+				Pets:    []Response{},
+			},
+			expectedError: nil,
 		},
 		{
 			name:          "fail to get pets by name",
@@ -421,7 +416,7 @@ func Test_getByName(t *testing.T) {
 			petService := NewService(&petMock)
 			result, err := petService.getPetsByName(tc.petName)
 
-			if tc.mockError != nil {
+			if tc.expectedError != nil {
 				assert.Equal(t, tc.expectedError, err)
 				assert.Nil(t, result)
 			} else {

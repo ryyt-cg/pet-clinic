@@ -43,8 +43,29 @@ The goal of this repository is to implement a pet clinic API in different langua
 | PUT    | /v1/vets/{id}                   | Update veterinarian                        |
 |        |                                 |                                            |
 
-## Application Architecture 
+
+## Application Architecture
+There are couple project layer-outs, layers and features/endpoints.
+### Layers
+* Middleware () - receive and process the requests and contexts prior forwarding to the router layer
+* Controller/Router - receive requests and response and invoke the service layer
+* Service (application logics) - receive inputs from the router layer and invoke repository layer and/gateway for more data if necessary. Process the logics and return output back to router layer
+* Repository - receive inputs from service layer and find data from the database.  Return data back to service layer
+* Gateway - receive inputs from service layer and search resources from API host.  Return data back to service layer
+* Model - define data structures used across layers
+
+In the layer architecture, all functions and methods are exposed to all layers.
+
+
+### Features/Endpoints
+
+
+In this project, I fuse both layers and features layout take advances of their pro features and apply them appropriately.
+
 ![api-by-features.png](api-by-features.png)
+
+
+## Spring Pet Clinic Wireframe
 
 
 ## Spring Pet Clinic Wireframe

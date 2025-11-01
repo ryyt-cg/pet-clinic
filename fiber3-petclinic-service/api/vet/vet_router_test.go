@@ -34,6 +34,11 @@ func Test_allSpecialties(t *testing.T) {
 		},
 	}
 
+	noSpecialtiesResponse := &specialtiesResponse{
+		Context:     model.Context{},
+		Specialties: []specialtyResponse{},
+	}
+
 	testCases := []struct {
 		name            string
 		mockSpecialties *specialtiesResponse
@@ -50,10 +55,10 @@ func Test_allSpecialties(t *testing.T) {
 		},
 		{
 			name:            "get no specialties",
-			mockSpecialties: nil,
-			mockErr:         gorm.ErrRecordNotFound,
-			statusCode:      http.StatusNotFound,
-			expectedResult:  gorm.ErrRecordNotFound,
+			mockSpecialties: noSpecialtiesResponse,
+			mockErr:         nil,
+			statusCode:      http.StatusOK,
+			expectedResult:  noSpecialtiesResponse,
 		},
 		{
 			name:            "fail to get all specialties",
@@ -129,6 +134,11 @@ func Test_allVets(t *testing.T) {
 		},
 	}
 
+	noVetsResponse := &Responses{
+		Context: model.Context{},
+		Vets:    []Response{},
+	}
+
 	testCases := []struct {
 		name           string
 		mockVets       *Responses
@@ -145,10 +155,10 @@ func Test_allVets(t *testing.T) {
 		},
 		{
 			name:           "get no vets",
-			mockVets:       nil,
-			mockErr:        gorm.ErrRecordNotFound,
-			statusCode:     http.StatusNotFound,
-			expectedResult: gorm.ErrRecordNotFound,
+			mockVets:       noVetsResponse,
+			mockErr:        nil,
+			statusCode:     http.StatusOK,
+			expectedResult: noVetsResponse,
 		},
 		{
 			name:           "fail to get all vets",

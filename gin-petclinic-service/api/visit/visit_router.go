@@ -45,6 +45,7 @@ func (r *Router) visitById(c *gin.Context) {
 
 	id, err := strconv.Atoi(pathID)
 	if err != nil {
+		log.Error().Err(err).Str("id", pathID).Msg("Invalid visit ID")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
@@ -52,9 +53,12 @@ func (r *Router) visitById(c *gin.Context) {
 	response, err := r.service.getVisitById(uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Err(err).Str("id", pathID).Msg("Visit by id not found")
 			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
 			return
 		}
+
+		log.Error().Err(err).Str("id", pathID).Msg("fail to get a visit by id")
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
@@ -76,6 +80,13 @@ func (r *Router) allVisits(c *gin.Context) {
 	log.Info().Msg("get all visits")
 	response, err := r.service.getAllVisits()
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Err(err).Msg("get no visits found")
+			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+			return
+		}
+
+		log.Error().Err(err).Msg("get all visits failed")
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
@@ -87,17 +98,20 @@ func (r *Router) addNewVisit(c *gin.Context) {
 	log.Info().Msg("add new visit")
 	var visit AddRequest
 	if err := c.ShouldBindJSON(&visit); err != nil {
+		log.Error().Err(err).Msg("fail to bind json request")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
 
 	visitEntity, err := FromAddRequest(&visit)
 	if err != nil {
+		log.Error().Err(err).Msg("fail to bind json request")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
 	response, err := r.service.create(visitEntity)
 	if err != nil {
+		log.Error().Err(err).Msg("fail to create visit")
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}
@@ -121,24 +135,32 @@ func (r *Router) updateVisit(c *gin.Context) {
 	log.Info().Msg("update visit")
 	var visit UpdateRequest
 	if err := c.ShouldBindJSON(&visit); err != nil {
+		log.Error().Err(err).Msg("fail to bind json request")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
+		log.Error().Err(err).Msg("fail to convert id to int")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
 
 	visitEntity, err := FromUpdateRequest(&visit)
 	if err != nil {
+		log.Error().Err(err).Msg("fail to convert to visit entity")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
 	visitEntity.ID = uint(id)
 	response, err := r.service.update(visitEntity)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error().Err(err).Msg("update visit by id not found")
+			c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+		}
+		log.Error().Err(err).Msg("fail to update visit")
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
 	}

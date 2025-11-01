@@ -3,7 +3,6 @@ package owner
 import (
 	"errors"
 	"fiber3-petclinic-service/api/pet"
-	"fiber3-petclinic-service/api/visit"
 	"fiber3-petclinic-service/internal/repository"
 	"fiber3-petclinic-service/internal/repository/model"
 	"fiber3-petclinic-service/internal/test"
@@ -119,6 +118,17 @@ func Test_getByLastName(t *testing.T) {
 			expectedError: nil,
 		},
 		{
+			tcName:     "Found no Owner By Last Name",
+			lastName:   "DiCaprio",
+			mockResult: nil,
+			mockError:  gorm.ErrRecordNotFound,
+			expectedResult: &Responses{
+				Context: model.Context{},
+				Owners:  []Response{},
+			},
+			expectedError: nil,
+		},
+		{
 			tcName:         "Fail to get Owner By Last Name",
 			lastName:       "DiCaprio",
 			mockResult:     nil,
@@ -160,6 +170,11 @@ func Test_getByLastName(t *testing.T) {
 }
 
 func Test_getAllOwners(t *testing.T) {
+	noOwnerFound := &Responses{
+		Context: model.Context{Count: 0},
+		Owners:  []Response{},
+	}
+
 	tests := []struct {
 		tcName         string
 		mockResult     []repository.Owner
@@ -200,6 +215,13 @@ func Test_getAllOwners(t *testing.T) {
 				},
 			},
 			expectedError: nil,
+		},
+		{
+			tcName:         "Find no owners",
+			mockResult:     nil,
+			mockError:      gorm.ErrRecordNotFound,
+			expectedResult: noOwnerFound,
+			expectedError:  nil,
 		},
 		{
 			tcName:         "Unable to get all owners",

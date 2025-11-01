@@ -29,6 +29,15 @@ type UpdateRequest struct {
 	OwnerID   uint   `json:"ownerID" binding:"required"`
 }
 
+// requestSchema
+// Validate Pet request payload
+//var requestSchema = z.Struct(z.Shape{
+//	"name":      z.String().Required(),
+//	"birthdate": z.String(),
+//	"speciesID": z.Uint(),
+//	"ownerID":   z.Uint(),
+//})
+
 func ToPet(petRequest *Request) (*repository.Pet, error) {
 	// TODO need to add data validation
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
@@ -46,10 +55,14 @@ func ToPet(petRequest *Request) (*repository.Pet, error) {
 	return petEntity, nil
 }
 
-func FromAddRequest(petRequest *AddRequest) *repository.Pet {
+func FromAddRequest(petRequest *AddRequest) (*repository.Pet, error) {
+	if petRequest == nil {
+		return nil, nil
+	}
+
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	return &repository.Pet{
@@ -57,7 +70,7 @@ func FromAddRequest(petRequest *AddRequest) *repository.Pet {
 		Birthdate: &birthday,
 		SpeciesID: petRequest.SpeciesID,
 		OwnerID:   petRequest.OwnerID,
-	}
+	}, nil
 }
 
 func FromUpdateRequest(petRequest *UpdateRequest) (*repository.Pet, error) {

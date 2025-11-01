@@ -67,7 +67,7 @@ func Test_AllOwners(t *testing.T) {
 			mockAllOwner:     noOwnersFoundResponse,
 			mockError:        nil,
 			route:            "/v1/owners/all",
-			statusCode:       http.StatusNotFound,
+			statusCode:       http.StatusOK,
 			expectedResponse: noOwnersFoundResponse,
 		},
 		{

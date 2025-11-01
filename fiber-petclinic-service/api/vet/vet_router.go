@@ -35,10 +35,6 @@ func (vetRouter *Router) allSpecialties(c *fiber.Ctx) error {
 	log.Info().Msg("Retrieving all specialties")
 	responses, err := vetRouter.service.getAllSpecialties()
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No specialties found.")
-			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No specialties found"))
-		}
 		log.Error().Err(err).Msg("Unable to get all specialties.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
 	}
@@ -61,13 +57,8 @@ func (vetRouter *Router) allVets(c *fiber.Ctx) error {
 	log.Info().Msg("Retrieving all vets.")
 	responses, err := vetRouter.service.getAllVets()
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No vets found.")
-			return c.Status(fiber.StatusNotFound).JSON(resterr.NotFound("No vets found"))
-		}
 		log.Error().Err(err).Msg("Fail to get all vets.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
-
 	}
 
 	return c.Status(fiber.StatusOK).JSON(responses)
@@ -80,6 +71,7 @@ func (vetRouter *Router) vetById(c *fiber.Ctx) error {
 
 	id, err := c.ParamsInt("id")
 	if err != nil {
+		log.Error().Err(err).Str("id", pathID).Msg("Invalid vet ID")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 

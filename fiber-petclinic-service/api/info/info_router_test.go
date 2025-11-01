@@ -48,11 +48,6 @@ func (ipM *ipServiceMock) lookupIP(host string) ([]net.IP, error) {
 	return val, args.Error(1)
 }
 
-// config the gin engine for testing purpose
-func setupRouter() *fiber.App {
-	r := fiber.New()
-	return r
-}
 
 func Test_appInfo(t *testing.T) {
 	info := &Info{
@@ -75,7 +70,7 @@ func Test_appInfo(t *testing.T) {
 	ipMock.On("lookupIP", "localhost").Return([]net.IP{net.ParseIP("1.2.3.4")}, nil)
 	infoRouter := NewRouter(&infoMock, &ipMock)
 
-	r := setupRouter()
+	r := test.SetupRouter()
 	infoRouter.Register(r.Group("/info"))
 
 	req := httptest.NewRequest("GET", "/info", nil)
@@ -144,7 +139,7 @@ func Test_appInfoWithErrors(t *testing.T) {
 		infoMock := infoServiceMock{}
 		ipMock := ipServiceMock{}
 
-		r := setupRouter()
+		r := test.SetupRouter()
 		infoRouter := NewRouter(&infoMock, &ipMock)
 		infoRouter.Register(r.Group("/info"))
 		infoMock.On("getAppInfo").Return(tc.mockResult, tc.mockError)

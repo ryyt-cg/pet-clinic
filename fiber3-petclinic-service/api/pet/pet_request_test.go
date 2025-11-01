@@ -63,7 +63,8 @@ func Test_FromAddRequest(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result := FromAddRequest(tc.petRequest)
+			result, _ := FromAddRequest(tc.petRequest)
+
 			if tc.expectedPet == nil {
 				assert.Nil(t, nil)
 			} else {

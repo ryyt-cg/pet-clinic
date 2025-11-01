@@ -1,7 +1,6 @@
 package pet
 
 import (
-	"gin-petclinic-service/api/visit"
 	"gin-petclinic-service/internal/repository"
 	"gin-petclinic-service/internal/test"
 	"testing"

@@ -225,8 +225,7 @@ func Test_OwnerByLastName(t *testing.T) {
 			},
 		},
 	}
-
-	noOwnersFoundResponse := &Responses{
+	noOwnerResponse := &Responses{
 		Context: model.Context{Count: 0},
 		Owners:  []Response{},
 	}
@@ -253,10 +252,10 @@ func Test_OwnerByLastName(t *testing.T) {
 			name:           "Test finding no owner",
 			queryParam:     "Jackson",
 			url:            "/v1/owners?last-name=Jackson",
-			expectedOwners: noOwnersFoundResponse,
+			expectedOwners: noOwnerResponse,
 			expectedError:  nil,
-			status:         http.StatusNotFound,
-			jsonResponse:   test.JsonString(resterr.NotFound("Find no owner with last name: Jackson")),
+			status:         http.StatusOK,
+			jsonResponse:   test.JsonString(noOwnerResponse),
 		},
 		{
 			name:           "Test get owner by last name with error",
@@ -314,7 +313,7 @@ func Test_AllOwners(t *testing.T) {
 		},
 	}
 
-	noOwnersFoundResponse := &Responses{
+	noOwnersResponse := &Responses{
 		Context: model.Context{Count: 0},
 		Owners:  []Response{},
 	}
@@ -335,10 +334,10 @@ func Test_AllOwners(t *testing.T) {
 		},
 		{
 			name:           "Test finding no owner",
-			expectedOwners: noOwnersFoundResponse,
+			expectedOwners: noOwnersResponse,
 			expectedError:  nil,
-			status:         http.StatusNotFound,
-			jsonResponse:   test.JsonString(resterr.NotFound("Find no owner")),
+			status:         http.StatusOK,
+			jsonResponse:   test.JsonString(noOwnersResponse),
 		},
 		{
 			name:           "Test get all owners with error",

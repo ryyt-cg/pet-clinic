@@ -84,11 +84,6 @@ func (r *Router) ownersByLastName(c *gin.Context) {
 	lastName := c.Query("last-name")
 	response, err := r.service.getOwnerByLastName(lastName)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Err(err).Str("lastName", lastName).Msg("Find no owner with this last name.")
-			c.JSON(http.StatusNotFound, resterr.NotFound("Find no owner with last name: "+lastName))
-			return
-		}
 		log.Error().Err(err).Str("lastName", lastName).Msg("Fail to get owner by last name.")
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
@@ -111,11 +106,6 @@ func (r *Router) ownersByLastName(c *gin.Context) {
 func (r *Router) allOwners(c *gin.Context) {
 	responses, err := r.service.getAllOwners()
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Warn().Msg("Find no owner.")
-			c.JSON(http.StatusNotFound, resterr.NotFound("Find no owner"))
-			return
-		}
 		log.Error().Err(err).Msg("Fail to get all owners.")
 		c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
 		return
