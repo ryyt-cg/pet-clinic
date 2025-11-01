@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fiber3-petclinic-service/api/pet"
 	resterr "fiber3-petclinic-service/internal/errors"
 	"fiber3-petclinic-service/internal/repository/model"
 	"fiber3-petclinic-service/internal/test"
@@ -264,7 +263,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 		Address:   "1234 Elm St",
 		City:      "New York",
 		Telephone: "1234567890",
-		Pets: []pet.Response{
+		Pets: []petResponse{
 			{
 				ID:        1,
 				Name:      "Max",

@@ -1,9 +1,9 @@
 package owner
 
 import (
-	"fiber3-petclinic-service/api/pet"
 	"fiber3-petclinic-service/internal/repository"
 	"fiber3-petclinic-service/internal/repository/model"
+	"time"
 )
 
 // Owner Responses - A collection of responses (output contracts) for the owner API.
@@ -40,13 +40,20 @@ func toUpdateResponse(owner *repository.Owner) *updateResponse {
 
 // Response - owner response
 type response struct {
-	ID        uint           `json:"id"`
-	FirstName string         `json:"firstName"`
-	LastName  string         `json:"lastName"`
-	Address   string         `json:"address"`
-	City      string         `json:"city"`
-	Telephone string         `json:"telephone"`
-	Pets      []pet.Response `json:"pets,omitempty"`
+	ID        uint          `json:"id"`
+	FirstName string        `json:"firstName"`
+	LastName  string        `json:"lastName"`
+	Address   string        `json:"address"`
+	City      string        `json:"city"`
+	Telephone string        `json:"telephone"`
+	Pets      []petResponse `json:"pets,omitempty"`
+}
+
+type petResponse struct {
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+	Birthdate string `json:"birthdate"`
+	Species   string `json:"species"`
 }
 
 // Responses - list of owners
@@ -69,7 +76,7 @@ func toResponse(owner *repository.Owner) *response {
 		Address:   owner.Address,
 		City:      owner.City,
 		Telephone: owner.Telephone,
-		Pets:      pet.FromPets(owner.Pets),
+		Pets:      toPetResponses(owner.Pets),
 	}
 }
 
@@ -87,7 +94,7 @@ func toResponses(owner *repository.Owner) *response {
 		Address:   owner.Address,
 		City:      owner.City,
 		Telephone: owner.Telephone,
-		Pets:      pet.FromPets(owner.Pets),
+		Pets:      toPetResponses(owner.Pets),
 	}
 }
 
@@ -98,4 +105,38 @@ func fromOwners(owners []repository.Owner) []response {
 	}
 
 	return ownerResponses
+}
+
+// petResponse
+
+// ToPetResponse
+// Map a repository.Pet to Response
+func toPetResponse(pet *repository.Pet) *petResponse {
+	if pet == nil {
+		return nil
+	}
+
+	var responseBirthday string
+	if pet.Birthdate != nil {
+		responseBirthday = pet.Birthdate.Format(time.DateOnly)
+	}
+
+	return &petResponse{
+		ID:        pet.ID,
+		Name:      pet.Name,
+		Birthdate: responseBirthday,
+		Species:   pet.Species.Name,
+	}
+}
+
+func toPetResponses(pets []repository.Pet) []petResponse {
+	if len(pets) == 0 {
+		return nil
+	}
+
+	petResponses := make([]petResponse, len(pets))
+	for i, pet := range pets {
+		petResponses[i] = *toPetResponse(&pet)
+	}
+	return petResponses
 }

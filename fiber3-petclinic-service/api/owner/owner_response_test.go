@@ -1,7 +1,6 @@
 package owner
 
 import (
-	"fiber3-petclinic-service/api/pet"
 	"fiber3-petclinic-service/internal/repository"
 	"fiber3-petclinic-service/internal/repository/model"
 	"fiber3-petclinic-service/internal/test"
@@ -87,8 +86,8 @@ func Test_FromOwners(t *testing.T) {
 			Pets: nil,
 		},
 		{ID: 3, FirstName: "Jane", LastName: "Doe", Address: "456 Main St", City: "Anytown", Telephone: "0987654321",
-			Pets: []pet.Response{
-				{ID: 1, Name: "Pet1", Birthdate: "2019-04-07", Visits: nil},
+			Pets: []petResponse{
+				{ID: 1, Name: "Pet1", Birthdate: "2019-04-07"},
 			},
 		},
 	}
