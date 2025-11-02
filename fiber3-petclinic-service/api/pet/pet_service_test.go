@@ -109,11 +109,11 @@ func Test_retrieveAllPets(t *testing.T) {
 		},
 	}
 
-	expectedPets := &Responses{
+	expectedPets := &responses{
 		Context: model.Context{
 			Count: len(mockPet),
 		},
-		Pets: []Response{
+		Pets: []response{
 			{
 				ID:        1,
 				Name:      "Nash",
@@ -128,7 +128,7 @@ func Test_retrieveAllPets(t *testing.T) {
 		name          string
 		mockPets      []repository.Pet
 		mockError     error
-		expectedPets  *Responses
+		expectedPets  *responses
 		expectedError error
 	}{
 		{
@@ -142,9 +142,9 @@ func Test_retrieveAllPets(t *testing.T) {
 			name:      "get no pet",
 			mockPets:  nil,
 			mockError: gorm.ErrRecordNotFound,
-			expectedPets: &Responses{
+			expectedPets: &responses{
 				Context: model.Context{},
-				Pets:    []Response{},
+				Pets:    []response{},
 			},
 			expectedError: nil,
 		},
@@ -185,7 +185,7 @@ func Test_getById(t *testing.T) {
 		id            uint
 		mockPet       *repository.Pet
 		mockError     error
-		expectedPet   *Response
+		expectedPet   *response
 		expectedError error
 	}{
 		{
@@ -204,7 +204,7 @@ func Test_getById(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedPet: &Response{
+			expectedPet: &response{
 				ID:        1,
 				Name:      "Nash",
 				Birthdate: "2014-10-07",
@@ -259,7 +259,7 @@ func Test_getByIdWithVisits(t *testing.T) {
 		id            uint
 		mockPet       *repository.Pet
 		mockError     error
-		expectedPet   *Response
+		expectedPet   *response
 		expectedError error
 	}{
 		{
@@ -287,7 +287,7 @@ func Test_getByIdWithVisits(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedPet: &Response{
+			expectedPet: &response{
 				ID:        1,
 				Name:      "Nash",
 				Birthdate: "2014-10-07",
@@ -348,7 +348,7 @@ func Test_getByName(t *testing.T) {
 		petName       string
 		mockPets      []repository.Pet
 		mockError     error
-		expectedPets  *Responses
+		expectedPets  *responses
 		expectedError error
 	}{
 		{
@@ -370,11 +370,11 @@ func Test_getByName(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedPets: &Responses{
+			expectedPets: &responses{
 				Context: model.Context{
 					Count: 1,
 				},
-				Pets: []Response{
+				Pets: []response{
 					{
 						ID:        1,
 						Name:      "Leo",
@@ -391,9 +391,9 @@ func Test_getByName(t *testing.T) {
 			petName:   "Tiger",
 			mockPets:  nil,
 			mockError: gorm.ErrRecordNotFound,
-			expectedPets: &Responses{
+			expectedPets: &responses{
 				Context: model.Context{},
-				Pets:    []Response{},
+				Pets:    []response{},
 			},
 			expectedError: nil,
 		},
@@ -436,7 +436,7 @@ func Test_update(t *testing.T) {
 		name          string
 		mockPet       *repository.Pet
 		mockError     error
-		expectedPet   *Response
+		expectedPet   *updateResponse
 		expectedError error
 	}{
 		{
@@ -455,12 +455,11 @@ func Test_update(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedPet: &Response{
+			expectedPet: &updateResponse{
 				ID:        1,
 				Name:      "Leo",
 				Birthdate: "2014-10-07",
-				Species:   "Cat",
-				Visits:    nil,
+				SpeciesID: 2,
 			},
 			expectedError: nil,
 		},
@@ -513,7 +512,7 @@ func Test_create(t *testing.T) {
 			Model: gorm.Model{
 				ID: 2,
 			},
-			Name: "Cat",
+			Name: "cat",
 		},
 	}
 
@@ -522,7 +521,7 @@ func Test_create(t *testing.T) {
 		mockPet       *repository.Pet
 		mockResult    *repository.Pet
 		mockError     error
-		expectedPet   *Response
+		expectedPet   *addResponse
 		expectedError error
 	}{
 		{
@@ -530,12 +529,11 @@ func Test_create(t *testing.T) {
 			mockPet:    mockPet,
 			mockResult: mockPet,
 			mockError:  nil,
-			expectedPet: &Response{
+			expectedPet: &addResponse{
 				ID:        1,
 				Name:      "Leo",
 				Birthdate: "2014-10-07",
-				Species:   "Cat",
-				Visits:    nil,
+				SpeciesID: 2,
 			},
 			expectedError: nil,
 		},

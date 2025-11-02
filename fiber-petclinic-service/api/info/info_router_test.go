@@ -5,13 +5,13 @@ import (
 	"errors"
 	"fiber-petclinic-service/config/app"
 	resterr "fiber-petclinic-service/internal/errors"
+	"fiber-petclinic-service/internal/test"
 	"io"
 	"net"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -24,7 +24,7 @@ type ipServiceMock struct {
 	mock.Mock
 }
 
-func (infoM *infoServiceMock) getAppInfo() (*Info, error) {
+func (infoM *infoServiceMock) getAppInfo() (*response, error) {
 	args := infoM.Called()
 	intf := args.Get(0)
 
@@ -32,7 +32,7 @@ func (infoM *infoServiceMock) getAppInfo() (*Info, error) {
 		return nil, args.Error(1)
 	}
 
-	val := intf.(*Info)
+	val := intf.(*response)
 	return val, args.Error(1)
 }
 
@@ -48,9 +48,8 @@ func (ipM *ipServiceMock) lookupIP(host string) ([]net.IP, error) {
 	return val, args.Error(1)
 }
 
-
 func Test_appInfo(t *testing.T) {
-	info := &Info{
+	info := &response{
 		AppName:     "fiber unit test",
 		Description: "This is fiber unit test",
 		Version:     "1.5.0",
@@ -83,7 +82,7 @@ func Test_appInfo(t *testing.T) {
 	// Read the response body
 	body, _ := io.ReadAll(resp.Body)
 	// unmarshal to Pet struct for asserts.
-	actualInfoResponse := Info{}
+	actualInfoResponse := response{}
 	err := json.Unmarshal(body, &actualInfoResponse)
 	if err != nil {
 		t.Errorf("Error unmarshalling response body: %v", err)
@@ -96,7 +95,7 @@ func Test_appInfo(t *testing.T) {
 }
 
 func Test_appInfoWithErrors(t *testing.T) {
-	info := &Info{
+	info := &response{
 		AppName:     "fiber error test",
 		Description: "This is fiber error test",
 		Version:     "1.5.0",
@@ -105,7 +104,7 @@ func Test_appInfoWithErrors(t *testing.T) {
 	expectError := resterr.InternalServerError("unable to fetch application info")
 
 	tests := []struct {
-		mockResult     *Info
+		mockResult     *response
 		mockError      error
 		mockIPResult   []net.IP
 		mockIPError    error
@@ -158,7 +157,7 @@ func Test_appInfoWithErrors(t *testing.T) {
 
 		switch resp.StatusCode {
 		case http.StatusOK:
-			actualInfoResponse := Info{}
+			actualInfoResponse := response{}
 			err := json.Unmarshal(body, &actualInfoResponse)
 			if err != nil {
 				t.Errorf("Error unmarshalling response body: %v", err)

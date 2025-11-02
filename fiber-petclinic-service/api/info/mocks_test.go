@@ -38,23 +38,23 @@ func (_m *MockServicer) EXPECT() *MockServicer_Expecter {
 }
 
 // getAppInfo provides a mock function for the type MockServicer
-func (_mock *MockServicer) getAppInfo() (*Info, error) {
+func (_mock *MockServicer) getAppInfo() (*response, error) {
 	ret := _mock.Called()
 
 	if len(ret) == 0 {
 		panic("no return value specified for getAppInfo")
 	}
 
-	var r0 *Info
+	var r0 *response
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func() (*Info, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func() (*response, error)); ok {
 		return returnFunc()
 	}
-	if returnFunc, ok := ret.Get(0).(func() *Info); ok {
+	if returnFunc, ok := ret.Get(0).(func() *response); ok {
 		r0 = returnFunc()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*Info)
+			r0 = ret.Get(0).(*response)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func() error); ok {
@@ -82,12 +82,12 @@ func (_c *MockServicer_getAppInfo_Call) Run(run func()) *MockServicer_getAppInfo
 	return _c
 }
 
-func (_c *MockServicer_getAppInfo_Call) Return(info *Info, err error) *MockServicer_getAppInfo_Call {
-	_c.Call.Return(info, err)
+func (_c *MockServicer_getAppInfo_Call) Return(responseMoqParam *response, err error) *MockServicer_getAppInfo_Call {
+	_c.Call.Return(responseMoqParam, err)
 	return _c
 }
 
-func (_c *MockServicer_getAppInfo_Call) RunAndReturn(run func() (*Info, error)) *MockServicer_getAppInfo_Call {
+func (_c *MockServicer_getAppInfo_Call) RunAndReturn(run func() (*response, error)) *MockServicer_getAppInfo_Call {
 	_c.Call.Return(run)
 	return _c
 }

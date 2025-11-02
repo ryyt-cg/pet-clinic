@@ -179,7 +179,7 @@ func (router *Router) getByName(c fiber.Ctx, param string) error {
 // @Router		/pets	 		[post]
 func (router *Router) create(c fiber.Ctx) error {
 	log.Info().Msg("Add a new pet.")
-	var request *AddRequest
+	var request *addRequest
 	err := c.Bind().Body(&request)
 
 	if err != nil {
@@ -187,7 +187,7 @@ func (router *Router) create(c fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	petEntity, err := FromAddRequest(request)
+	petEntity, err := fromAddRequest(request)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to convert request to pet entity.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
@@ -212,26 +212,25 @@ func (router *Router) create(c fiber.Ctx) error {
 // @Router		/pets/{id}	 	[put]
 func (router *Router) update(c fiber.Ctx) error {
 	log.Info().Msg("Update a new pet.")
-	var request Request
+	var request request
 
 	strID := c.Params("id")
 	log.Info().Str("id", strID).Msg("GET pet by ID")
 
-	id := fiber.Params[int](c, "id")
-	//id, err := c.ParamsInt("id")
-	//if err != nil {
-	//	log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid pet ID")
-	//	return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
-	//}
+	id, err := strconv.Atoi(strID)
+	if err != nil {
+		log.Error().Err(err).Str("id", c.Params("id")).Msg("Invalid pet ID")
+		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
+	}
 
-	err := c.Bind().Body(&request)
+	err = c.Bind().Body(&request)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
 	log.Info().Str("name", request.Name).Msg("Update a pet.")
-	petEntity, err := ToPet(&request)
+	petEntity, err := toPet(&request)
 	if err != nil {
 		log.Error().Err(err).Msg("Invalid request data.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))

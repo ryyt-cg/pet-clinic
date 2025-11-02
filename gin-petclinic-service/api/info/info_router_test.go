@@ -21,7 +21,7 @@ type ipServiceMock struct {
 	mock.Mock
 }
 
-func (infoM *infoServiceMock) getAppInfo() (*Info, error) {
+func (infoM *infoServiceMock) getAppInfo() (*response, error) {
 	args := infoM.Called()
 	intf := args.Get(0)
 
@@ -29,7 +29,7 @@ func (infoM *infoServiceMock) getAppInfo() (*Info, error) {
 		return nil, args.Error(1)
 	}
 
-	val := intf.(*Info)
+	val := intf.(*response)
 	return val, args.Error(1)
 }
 
@@ -46,7 +46,7 @@ func (ipM *ipServiceMock) lookupIP(host string) ([]net.IP, error) {
 }
 
 func Test_appInfo(t *testing.T) {
-	info := &Info{
+	info := &response{
 		AppName:     "Gin unit test",
 		Description: "This is Gin unit test",
 		Version:     "1.5.0",
@@ -68,7 +68,7 @@ func Test_appInfo(t *testing.T) {
 
 	r := test.SetupRouter()
 	infoRouter.Register(r.Group("/info"))
-	expectedResponse := Info{
+	expectedResponse := response{
 		AppName:     "Gin unit test",
 		Description: "This is Gin unit test",
 		Version:     "1.5.0",
@@ -84,7 +84,7 @@ func Test_appInfo(t *testing.T) {
 }
 
 func Test_appInfoWithErrors(t *testing.T) {
-	info := &Info{
+	info := &response{
 		AppName:     "Gin unit test",
 		Description: "This is Gin unit test",
 		Version:     "1.5.0",
@@ -92,7 +92,7 @@ func Test_appInfoWithErrors(t *testing.T) {
 	}
 
 	tests := []struct {
-		mockResult     *Info
+		mockResult     *response
 		mockError      error
 		mockIPResult   []net.IP
 		mockIPError    error

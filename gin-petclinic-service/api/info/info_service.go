@@ -7,7 +7,7 @@ import (
 )
 
 type Servicer interface {
-	getAppInfo() (*Info, error)
+	getAppInfo() (*response, error)
 }
 
 type Service struct {
@@ -17,9 +17,9 @@ func NewService() *Service {
 	return &Service{}
 }
 
-func (service *Service) getAppInfo() (*Info, error) {
+func (service *Service) getAppInfo() (*response, error) {
 	// this block make GetAppInfo() not testable.
-	info := &Info{
+	info := &response{
 		AppName:     app.Config.AppInfo.Name,
 		Description: app.Config.AppInfo.Description,
 		Version:     app.Config.AppInfo.Version,

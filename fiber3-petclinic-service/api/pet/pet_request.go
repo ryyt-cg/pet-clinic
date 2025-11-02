@@ -7,21 +7,21 @@ import (
 	"gorm.io/gorm"
 )
 
-type Request struct {
+type request struct {
 	Name      string `json:"name" binding:"required"`
 	Birthdate string `json:"birthdate" binding:"required"`
 	SpeciesID uint   `json:"speciesID" binding:"required"`
 	OwnerID   uint   `json:"ownerID" binding:"required"`
 }
 
-type AddRequest struct {
+type addRequest struct {
 	Name      string `json:"name" binding:"required"`
 	Birthdate string `json:"birthdate" binding:"required"`
 	SpeciesID uint   `json:"speciesID" binding:"required"`
 	OwnerID   uint   `json:"ownerID" binding:"required"`
 }
 
-type UpdateRequest struct {
+type updateRequest struct {
 	ID        uint   `json:"id" binding:"required"`
 	Name      string `json:"name" binding:"required"`
 	Birthdate string `json:"birthdate" binding:"required"`
@@ -38,9 +38,9 @@ type UpdateRequest struct {
 //	"ownerID":   z.Uint(),
 //})
 
-// ToPet
+// toPet
 // Map Request to repository.Pet
-func ToPet(petRequest *Request) (*repository.Pet, error) {
+func toPet(petRequest *request) (*repository.Pet, error) {
 	// TODO need to add data validation
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
@@ -57,9 +57,9 @@ func ToPet(petRequest *Request) (*repository.Pet, error) {
 	return petEntity, nil
 }
 
-// FromAddRequest
+// fromAddRequest
 // Map AddRequest to repository.Pet
-func FromAddRequest(petRequest *AddRequest) (*repository.Pet, error) {
+func fromAddRequest(petRequest *addRequest) (*repository.Pet, error) {
 	if petRequest == nil {
 		return nil, nil
 	}
@@ -77,9 +77,9 @@ func FromAddRequest(petRequest *AddRequest) (*repository.Pet, error) {
 	}, nil
 }
 
-// FromUpdateRequest
+// fromUpdateRequest
 // Map UpdateRequest to repository.Pet
-func FromUpdateRequest(petRequest *UpdateRequest) (*repository.Pet, error) {
+func fromUpdateRequest(petRequest *updateRequest) (*repository.Pet, error) {
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
 		return nil, err
