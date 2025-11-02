@@ -11,13 +11,13 @@ import (
 
 type Servicer interface {
 	getAllSpecialties() (*specialtiesResponse, error)
-	getVetById(id uint) (*Response, error)
-	getVetByIdWithSpecialties(id uint) (*Response, error)
-	getVetByLastName(lastName string) (*Responses, error)
-	getAllVets() (*Responses, error)
-	getAllVetsWithSpecialties() (*Responses, error)
-	create(vet *repository.Vet) (*Response, error)
-	update(vet *repository.Vet) (*Response, error)
+	getVetById(id uint) (*response, error)
+	getVetByIdWithSpecialties(id uint) (*response, error)
+	getVetByLastName(lastName string) (*responses, error)
+	getAllVets() (*responses, error)
+	getAllVetsWithSpecialties() (*responses, error)
+	create(vet *repository.Vet) (*response, error)
+	update(vet *repository.Vet) (*response, error)
 }
 
 type Service struct {
@@ -33,20 +33,22 @@ func (service *Service) getAllSpecialties() (*specialtiesResponse, error) {
 	specialties, err := service.repository.FindAllSpecialties()
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No specialties found.")
-			return nil, gorm.ErrRecordNotFound
+			return &specialtiesResponse{
+				Context:     model.Context{},
+				Specialties: []specialtyResponse{},
+			}, nil
 		}
 
 		log.Error().Err(err).Msg("Fail to retrieve all specialties.")
 		return nil, err
 	}
 
-	specialtiesResponses := ToSpecialtiesResponses(specialties)
+	specialtiesResponses := toSpecialtiesResponses(specialties)
 	return specialtiesResponses, nil
 }
 
 // getVetById - retrieve vet by id
-func (service *Service) getVetById(id uint) (*Response, error) {
+func (service *Service) getVetById(id uint) (*response, error) {
 	log.Debug().Uint("id", id).Msg("GET vet by id")
 	vet, err := service.repository.FindById(id)
 	if err != nil {
@@ -59,12 +61,12 @@ func (service *Service) getVetById(id uint) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromVet(vet)
+	response := &response{}
+	response.fromVet(vet)
 	return response, nil
 }
 
-func (service *Service) getVetByIdWithSpecialties(id uint) (*Response, error) {
+func (service *Service) getVetByIdWithSpecialties(id uint) (*response, error) {
 	vet, err := service.repository.FindByIdWithSpecialties(id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -75,63 +77,69 @@ func (service *Service) getVetByIdWithSpecialties(id uint) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromVet(vet)
+	response := &response{}
+	response.fromVet(vet)
 	return response, nil
 }
 
-func (service *Service) getVetByLastName(lastName string) (*Responses, error) {
+func (service *Service) getVetByLastName(lastName string) (*responses, error) {
 	vets, err := service.repository.FindByLastName(lastName)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Str("lastName", lastName).Msg("No vets found with this last name.")
-			return nil, gorm.ErrRecordNotFound
+			return &responses{
+				Context: model.Context{},
+				Vets:    []response{},
+			}, nil
 		}
 		log.Error().Err(err).Str("lastName", lastName).Msg("Fail to retrieve the vets by last name.")
 		return nil, err
 	}
 
-	vetsJson := FromVets(vets)
+	vetsJson := fromVets(vets)
 	contextJson := model.Context{Count: len(vetsJson)}
-	return &Responses{Vets: vetsJson, Context: contextJson}, nil
+	return &responses{Vets: vetsJson, Context: contextJson}, nil
 }
 
 // getAllVets - retrieve all vets
-func (service *Service) getAllVets() (*Responses, error) {
+func (service *Service) getAllVets() (*responses, error) {
 	vets, err := service.repository.FindAll()
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No vets found.")
-			return nil, gorm.ErrRecordNotFound
+			return &responses{
+				Context: model.Context{},
+				Vets:    []response{},
+			}, nil
 		}
 		log.Error().Err(err).Msg("Fail to retrieve all vets.")
 		return nil, err
 	}
 	log.Debug().Msg("counts of all vets")
 
-	vetsJson := FromVets(vets)
+	vetsJson := fromVets(vets)
 	contextJson := model.Context{Count: len(vetsJson)}
-	return &Responses{Vets: vetsJson, Context: contextJson}, nil
+	return &responses{Vets: vetsJson, Context: contextJson}, nil
 }
 
-func (service *Service) getAllVetsWithSpecialties() (*Responses, error) {
+func (service *Service) getAllVetsWithSpecialties() (*responses, error) {
 	vets, err := service.repository.FindAllPreload()
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No vets found with specialties.")
-			return nil, gorm.ErrRecordNotFound
+			return &responses{
+				Context: model.Context{},
+				Vets:    []response{},
+			}, nil
 		}
 		log.Error().Err(err).Msg("Fail to retrieve all vets.")
 		return nil, err
 	}
 
-	return ToResponses(vets), nil
+	return toResponses(vets), nil
 }
 
 // create - create new vet
-func (service *Service) create(vet *repository.Vet) (*Response, error) {
+func (service *Service) create(vet *repository.Vet) (*response, error) {
 	log.Info().Any("vet", vet).Msg("Create new vet.")
 	newVet, err := service.repository.Insert(vet)
 
@@ -140,13 +148,13 @@ func (service *Service) create(vet *repository.Vet) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromVet(newVet)
+	response := &response{}
+	response.fromVet(newVet)
 	return response, nil
 }
 
 // update - update vet
-func (service *Service) update(vet *repository.Vet) (*Response, error) {
+func (service *Service) update(vet *repository.Vet) (*response, error) {
 	log.Info().Any("vet", vet).Msg("Update a vet.")
 	updatedVet, err := service.repository.Update(vet)
 
@@ -159,7 +167,7 @@ func (service *Service) update(vet *repository.Vet) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromVet(updatedVet)
+	response := &response{}
+	response.fromVet(updatedVet)
 	return response, nil
 }

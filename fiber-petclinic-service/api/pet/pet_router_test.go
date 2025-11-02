@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fiber-petclinic-service/api/visit"
 	resterr "fiber-petclinic-service/internal/errors"
 	"fiber-petclinic-service/internal/repository"
 	"fiber-petclinic-service/internal/repository/model"
@@ -22,24 +21,24 @@ func Test_getAllPets(t *testing.T) {
 	mockEntityPets := []repository.Pet{
 		{Model: gorm.Model{ID: 1}, Name: "Tom",
 			Birthdate: test.ToDate("2015-11-19"),
-			//Visits:    nil,
+			Visits:    nil,
 			SpeciesID: 19, OwnerID: 7},
 		{Model: gorm.Model{ID: 2}, Name: "Mike",
 			Birthdate: test.ToDate("2018-04-17"),
-			//Visits:    nil,
+			Visits:    nil,
 			SpeciesID: 20, OwnerID: 7},
 	}
 
-	mockPets := &Responses{
+	mockPets := &responses{
 		Context: model.Context{
 			Count: 2,
 		},
-		Pets: FromPets(mockEntityPets),
+		Pets: fromPets(mockEntityPets),
 	}
 
 	tests := []struct {
 		name             string
-		mockPets         *Responses
+		mockPets         *responses
 		mockError        error
 		route            string
 		statusCode       int
@@ -88,7 +87,7 @@ func Test_getAllPets(t *testing.T) {
 
 			switch resp.StatusCode {
 			case http.StatusOK:
-				actualPetResponse := &Responses{}
+				actualPetResponse := &responses{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualPetResponse)
@@ -96,8 +95,8 @@ func Test_getAllPets(t *testing.T) {
 					t.Errorf("Error unmarshalling response body: %v", err)
 					return
 				}
-				assert.Equal(t, tc.expectedResponse.(*Responses).Context.Count, actualPetResponse.Context.Count)
-				assert.Equal(t, tc.expectedResponse.(*Responses).Pets, actualPetResponse.Pets)
+				assert.Equal(t, tc.expectedResponse.(*responses).Context.Count, actualPetResponse.Context.Count)
+				assert.Equal(t, tc.expectedResponse.(*responses).Pets, actualPetResponse.Pets)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -115,7 +114,7 @@ func Test_getAllPets(t *testing.T) {
 }
 
 func Test_getPetById(t *testing.T) {
-	mockPet := &Response{
+	mockPet := &response{
 		ID:        1,
 		Name:      "Running Water",
 		Birthdate: "2018-02-26",
@@ -124,7 +123,7 @@ func Test_getPetById(t *testing.T) {
 	tests := []struct {
 		name             string
 		id               uint
-		mockPet          *Response
+		mockPet          *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -176,7 +175,7 @@ func Test_getPetById(t *testing.T) {
 
 			switch resp.StatusCode {
 			case http.StatusOK:
-				actualPetResponse := &Response{}
+				actualPetResponse := &response{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualPetResponse)
@@ -184,8 +183,8 @@ func Test_getPetById(t *testing.T) {
 					t.Errorf("Error unmarshalling response body: %v", err)
 					return
 				}
-				assert.Equal(t, tc.expectedResponse.(*Response).ID, actualPetResponse.ID)
-				assert.Equal(t, tc.expectedResponse.(*Response).Name, actualPetResponse.Name)
+				assert.Equal(t, tc.expectedResponse.(*response).ID, actualPetResponse.ID)
+				assert.Equal(t, tc.expectedResponse.(*response).Name, actualPetResponse.Name)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -206,7 +205,7 @@ func Test_getById_BadRequest(t *testing.T) {
 	testCases := []struct {
 		name             string
 		id               interface{}
-		mockPet          *Response
+		mockPet          *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -216,10 +215,10 @@ func Test_getById_BadRequest(t *testing.T) {
 			name:             "get pet by invalid id",
 			id:               "invalid_id",
 			mockPet:          nil,
-			mockError:        resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
+			mockError:        resterr.BadRequest("strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
 			route:            "/v1/pets/invalid_id",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
+			expectedResponse: resterr.BadRequest("strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
 		},
 	}
 
@@ -251,12 +250,12 @@ func Test_getById_BadRequest(t *testing.T) {
 }
 
 func Test_getPetByIdWithVisits(t *testing.T) {
-	mockPet := &Response{
+	mockPet := &response{
 		ID:        1,
 		Name:      "Running Water",
 		Birthdate: "2018-02-26",
 		Species:   "Dog",
-		Visits: []visit.Response{
+		Visits: []visitResponse{
 			{
 				ID:          1,
 				VisitDate:   "2023-10-01",
@@ -275,7 +274,7 @@ func Test_getPetByIdWithVisits(t *testing.T) {
 	tests := []struct {
 		name             string
 		id               uint
-		mockPet          *Response
+		mockPet          *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -327,7 +326,7 @@ func Test_getPetByIdWithVisits(t *testing.T) {
 
 			switch resp.StatusCode {
 			case http.StatusOK:
-				actualPetResponse := &Response{}
+				actualPetResponse := &response{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualPetResponse)
@@ -335,8 +334,8 @@ func Test_getPetByIdWithVisits(t *testing.T) {
 					t.Errorf("Error unmarshalling response body: %v", err)
 					return
 				}
-				assert.Equal(t, tc.expectedResponse.(*Response).ID, actualPetResponse.ID)
-				assert.Equal(t, tc.expectedResponse.(*Response).Name, actualPetResponse.Name)
+				assert.Equal(t, tc.expectedResponse.(*response).ID, actualPetResponse.ID)
+				assert.Equal(t, tc.expectedResponse.(*response).Name, actualPetResponse.Name)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -357,7 +356,7 @@ func Test_getByIdWithVisits_BadRequest(t *testing.T) {
 	testCases := []struct {
 		name             string
 		id               interface{}
-		mockPet          *Response
+		mockPet          *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -367,10 +366,10 @@ func Test_getByIdWithVisits_BadRequest(t *testing.T) {
 			name:             "get pet by invalid id",
 			id:               "invalid_id",
 			mockPet:          nil,
-			mockError:        resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
+			mockError:        resterr.BadRequest("strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
 			route:            "/v1/pets/invalid_id/visits",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
+			expectedResponse: resterr.BadRequest("strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
 		},
 	}
 
@@ -402,11 +401,11 @@ func Test_getByIdWithVisits_BadRequest(t *testing.T) {
 }
 
 func Test_getPetsByName(t *testing.T) {
-	mockPets := &Responses{
+	mockPets := &responses{
 		Context: model.Context{
 			Count: 2,
 		},
-		Pets: []Response{
+		Pets: []response{
 			{ID: 1, Name: "Tom", Birthdate: "2015-11-19"},
 			{ID: 2, Name: "Tom", Birthdate: "2018-04-17"},
 		},
@@ -415,7 +414,7 @@ func Test_getPetsByName(t *testing.T) {
 	tests := []struct {
 		name             string
 		nameQuery        string
-		mockPets         *Responses
+		mockPets         *responses
 		mockError        error
 		route            string
 		statusCode       int
@@ -467,15 +466,15 @@ func Test_getPetsByName(t *testing.T) {
 
 			switch resp.StatusCode {
 			case http.StatusOK:
-				actualPetResponse := &Responses{}
+				actualPetResponse := &responses{}
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualPetResponse)
 				if err != nil {
 					t.Errorf("Error unmarshalling response body: %v", err)
 					return
 				}
-				assert.Equal(t, tc.expectedResponse.(*Responses).Context.Count, actualPetResponse.Context.Count)
-				assert.Equal(t, tc.expectedResponse.(*Responses).Pets, actualPetResponse.Pets)
+				assert.Equal(t, tc.expectedResponse.(*responses).Context.Count, actualPetResponse.Context.Count)
+				assert.Equal(t, tc.expectedResponse.(*responses).Pets, actualPetResponse.Pets)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				body, _ := io.ReadAll(resp.Body)
@@ -495,7 +494,7 @@ func Test_getByName_BadRequest(t *testing.T) {
 	testCases := []struct {
 		name             string
 		nameQuery        string
-		mockPets         *Responses
+		mockPets         *responses
 		mockError        error
 		route            string
 		statusCode       int
@@ -514,10 +513,10 @@ func Test_getByName_BadRequest(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			petMock := NewMockServicer(t)
 			r := test.SetupRouter()
 			v1 := r.Group("/v1")
 
+			petMock := NewMockServicer(t)
 			petRouter := NewRouter(petMock)
 			petRouter.Register(v1.Group("/pets"))
 
@@ -539,32 +538,32 @@ func Test_getByName_BadRequest(t *testing.T) {
 }
 
 func Test_createNewPet(t *testing.T) {
-	addRequest := &AddRequest{
+	addPetRequest := &addRequest{
 		Name:      "Tom",
 		Birthdate: "2015-11-19",
-		//SpeciesID: 19,
-		//OwnerID:   7,
+		SpeciesID: 19,
+		OwnerID:   7,
 	}
 
-	mockPet := &Response{
+	mockPet := &addResponse{
 		ID:        1,
 		Name:      "Tom",
 		Birthdate: "2015-11-19",
-		Species:   "Dog",
-		Visits:    nil,
+		SpeciesID: 19,
+		OwnerID:   7,
 	}
 
 	petEntity := &repository.Pet{
 		Name:      "Tom",
 		Birthdate: test.ToDate("2015-11-19"),
-		//SpeciesID: 19,
-		//OwnerID:   7,
+		SpeciesID: 19,
+		OwnerID:   7,
 	}
 
 	tests := []struct {
 		name             string
-		request          *AddRequest
-		mockPet          *Response
+		request          *addRequest
+		mockPet          *addResponse
 		mockError        error
 		route            string
 		statusCode       int
@@ -572,7 +571,7 @@ func Test_createNewPet(t *testing.T) {
 	}{
 		{
 			name:             "create new pet",
-			request:          addRequest,
+			request:          addPetRequest,
 			mockPet:          mockPet,
 			mockError:        nil,
 			route:            "/v1/pets",
@@ -581,7 +580,7 @@ func Test_createNewPet(t *testing.T) {
 		},
 		{
 			name:             "fail to create new pet",
-			request:          addRequest,
+			request:          addPetRequest,
 			mockPet:          nil,
 			mockError:        errors.New("failed to create pet"),
 			route:            "/v1/pets",
@@ -607,15 +606,15 @@ func Test_createNewPet(t *testing.T) {
 			resp, _ := r.Test(req, 5)
 
 			switch resp.StatusCode {
-			case http.StatusOK:
-				actualPetResponse := &Response{}
+			case http.StatusCreated:
+				actualPetResponse := &addResponse{}
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualPetResponse)
 				if err != nil {
 					t.Errorf("Error unmarshalling response body: %v", err)
 					return
 				}
-				assert.Equal(t, tc.expectedResponse.(*Response), actualPetResponse)
+				assert.Equal(t, tc.expectedResponse.(*addResponse), actualPetResponse)
 			case http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				body, _ := io.ReadAll(resp.Body)
@@ -634,8 +633,8 @@ func Test_createNewPet(t *testing.T) {
 func Test_createNewPet_BadRequest(t *testing.T) {
 	testCases := []struct {
 		name             string
-		request          *AddRequest
-		mockPet          *Response
+		request          *addRequest
+		mockPet          *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -643,7 +642,7 @@ func Test_createNewPet_BadRequest(t *testing.T) {
 	}{
 		{
 			name:             "create new pet with invalid birthdate",
-			request:          &AddRequest{Name: "Tom", Birthdate: "2015-11-31"},
+			request:          &addRequest{Name: "Tom", Birthdate: "2015-11-31"},
 			mockPet:          nil,
 			mockError:        resterr.BadRequest("parsing time \"2015-11-31\": day out of range"),
 			route:            "/v1/pets",
@@ -680,30 +679,34 @@ func Test_createNewPet_BadRequest(t *testing.T) {
 }
 
 func Test_updatePet(t *testing.T) {
-	updateRequest := &UpdateRequest{
+	updatePetRequest := &updateRequest{
 		Name:      "Tom",
 		Birthdate: "2015-11-19",
+		SpeciesID: 19,
+		OwnerID:   7,
 	}
 
-	mockPet := &Response{
+	mockPet := &updateResponse{
 		ID:        1,
 		Name:      "Tom",
 		Birthdate: "2015-11-19",
-		Species:   "Dog",
-		Visits:    nil,
+		SpeciesID: 19,
+		OwnerID:   7,
 	}
 
 	petEntity := &repository.Pet{
 		Model:     gorm.Model{ID: 1},
 		Name:      "Tom",
 		Birthdate: test.ToDate("2015-11-19"),
+		SpeciesID: 19,
+		OwnerID:   7,
 	}
 
 	tests := []struct {
 		name             string
 		id               uint
-		request          *UpdateRequest
-		mockPet          *Response
+		request          *updateRequest
+		mockPet          *updateResponse
 		mockError        error
 		route            string
 		statusCode       int
@@ -712,7 +715,7 @@ func Test_updatePet(t *testing.T) {
 		{
 			name:             "update pet",
 			id:               1,
-			request:          updateRequest,
+			request:          updatePetRequest,
 			mockPet:          mockPet,
 			mockError:        nil,
 			route:            "/v1/pets/1",
@@ -722,7 +725,7 @@ func Test_updatePet(t *testing.T) {
 		{
 			name:             "fail to update pet",
 			id:               1,
-			request:          updateRequest,
+			request:          updatePetRequest,
 			mockPet:          nil,
 			mockError:        errors.New("failed to update pet"),
 			route:            "/v1/pets/1",
@@ -749,15 +752,15 @@ func Test_updatePet(t *testing.T) {
 
 			switch resp.StatusCode {
 			case http.StatusOK:
-				actualPetResponse := &Response{}
+				actualPetResponse := &updateResponse{}
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualPetResponse)
 				if err != nil {
 					t.Errorf("Error unmarshalling response body: %v", err)
 					return
 				}
-				assert.Equal(t, tc.expectedResponse.(*Response).ID, actualPetResponse.ID)
-				assert.Equal(t, tc.expectedResponse.(*Response).Name, actualPetResponse.Name)
+				assert.Equal(t, tc.expectedResponse.(*updateResponse).ID, actualPetResponse.ID)
+				assert.Equal(t, tc.expectedResponse.(*updateResponse).Name, actualPetResponse.Name)
 			case http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				body, _ := io.ReadAll(resp.Body)
@@ -777,8 +780,8 @@ func Test_updatePet_BadRequest(t *testing.T) {
 	testCases := []struct {
 		name             string
 		id               interface{}
-		request          *UpdateRequest
-		mockPet          *Response
+		request          *updateRequest
+		mockPet          *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -787,17 +790,17 @@ func Test_updatePet_BadRequest(t *testing.T) {
 		{
 			name:             "update pet with invalid id",
 			id:               "invalid_id",
-			request:          &UpdateRequest{Name: "Tom", Birthdate: "2015-11-19"},
+			request:          &updateRequest{Name: "Tom", Birthdate: "2015-11-19"},
 			mockPet:          nil,
-			mockError:        resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
+			mockError:        resterr.BadRequest("strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
 			route:            "/v1/pets/invalid_id",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("failed to convert: strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
+			expectedResponse: resterr.BadRequest("strconv.Atoi: parsing \"invalid_id\": invalid syntax"),
 		},
 		{
 			name:             "update pet with invalid birthdate",
 			id:               1,
-			request:          &UpdateRequest{Name: "Tom", Birthdate: "2015-11-31"}, // Invalid date
+			request:          &updateRequest{Name: "Tom", Birthdate: "2015-11-31"}, // Invalid date
 			mockPet:          nil,
 			mockError:        resterr.BadRequest("parsing time \"2015-11-31\": day out of range"),
 			route:            "/v1/pets/1",

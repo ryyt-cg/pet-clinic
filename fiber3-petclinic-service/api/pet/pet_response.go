@@ -1,18 +1,27 @@
 package pet
 
 import (
-	"fiber3-petclinic-service/api/visit"
 	"fiber3-petclinic-service/internal/repository"
 	"fiber3-petclinic-service/internal/repository/model"
 	"time"
 )
 
+type ownerResponse struct {
+}
+
+type visitResponse struct {
+	ID          uint   `json:"id"`
+	VisitDate   string `json:"visitDate"`
+	Description string `json:"description"`
+	PetID       uint   `json:"petID"`
+}
+
 type response struct {
-	ID        uint             `json:"id"`
-	Name      string           `json:"name"`
-	Birthdate string           `json:"birthdate"`
-	Species   string           `json:"species"`
-	Visits    []visit.Response `json:"visits,omitempty"`
+	ID        uint            `json:"id"`
+	Name      string          `json:"name"`
+	Birthdate string          `json:"birthdate"`
+	Species   string          `json:"species"`
+	Visits    []visitResponse `json:"visits,omitempty"`
 }
 
 type responses struct {
@@ -53,7 +62,7 @@ func toResponse(pet *repository.Pet) *response {
 		Name:      pet.Name,
 		Birthdate: responseBirthday,
 		Species:   pet.Species.Name,
-		Visits:    visit.FromVisits(pet.Visits),
+		Visits:    toVisitResponses(pet.Visits),
 	}
 }
 
@@ -111,8 +120,32 @@ func fromPets(pets []repository.Pet) []response {
 	return petResponses
 }
 
+// toResponses
+// Map list of repository.Pet to responses
 func toResponses(pets []repository.Pet) *responses {
 	petResponses := fromPets(pets)
 	contextJson := model.Context{Count: len(petResponses)}
 	return &responses{Pets: petResponses, Context: contextJson}
+}
+
+func toVisitResponse(visit repository.Visit) *visitResponse {
+	return &visitResponse{
+		ID:          visit.ID,
+		VisitDate:   visit.VisitDate.Format(time.DateOnly),
+		Description: visit.Description,
+		PetID:       visit.PetID,
+	}
+}
+
+func toVisitResponses(visits []repository.Visit) []visitResponse {
+	if len(visits) == 0 {
+		return nil
+	}
+
+	visitResponses := make([]visitResponse, len(visits))
+	for i, v := range visits {
+		visitResponses[i] = *toVisitResponse(v)
+	}
+
+	return visitResponses
 }

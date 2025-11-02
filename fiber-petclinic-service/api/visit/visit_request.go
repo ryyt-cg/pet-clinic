@@ -7,29 +7,29 @@ import (
 	"gorm.io/gorm"
 )
 
-type Request struct {
+type request struct {
 	ID          uint   `json:"id"`
 	VisitDate   string `json:"visitDate" binding:"required"`
 	Description string `json:"description" binding:"required"`
 	PetID       uint   `json:"petID" binding:"required"`
 }
 
-type AddRequest struct {
+type addRequest struct {
 	VisitDate   string `json:"visitDate" binding:"required"`
 	Description string `json:"description" binding:"required"`
 	PetID       uint   `json:"petID" binding:"required"`
 }
 
-type UpdateRequest struct {
+type updateRequest struct {
 	ID          uint   `json:"id"`
 	VisitDate   string `json:"visitDate" binding:"required"`
 	Description string `json:"description" binding:"required"`
 	PetID       uint   `json:"petID" binding:"required"`
 }
 
-// FromAddRequest
-// Map an AddRequest to repository.Visit
-func FromAddRequest(request *AddRequest) (*repository.Visit, error) {
+// fromAddRequest
+// Map an addRequest to repository.Visit
+func fromAddRequest(request *addRequest) (*repository.Visit, error) {
 	visitEntify := &repository.Visit{
 		Description: request.Description,
 		PetID:       request.PetID,
@@ -44,9 +44,9 @@ func FromAddRequest(request *AddRequest) (*repository.Visit, error) {
 	return visitEntify, nil
 }
 
-// FromUpdateRequest
-// Map a UpdateRequest to repository.Visit
-func FromUpdateRequest(request *UpdateRequest) (*repository.Visit, error) {
+// fromUpdateRequest
+// Map a updateRequest to repository.Visit
+func fromUpdateRequest(request *updateRequest) (*repository.Visit, error) {
 	visitEntify := &repository.Visit{
 		Model:       gorm.Model{ID: request.ID},
 		Description: request.Description,

@@ -20,7 +20,7 @@ func Test_getById(t *testing.T) {
 		Description: "rabies shot",
 		PetID:       101,
 	}
-	expectedResponse := &Response{
+	expectedResponse := &response{
 		ID:          1,
 		VisitDate:   "2023-03-05",
 		Description: "rabies shot",
@@ -69,7 +69,7 @@ func Test_getById(t *testing.T) {
 				assert.Equal(t, tc.mockError, err)
 				assert.Nil(t, result)
 			} else {
-				assert.Equal(t, tc.expectedResult.(*Response), result)
+				assert.Equal(t, tc.expectedResult.(*response), result)
 				assert.Nil(t, err)
 			}
 
@@ -99,11 +99,11 @@ func Test_getAllVisits(t *testing.T) {
 			PetID:       202,
 		},
 	}
-	expectedVisits := &Responses{
+	expectedVisits := &responses{
 		Context: model.Context{
 			Count: 2,
 		},
-		Visits: FromVisits(mockVisits),
+		Visits: fromVisits(mockVisits),
 	}
 
 	testCases := []struct {
@@ -122,9 +122,9 @@ func Test_getAllVisits(t *testing.T) {
 			name:       "get no visits",
 			mockVisits: nil,
 			mockError:  gorm.ErrRecordNotFound,
-			expectedVisits: &Responses{
+			expectedVisits: &responses{
 				Context: model.Context{},
-				Visits:  []Response{},
+				Visits:  []response{},
 			},
 		},
 		{
@@ -147,7 +147,7 @@ func Test_getAllVisits(t *testing.T) {
 				assert.Equal(t, tc.expectedVisits, err)
 				assert.Nil(t, result)
 			} else {
-				assert.Equal(t, tc.expectedVisits.(*Responses), result)
+				assert.Equal(t, tc.expectedVisits.(*responses), result)
 				assert.Nil(t, err)
 			}
 			visitMock.AssertExpectations(t)
@@ -165,7 +165,7 @@ func Test_create(t *testing.T) {
 		Description: "rabies shot",
 		PetID:       101,
 	}
-	expectedResponse := &Response{
+	expectedResponse := &response{
 		ID:          1,
 		VisitDate:   "2023-03-05",
 		Description: "rabies shot",
@@ -209,7 +209,7 @@ func Test_create(t *testing.T) {
 				assert.Equal(t, tc.expectedResult, err)
 				assert.Nil(t, result)
 			} else {
-				assert.Equal(t, tc.expectedResult.(*Response), result)
+				assert.Equal(t, tc.expectedResult.(*response), result)
 				assert.Nil(t, err)
 			}
 			visitMock.AssertExpectations(t)
@@ -227,7 +227,7 @@ func Test_update(t *testing.T) {
 		Description: "rabies shot",
 		PetID:       101,
 	}
-	expectedResponse := &Response{
+	expectedResponse := &response{
 		ID:          1,
 		VisitDate:   "2023-03-05",
 		Description: "rabies shot",
@@ -275,7 +275,7 @@ func Test_update(t *testing.T) {
 				assert.Equal(t, tc.expectedResult, err)
 				assert.Nil(t, result)
 			} else {
-				assert.Equal(t, tc.expectedResult.(*Response), result)
+				assert.Equal(t, tc.expectedResult.(*response), result)
 				assert.Nil(t, err)
 			}
 			visitMock.AssertExpectations(t)

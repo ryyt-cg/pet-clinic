@@ -49,7 +49,7 @@ func (vetRouter *Router) allSpecialties(c *fiber.Ctx) error {
 //
 // @Description	Get all vets
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/vets/all 		[get]
@@ -59,6 +59,7 @@ func (vetRouter *Router) allVets(c *fiber.Ctx) error {
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to get all vets.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+
 	}
 
 	return c.Status(fiber.StatusOK).JSON(responses)
@@ -114,14 +115,14 @@ func (vetRouter *Router) getVetByIdWithSpecialties(c *fiber.Ctx) error {
 
 // addNewVet - add new vet
 func (vetRouter *Router) create(c *fiber.Ctx) error {
-	var vetRequest AddRequest
+	var vetRequest addRequest
 	err := c.BodyParser(&vetRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	newVet, err := vetRouter.service.create(FromAddRequest(&vetRequest))
+	newVet, err := vetRouter.service.create(fromAddRequest(&vetRequest))
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to create new vet.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
@@ -130,7 +131,7 @@ func (vetRouter *Router) create(c *fiber.Ctx) error {
 }
 
 func (vetRouter *Router) update(c *fiber.Ctx) error {
-	var vetRequest UpdateRequest
+	var vetRequest updateRequest
 	id, err := c.ParamsInt("id")
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to convert ID to integer.")
@@ -143,7 +144,7 @@ func (vetRouter *Router) update(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	vetEntity := FromUpdateRequest(&vetRequest)
+	vetEntity := fromUpdateRequest(&vetRequest)
 	vetEntity.ID = uint(id)
 	newVet, err := vetRouter.service.update(vetEntity)
 	if err != nil {

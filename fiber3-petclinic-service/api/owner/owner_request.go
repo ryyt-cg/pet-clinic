@@ -28,9 +28,9 @@ type updateRequest struct {
 	Telephone string `json:"telephone"`
 }
 
-// ToOwnerEntity
+// toOwnerEntity
 // Map an AddRequest to repository.Owner
-func ToOwnerEntity(ownerRequest *addRequest) *repository.Owner {
+func toOwnerEntity(ownerRequest *addRequest) *repository.Owner {
 	if ownerRequest == nil {
 		return nil
 	}
@@ -47,9 +47,9 @@ func ToOwnerEntity(ownerRequest *addRequest) *repository.Owner {
 	}
 }
 
-// ToOwnerEntityFromUpdateRequest
+// toOwnerEntityFromUpdateRequest
 // Map an UpdateRequest to repository.Owner
-func ToOwnerEntityFromUpdateRequest(ownerRequest *updateRequest) *repository.Owner {
+func toOwnerEntityFromUpdateRequest(ownerRequest *updateRequest) *repository.Owner {
 	if ownerRequest == nil {
 		return nil
 	}

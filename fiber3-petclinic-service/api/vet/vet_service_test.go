@@ -42,11 +42,14 @@ func Test_getAllSpecialties(t *testing.T) {
 			expectedError: nil,
 		},
 		{
-			name:          "get no specialties",
-			mockSpecs:     nil,
-			mockError:     gorm.ErrRecordNotFound,
-			expectedSpecs: nil,
-			expectedError: gorm.ErrRecordNotFound,
+			name:      "get no specialties",
+			mockSpecs: nil,
+			mockError: gorm.ErrRecordNotFound,
+			expectedSpecs: &specialtiesResponse{
+				Context:     model.Context{},
+				Specialties: []specialtyResponse{},
+			},
+			expectedError: nil,
 		},
 		{
 			name:          "fail to get all specialties",
@@ -86,7 +89,7 @@ func Test_getById(t *testing.T) {
 		id            uint
 		mockVet       *repository.Vet
 		mockError     error
-		expectedVet   *Response
+		expectedVet   *response
 		expectedError error
 	}{
 		{
@@ -102,7 +105,7 @@ func Test_getById(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedVet: &Response{
+			expectedVet: &response{
 				ID:        1,
 				FirstName: "Nat",
 				LastName:  "Cole",
@@ -157,7 +160,7 @@ func Test_getByIdWithSpecialties(t *testing.T) {
 		id            uint
 		mockVet       *repository.Vet
 		mockError     error
-		expectedVet   *Response
+		expectedVet   *response
 		expectedError error
 	}{
 		{
@@ -187,7 +190,7 @@ func Test_getByIdWithSpecialties(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedVet: &Response{
+			expectedVet: &response{
 				ID:        1,
 				FirstName: "Nat",
 				LastName:  "Cole",
@@ -245,7 +248,7 @@ func Test_getByLastName(t *testing.T) {
 		lastName      string
 		mockVets      []repository.Vet
 		mockError     error
-		expectedVets  *Responses
+		expectedVets  *responses
 		expectedError error
 	}{
 		{
@@ -272,11 +275,11 @@ func Test_getByLastName(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedVets: &Responses{
+			expectedVets: &responses{
 				Context: model.Context{
 					Count: 2,
 				},
-				Vets: []Response{
+				Vets: []response{
 					{ID: 1, FirstName: "Leo", LastName: "DiCaprio"},
 					{ID: 2, FirstName: "Tiger", LastName: "DiCaprio"}, // Specialties: {}},
 				},
@@ -284,12 +287,15 @@ func Test_getByLastName(t *testing.T) {
 			expectedError: nil,
 		},
 		{
-			name:          "get no vet by last namer",
-			lastName:      "DiCaprio",
-			mockVets:      nil,
-			mockError:     gorm.ErrRecordNotFound,
-			expectedVets:  nil,
-			expectedError: gorm.ErrRecordNotFound,
+			name:      "get no vet by last namer",
+			lastName:  "DiCaprio",
+			mockVets:  nil,
+			mockError: gorm.ErrRecordNotFound,
+			expectedVets: &responses{
+				Context: model.Context{},
+				Vets:    []response{},
+			},
+			expectedError: nil,
 		},
 		{
 			name:          "fail to get vet by last namer",
@@ -327,7 +333,7 @@ func Test_getAllVets(t *testing.T) {
 		name          string
 		mockVets      []repository.Vet
 		mockError     error
-		expectedVets  *Responses
+		expectedVets  *responses
 		expectedError error
 	}{
 		{
@@ -353,11 +359,11 @@ func Test_getAllVets(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedVets: &Responses{
+			expectedVets: &responses{
 				Context: model.Context{
 					Count: 2,
 				},
-				Vets: []Response{
+				Vets: []response{
 					{ID: 1, FirstName: "Leo", LastName: "DiCaprio"},
 					{ID: 2, FirstName: "Tiger", LastName: "DiCaprio"}, // Specialties: {}},
 				},
@@ -365,11 +371,14 @@ func Test_getAllVets(t *testing.T) {
 			expectedError: nil,
 		},
 		{
-			name:          "get no vets",
-			mockVets:      nil,
-			mockError:     gorm.ErrRecordNotFound,
-			expectedVets:  nil,
-			expectedError: gorm.ErrRecordNotFound,
+			name:      "get no vets",
+			mockVets:  nil,
+			mockError: gorm.ErrRecordNotFound,
+			expectedVets: &responses{
+				Context: model.Context{},
+				Vets:    []response{},
+			},
+			expectedError: nil,
 		},
 		{
 			name:          "fail to get all vets",
@@ -406,7 +415,7 @@ func Test_getAllVetsWithSpecialties(t *testing.T) {
 		name          string
 		mockVets      []repository.Vet
 		mockError     error
-		expectedVets  *Responses
+		expectedVets  *responses
 		expectedError error
 	}{
 		{
@@ -440,11 +449,11 @@ func Test_getAllVetsWithSpecialties(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedVets: &Responses{
+			expectedVets: &responses{
 				Context: model.Context{
 					Count: 2,
 				},
-				Vets: []Response{
+				Vets: []response{
 					{ID: 1, FirstName: "Leo", LastName: "DiCaprio",
 						Specialties: &[]specialtyResponse{
 							{ID: 1, Name: "Surgery"},
@@ -455,11 +464,14 @@ func Test_getAllVetsWithSpecialties(t *testing.T) {
 			expectedError: nil,
 		},
 		{
-			name:          "get no vets with specialties",
-			mockVets:      nil,
-			mockError:     gorm.ErrRecordNotFound,
-			expectedVets:  nil,
-			expectedError: gorm.ErrRecordNotFound,
+			name:      "get no vets with specialties",
+			mockVets:  nil,
+			mockError: gorm.ErrRecordNotFound,
+			expectedVets: &responses{
+				Context: model.Context{},
+				Vets:    []response{},
+			},
+			expectedError: nil,
 		},
 		{
 			name:          "fail to get all vets",
@@ -507,7 +519,7 @@ func Test_create(t *testing.T) {
 		mockVet       *repository.Vet
 		mockResult    *repository.Vet
 		mockError     error
-		expectedVet   *Response
+		expectedVet   *response
 		expectedError error
 	}{
 		{
@@ -515,7 +527,7 @@ func Test_create(t *testing.T) {
 			mockVet:    mockVet,
 			mockResult: mockVet,
 			mockError:  nil,
-			expectedVet: &Response{
+			expectedVet: &response{
 				ID:        1,
 				FirstName: "Leo",
 				LastName:  "DiCaprio",
@@ -558,7 +570,7 @@ func Test_update(t *testing.T) {
 		name          string
 		mockVet       *repository.Vet
 		mockError     error
-		expectedVet   *Response
+		expectedVet   *response
 		expectedError error
 	}{
 		{
@@ -573,7 +585,7 @@ func Test_update(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedVet: &Response{
+			expectedVet: &response{
 				ID:        1,
 				FirstName: "Leo",
 				LastName:  "DiCaprio",

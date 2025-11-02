@@ -2,7 +2,6 @@ package pet
 
 import (
 	"errors"
-	"fiber3-petclinic-service/api/visit"
 	"fiber3-petclinic-service/internal/repository"
 	"fiber3-petclinic-service/internal/repository/model"
 	"fiber3-petclinic-service/internal/test"
@@ -292,7 +291,7 @@ func Test_getByIdWithVisits(t *testing.T) {
 				Name:      "Nash",
 				Birthdate: "2014-10-07",
 				Species:   "Dog",
-				Visits: []visit.Response{
+				Visits: []visitResponse{
 					{
 						ID:          1,
 						VisitDate:   "2014-10-07",

@@ -13,14 +13,14 @@ import (
 func TestResponse_FromVisit(t *testing.T) {
 	testCases := []struct {
 		fromVisit  *repository.Visit
-		toResponse Response
+		toResponse response
 	}{
 		{fromVisit: &repository.Visit{
 			Model:       gorm.Model{ID: 1},
 			VisitDate:   test.ToDate("2023-07-12"),
 			Description: "Flu Shot",
 			PetID:       1,
-		}, toResponse: Response{
+		}, toResponse: response{
 			ID:          1,
 			VisitDate:   "2023-07-12",
 			Description: "Flu Shot",
@@ -30,7 +30,7 @@ func TestResponse_FromVisit(t *testing.T) {
 			Model:       gorm.Model{ID: 2},
 			Description: "Flu Shot",
 			PetID:       1,
-		}, toResponse: Response{
+		}, toResponse: response{
 			ID:          2,
 			Description: "Flu Shot",
 			PetID:       1},
@@ -38,8 +38,8 @@ func TestResponse_FromVisit(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		result := &Response{}
-		result.FromVisit(tc.fromVisit)
+		result := &response{}
+		result.fromVisit(tc.fromVisit)
 		assert.Equal(t, tc.toResponse, *result)
 	}
 
@@ -52,14 +52,14 @@ func Test_FromVisits(t *testing.T) {
 		{Model: gorm.Model{ID: 10}, Description: "Flu Shot", VisitDate: test.ToDate("2023-07-12"), PetID: 1},
 		{Model: gorm.Model{ID: 20}, Description: "Regular Checkup", VisitDate: test.ToDate("2023-07-15"), PetID: 2},
 	}
-	mockResponses := []Response{
+	mockResponses := []response{
 		{ID: 10, Description: "Flu Shot", VisitDate: "2023-07-12", PetID: 1},
 		{ID: 20, Description: "Regular Checkup", VisitDate: "2023-07-15", PetID: 2},
 	}
 
 	testCases := []struct {
 		fromVisits  []repository.Visit
-		toResponses []Response
+		toResponses []response
 	}{
 		{
 			fromVisits:  mockVisits,
@@ -76,31 +76,31 @@ func Test_FromVisits(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		result := FromVisits(tc.fromVisits)
+		result := fromVisits(tc.fromVisits)
 		assert.Equal(t, tc.toResponses, result)
 	}
 }
 
 func Test_ToResponses(t *testing.T) {
-	mockResponses := []Response{
+	mockResponses := []response{
 		{ID: 10, Description: "Flu Shot", VisitDate: "2023-07-12", PetID: 1},
 		{ID: 20, Description: "Regular Checkup", VisitDate: "2023-07-15", PetID: 2},
 	}
 
 	testCases := []struct {
-		fromResponses []Response
-		toResponses   *Responses
+		fromResponses []response
+		toResponses   *responses
 	}{
 		{
 			fromResponses: mockResponses,
-			toResponses: &Responses{
+			toResponses: &responses{
 				Context: model.Context{Count: 2},
 				Visits:  mockResponses,
 			},
 		},
 		{
 			fromResponses: nil,
-			toResponses: &Responses{
+			toResponses: &responses{
 				Context: model.Context{Count: 0},
 				Visits:  nil,
 			},
@@ -108,7 +108,7 @@ func Test_ToResponses(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		result := ToResponses(tc.fromResponses)
+		result := toResponses(tc.fromResponses)
 		assert.Equal(t, tc.toResponses, result)
 	}
 }

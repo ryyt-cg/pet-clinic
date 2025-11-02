@@ -40,7 +40,7 @@ func Test_ToSpecialtyResponses(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result := ToSpecialtyResponses(tc.specialties)
+			result := toSpecialtyResponses(tc.specialties)
 			assert.Equal(t, len(*result), len(*tc.expected))
 			for i, specialty := range *result {
 				assert.Equal(t, (*tc.expected)[i].ID, specialty.ID)
@@ -78,7 +78,7 @@ func Test_ToSpecialtyResponsesWithEmptySlice(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result := ToSpecialtyResponses(tc.specialties)
+			result := toSpecialtyResponses(tc.specialties)
 			if tc.expected == nil {
 				assert.Nil(t, result)
 			} else {
@@ -99,7 +99,7 @@ func Test_ToSpecialties(t *testing.T) {
 		{ID: 3, Name: "Empty Specialty"},
 	}
 
-	result := ToSpecialties(specialties)
+	result := toSpecialties(specialties)
 
 	assert.Equal(t, len(specialties), len(*result))
 	for i, specialty := range *result {
@@ -111,6 +111,6 @@ func Test_ToSpecialties(t *testing.T) {
 func Test_ToSpecialtiesWithEmptySlice(t *testing.T) {
 	specialties := []specialtyResponse{}
 
-	result := ToSpecialties(specialties)
+	result := toSpecialties(specialties)
 	assert.Equal(t, 0, len(*result))
 }

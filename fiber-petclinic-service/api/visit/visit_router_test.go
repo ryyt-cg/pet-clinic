@@ -18,7 +18,7 @@ import (
 )
 
 func Test_visitById(t *testing.T) {
-	visitResponse := &Response{
+	visitResponse := &response{
 		ID:          1,
 		VisitDate:   "2023-03-05",
 		Description: "rabies shot",
@@ -30,7 +30,7 @@ func Test_visitById(t *testing.T) {
 	testCases := []struct {
 		name             string
 		id               uint
-		mockVisit        *Response
+		mockVisit        *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -81,7 +81,7 @@ func Test_visitById(t *testing.T) {
 
 			switch resp.StatusCode {
 			case http.StatusOK:
-				actualVisitResponse := &Response{}
+				actualVisitResponse := &response{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualVisitResponse)
@@ -90,7 +90,7 @@ func Test_visitById(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResponse.(*Response), actualVisitResponse)
+				assert.Equal(t, tc.expectedResponse.(*response), actualVisitResponse)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -133,9 +133,9 @@ func Test_visitById_BadRequest(t *testing.T) {
 }
 
 func Test_allVisits(t *testing.T) {
-	visitsResponses := &Responses{
+	visitsResponses := &responses{
 		Context: model.Context{Count: 3},
-		Visits: []Response{
+		Visits: []response{
 			{
 				ID:          35,
 				VisitDate:   "2023-03-05",
@@ -158,14 +158,14 @@ func Test_allVisits(t *testing.T) {
 	}
 
 	errorResponse := resterr.InternalServerError("fail to get all visits")
-	noVisitsResponse := &Responses{
+	noVisitsResponse := &responses{
 		Context: model.Context{Count: 0},
-		Visits:  []Response{},
+		Visits:  []response{},
 	}
 
 	testCases := []struct {
 		name              string
-		mockAllVisits     *Responses
+		mockAllVisits     *responses
 		mockError         error
 		route             string
 		statusCode        int
@@ -213,7 +213,7 @@ func Test_allVisits(t *testing.T) {
 
 			switch resp.StatusCode {
 			case http.StatusOK:
-				actualVisitResponses := &Responses{}
+				actualVisitResponses := &responses{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualVisitResponses)
@@ -222,7 +222,7 @@ func Test_allVisits(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResponses.(*Responses), actualVisitResponses)
+				assert.Equal(t, tc.expectedResponses.(*responses), actualVisitResponses)
 			case http.StatusInternalServerError:
 				actualVisitResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -248,14 +248,14 @@ func Test_updateVisit(t *testing.T) {
 		Description: "rabies shot",
 		PetID:       101,
 	}
-	visitRequest := &UpdateRequest{
+	visitRequest := &updateRequest{
 		ID:          1,
 		VisitDate:   "2023-03-05",
 		Description: "rabies shot",
 		PetID:       101,
 	}
 
-	visitResponse := &Response{
+	visitResponse := &response{
 		ID:          1,
 		VisitDate:   "2023-03-05",
 		Description: "rabies shot",
@@ -268,8 +268,8 @@ func Test_updateVisit(t *testing.T) {
 		name             string
 		id               uint
 		visitEntity      *repository.Visit
-		request          *UpdateRequest
-		mockVisit        *Response
+		request          *updateRequest
+		mockVisit        *response
 		mockError        error
 		route            string
 		statusCode       int
@@ -329,7 +329,7 @@ func Test_updateVisit(t *testing.T) {
 
 			switch resp.StatusCode {
 			case http.StatusOK:
-				actualVisitResponse := &Response{}
+				actualVisitResponse := &response{}
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualVisitResponse)
 				if err != nil {
@@ -337,7 +337,7 @@ func Test_updateVisit(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResponse.(*Response), actualVisitResponse)
+				assert.Equal(t, tc.expectedResponse.(*response), actualVisitResponse)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualVisitResponse := &resterr.ErrorResponse{}
 				body, _ := io.ReadAll(resp.Body)
@@ -389,7 +389,7 @@ func Test_updateVisit_BadRequest(t *testing.T) {
 			request:          visitRequest,
 			route:            "/v1/visits/1",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("json: cannot unmarshal string into Go struct field UpdateRequest.petID of type uint"),
+			expectedResponse: resterr.BadRequest("json: cannot unmarshal string into Go struct field updateRequest.petID of type uint"),
 		},
 		{
 			name:             "update visit by ID with bad request",
@@ -436,13 +436,13 @@ func Test_addNewVisit(t *testing.T) {
 		PetID:       101,
 	}
 
-	visitRequest := &AddRequest{
+	visitRequest := &addRequest{
 		VisitDate:   "2023-03-05",
 		Description: "rabies shot",
 		PetID:       101,
 	}
 
-	visitResponse := &Response{
+	visitResponse := &response{
 		ID:          1,
 		VisitDate:   "2023-03-05",
 		Description: "rabies shot",
@@ -453,8 +453,8 @@ func Test_addNewVisit(t *testing.T) {
 	testCases := []struct {
 		name             string
 		newVisit         *repository.Visit
-		request          *AddRequest
-		mockVisit        *Response
+		request          *addRequest
+		mockVisit        *response
 		mockError        error
 		statusCode       int
 		expectedResponse interface{}
@@ -496,7 +496,7 @@ func Test_addNewVisit(t *testing.T) {
 
 			switch tc.statusCode {
 			case http.StatusCreated:
-				actualVisitResponse := &Response{}
+				actualVisitResponse := &response{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualVisitResponse)
@@ -505,7 +505,7 @@ func Test_addNewVisit(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResponse.(*Response), actualVisitResponse)
+				assert.Equal(t, tc.expectedResponse.(*response), actualVisitResponse)
 			case http.StatusInternalServerError:
 				actualVisitResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -545,7 +545,7 @@ func Test_addNewVisit_BadRequest(t *testing.T) {
 			name:             "add new visit with bad request",
 			request:          visitRequest,
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("json: cannot unmarshal string into Go struct field AddRequest.petID of type uint"),
+			expectedResponse: resterr.BadRequest("json: cannot unmarshal string into Go struct field addRequest.petID of type uint"),
 		},
 		{
 			name:             "update visit by ID with bad request",

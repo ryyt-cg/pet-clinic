@@ -93,7 +93,7 @@ func (service *Service) getOwnerByIdWithPets(id uint) (*response, error) {
 // create - create new owner
 func (service *Service) create(ownerRequest *addRequest) (*response, error) {
 	log.Debug().Msg("Create new owner")
-	owner := ToOwnerEntity(ownerRequest)
+	owner := toOwnerEntity(ownerRequest)
 	newOwner, err := service.repository.Insert(owner)
 
 	if err != nil {
@@ -108,7 +108,7 @@ func (service *Service) create(ownerRequest *addRequest) (*response, error) {
 // update - update owner
 func (service *Service) update(id uint, request *updateRequest) (*updateResponse, error) {
 	log.Debug().Msg("Update an owner.")
-	ownerEntity := ToOwnerEntityFromUpdateRequest(request)
+	ownerEntity := toOwnerEntityFromUpdateRequest(request)
 	ownerEntity.ID = id
 	updatedOwner, err := service.repository.Update(ownerEntity)
 

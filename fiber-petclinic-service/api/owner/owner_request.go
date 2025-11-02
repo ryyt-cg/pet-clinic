@@ -11,8 +11,7 @@ import (
 // 1. Composes the validation functions to enforce the input contracts.
 // 2. Composes the transformation functions to transform the input contracts into the domain model.
 // 3. Composes the error handling functions to handle the errors.
-
-type AddRequest struct {
+type addRequest struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Address   string `json:"address"`
@@ -20,7 +19,7 @@ type AddRequest struct {
 	Telephone string `json:"telephone"`
 }
 
-type UpdateRequest struct {
+type updateRequest struct {
 	ID        uint   `json:"id"`
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
@@ -29,9 +28,9 @@ type UpdateRequest struct {
 	Telephone string `json:"telephone"`
 }
 
-// ToOwnerEntity
+// toOwnerEntity
 // Map an AddRequest to repository.Owner
-func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner {
+func toOwnerEntity(ownerRequest *addRequest) *repository.Owner {
 	if ownerRequest == nil {
 		return nil
 	}
@@ -48,9 +47,9 @@ func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner {
 	}
 }
 
-// ToOwnerEntityFromUpdateRequest
+// toOwnerEntityFromUpdateRequest
 // Map an UpdateRequest to repository.Owner
-func ToOwnerEntityFromUpdateRequest(ownerRequest *UpdateRequest) *repository.Owner {
+func toOwnerEntityFromUpdateRequest(ownerRequest *updateRequest) *repository.Owner {
 	if ownerRequest == nil {
 		return nil
 	}

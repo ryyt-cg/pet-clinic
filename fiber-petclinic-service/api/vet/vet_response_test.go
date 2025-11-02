@@ -21,8 +21,8 @@ func TestResponseFromVet(t *testing.T) {
 			{Model: gorm.Model{ID: 2}, Name: "Dentistry"},
 		},
 	}
-	response := &Response{}
-	response.FromVet(vet)
+	response := &response{}
+	response.fromVet(vet)
 
 	assert.Equal(t, vet.ID, response.ID)
 	assert.Equal(t, vet.FirstName, response.FirstName)
@@ -59,7 +59,7 @@ func TestFromVets(t *testing.T) {
 		},
 	}
 
-	responses := FromVets(vets)
+	responses := fromVets(vets)
 
 	assert.Equal(t, len(vets), len(responses))
 	for i, response := range responses {
@@ -76,6 +76,8 @@ func TestFromVets(t *testing.T) {
 
 func TestFromVetsWithEmptySlice(t *testing.T) {
 	vets := []repository.Vet{}
-	responses := FromVets(vets)
+
+	responses := fromVets(vets)
+
 	assert.Equal(t, 0, len(responses))
 }

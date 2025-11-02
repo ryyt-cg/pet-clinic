@@ -38,23 +38,23 @@ func (_m *MockServicer) EXPECT() *MockServicer_Expecter {
 }
 
 // create provides a mock function for the type MockServicer
-func (_mock *MockServicer) create(pet *repository.Pet) (*Response, error) {
+func (_mock *MockServicer) create(pet *repository.Pet) (*addResponse, error) {
 	ret := _mock.Called(pet)
 
 	if len(ret) == 0 {
 		panic("no return value specified for create")
 	}
 
-	var r0 *Response
+	var r0 *addResponse
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(*repository.Pet) (*Response, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(*repository.Pet) (*addResponse, error)); ok {
 		return returnFunc(pet)
 	}
-	if returnFunc, ok := ret.Get(0).(func(*repository.Pet) *Response); ok {
+	if returnFunc, ok := ret.Get(0).(func(*repository.Pet) *addResponse); ok {
 		r0 = returnFunc(pet)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*Response)
+			r0 = ret.Get(0).(*addResponse)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(*repository.Pet) error); ok {
@@ -89,34 +89,34 @@ func (_c *MockServicer_create_Call) Run(run func(pet *repository.Pet)) *MockServ
 	return _c
 }
 
-func (_c *MockServicer_create_Call) Return(response *Response, err error) *MockServicer_create_Call {
-	_c.Call.Return(response, err)
+func (_c *MockServicer_create_Call) Return(addResponseMoqParam *addResponse, err error) *MockServicer_create_Call {
+	_c.Call.Return(addResponseMoqParam, err)
 	return _c
 }
 
-func (_c *MockServicer_create_Call) RunAndReturn(run func(pet *repository.Pet) (*Response, error)) *MockServicer_create_Call {
+func (_c *MockServicer_create_Call) RunAndReturn(run func(pet *repository.Pet) (*addResponse, error)) *MockServicer_create_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // getAllPets provides a mock function for the type MockServicer
-func (_mock *MockServicer) getAllPets() (*Responses, error) {
+func (_mock *MockServicer) getAllPets() (*responses, error) {
 	ret := _mock.Called()
 
 	if len(ret) == 0 {
 		panic("no return value specified for getAllPets")
 	}
 
-	var r0 *Responses
+	var r0 *responses
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func() (*Responses, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func() (*responses, error)); ok {
 		return returnFunc()
 	}
-	if returnFunc, ok := ret.Get(0).(func() *Responses); ok {
+	if returnFunc, ok := ret.Get(0).(func() *responses); ok {
 		r0 = returnFunc()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*Responses)
+			r0 = ret.Get(0).(*responses)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func() error); ok {
@@ -144,34 +144,34 @@ func (_c *MockServicer_getAllPets_Call) Run(run func()) *MockServicer_getAllPets
 	return _c
 }
 
-func (_c *MockServicer_getAllPets_Call) Return(responses *Responses, err error) *MockServicer_getAllPets_Call {
-	_c.Call.Return(responses, err)
+func (_c *MockServicer_getAllPets_Call) Return(responsesMoqParam *responses, err error) *MockServicer_getAllPets_Call {
+	_c.Call.Return(responsesMoqParam, err)
 	return _c
 }
 
-func (_c *MockServicer_getAllPets_Call) RunAndReturn(run func() (*Responses, error)) *MockServicer_getAllPets_Call {
+func (_c *MockServicer_getAllPets_Call) RunAndReturn(run func() (*responses, error)) *MockServicer_getAllPets_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // getPetById provides a mock function for the type MockServicer
-func (_mock *MockServicer) getPetById(id uint) (*Response, error) {
+func (_mock *MockServicer) getPetById(id uint) (*response, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for getPetById")
 	}
 
-	var r0 *Response
+	var r0 *response
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uint) (*Response, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) (*response, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uint) *Response); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) *response); ok {
 		r0 = returnFunc(id)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*Response)
+			r0 = ret.Get(0).(*response)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(uint) error); ok {
@@ -206,34 +206,34 @@ func (_c *MockServicer_getPetById_Call) Run(run func(id uint)) *MockServicer_get
 	return _c
 }
 
-func (_c *MockServicer_getPetById_Call) Return(response *Response, err error) *MockServicer_getPetById_Call {
-	_c.Call.Return(response, err)
+func (_c *MockServicer_getPetById_Call) Return(responseMoqParam *response, err error) *MockServicer_getPetById_Call {
+	_c.Call.Return(responseMoqParam, err)
 	return _c
 }
 
-func (_c *MockServicer_getPetById_Call) RunAndReturn(run func(id uint) (*Response, error)) *MockServicer_getPetById_Call {
+func (_c *MockServicer_getPetById_Call) RunAndReturn(run func(id uint) (*response, error)) *MockServicer_getPetById_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // getPetWithVisitsById provides a mock function for the type MockServicer
-func (_mock *MockServicer) getPetWithVisitsById(id uint) (*Response, error) {
+func (_mock *MockServicer) getPetWithVisitsById(id uint) (*response, error) {
 	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for getPetWithVisitsById")
 	}
 
-	var r0 *Response
+	var r0 *response
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uint) (*Response, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) (*response, error)); ok {
 		return returnFunc(id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uint) *Response); ok {
+	if returnFunc, ok := ret.Get(0).(func(uint) *response); ok {
 		r0 = returnFunc(id)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*Response)
+			r0 = ret.Get(0).(*response)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(uint) error); ok {
@@ -268,34 +268,34 @@ func (_c *MockServicer_getPetWithVisitsById_Call) Run(run func(id uint)) *MockSe
 	return _c
 }
 
-func (_c *MockServicer_getPetWithVisitsById_Call) Return(response *Response, err error) *MockServicer_getPetWithVisitsById_Call {
-	_c.Call.Return(response, err)
+func (_c *MockServicer_getPetWithVisitsById_Call) Return(responseMoqParam *response, err error) *MockServicer_getPetWithVisitsById_Call {
+	_c.Call.Return(responseMoqParam, err)
 	return _c
 }
 
-func (_c *MockServicer_getPetWithVisitsById_Call) RunAndReturn(run func(id uint) (*Response, error)) *MockServicer_getPetWithVisitsById_Call {
+func (_c *MockServicer_getPetWithVisitsById_Call) RunAndReturn(run func(id uint) (*response, error)) *MockServicer_getPetWithVisitsById_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // getPetsByName provides a mock function for the type MockServicer
-func (_mock *MockServicer) getPetsByName(name string) (*Responses, error) {
+func (_mock *MockServicer) getPetsByName(name string) (*responses, error) {
 	ret := _mock.Called(name)
 
 	if len(ret) == 0 {
 		panic("no return value specified for getPetsByName")
 	}
 
-	var r0 *Responses
+	var r0 *responses
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string) (*Responses, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(string) (*responses, error)); ok {
 		return returnFunc(name)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string) *Responses); ok {
+	if returnFunc, ok := ret.Get(0).(func(string) *responses); ok {
 		r0 = returnFunc(name)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*Responses)
+			r0 = ret.Get(0).(*responses)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
@@ -330,34 +330,34 @@ func (_c *MockServicer_getPetsByName_Call) Run(run func(name string)) *MockServi
 	return _c
 }
 
-func (_c *MockServicer_getPetsByName_Call) Return(responses *Responses, err error) *MockServicer_getPetsByName_Call {
-	_c.Call.Return(responses, err)
+func (_c *MockServicer_getPetsByName_Call) Return(responsesMoqParam *responses, err error) *MockServicer_getPetsByName_Call {
+	_c.Call.Return(responsesMoqParam, err)
 	return _c
 }
 
-func (_c *MockServicer_getPetsByName_Call) RunAndReturn(run func(name string) (*Responses, error)) *MockServicer_getPetsByName_Call {
+func (_c *MockServicer_getPetsByName_Call) RunAndReturn(run func(name string) (*responses, error)) *MockServicer_getPetsByName_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // update provides a mock function for the type MockServicer
-func (_mock *MockServicer) update(pet *repository.Pet) (*Response, error) {
+func (_mock *MockServicer) update(pet *repository.Pet) (*updateResponse, error) {
 	ret := _mock.Called(pet)
 
 	if len(ret) == 0 {
 		panic("no return value specified for update")
 	}
 
-	var r0 *Response
+	var r0 *updateResponse
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(*repository.Pet) (*Response, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(*repository.Pet) (*updateResponse, error)); ok {
 		return returnFunc(pet)
 	}
-	if returnFunc, ok := ret.Get(0).(func(*repository.Pet) *Response); ok {
+	if returnFunc, ok := ret.Get(0).(func(*repository.Pet) *updateResponse); ok {
 		r0 = returnFunc(pet)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*Response)
+			r0 = ret.Get(0).(*updateResponse)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(*repository.Pet) error); ok {
@@ -392,12 +392,12 @@ func (_c *MockServicer_update_Call) Run(run func(pet *repository.Pet)) *MockServ
 	return _c
 }
 
-func (_c *MockServicer_update_Call) Return(response *Response, err error) *MockServicer_update_Call {
-	_c.Call.Return(response, err)
+func (_c *MockServicer_update_Call) Return(updateResponseMoqParam *updateResponse, err error) *MockServicer_update_Call {
+	_c.Call.Return(updateResponseMoqParam, err)
 	return _c
 }
 
-func (_c *MockServicer_update_Call) RunAndReturn(run func(pet *repository.Pet) (*Response, error)) *MockServicer_update_Call {
+func (_c *MockServicer_update_Call) RunAndReturn(run func(pet *repository.Pet) (*updateResponse, error)) *MockServicer_update_Call {
 	_c.Call.Return(run)
 	return _c
 }

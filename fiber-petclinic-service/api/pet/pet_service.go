@@ -10,12 +10,12 @@ import (
 )
 
 type Servicer interface {
-	getAllPets() (*Responses, error)
-	getPetById(id uint) (*Response, error)
-	getPetWithVisitsById(id uint) (*Response, error)
-	getPetsByName(name string) (*Responses, error)
-	create(pet *repository.Pet) (*Response, error)
-	update(pet *repository.Pet) (*Response, error)
+	getAllPets() (*responses, error)
+	getPetById(id uint) (*response, error)
+	getPetWithVisitsById(id uint) (*response, error)
+	getPetsByName(name string) (*responses, error)
+	create(pet *repository.Pet) (*addResponse, error)
+	update(pet *repository.Pet) (*updateResponse, error)
 }
 
 type Service struct {
@@ -27,27 +27,27 @@ func NewService(repository repository.PetRepositorier) *Service {
 }
 
 // getAllPets - retrieve all pets
-func (service *Service) getAllPets() (*Responses, error) {
+func (service *Service) getAllPets() (*responses, error) {
 	log.Debug().Msg("Retrieve all pets")
 	pets, err := service.repository.FindAll()
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return &Responses{
+			return &responses{
 				Context: model.Context{},
-				Pets:    []Response{},
+				Pets:    []response{},
 			}, nil
 		}
 		log.Error().Err(err).Msg("Fail to retrieve all pets.")
 		return nil, err
 	}
 
-	petResponses := FromPets(pets)
+	petResponses := fromPets(pets)
 	contextJson := model.Context{Count: len(petResponses)}
-	return &Responses{Pets: petResponses, Context: contextJson}, nil
+	return &responses{Pets: petResponses, Context: contextJson}, nil
 }
 
 // getPetById - retrieve pet by id
-func (service *Service) getPetById(id uint) (*Response, error) {
+func (service *Service) getPetById(id uint) (*response, error) {
 	log.Debug().Uint("id", id).Msg("Retrieve pet by id.")
 	petF, err := service.repository.FindById(id)
 	if err != nil {
@@ -59,11 +59,11 @@ func (service *Service) getPetById(id uint) (*Response, error) {
 		return nil, err
 	}
 
-	response := ToResponse(petF)
+	response := toResponse(petF)
 	return response, nil
 }
 
-func (service *Service) getPetWithVisitsById(id uint) (*Response, error) {
+func (service *Service) getPetWithVisitsById(id uint) (*response, error) {
 	log.Debug().Uint("id", id).Msg("Retrieve pet by id.")
 	petF, err := service.repository.FindByIdWithVisits(id)
 	if err != nil {
@@ -75,31 +75,31 @@ func (service *Service) getPetWithVisitsById(id uint) (*Response, error) {
 		return nil, err
 	}
 
-	response := ToResponse(petF)
+	response := toResponse(petF)
 	return response, nil
 }
 
 // getPetByName - retrieve pet by name
-func (service *Service) getPetsByName(name string) (*Responses, error) {
+func (service *Service) getPetsByName(name string) (*responses, error) {
 	log.Debug().Str("name", name).Msg("retrieve pets by name.")
 
 	pets, err := service.repository.FindByName(name)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return &Responses{
+			return &responses{
 				Context: model.Context{},
-				Pets:    []Response{},
+				Pets:    []response{},
 			}, nil
 		}
 		log.Error().Err(err).Str("name", name).Msg("fail to retrieve pets by name.")
 		return nil, err
 	}
 
-	return ToResponses(pets), nil
+	return toResponses(pets), nil
 }
 
 // create - create new pet
-func (service *Service) create(pet *repository.Pet) (*Response, error) {
+func (service *Service) create(pet *repository.Pet) (*addResponse, error) {
 	log.Debug().Str("name", pet.Name).Msg("Create new pet.")
 	newPet, err := service.repository.Insert(pet)
 
@@ -108,12 +108,12 @@ func (service *Service) create(pet *repository.Pet) (*Response, error) {
 		return nil, err
 	}
 
-	response := ToResponse(newPet)
+	response := toAddResponse(newPet)
 	return response, nil
 }
 
 // update - update pet
-func (service *Service) update(pet *repository.Pet) (*Response, error) {
+func (service *Service) update(pet *repository.Pet) (*updateResponse, error) {
 	log.Info().Any("pet", pet).Msg("Update a vet.")
 	updatedPet, err := service.repository.Update(pet)
 
@@ -126,6 +126,6 @@ func (service *Service) update(pet *repository.Pet) (*Response, error) {
 		return nil, err
 	}
 
-	response := ToResponse(updatedPet)
+	response := toUpdateResponse(updatedPet)
 	return response, nil
 }

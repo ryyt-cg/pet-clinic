@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fiber3-petclinic-service/api/visit"
 	resterr "fiber3-petclinic-service/internal/errors"
 	"fiber3-petclinic-service/internal/repository"
 	"fiber3-petclinic-service/internal/repository/model"
@@ -257,7 +256,7 @@ func Test_getPetByIdWithVisits(t *testing.T) {
 		Name:      "Running Water",
 		Birthdate: "2018-02-26",
 		Species:   "Dog",
-		Visits: []visit.Response{
+		Visits: []visitResponse{
 			{
 				ID:          1,
 				VisitDate:   "2023-10-01",
@@ -582,6 +581,7 @@ func Test_createNewPet(t *testing.T) {
 		},
 		{
 			name:             "fail to create new pet",
+			request:          addPetRequest,
 			mockPet:          nil,
 			mockError:        errors.New("failed to create pet"),
 			route:            "/v1/pets",
@@ -601,20 +601,21 @@ func Test_createNewPet(t *testing.T) {
 			petRouter := NewRouter(petMock)
 			petRouter.Register(v1.Group("/pets"))
 
-			reqBody, _ := json.Marshal(tc.mockPet)
+			reqBody, _ := json.Marshal(tc.request)
 			req := httptest.NewRequest("POST", tc.route, bytes.NewBuffer(reqBody))
+			req.Header.Set("Content-Type", "application/json")
 			resp, _ := r.Test(req, fiber.TestConfig{})
 
 			switch resp.StatusCode {
-			case http.StatusOK:
-				actualPetResponse := &response{}
+			case http.StatusCreated:
+				actualPetResponse := &addResponse{}
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualPetResponse)
 				if err != nil {
 					t.Errorf("Error unmarshalling response body: %v", err)
 					return
 				}
-				assert.Equal(t, tc.expectedResponse.(*response), actualPetResponse)
+				assert.Equal(t, tc.expectedResponse.(*addResponse), actualPetResponse)
 			case http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				body, _ := io.ReadAll(resp.Body)
@@ -736,30 +737,31 @@ func Test_updatePet(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			r := test.SetupRouter()
-			v1 := r.Group("/v1")
-
 			petMock := NewMockServicer(t)
 			petMock.EXPECT().update(petEntity).Return(tc.mockPet, tc.mockError)
 
+			r := test.SetupRouter()
+			v1 := r.Group("/v1")
 			petRouter := NewRouter(petMock)
 			petRouter.Register(v1.Group("/pets"))
 
 			reqBody, _ := json.Marshal(tc.request)
 			req := httptest.NewRequest("PUT", tc.route, bytes.NewBuffer(reqBody))
+			// Must se content-type header.
+			req.Header.Set("Content-Type", "application/json")
 			resp, _ := r.Test(req, fiber.TestConfig{})
 
 			switch resp.StatusCode {
 			case http.StatusOK:
-				actualPetResponse := &response{}
+				actualPetResponse := &updateResponse{}
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualPetResponse)
 				if err != nil {
 					t.Errorf("Error unmarshalling response body: %v", err)
 					return
 				}
-				assert.Equal(t, tc.expectedResponse.(*response).ID, actualPetResponse.ID)
-				assert.Equal(t, tc.expectedResponse.(*response).Name, actualPetResponse.Name)
+				assert.Equal(t, tc.expectedResponse.(*updateResponse).ID, actualPetResponse.ID)
+				assert.Equal(t, tc.expectedResponse.(*updateResponse).Name, actualPetResponse.Name)
 			case http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				body, _ := io.ReadAll(resp.Body)

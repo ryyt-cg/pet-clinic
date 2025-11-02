@@ -194,6 +194,11 @@ func (router *Router) create(c fiber.Ctx) error {
 	}
 
 	petResponse, err := router.service.create(petEntity)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to create pet.")
+		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))
+	}
+
 	return c.Status(fiber.StatusCreated).JSON(petResponse)
 }
 

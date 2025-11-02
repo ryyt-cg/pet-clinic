@@ -8,20 +8,20 @@ import (
 	"gorm.io/gorm"
 )
 
-type AddRequest struct {
+type addRequest struct {
 	FirstName   string `json:"firstName" binding:"required"`
 	LastName    string `json:"lastName" binding:"required"`
 	Specialties []uint `json:"specialties" binding:"required"`
 }
 
-type UpdateRequest struct {
+type updateRequest struct {
 	ID          uint   `json:"id" binding:"required"`
 	FirstName   string `json:"firstName" binding:"required"`
 	LastName    string `json:"lastName" binding:"required"`
 	Specialties []uint `json:"specialties" binding:"required"`
 }
 
-func (vr AddRequest) Validate() error {
+func (vr addRequest) Validate() error {
 	return validation.ValidateStruct(&vr,
 		validation.Field(&vr.FirstName, validation.Required),
 		validation.Field(&vr.LastName, validation.Required),
@@ -29,21 +29,21 @@ func (vr AddRequest) Validate() error {
 	)
 }
 
-// FromAddRequest
-// Map an AddRequest to repository.Vet
-func FromAddRequest(vetRequest *AddRequest) *repository.Vet {
+// fromAddRequest
+// Map an addRequest to repository.Vet
+func fromAddRequest(vetRequest *addRequest) *repository.Vet {
 	return &repository.Vet{
 		Person: model.Person{
 			FirstName: vetRequest.FirstName,
 			LastName:  vetRequest.LastName,
 		},
-		//Specialties: *ToSpecialties(vetRequest.Specialties),
+		//Specialties: *toSpecialties(vetRequest.Specialties),
 	}
 }
 
-// FromUpdateRequest
-// Map an UpdateRequest to repository.Vet
-func FromUpdateRequest(vetRequest *UpdateRequest) *repository.Vet {
+// fromUpdateRequest
+// Map an updateRequest to repository.Vet
+func fromUpdateRequest(vetRequest *updateRequest) *repository.Vet {
 	return &repository.Vet{
 		Model: gorm.Model{
 			ID: vetRequest.ID,
@@ -52,6 +52,6 @@ func FromUpdateRequest(vetRequest *UpdateRequest) *repository.Vet {
 			FirstName: vetRequest.FirstName,
 			LastName:  vetRequest.LastName,
 		},
-		//Specialties: *ToSpecialties(vetRequest.Specialties),
+		//Specialties: *toSpecialties(vetRequest.Specialties),
 	}
 }

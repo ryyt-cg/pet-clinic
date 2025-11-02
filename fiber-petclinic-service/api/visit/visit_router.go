@@ -31,7 +31,7 @@ func (r *Router) Register(router fiber.Router) {
 // @Description	Get visit by ID
 // @Param		id	path	int	true	"Visit ID"
 // @Produce		json
-// @Success		200	{object}	Response
+// @Success		200	{object}	response
 // @Failure		400	{object}	errors.ErrorResponse
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
@@ -65,7 +65,7 @@ func (r *Router) visitById(c *fiber.Ctx) error {
 //
 // @Description	Get all visits
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/visits/all		[get]
@@ -82,13 +82,13 @@ func (r *Router) allVisits(c *fiber.Ctx) error {
 
 func (r *Router) addNewVisit(c *fiber.Ctx) error {
 	log.Info().Msg("Post a new visit.")
-	var addRequest *AddRequest
+	var addRequest *addRequest
 	if err := c.BodyParser(&addRequest); err != nil {
 		log.Error().Err(err).Msg("Fail to Unmarshal visit JSON.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	addVisit, err := FromAddRequest(addRequest)
+	addVisit, err := fromAddRequest(addRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Invalid Add Request.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
@@ -109,8 +109,8 @@ func (r *Router) addNewVisit(c *fiber.Ctx) error {
 // @Description	Update visit
 // @Produce		json
 // @Param		id	path		int	true	"Visit ID"
-// @Param		Request			body		UpdateRequest	true	"Update visit"
-// @Success		200	{object}	Responses
+// @Param		request			body		updateRequest	true	"Update visit"
+// @Success		200	{object}	responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/visits/{id} 	[put]
@@ -124,14 +124,14 @@ func (r *Router) updateVisit(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	var updateRequest *UpdateRequest
+	var updateRequest *updateRequest
 	if err := c.BodyParser(&updateRequest); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 
-	visit, err := FromUpdateRequest(updateRequest)
+	visit, err := fromUpdateRequest(updateRequest)
 	if err != nil {
-		log.Error().Err(err).Msg("Invalid Update Request.")
+		log.Error().Err(err).Msg("Invalid Update request.")
 		return c.Status(fiber.StatusBadRequest).JSON(resterr.BadRequest(err.Error()))
 	}
 	visit.ID = uint(id)

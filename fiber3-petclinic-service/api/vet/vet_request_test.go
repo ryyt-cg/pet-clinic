@@ -10,7 +10,7 @@ import (
 )
 
 func Test_AddRequestValidation(t *testing.T) {
-	vetRequest := &AddRequest{
+	vetRequest := &addRequest{
 		FirstName: "John",
 		LastName:  "Doe",
 		//Specialties: []specialtyResponse{
@@ -25,7 +25,7 @@ func Test_AddRequestValidation(t *testing.T) {
 }
 
 func Test_AddRequestValidationWithEmptyFields(t *testing.T) {
-	vetRequest := &AddRequest{
+	vetRequest := &addRequest{
 		FirstName: "",
 		LastName:  "",
 		//Specialties: []Specialty{},
@@ -37,7 +37,7 @@ func Test_AddRequestValidationWithEmptyFields(t *testing.T) {
 }
 
 func Test_FromAddRequest(t *testing.T) {
-	vetRequest := &AddRequest{
+	vetRequest := &addRequest{
 		FirstName: "John",
 		LastName:  "Johnson",
 		//Specialties: []Specialty{
@@ -52,12 +52,12 @@ func Test_FromAddRequest(t *testing.T) {
 		},
 	}
 
-	vet := FromAddRequest(vetRequest)
+	vet := fromAddRequest(vetRequest)
 	assert.Equal(t, expectedVet, vet)
 }
 
 func Test_FromUpdateRequest(t *testing.T) {
-	vetRequest := &UpdateRequest{
+	vetRequest := &updateRequest{
 		ID:        1,
 		FirstName: "John",
 		LastName:  "Johnson",
@@ -76,6 +76,6 @@ func Test_FromUpdateRequest(t *testing.T) {
 		},
 	}
 
-	vet := FromUpdateRequest(vetRequest)
+	vet := fromUpdateRequest(vetRequest)
 	assert.Equal(t, expectedVet, vet)
 }

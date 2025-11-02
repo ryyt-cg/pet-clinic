@@ -116,11 +116,11 @@ func Test_allSpecialties(t *testing.T) {
 }
 
 func Test_allVets(t *testing.T) {
-	vetsResponse := &Responses{
+	vetsResponse := &responses{
 		Context: model.Context{
 			Count: 2,
 		},
-		Vets: []Response{
+		Vets: []response{
 			{
 				ID:        1,
 				FirstName: "Nat",
@@ -134,14 +134,14 @@ func Test_allVets(t *testing.T) {
 		},
 	}
 
-	noVetsResponse := &Responses{
+	noVetsResponse := &responses{
 		Context: model.Context{},
-		Vets:    []Response{},
+		Vets:    []response{},
 	}
 
 	testCases := []struct {
 		name           string
-		mockVets       *Responses
+		mockVets       *responses
 		mockErr        error
 		statusCode     int
 		expectedResult interface{}
@@ -189,7 +189,7 @@ func Test_allVets(t *testing.T) {
 
 			switch tc.statusCode {
 			case http.StatusOK:
-				actualVetsResponse := &Responses{}
+				actualVetsResponse := &responses{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualVetsResponse)
@@ -198,7 +198,7 @@ func Test_allVets(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResult.(*Responses), actualVetsResponse)
+				assert.Equal(t, tc.expectedResult.(*responses), actualVetsResponse)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -216,7 +216,7 @@ func Test_allVets(t *testing.T) {
 }
 
 func Test_vetById(t *testing.T) {
-	vetResponse := &Response{
+	vetResponse := &response{
 		ID:        1,
 		FirstName: "Code",
 		LastName:  "Ninjas",
@@ -225,7 +225,7 @@ func Test_vetById(t *testing.T) {
 	testCases := []struct {
 		name           string
 		id             uint
-		mockVet        *Response
+		mockVet        *response
 		mockErr        error
 		route          string
 		statusCode     int
@@ -280,7 +280,7 @@ func Test_vetById(t *testing.T) {
 
 			switch tc.statusCode {
 			case http.StatusOK:
-				actualVetsResponse := &Response{}
+				actualVetsResponse := &response{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualVetsResponse)
@@ -289,7 +289,7 @@ func Test_vetById(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResult.(*Response), actualVetsResponse)
+				assert.Equal(t, tc.expectedResult.(*response), actualVetsResponse)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -311,7 +311,7 @@ func Test_vetByID_BadRequest(t *testing.T) {
 		name           string
 		id             interface{}
 		route          string
-		mockVet        *Response
+		mockVet        *response
 		expectedResult resterr.ErrorResponse
 	}{
 		{
@@ -352,7 +352,7 @@ func Test_vetByID_BadRequest(t *testing.T) {
 }
 
 func Test_getVetByIdWithSpecialties(t *testing.T) {
-	vetResponse := &Response{
+	vetResponse := &response{
 		ID:        1,
 		FirstName: "Code",
 		LastName:  "Ninjas",
@@ -371,7 +371,7 @@ func Test_getVetByIdWithSpecialties(t *testing.T) {
 	testCases := []struct {
 		name           string
 		id             uint
-		mockVet        *Response
+		mockVet        *response
 		mockErr        error
 		route          string
 		statusCode     int
@@ -426,7 +426,7 @@ func Test_getVetByIdWithSpecialties(t *testing.T) {
 
 			switch tc.statusCode {
 			case http.StatusOK:
-				actualVetsResponse := &Response{}
+				actualVetsResponse := &response{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualVetsResponse)
@@ -435,7 +435,7 @@ func Test_getVetByIdWithSpecialties(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResult.(*Response), actualVetsResponse)
+				assert.Equal(t, tc.expectedResult.(*response), actualVetsResponse)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -505,22 +505,22 @@ func Test_createVet(t *testing.T) {
 		},
 	}
 
-	mockVet := &Response{
+	mockVet := &response{
 		ID:        1,
 		FirstName: "New",
 		LastName:  "Vet",
 	}
 
-	createRequest := &AddRequest{
+	createRequest := &addRequest{
 		FirstName: "New",
 		LastName:  "Vet",
 	}
 
 	testCases := []struct {
 		name           string
-		request        *AddRequest
+		request        *addRequest
 		vetEntity      *repository.Vet
-		mockVet        *Response
+		mockVet        *response
 		mockErr        error
 		statusCode     int
 		expectedResult interface{}
@@ -532,7 +532,7 @@ func Test_createVet(t *testing.T) {
 			mockVet:        mockVet,
 			mockErr:        nil,
 			statusCode:     http.StatusCreated,
-			expectedResult: &Response{ID: 1, FirstName: "New", LastName: "Vet"},
+			expectedResult: &response{ID: 1, FirstName: "New", LastName: "Vet"},
 		},
 		{
 			name:           "fail to create new vet",
@@ -573,7 +573,7 @@ func Test_createVet(t *testing.T) {
 
 			switch tc.statusCode {
 			case http.StatusCreated:
-				actualVetsResponse := &Response{}
+				actualVetsResponse := &response{}
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualVetsResponse)
 				if err != nil {
@@ -581,7 +581,7 @@ func Test_createVet(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResult.(*Response), actualVetsResponse)
+				assert.Equal(t, tc.expectedResult.(*response), actualVetsResponse)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				body, _ := io.ReadAll(resp.Body)
@@ -615,7 +615,7 @@ func Test_createVet_BadRequest(t *testing.T) {
 			request:          vetRequest,
 			route:            "/v1/vets",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("json: cannot unmarshal number into Go struct field AddRequest.lastName of type string"),
+			expectedResponse: resterr.BadRequest("json: cannot unmarshal number into Go struct field addRequest.lastName of type string"),
 		},
 	}
 
@@ -658,13 +658,13 @@ func Test_updateVet(t *testing.T) {
 		},
 	}
 
-	mockVet := &Response{
+	mockVet := &response{
 		ID:        1,
 		FirstName: "Updated",
 		LastName:  "Vet",
 	}
 
-	updateRequest := &UpdateRequest{
+	updateVetRequest := &updateRequest{
 		ID:        1,
 		FirstName: "Updated",
 		LastName:  "Vet",
@@ -673,9 +673,9 @@ func Test_updateVet(t *testing.T) {
 	testCases := []struct {
 		name           string
 		id             uint
-		request        *UpdateRequest
+		request        *updateRequest
 		vetEntity      *repository.Vet
-		mockVet        *Response
+		mockVet        *response
 		mockErr        error
 		route          string
 		statusCode     int
@@ -684,18 +684,18 @@ func Test_updateVet(t *testing.T) {
 		{
 			name:           "update vet by id",
 			id:             1,
-			request:        updateRequest,
+			request:        updateVetRequest,
 			vetEntity:      vetEntity,
 			mockVet:        mockVet,
 			mockErr:        nil,
 			route:          "/v1/vets/1",
 			statusCode:     http.StatusOK,
-			expectedResult: &Response{ID: 1, FirstName: "Updated", LastName: "Vet"},
+			expectedResult: &response{ID: 1, FirstName: "Updated", LastName: "Vet"},
 		},
 		{
 			name:           "fail to update vet by id",
 			id:             1,
-			request:        updateRequest,
+			request:        updateVetRequest,
 			vetEntity:      vetEntity,
 			mockVet:        nil,
 			mockErr:        gorm.ErrRecordNotFound,
@@ -706,7 +706,7 @@ func Test_updateVet(t *testing.T) {
 		{
 			name:           "fail to update vet by id with internal error",
 			id:             1,
-			request:        updateRequest,
+			request:        updateVetRequest,
 			vetEntity:      vetEntity,
 			mockVet:        nil,
 			mockErr:        resterr.InternalServerError("failed to update vet"),
@@ -736,7 +736,7 @@ func Test_updateVet(t *testing.T) {
 
 			switch tc.statusCode {
 			case http.StatusOK:
-				actualVetsResponse := &Response{}
+				actualVetsResponse := &response{}
 				// Read the response body
 				body, _ := io.ReadAll(resp.Body)
 				err := json.Unmarshal(body, actualVetsResponse)
@@ -745,7 +745,7 @@ func Test_updateVet(t *testing.T) {
 					return
 				}
 				assert.Equal(t, tc.statusCode, resp.StatusCode)
-				assert.Equal(t, tc.expectedResult.(*Response), actualVetsResponse)
+				assert.Equal(t, tc.expectedResult.(*response), actualVetsResponse)
 			case http.StatusNotFound | http.StatusInternalServerError:
 				actualPetResponse := &resterr.ErrorResponse{}
 				// Read the response body
@@ -797,7 +797,7 @@ func Test_updateVet_BadRequest(t *testing.T) {
 			request:          vetRequest2,
 			route:            "/v1/vets/1",
 			statusCode:       http.StatusBadRequest,
-			expectedResponse: resterr.BadRequest("json: cannot unmarshal string into Go struct field UpdateRequest.id of type uint"),
+			expectedResponse: resterr.BadRequest("json: cannot unmarshal string into Go struct field updateRequest.id of type uint"),
 		},
 	}
 

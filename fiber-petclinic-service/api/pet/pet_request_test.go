@@ -10,7 +10,7 @@ import (
 )
 
 func Test_ToPet(t *testing.T) {
-	petRequest := &Request{
+	petRequest := &request{
 		Name:      "Five Miles",
 		Birthdate: "2017-05-03",
 		SpeciesID: 1,
@@ -23,7 +23,7 @@ func Test_ToPet(t *testing.T) {
 		OwnerID:   20,
 	}
 
-	result, err := ToPet(petRequest)
+	result, err := toPet(petRequest)
 	assert.NoError(t, err, "Expected no error when converting to Pet")
 	assert.Equal(t, pet, result)
 }
@@ -31,12 +31,12 @@ func Test_ToPet(t *testing.T) {
 func Test_FromAddRequest(t *testing.T) {
 	testCases := []struct {
 		name        string
-		petRequest  *AddRequest
+		petRequest  *addRequest
 		expectedPet *repository.Pet
 	}{
 		{
 			name: "Valid AddRequest",
-			petRequest: &AddRequest{
+			petRequest: &addRequest{
 				Name:      "Five Miles",
 				Birthdate: "2017-05-03",
 				SpeciesID: 1,
@@ -51,7 +51,7 @@ func Test_FromAddRequest(t *testing.T) {
 		},
 		{
 			name: "Invalid Birthdate",
-			petRequest: &AddRequest{
+			petRequest: &addRequest{
 				Name:      "Invalid Date",
 				Birthdate: "invalid-date",
 				SpeciesID: 1,
@@ -63,7 +63,8 @@ func Test_FromAddRequest(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result := FromAddRequest(tc.petRequest)
+			result, _ := fromAddRequest(tc.petRequest)
+
 			if tc.expectedPet == nil {
 				assert.Nil(t, nil)
 			} else {
@@ -76,12 +77,12 @@ func Test_FromAddRequest(t *testing.T) {
 func Test_FromUpdateRequest(t *testing.T) {
 	testCases := []struct {
 		name        string
-		petRequest  *UpdateRequest
+		petRequest  *updateRequest
 		expectedPet *repository.Pet
 	}{
 		{
 			name: "Valid Update Request",
-			petRequest: &UpdateRequest{
+			petRequest: &updateRequest{
 				ID:        1,
 				Name:      "Five Miles",
 				Birthdate: "2017-05-03",
@@ -100,7 +101,7 @@ func Test_FromUpdateRequest(t *testing.T) {
 		},
 		{
 			name: "Invalid Birthdate",
-			petRequest: &UpdateRequest{
+			petRequest: &updateRequest{
 				Name:      "Invalid Date",
 				Birthdate: "invalid-date",
 				SpeciesID: 1,
@@ -112,7 +113,7 @@ func Test_FromUpdateRequest(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result, err := FromUpdateRequest(tc.petRequest)
+			result, err := fromUpdateRequest(tc.petRequest)
 			if tc.expectedPet == nil {
 				assert.Error(t, err, "Expected an error for invalid request")
 			} else {

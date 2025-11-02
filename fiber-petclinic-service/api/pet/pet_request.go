@@ -7,21 +7,21 @@ import (
 	"gorm.io/gorm"
 )
 
-type Request struct {
+type request struct {
 	Name      string `json:"name" binding:"required"`
 	Birthdate string `json:"birthdate" binding:"required"`
 	SpeciesID uint   `json:"speciesID" binding:"required"`
 	OwnerID   uint   `json:"ownerID" binding:"required"`
 }
 
-type AddRequest struct {
+type addRequest struct {
 	Name      string `json:"name" binding:"required"`
 	Birthdate string `json:"birthdate" binding:"required"`
 	SpeciesID uint   `json:"speciesID" binding:"required"`
 	OwnerID   uint   `json:"ownerID" binding:"required"`
 }
 
-type UpdateRequest struct {
+type updateRequest struct {
 	ID        uint   `json:"id" binding:"required"`
 	Name      string `json:"name" binding:"required"`
 	Birthdate string `json:"birthdate" binding:"required"`
@@ -29,7 +29,18 @@ type UpdateRequest struct {
 	OwnerID   uint   `json:"ownerID" binding:"required"`
 }
 
-func ToPet(petRequest *Request) (*repository.Pet, error) {
+// requestSchema
+// Validate Pet request payload
+//var requestSchema = z.Struct(z.Shape{
+//	"name":      z.String().Required(),
+//	"birthdate": z.String(),
+//	"speciesID": z.Uint(),
+//	"ownerID":   z.Uint(),
+//})
+
+// toPet
+// Map Request to repository.Pet
+func toPet(petRequest *request) (*repository.Pet, error) {
 	// TODO need to add data validation
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
@@ -46,14 +57,16 @@ func ToPet(petRequest *Request) (*repository.Pet, error) {
 	return petEntity, nil
 }
 
-func FromAddRequest(petRequest *AddRequest) *repository.Pet {
+// fromAddRequest
+// Map AddRequest to repository.Pet
+func fromAddRequest(petRequest *addRequest) (*repository.Pet, error) {
 	if petRequest == nil {
-		return nil
+		return nil, nil
 	}
 
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	return &repository.Pet{
@@ -61,10 +74,12 @@ func FromAddRequest(petRequest *AddRequest) *repository.Pet {
 		Birthdate: &birthday,
 		SpeciesID: petRequest.SpeciesID,
 		OwnerID:   petRequest.OwnerID,
-	}
+	}, nil
 }
 
-func FromUpdateRequest(petRequest *UpdateRequest) (*repository.Pet, error) {
+// fromUpdateRequest
+// Map UpdateRequest to repository.Pet
+func fromUpdateRequest(petRequest *updateRequest) (*repository.Pet, error) {
 	birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
 	if err != nil {
 		return nil, err

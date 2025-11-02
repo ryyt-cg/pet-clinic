@@ -6,28 +6,28 @@ import (
 	"time"
 )
 
-type Response struct {
+type response struct {
 	ID          uint   `json:"id"`
 	VisitDate   string `json:"visitDate"`
 	Description string `json:"description"`
 	PetID       uint   `json:"petID"`
 }
 
-type UpdateResponse struct {
+type updateResponse struct {
 	ID          uint   `json:"id"`
 	VisitDate   string `json:"visitDate"`
 	Description string `json:"description"`
 	PetID       uint   `json:"petID"`
 }
 
-type Responses struct {
+type responses struct {
 	Context model.Context `json:"context"`
-	Visits  []Response    `json:"visits"`
+	Visits  []response    `json:"visits"`
 }
 
-// FromVisit
-// Map from repository.Visit to json Response
-func (vr *Response) FromVisit(visit *repository.Visit) {
+// fromVisit
+// Map from repository.Visit to json response
+func (vr *response) fromVisit(visit *repository.Visit) {
 	vr.ID = visit.ID
 	if visit.VisitDate == nil {
 		vr.VisitDate = ""
@@ -39,26 +39,26 @@ func (vr *Response) FromVisit(visit *repository.Visit) {
 	vr.PetID = visit.PetID
 }
 
-// FromVisits
-// Map from repository.Visit list to Response list
-func FromVisits(visits []repository.Visit) []Response {
+// fromVisits
+// Map from repository.Visit list to response list
+func fromVisits(visits []repository.Visit) []response {
 	if len(visits) == 0 {
 		return nil
 	}
 
-	visitResponses := make([]Response, len(visits))
+	visitResponses := make([]response, len(visits))
 	for i, v := range visits {
-		visitResponses[i].FromVisit(&v)
+		visitResponses[i].fromVisit(&v)
 	}
 
 	return visitResponses
 }
 
-// FromVisitsToResponses
-// Map from repository.Visit list to Responses
-func FromVisitsToResponses(visits []repository.Visit) *Responses {
+// fromVisitsToResponses
+// Map from repository.Visit list to responses
+func fromVisitsToResponses(visits []repository.Visit) *responses {
 	if len(visits) == 0 {
-		return &Responses{
+		return &responses{
 			Context: model.Context{
 				Count: len(visits),
 			},
@@ -66,12 +66,12 @@ func FromVisitsToResponses(visits []repository.Visit) *Responses {
 		}
 	}
 
-	visitResponses := make([]Response, len(visits))
+	visitResponses := make([]response, len(visits))
 	for i, v := range visits {
-		visitResponses[i].FromVisit(&v)
+		visitResponses[i].fromVisit(&v)
 	}
 
-	responses := &Responses{
+	responses := &responses{
 		Context: model.Context{
 			Count: len(visits),
 		},
@@ -80,29 +80,29 @@ func FromVisitsToResponses(visits []repository.Visit) *Responses {
 	return responses
 }
 
-// ToResponses
-// Map list of Response to Responses
-func ToResponses(responses []Response) *Responses {
-	if len(responses) == 0 {
-		return &Responses{
+// toResponses
+// Map list of response to responses
+func toResponses(visitResponses []response) *responses {
+	if len(visitResponses) == 0 {
+		return &responses{
 			Context: model.Context{
-				Count: len(responses),
+				Count: len(visitResponses),
 			},
 			Visits: nil,
 		}
 	}
 
-	result := make([]Response, len(responses))
-	for i, v := range responses {
+	result := make([]response, len(visitResponses))
+	for i, v := range visitResponses {
 		result[i].ID = v.ID
 		result[i].VisitDate = v.VisitDate
 		result[i].Description = v.Description
 		result[i].PetID = v.PetID
 	}
 
-	return &Responses{
+	return &responses{
 		Context: model.Context{
-			Count: len(responses),
+			Count: len(visitResponses),
 		},
 		Visits: result,
 	}
