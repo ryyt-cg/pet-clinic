@@ -34,7 +34,7 @@ func (r *Router) Register(router *gin.RouterGroup) {
 // @Description	Get visit by ID
 // @Param		id	path	int	true	"Visit ID"
 // @Produce		json
-// @Success		200	{object}	Response
+// @Success		200	{object}	response
 // @Failure		400	{object}	errors.ErrorResponse
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
@@ -72,7 +72,7 @@ func (r *Router) visitById(c *gin.Context) {
 //
 // @Description	Get all visits
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/visits/all		[get]
@@ -96,14 +96,14 @@ func (r *Router) allVisits(c *gin.Context) {
 
 func (r *Router) addNewVisit(c *gin.Context) {
 	log.Info().Msg("add new visit")
-	var visit AddRequest
+	var visit addRequest
 	if err := c.ShouldBindJSON(&visit); err != nil {
 		log.Error().Err(err).Msg("fail to bind json request")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
 		return
 	}
 
-	visitEntity, err := FromAddRequest(&visit)
+	visitEntity, err := fromAddRequest(&visit)
 	if err != nil {
 		log.Error().Err(err).Msg("fail to bind json request")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
@@ -126,14 +126,14 @@ func (r *Router) addNewVisit(c *gin.Context) {
 // @Description	Update visit
 // @Produce		json
 // @Param		id	path		int	true	"Visit ID"
-// @Param		Request			body		UpdateRequest	true	"Update visit"
-// @Success		200	{object}	Responses
+// @Param		request			body		updateRequest	true	"Update visit"
+// @Success		200	{object}	responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/visits/{id} 	[put]
 func (r *Router) updateVisit(c *gin.Context) {
 	log.Info().Msg("update visit")
-	var visit UpdateRequest
+	var visit updateRequest
 	if err := c.ShouldBindJSON(&visit); err != nil {
 		log.Error().Err(err).Msg("fail to bind json request")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
@@ -147,7 +147,7 @@ func (r *Router) updateVisit(c *gin.Context) {
 		return
 	}
 
-	visitEntity, err := FromUpdateRequest(&visit)
+	visitEntity, err := fromUpdateRequest(&visit)
 	if err != nil {
 		log.Error().Err(err).Msg("fail to convert to visit entity")
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))

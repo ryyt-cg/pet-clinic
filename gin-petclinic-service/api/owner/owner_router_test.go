@@ -2,7 +2,6 @@ package owner
 
 import (
 	"errors"
-	"gin-petclinic-service/api/pet"
 	resterr "gin-petclinic-service/internal/errors"
 	"gin-petclinic-service/internal/repository/model"
 	"gin-petclinic-service/internal/test"
@@ -23,7 +22,7 @@ func setupRouter() *gin.Engine {
 }
 
 func Test_ownerById(t *testing.T) {
-	ownerResponse := &Response{
+	ownerResponse := &response{
 		ID:        1,
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -35,7 +34,7 @@ func Test_ownerById(t *testing.T) {
 	testCases := []struct {
 		url           string
 		name          string
-		expectedOwner *Response
+		expectedOwner *response
 		expectedError error
 		status        int
 		jsonResponse  string
@@ -98,14 +97,14 @@ func Test_ownerByIdWithPets(t *testing.T) {
 	logger, _ := zap.NewProduction()
 	logger.Info("Owner by ID with Pets endpoint", zap.String("function", "Test_ownerByIdWithPets"))
 
-	ownerWithPetsResponse := &Response{
+	ownerWithPetsResponse := &response{
 		ID:        1,
 		FirstName: "Nat",
 		LastName:  "Cole",
 		Address:   "1234 Elm St",
 		City:      "New York",
 		Telephone: "1234567890",
-		Pets: []pet.Response{
+		Pets: []petResponse{
 			{
 				ID:        1,
 				Name:      "Max",
@@ -121,7 +120,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 		},
 	}
 
-	ownerResponse := &Response{
+	ownerResponse := &response{
 		ID:        2,
 		FirstName: "John",
 		LastName:  "Smith",
@@ -136,7 +135,7 @@ func Test_ownerByIdWithPets(t *testing.T) {
 		url           string
 		pathParam     string
 		name          string
-		expectedOwner *Response
+		expectedOwner *response
 		expectedError error
 		status        int
 		jsonResponse  string
@@ -210,9 +209,9 @@ func Test_ownerByIdWithPets(t *testing.T) {
 }
 
 func Test_OwnerByLastName(t *testing.T) {
-	ownersResponse := &Responses{
+	ownersResponse := &responses{
 		Context: model.Context{Count: 2},
-		Owners: []Response{
+		Owners: []response{
 			{
 				ID:        15,
 				FirstName: "Charles",
@@ -225,16 +224,16 @@ func Test_OwnerByLastName(t *testing.T) {
 			},
 		},
 	}
-	noOwnerResponse := &Responses{
+	noOwnerResponse := &responses{
 		Context: model.Context{Count: 0},
-		Owners:  []Response{},
+		Owners:  []response{},
 	}
 
 	testCases := []struct {
 		name           string
 		queryParam     string
 		url            string
-		expectedOwners *Responses
+		expectedOwners *responses
 		expectedError  error
 		status         int
 		jsonResponse   string
@@ -292,9 +291,9 @@ func Test_AllOwners(t *testing.T) {
 	logger, _ := zap.NewProduction()
 	logger.Info("All owner endpoint", zap.String("function", "TestAllOwners"))
 
-	ownersResponse := &Responses{
+	ownersResponse := &responses{
 		Context: model.Context{Count: 2},
-		Owners: []Response{
+		Owners: []response{
 			{
 				ID:        35,
 				FirstName: "Charles",
@@ -313,14 +312,14 @@ func Test_AllOwners(t *testing.T) {
 		},
 	}
 
-	noOwnersResponse := &Responses{
+	noOwnersResponse := &responses{
 		Context: model.Context{Count: 0},
-		Owners:  []Response{},
+		Owners:  []response{},
 	}
 
 	testCases := []struct {
 		name           string
-		expectedOwners *Responses
+		expectedOwners *responses
 		expectedError  error
 		status         int
 		jsonResponse   string
@@ -371,7 +370,7 @@ func Test_AllOwners(t *testing.T) {
 func Test_CreateOwner(t *testing.T) {
 	logger, _ := zap.NewProduction()
 	logger.Info("Create Owner endpoint", zap.String("function", "Test_CreateOwner"))
-	ownerRequest := &AddRequest{
+	ownerRequest := &addRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",
 		Address:   "1234 Elm St",
@@ -379,7 +378,7 @@ func Test_CreateOwner(t *testing.T) {
 		Telephone: "1234567890",
 	}
 
-	owner := &Response{
+	owner := &response{
 		ID:        1,
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -390,8 +389,8 @@ func Test_CreateOwner(t *testing.T) {
 
 	testCases := []struct {
 		name          string
-		request       *AddRequest
-		expectedOwner *Response
+		request       *addRequest
+		expectedOwner *response
 		expectedError error
 		status        int
 		jsonResponse  string
@@ -438,7 +437,7 @@ func Test_UpdateOwner(t *testing.T) {
 	logger, _ := zap.NewProduction()
 	logger.Info("Update Owner endpoint", zap.String("function", "Test_UpdateOwner"))
 
-	ownerRequest := &UpdateRequest{
+	ownerRequest := &updateRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",
 		Address:   "1234 Elm St",
@@ -446,7 +445,7 @@ func Test_UpdateOwner(t *testing.T) {
 		Telephone: "1234567890",
 	}
 
-	owner := &UpdateResponse{
+	owner := &updateResponse{
 		ID:        15,
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -458,9 +457,9 @@ func Test_UpdateOwner(t *testing.T) {
 	testCases := []struct {
 		name          string
 		requestID     string
-		request       *UpdateRequest
+		request       *updateRequest
 		url           string
-		expectedOwner *UpdateResponse
+		expectedOwner *updateResponse
 		expectedError error
 		status        int
 		jsonResponse  string

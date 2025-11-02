@@ -19,7 +19,7 @@ type vetServiceMock struct {
 	mock.Mock
 }
 
-func (vetM *vetServiceMock) allSpecialties() (*specialtiesResponse, error) {
+func (vetM *vetServiceMock) getAllSpecialties() (*specialtiesResponse, error) {
 	args := vetM.Called()
 	intf := args.Get(0)
 	val := intf.(specialtiesResponse)
@@ -28,55 +28,55 @@ func (vetM *vetServiceMock) allSpecialties() (*specialtiesResponse, error) {
 	return ptr, args.Error(1)
 }
 
-func (vetM *vetServiceMock) getVetById(id uint) (*Response, error) {
+func (vetM *vetServiceMock) getVetById(id uint) (*response, error) {
 	args := vetM.Called(id)
 	intf := args.Get(0)
-	val := intf.(Response)
+	val := intf.(response)
 	ptr := &val
 
 	return ptr, args.Error(1)
 }
 
-func (vetM *vetServiceMock) getVetByLastName(lastName string) ([]Response, error) {
+func (vetM *vetServiceMock) getVetByLastName(lastName string) ([]response, error) {
 	args := vetM.Called(lastName)
 	intf := args.Get(0)
-	val := intf.([]Response)
+	val := intf.([]response)
 	ptr := val
 
 	return ptr, args.Error(1)
 }
 
-func (vetM *vetServiceMock) allVets() ([]Response, error) {
+func (vetM *vetServiceMock) allVets() ([]response, error) {
 	args := vetM.Called()
 	intf := args.Get(0)
-	val := intf.([]Response)
+	val := intf.([]response)
 	ptr := val
 
 	return ptr, args.Error(1)
 }
 
-func (vetM *vetServiceMock) getAllVetsWithSpecialties() ([]Response, error) {
+func (vetM *vetServiceMock) getAllVetsWithSpecialties() ([]response, error) {
 	args := vetM.Called()
 	intf := args.Get(0)
-	val := intf.([]Response)
+	val := intf.([]response)
 	ptr := val
 
 	return ptr, args.Error(1)
 }
 
-func (vetM *vetServiceMock) create(vet *repository.Vet) (*Response, error) {
+func (vetM *vetServiceMock) create(vet *repository.Vet) (*response, error) {
 	args := vetM.Called(vet)
 	intf := args.Get(0)
-	val := intf.(Response)
+	val := intf.(response)
 	ptr := &val
 
 	return ptr, args.Error(1)
 }
 
-func (vetM *vetServiceMock) update(vet *repository.Vet) (*Response, error) {
+func (vetM *vetServiceMock) update(vet *repository.Vet) (*response, error) {
 	args := vetM.Called(vet)
 	intf := args.Get(0)
-	val := intf.(Response)
+	val := intf.(response)
 	ptr := &val
 
 	return ptr, args.Error(1)
@@ -92,7 +92,7 @@ func setupRouter() *gin.Engine {
 func Test_VetById(t *testing.T) {
 	vetMock := vetServiceMock{}
 
-	vetResponse := &Response{
+	vetResponse := &response{
 		ID:        1,
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -124,8 +124,8 @@ func Test_VetById(t *testing.T) {
 func Test_VetByLastName(t *testing.T) {
 	vetMock := vetServiceMock{}
 
-	var vetResponses = make([]Response, 1)
-	var vetResponse = &Response{
+	var vetResponses = make([]response, 1)
+	var vetResponse = &response{
 		ID:        15,
 		FirstName: "Charles",
 		LastName:  "Ward",
@@ -148,7 +148,7 @@ func Test_VetByLastName(t *testing.T) {
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	// unmarshal to Vet struct for asserts.
-	actualVetResponses := make([]Response, 1)
+	actualVetResponses := make([]response, 1)
 	jsoniter.Unmarshal(w.Body.Bytes(), &actualVetResponses)
 
 	assert.Equal(t, vetResponse.ID, actualVetResponses[0].ID)

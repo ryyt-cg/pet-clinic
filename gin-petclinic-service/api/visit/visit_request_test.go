@@ -11,11 +11,11 @@ import (
 
 func Test_FromAddRequest(t *testing.T) {
 	testCases := []struct {
-		fromAddRequest *AddRequest
+		fromAddRequest *addRequest
 		toVisit        *repository.Visit
 	}{
 		{
-			fromAddRequest: &AddRequest{
+			fromAddRequest: &addRequest{
 				VisitDate:   "2024-12-05",
 				Description: "Nail Clip",
 				PetID:       21,
@@ -27,7 +27,7 @@ func Test_FromAddRequest(t *testing.T) {
 			},
 		},
 		{
-			fromAddRequest: &AddRequest{
+			fromAddRequest: &addRequest{
 				VisitDate:   "2025-03-32",
 				Description: "Regular Checkup",
 				PetID:       42,
@@ -41,7 +41,7 @@ func Test_FromAddRequest(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		result, err := FromAddRequest(tc.fromAddRequest)
+		result, err := fromAddRequest(tc.fromAddRequest)
 
 		if err != nil {
 			assert.Nil(t, result)
@@ -55,11 +55,11 @@ func Test_FromAddRequest(t *testing.T) {
 
 func Test_FromUpdateRequest(t *testing.T) {
 	testCases := []struct {
-		fromUpdateRequest *UpdateRequest
+		fromUpdateRequest *updateRequest
 		toVisit           *repository.Visit
 	}{
 		{
-			fromUpdateRequest: &UpdateRequest{
+			fromUpdateRequest: &updateRequest{
 				ID:          150,
 				VisitDate:   "2024-12-05",
 				Description: "Nail Clip",
@@ -73,7 +73,7 @@ func Test_FromUpdateRequest(t *testing.T) {
 			},
 		},
 		{
-			fromUpdateRequest: &UpdateRequest{
+			fromUpdateRequest: &updateRequest{
 				ID:          151,
 				VisitDate:   "2025-03-32",
 				Description: "Regular Checkup",
@@ -89,7 +89,7 @@ func Test_FromUpdateRequest(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		result, err := FromUpdateRequest(tc.fromUpdateRequest)
+		result, err := fromUpdateRequest(tc.fromUpdateRequest)
 
 		if err != nil {
 			assert.Nil(t, result)

@@ -2,7 +2,6 @@ package pet
 
 import (
 	"errors"
-	"gin-petclinic-service/api/visit"
 	"gin-petclinic-service/internal/repository"
 	"gin-petclinic-service/internal/repository/model"
 	"gin-petclinic-service/internal/test"
@@ -109,11 +108,11 @@ func Test_retrieveAllPets(t *testing.T) {
 		},
 	}
 
-	expectedPets := &Responses{
+	expectedPets := &responses{
 		Context: model.Context{
 			Count: len(mockPet),
 		},
-		Pets: []Response{
+		Pets: []response{
 			{
 				ID:        1,
 				Name:      "Nash",
@@ -128,7 +127,7 @@ func Test_retrieveAllPets(t *testing.T) {
 		name          string
 		mockPets      []repository.Pet
 		mockError     error
-		expectedPets  *Responses
+		expectedPets  *responses
 		expectedError error
 	}{
 		{
@@ -139,11 +138,14 @@ func Test_retrieveAllPets(t *testing.T) {
 			expectedError: nil,
 		},
 		{
-			name:          "get no pet",
-			mockPets:      nil,
-			mockError:     gorm.ErrRecordNotFound,
-			expectedPets:  nil,
-			expectedError: gorm.ErrRecordNotFound,
+			name:      "get no pet",
+			mockPets:  nil,
+			mockError: gorm.ErrRecordNotFound,
+			expectedPets: &responses{
+				Context: model.Context{},
+				Pets:    []response{},
+			},
+			expectedError: nil,
 		},
 		{
 			name:          "fail to get all pets",
@@ -182,8 +184,7 @@ func Test_getById(t *testing.T) {
 		id            uint
 		mockPet       *repository.Pet
 		mockError     error
-		route         string
-		expectedPet   *Response
+		expectedPet   *response
 		expectedError error
 	}{
 		{
@@ -202,8 +203,7 @@ func Test_getById(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			route:     "/v1/pets/1",
-			expectedPet: &Response{
+			expectedPet: &response{
 				ID:        1,
 				Name:      "Nash",
 				Birthdate: "2014-10-07",
@@ -217,7 +217,6 @@ func Test_getById(t *testing.T) {
 			id:            1,
 			mockPet:       nil,
 			mockError:     gorm.ErrRecordNotFound,
-			route:         "/v1/pets/1",
 			expectedPet:   nil,
 			expectedError: gorm.ErrRecordNotFound,
 		},
@@ -226,7 +225,6 @@ func Test_getById(t *testing.T) {
 			id:            1,
 			mockPet:       nil,
 			mockError:     errors.New("fail to retrieve pet by id"),
-			route:         "/v1/pets/1",
 			expectedPet:   nil,
 			expectedError: errors.New("fail to retrieve pet by id"),
 		},
@@ -260,8 +258,7 @@ func Test_getByIdWithVisits(t *testing.T) {
 		id            uint
 		mockPet       *repository.Pet
 		mockError     error
-		route         string
-		expectedPet   *Response
+		expectedPet   *response
 		expectedError error
 	}{
 		{
@@ -289,13 +286,12 @@ func Test_getByIdWithVisits(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			route:     "/v1/pets/1/visits",
-			expectedPet: &Response{
+			expectedPet: &response{
 				ID:        1,
 				Name:      "Nash",
 				Birthdate: "2014-10-07",
 				Species:   "Dog",
-				Visits: []visit.Response{
+				Visits: []visitResponse{
 					{
 						ID:          1,
 						VisitDate:   "2014-10-07",
@@ -310,7 +306,6 @@ func Test_getByIdWithVisits(t *testing.T) {
 			id:            1,
 			mockPet:       nil,
 			mockError:     gorm.ErrRecordNotFound,
-			route:         "/v1/pets/1/visits",
 			expectedPet:   nil,
 			expectedError: gorm.ErrRecordNotFound,
 		},
@@ -319,7 +314,6 @@ func Test_getByIdWithVisits(t *testing.T) {
 			id:            1,
 			mockPet:       nil,
 			mockError:     errors.New("fail to retrieve pet by id"),
-			route:         "/v1/pets/1/visits",
 			expectedPet:   nil,
 			expectedError: errors.New("fail to retrieve pet by id"),
 		},
@@ -353,8 +347,7 @@ func Test_getByName(t *testing.T) {
 		petName       string
 		mockPets      []repository.Pet
 		mockError     error
-		route         string
-		expectedPets  *Responses
+		expectedPets  *responses
 		expectedError error
 	}{
 		{
@@ -376,12 +369,11 @@ func Test_getByName(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			route:     "/v1/pets/name/Leo",
-			expectedPets: &Responses{
+			expectedPets: &responses{
 				Context: model.Context{
 					Count: 1,
 				},
-				Pets: []Response{
+				Pets: []response{
 					{
 						ID:        1,
 						Name:      "Leo",
@@ -394,13 +386,15 @@ func Test_getByName(t *testing.T) {
 			expectedError: nil,
 		},
 		{
-			name:          "found no pets by name",
-			petName:       "Tiger",
-			mockPets:      nil,
-			mockError:     gorm.ErrRecordNotFound,
-			route:         "/v1/pets/name/Tiger",
-			expectedPets:  nil,
-			expectedError: gorm.ErrRecordNotFound,
+			name:      "found no pets by name",
+			petName:   "Tiger",
+			mockPets:  nil,
+			mockError: gorm.ErrRecordNotFound,
+			expectedPets: &responses{
+				Context: model.Context{},
+				Pets:    []response{},
+			},
+			expectedError: nil,
 		},
 		{
 			name:          "fail to get pets by name",
@@ -421,7 +415,7 @@ func Test_getByName(t *testing.T) {
 			petService := NewService(&petMock)
 			result, err := petService.getPetsByName(tc.petName)
 
-			if tc.mockError != nil {
+			if tc.expectedError != nil {
 				assert.Equal(t, tc.expectedError, err)
 				assert.Nil(t, result)
 			} else {
@@ -441,7 +435,7 @@ func Test_update(t *testing.T) {
 		name          string
 		mockPet       *repository.Pet
 		mockError     error
-		expectedPet   *Response
+		expectedPet   *updateResponse
 		expectedError error
 	}{
 		{
@@ -460,12 +454,11 @@ func Test_update(t *testing.T) {
 				},
 			},
 			mockError: nil,
-			expectedPet: &Response{
+			expectedPet: &updateResponse{
 				ID:        1,
 				Name:      "Leo",
 				Birthdate: "2014-10-07",
-				Species:   "Cat",
-				Visits:    nil,
+				SpeciesID: 2,
 			},
 			expectedError: nil,
 		},
@@ -518,7 +511,7 @@ func Test_create(t *testing.T) {
 			Model: gorm.Model{
 				ID: 2,
 			},
-			Name: "Cat",
+			Name: "cat",
 		},
 	}
 
@@ -527,7 +520,7 @@ func Test_create(t *testing.T) {
 		mockPet       *repository.Pet
 		mockResult    *repository.Pet
 		mockError     error
-		expectedPet   *Response
+		expectedPet   *addResponse
 		expectedError error
 	}{
 		{
@@ -535,12 +528,11 @@ func Test_create(t *testing.T) {
 			mockPet:    mockPet,
 			mockResult: mockPet,
 			mockError:  nil,
-			expectedPet: &Response{
+			expectedPet: &addResponse{
 				ID:        1,
 				Name:      "Leo",
 				Birthdate: "2014-10-07",
-				Species:   "Cat",
-				Visits:    nil,
+				SpeciesID: 2,
 			},
 			expectedError: nil,
 		},

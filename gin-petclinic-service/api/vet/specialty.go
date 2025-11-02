@@ -17,12 +17,12 @@ type specialtiesResponse struct {
 	Specialties []specialtyResponse `json:"specialties"`
 }
 
-func (s *specialtyResponse) FromSpecialty(specialty *repository.Specialty) {
+func (s *specialtyResponse) fromSpecialty(specialty *repository.Specialty) {
 	s.ID = specialty.ID
 	s.Name = specialty.Name
 }
 
-func ToSpecialtyResponses(specialties []repository.Specialty) *[]specialtyResponse {
+func toSpecialtyResponses(specialties []repository.Specialty) *[]specialtyResponse {
 	if len(specialties) == 0 {
 		return nil
 	}
@@ -35,7 +35,7 @@ func ToSpecialtyResponses(specialties []repository.Specialty) *[]specialtyRespon
 	return &specialtyResponses
 }
 
-func ToSpecialtiesResponses(specialties []repository.Specialty) *specialtiesResponse {
+func toSpecialtiesResponses(specialties []repository.Specialty) *specialtiesResponse {
 	specialtyResponses := make([]specialtyResponse, len(specialties))
 	for i, s := range specialties {
 		specialtyResponses[i].ID = s.ID
@@ -48,7 +48,7 @@ func ToSpecialtiesResponses(specialties []repository.Specialty) *specialtiesResp
 	return specialtiesResponse
 }
 
-func ToSpecialty(specialty *specialtyResponse) *repository.Specialty {
+func toSpecialty(specialty *specialtyResponse) *repository.Specialty {
 	return &repository.Specialty{
 		Model: gorm.Model{
 			ID: specialty.ID,
@@ -57,10 +57,10 @@ func ToSpecialty(specialty *specialtyResponse) *repository.Specialty {
 	}
 }
 
-func ToSpecialties(specialties []specialtyResponse) *[]repository.Specialty {
+func toSpecialties(specialties []specialtyResponse) *[]repository.Specialty {
 	specialtyEntities := make([]repository.Specialty, len(specialties))
 	for i, s := range specialties {
-		specialtyEntities[i] = *ToSpecialty(&s)
+		specialtyEntities[i] = *toSpecialty(&s)
 	}
 
 	return &specialtyEntities

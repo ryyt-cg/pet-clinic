@@ -1,7 +1,6 @@
 package owner
 
 import (
-	"gin-petclinic-service/api/pet"
 	"gin-petclinic-service/internal/repository"
 	"gin-petclinic-service/internal/repository/model"
 	"gin-petclinic-service/internal/test"
@@ -26,7 +25,7 @@ func Test_ResponseFromOwner(t *testing.T) {
 		Pets:      nil,
 	}
 
-	expectedResponse := Response{
+	expectedResponse := response{
 		ID:        1,
 		FirstName: "John",
 		LastName:  "Doe",
@@ -36,7 +35,7 @@ func Test_ResponseFromOwner(t *testing.T) {
 		Pets:      nil,
 	}
 
-	response := ToResponse(owner)
+	response := toResponse(owner)
 	assert.Equal(t, expectedResponse.ID, response.ID)
 	assert.Equal(t, expectedResponse.FirstName, response.FirstName)
 	assert.Equal(t, expectedResponse.LastName, response.LastName)
@@ -79,7 +78,7 @@ func Test_FromOwners(t *testing.T) {
 		},
 	}
 
-	ownerResponses := []Response{
+	ownerResponses := []response{
 		{ID: 1, FirstName: "John", LastName: "Doe", Address: "123 Main St", City: "Anytown", Telephone: "1234567890",
 			Pets: nil,
 		},
@@ -87,13 +86,13 @@ func Test_FromOwners(t *testing.T) {
 			Pets: nil,
 		},
 		{ID: 3, FirstName: "Jane", LastName: "Doe", Address: "456 Main St", City: "Anytown", Telephone: "0987654321",
-			Pets: []pet.Response{
-				{ID: 1, Name: "Pet1", Birthdate: "2019-04-07", Visits: nil},
+			Pets: []petResponse{
+				{ID: 1, Name: "Pet1", Birthdate: "2019-04-07"},
 			},
 		},
 	}
 
-	responses := FromOwners(owners)
+	responses := fromOwners(owners)
 
 	assert.Equal(t, len(ownerResponses), len(responses))
 	for i, owner := range ownerResponses {
@@ -104,7 +103,7 @@ func Test_FromOwners(t *testing.T) {
 func Test_FromUpdateEntity(t *testing.T) {
 	tests := []struct {
 		updateEntity   *repository.Owner
-		updateResponse *UpdateResponse
+		updateResponse *updateResponse
 	}{
 		{
 			updateEntity: &repository.Owner{
@@ -116,7 +115,7 @@ func Test_FromUpdateEntity(t *testing.T) {
 				Address: "123 Main St",
 				City:    "Anytown",
 			},
-			updateResponse: &UpdateResponse{
+			updateResponse: &updateResponse{
 				ID:        202,
 				FirstName: "Ronald",
 				LastName:  "Petersen",
@@ -127,7 +126,7 @@ func Test_FromUpdateEntity(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		result := ToUpdateResponse(tc.updateEntity)
+		result := toUpdateResponse(tc.updateEntity)
 		assert.Equal(t, result, tc.updateResponse)
 	}
 }

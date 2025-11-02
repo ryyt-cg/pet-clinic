@@ -184,7 +184,7 @@ func (router *Router) getByName(c *gin.Context, param api.NameParam) {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets	 		[post]
 func (router *Router) create(c *gin.Context) {
-	var request AddRequest
+	var request addRequest
 	err := c.ShouldBind(&request)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
@@ -193,12 +193,12 @@ func (router *Router) create(c *gin.Context) {
 	}
 
 	log.Info().Str("name", request.Name).Msg("Add a new pet.")
-	petEntity := FromAddRequest(&request)
-	//if err != nil {
-	//	log.Error().Err(err).Msg("Unable to convert request to pet entity.")
-	//	c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
-	//	return
-	//}
+	petEntity, err := fromAddRequest(&request)
+	if err != nil {
+		log.Error().Err(err).Msg("Unable to convert request to pet entity.")
+		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+		return
+	}
 
 	petResponse, err := router.service.create(petEntity)
 	if err != nil {
@@ -223,7 +223,7 @@ func (router *Router) create(c *gin.Context) {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets/{id}	 	[put]
 func (router *Router) update(c *gin.Context) {
-	var request UpdateRequest
+	var request updateRequest
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to convert to number.")
@@ -239,7 +239,7 @@ func (router *Router) update(c *gin.Context) {
 	}
 
 	log.Info().Str("name", request.Name).Msg("Update a pet.")
-	petEntity, err := FromUpdateRequest(&request)
+	petEntity, err := fromUpdateRequest(&request)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to convert request to pet entity.")
 		c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))

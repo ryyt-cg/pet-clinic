@@ -11,7 +11,7 @@ import (
 func Test_FromSpecialty(t *testing.T) {
 	specialty := &repository.Specialty{Model: gorm.Model{ID: 1}, Name: "Cardiology"}
 	s := &specialtyResponse{}
-	s.FromSpecialty(specialty)
+	s.fromSpecialty(specialty)
 
 	assert.Equal(t, specialty.ID, s.ID)
 	assert.Equal(t, specialty.Name, s.Name)

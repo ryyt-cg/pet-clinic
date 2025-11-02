@@ -13,7 +13,7 @@ func Test_Response(t *testing.T) {
 	testCases := []struct {
 		name     string
 		pet      *repository.Pet
-		expected *Response
+		expected *response
 	}{
 		{
 			name: "Valid Pet",
@@ -24,7 +24,7 @@ func Test_Response(t *testing.T) {
 				Name:      "Buddy",
 				Birthdate: nil,
 			},
-			expected: &Response{
+			expected: &response{
 				ID:        1,
 				Name:      "Buddy",
 				Birthdate: "", // Empty birthdate
@@ -39,7 +39,7 @@ func Test_Response(t *testing.T) {
 				Name:      "Mittens",
 				Birthdate: test.ToDate("2023-01-01"),
 			},
-			expected: &Response{
+			expected: &response{
 				ID:        2,
 				Name:      "Mittens",
 				Birthdate: "2023-01-01", // Formatted birthdate
@@ -54,10 +54,12 @@ func Test_Response(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			response := ToResponse(tc.pet)
+			response := toResponse(tc.pet)
 			assert.Equal(t, tc.expected, response)
 		})
 	}
 }
 
-func Test_FromPets(t *testing.T) {}
+func Test_FromPets(t *testing.T) {
+
+}

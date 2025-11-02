@@ -22,7 +22,7 @@ func NewRouter(service Servicer) *Router {
 // Register
 // register vet endpoints
 func (vetRouter *Router) Register(router *gin.RouterGroup) {
-	router.GET("specialties", vetRouter.allSpecialties)
+	router.GET("specialties", vetRouter.getAllSpecialties)
 	router.GET("all", vetRouter.allVets)
 	router.GET(":id", vetRouter.vetById)
 	router.GET(":id/specialties", vetRouter.getVetByIdWithSpecialties)
@@ -33,7 +33,7 @@ func (vetRouter *Router) Register(router *gin.RouterGroup) {
 
 // allSpecialties - retrieve all specialties
 
-func (vetRouter *Router) allSpecialties(c *gin.Context) {
+func (vetRouter *Router) getAllSpecialties(c *gin.Context) {
 	log.Info().Msg("get all specialties")
 	response, err := vetRouter.service.getAllSpecialties()
 	if err != nil {
@@ -93,7 +93,7 @@ func (vetRouter *Router) vetByLastName(c *gin.Context, lastName string) {
 //
 // @Description	Get all vets
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/vets/all 		[get]
@@ -132,7 +132,7 @@ func (vetRouter *Router) getVetByIdWithSpecialties(c *gin.Context) {
 
 // addNewVet - add new vet
 func (vetRouter *Router) create(c *gin.Context) {
-	var vetRequest AddRequest
+	var vetRequest addRequest
 	err := c.ShouldBindJSON(&vetRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
@@ -140,7 +140,7 @@ func (vetRouter *Router) create(c *gin.Context) {
 		return
 	}
 
-	vetEntity := FromAddRequest(&vetRequest)
+	vetEntity := fromAddRequest(&vetRequest)
 	newVet, err := vetRouter.service.create(vetEntity)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to create vet.")
@@ -153,7 +153,7 @@ func (vetRouter *Router) create(c *gin.Context) {
 }
 
 func (vetRouter *Router) update(c *gin.Context) {
-	var vetRequest UpdateRequest
+	var vetRequest updateRequest
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
@@ -168,7 +168,7 @@ func (vetRouter *Router) update(c *gin.Context) {
 		return
 	}
 
-	vetEntity := FromUpdateRequest(&vetRequest)
+	vetEntity := fromUpdateRequest(&vetRequest)
 	vetEntity.ID = uint(id)
 	newVet, err := vetRouter.service.update(vetEntity)
 	if err != nil {

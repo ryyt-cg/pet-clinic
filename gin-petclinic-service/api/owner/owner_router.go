@@ -164,7 +164,7 @@ func (r *Router) ownerByIdWithPets(c *gin.Context) {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/owners 		[post]
 func (r *Router) addNewOwner(c *gin.Context) {
-	var ownerRequest AddRequest
+	var ownerRequest addRequest
 	err := c.ShouldBindJSON(&ownerRequest)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to Unmarshal JSON.")
@@ -195,7 +195,7 @@ func (r *Router) addNewOwner(c *gin.Context) {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/owners/{id} 	[put]
 func (r *Router) updateOwner(c *gin.Context) {
-	var ownerRequest UpdateRequest
+	var ownerRequest updateRequest
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		log.Warn().Msg("Fail to convert ID to int.")

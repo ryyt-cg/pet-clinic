@@ -3,16 +3,17 @@ package visit
 import (
 	"errors"
 	"gin-petclinic-service/internal/repository"
+	"gin-petclinic-service/internal/repository/model"
 
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
 
 type Servicer interface {
-	getVisitById(id uint) (*Response, error)
-	getAllVisits() (*Responses, error)
-	create(visit *repository.Visit) (*Response, error)
-	update(visit *repository.Visit) (*Response, error)
+	getVisitById(id uint) (*response, error)
+	getAllVisits() (*responses, error)
+	create(visit *repository.Visit) (*response, error)
+	update(visit *repository.Visit) (*response, error)
 }
 
 type Service struct {
@@ -23,7 +24,7 @@ func NewService(repository repository.VisitRepositorier) *Service {
 	return &Service{repository: repository}
 }
 
-func (service *Service) getVisitById(id uint) (*Response, error) {
+func (service *Service) getVisitById(id uint) (*response, error) {
 	visit, err := service.repository.FindById(id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -34,18 +35,20 @@ func (service *Service) getVisitById(id uint) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromVisit(visit)
+	response := &response{}
+	response.fromVisit(visit)
 	return response, nil
 }
 
-func (service *Service) getAllVisits() (*Responses, error) {
+func (service *Service) getAllVisits() (*responses, error) {
 	visits, err := service.repository.FindAll()
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Error().Msg("No visits found.")
-			return nil, gorm.ErrRecordNotFound
+			return &responses{
+				Context: model.Context{},
+				Visits:  []response{},
+			}, nil
 		}
 
 		log.Error().Err(err).Msg("Fail to retrieve all visits.")
@@ -53,24 +56,24 @@ func (service *Service) getAllVisits() (*Responses, error) {
 	}
 	log.Debug().Int("count", len(visits)).Msg("counts of all visits")
 
-	// convert to []Response & model.Context
-	responses := FromVisitsToResponses(visits)
+	// convert to []response & model.Context
+	responses := fromVisitsToResponses(visits)
 	return responses, nil
 }
 
-func (service *Service) create(visit *repository.Visit) (*Response, error) {
+func (service *Service) create(visit *repository.Visit) (*response, error) {
 	newVisit, err := service.repository.Insert(visit)
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to create visit.")
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromVisit(newVisit)
+	response := &response{}
+	response.fromVisit(newVisit)
 	return response, nil
 }
 
-func (service *Service) update(visit *repository.Visit) (*Response, error) {
+func (service *Service) update(visit *repository.Visit) (*response, error) {
 	updatedVisit, err := service.repository.Update(visit)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -81,7 +84,7 @@ func (service *Service) update(visit *repository.Visit) (*Response, error) {
 		return nil, err
 	}
 
-	response := &Response{}
-	response.FromVisit(updatedVisit)
+	response := &response{}
+	response.fromVisit(updatedVisit)
 	return response, nil
 }
