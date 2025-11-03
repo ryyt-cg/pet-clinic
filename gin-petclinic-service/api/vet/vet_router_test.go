@@ -28,6 +28,15 @@ func (vetM *vetServiceMock) getAllSpecialties() (*specialtiesResponse, error) {
 	return ptr, args.Error(1)
 }
 
+func (vetM *vetServiceMock) getAllVets() (*responses, error) {
+	args := vetM.Called()
+	intf := args.Get(0)
+	val := intf.(responses)
+	ptr := &val
+
+	return ptr, args.Error(1)
+}
+
 func (vetM *vetServiceMock) getVetById(id uint) (*response, error) {
 	args := vetM.Called(id)
 	intf := args.Get(0)
@@ -37,29 +46,38 @@ func (vetM *vetServiceMock) getVetById(id uint) (*response, error) {
 	return ptr, args.Error(1)
 }
 
-func (vetM *vetServiceMock) getVetByLastName(lastName string) ([]response, error) {
+func (vetM *vetServiceMock) getVetByIdWithSpecialties(id uint) (*response, error) {
+	args := vetM.Called(id)
+	intf := args.Get(0)
+	val := intf.(response)
+	ptr := val
+
+	return &ptr, args.Error(1)
+}
+
+func (vetM *vetServiceMock) allVets() (*responses, error) {
+	args := vetM.Called()
+	intf := args.Get(0)
+	val := intf.(*responses)
+	ptr := val
+
+	return ptr, args.Error(1)
+}
+
+func (vetM *vetServiceMock) getAllVetsWithSpecialties() (*responses, error) {
+	args := vetM.Called()
+	intf := args.Get(0)
+	val := intf.(*responses)
+	ptr := val
+
+	return ptr, args.Error(1)
+}
+
+func (vetM *vetServiceMock) getVetByLastName(lastName string) (*responses, error) {
 	args := vetM.Called(lastName)
 	intf := args.Get(0)
-	val := intf.([]response)
-	ptr := val
-
-	return ptr, args.Error(1)
-}
-
-func (vetM *vetServiceMock) allVets() ([]response, error) {
-	args := vetM.Called()
-	intf := args.Get(0)
-	val := intf.([]response)
-	ptr := val
-
-	return ptr, args.Error(1)
-}
-
-func (vetM *vetServiceMock) getAllVetsWithSpecialties() ([]response, error) {
-	args := vetM.Called()
-	intf := args.Get(0)
-	val := intf.([]response)
-	ptr := val
+	val := intf.(responses)
+	ptr := &val
 
 	return ptr, args.Error(1)
 }
