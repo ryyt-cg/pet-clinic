@@ -41,6 +41,21 @@ Run this command to generate the mock files
 mockery
 ```
 
+## [SQL Mock](https://github.com/DATA-DOG/go-sqlmock)
+**sqlmock** is a mock library to simulate any sql driver behavior in tests, without needing a real database connection.
+
+### Install
+```bash
+go get github.com/DATA-DOG/go-sqlmock
+```
+### Documentation and Examples
+* [Documentation](https://pkg.go.dev/github.com/DATA-DOG/go-sqlmock)
+* [Blog API example](https://github.com/DATA-DOG/go-sqlmock/tree/master/examples/blog)
+* [Order API example](https://github.com/DATA-DOG/go-sqlmock/tree/master/examples/orders)
+
+
+
+
 [fiber v2](fiber-petclinic-service/README.md) |
 [fiber v3](fiber3-petclinic-service/README.md) |
 [gin gonic](gin-petclinic-service/README.md) |

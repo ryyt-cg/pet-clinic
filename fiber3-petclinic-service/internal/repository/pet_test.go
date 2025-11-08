@@ -35,13 +35,3 @@ func TestPetFieldsWithEmptyType(t *testing.T) {
 	assert.Equal(t, "Fido", pet.Name)
 	assert.Equal(t, "", pet.Species.Name)
 }
-
-func (suite *PetRepoTestSuite) TestPetFieldsWithEmptyNameAndType(t *testing.T) {
-	pet := &Pet{
-		Name:    "",
-		Species: Species{Name: ""},
-	}
-
-	assert.Equal(t, "", pet.Name)
-	assert.Equal(t, "", pet.Species.Name)
-}

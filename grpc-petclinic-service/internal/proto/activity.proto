@@ -1,0 +1,12 @@
+syntax = "proto3";
+package task;
+option go_package = "github.com/rhtran/task";
+
+
+import "google/protobuf/timestamp.proto";
+
+message Activity {
+  int32 id = 1;
+  google.protobuf.Timestamp time = 2;
+  string description = 3;
+}

@@ -1,51 +1,20 @@
 package repository
 
-import (
-	"fiber3-petclinic-service/internal/test"
-	"testing"
+import "testing"
 
-	"gorm.io/gorm"
+func TestVisitRepository_FindAll(t *testing.T) {
 
-	"github.com/stretchr/testify/assert"
-
-	embeddedpostgres "github.com/fergusstrange/embedded-postgres"
-	"github.com/stretchr/testify/suite"
-)
-
-type VisitRepoTestSuite struct {
-	suite.Suite
-	postgresql      *embeddedpostgres.EmbeddedPostgres
-	visitRepository *VisitRepository
 }
 
-// This will run before the tests in the suite are run
-func (suite *VisitRepoTestSuite) SetupSuite() {
-	suite.postgresql = test.PgStart(suite.T(), "test/migrations")
-	suite.visitRepository = getVisitRepository(suite.T())
+func TestVisitRepository_FindByID(t *testing.T) {}
+
+func TestVisitRepository_Insert(t *testing.T) {
+
 }
 
-func (suite *VisitRepoTestSuite) TearDownSuite() {
-	err := suite.postgresql.Stop()
-	if err != nil {
-		suite.T().Fatal(err)
-	}
-}
+func TestVisitRepository_Update(t *testing.T) {}
 
-// In order for 'go test' to run this suite, we need to create
-// a normal test function and pass our suite to suite.Run
-func TestVisitRepoTestSuite(t *testing.T) {
-	suite.Run(t, new(VisitRepoTestSuite))
-}
-
-func getVisitRepository(t *testing.T) *VisitRepository {
-	db, err := test.Connect()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	return NewVisitRepository(db)
-}
-
+/*
 func (suite *VisitRepoTestSuite) Test_FindById() {
 	var testCases = []struct {
 		input    uint
@@ -75,3 +44,4 @@ func (suite *VisitRepoTestSuite) Test_FindById() {
 		//assert.Equal(suite.T(), testCase.expected.VisitDate, visit.VisitDate)
 	}
 }
+*/

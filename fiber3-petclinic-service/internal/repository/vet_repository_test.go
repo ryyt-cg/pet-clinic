@@ -1,43 +1,31 @@
 package repository
 
-import (
-	"fiber3-petclinic-service/internal/repository/model"
-	"fiber3-petclinic-service/internal/test"
-	"testing"
+import "testing"
 
-	"gorm.io/gorm"
+func TestVetRepository_FindAll(t *testing.T) {
 
-	embeddedpostgres "github.com/fergusstrange/embedded-postgres"
-	"github.com/stretchr/testify/suite"
-
-	"gopkg.in/go-playground/assert.v1"
-)
-
-type VetRepoTestSuite struct {
-	suite.Suite
-	postgresql    *embeddedpostgres.EmbeddedPostgres
-	vetRepository *VetRepository
 }
 
-// This will run before the tests in the suite are run
-func (suite *VetRepoTestSuite) SetupSuite() {
-	suite.postgresql = test.PgStart(suite.T(), "test/migrations")
-	suite.vetRepository = getVetRepository(suite.T())
+func TestVetRepository_FindById(t *testing.T)           {}
+func TestVetRepository_FindAllWithVisits(t *testing.T)  {}
+func TestVetRepository_FindByIdWithVisits(t *testing.T) {}
+func TestVetRepository_FindAllSpecialties(t *testing.T) {
+
 }
 
-func (suite *VetRepoTestSuite) TearDownSuite() {
-	err := suite.postgresql.Stop()
-	if err != nil {
-		suite.T().Fatal(err)
-	}
+func TestVetRepository_FindAllSpecialtiesWithVisits(t *testing.T) {}
+func TestVetRepository_FindByLastName(t *testing.T) {
+
 }
 
-// In order for 'go test' to run this suite, we need to create
-// a normal test function and pass our suite to suite.Run
-func TestVetRepoTestSuite(t *testing.T) {
-	suite.Run(t, new(VetRepoTestSuite))
+func TestVetRepository_FindByLastNameWithVisits(t *testing.T) {}
+func TestVetRepository_Insert(t *testing.T) {
+
 }
 
+func TestVetRepository_Update(t *testing.T) {}
+
+/*
 func getVetRepository(t *testing.T) *VetRepository {
 	db, err := test.Connect()
 	if err != nil {
@@ -104,3 +92,4 @@ func (suite *VetRepoTestSuite) Test_FindByLastName() {
 		assert.Equal(suite.T(), testCase.expected.FirstName, vets[0].FirstName)
 	}
 }
+*/

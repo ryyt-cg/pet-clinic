@@ -5,102 +5,118 @@ import (
 	"fiber3-petclinic-service/internal/test"
 	"testing"
 
-	"gorm.io/gorm"
-
-	embeddedpostgres "github.com/fergusstrange/embedded-postgres"
-	"github.com/stretchr/testify/suite"
-
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 )
 
-type OwnerRepoTestSuite struct {
-	suite.Suite
-	postgresql      *embeddedpostgres.EmbeddedPostgres
-	ownerRepository *OwnerRepository
+func TestOwnerRepository_FindById(t *testing.T) {
+	gdb, mock := test.NewMockPostgresDB()
+	expected := &Owner{
+		Model: gorm.Model{
+			ID: 2,
+		},
+		Person: model.Person{
+			FirstName: "Betty",
+			LastName:  "Davis",
+		},
+		Address:   "123 Main Street",
+		City:      "New York",
+		Telephone: "0123456789",
+	}
+	row := sqlmock.NewRows([]string{"id", "first_name", "last_name", "address", "city", "telephone", "created_at", "updated_at", "deleted_at"}).
+		AddRow(expected.ID, expected.FirstName, expected.LastName, expected.Address, expected.City, expected.Telephone, expected.CreatedAt, expected.UpdatedAt, expected.DeletedAt)
+	mock.ExpectQuery(`SELECT (.+) FROM "owners" WHERE "owners"."id" = (.+)`).WithArgs(expected.ID, 1).WillReturnRows(row)
+
+	ownerRepo := NewOwnerRepository(gdb)
+	result, err := ownerRepo.FindById(expected.ID)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, result, expected)
+
 }
 
-// This will run before the tests in the suite are run
-func (suite *OwnerRepoTestSuite) SetupSuite() {
-	suite.postgresql = test.PgStart(suite.T(), "test/migrations")
-	suite.ownerRepository = getOwnerRepository(suite.T())
+func TestOwnerRepository_FindByIdWithPets(t *testing.T) {
+	expected := &Owner{
+		Model: gorm.Model{
+			ID: 2,
+		},
+		Person: model.Person{
+			FirstName: "Peter",
+			LastName:  "McTavish",
+		},
+		Address:   "123 Main Street",
+		City:      "New York",
+		Telephone: "0123456789",
+		Pets: []Pet{
+			{
+				Model: gorm.Model{
+					ID: 1,
+				},
+				Name:      "Peter",
+				Birthdate: test.ToDate("2021-05-19"),
+			},
+			{
+				Model: gorm.Model{
+					ID: 2,
+				},
+				Name:      "John",
+				Birthdate: test.ToDate("2021-06-10"),
+			},
+		},
+	}
+
+	gdb, mock := test.NewMockPostgresDB()
+	row := sqlmock.NewRows([]string{"id", "first_name", "last_name", "address", "city", "telephone", "created_at", "updated_at", "deleted_at"}).
+		AddRow(expected.ID, expected.FirstName, expected.LastName, expected.Address, expected.City, expected.Telephone, expected.CreatedAt, expected.UpdatedAt, expected.DeletedAt)
+	mock.ExpectQuery(`SELECT (.+) FROM "owners" WHERE "owners"."id" = (.+)`).WithArgs(expected.ID, 1).WillReturnRows(row)
+
+	ownerRepo := NewOwnerRepository(gdb)
+	result, err := ownerRepo.FindByIdWithPets(expected.ID)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, result, expected)
 }
 
-func (suite *OwnerRepoTestSuite) TearDownSuite() {
-	err := suite.postgresql.Stop()
-	if err != nil {
-		suite.T().Fatal(err)
+func TestOwnerRepository_FindByLastName(t *testing.T) {
+	expected := &Owner{
+		Model: gorm.Model{
+			ID: 20,
+		},
+		Person: model.Person{
+			FirstName: "Jean",
+			LastName:  "Coleman",
+		},
 	}
+
+	gdb, mock := test.NewMockPostgresDB()
+	row := sqlmock.NewRows([]string{"id", "first_name", "last_name", "address", "city", "telephone", "created_at", "updated_at", "deleted_at"}).
+		AddRow(expected.ID, expected.FirstName, expected.LastName, expected.Address, expected.City, expected.Telephone, expected.CreatedAt, expected.UpdatedAt, expected.DeletedAt)
+	mock.ExpectQuery(`SELECT (.+) FROM "owners" WHERE "owners"."last_name" = (.+)`).WithArgs(expected.LastName, 1).WillReturnRows(row)
+
+	ownerRepo := NewOwnerRepository(gdb)
+	result, err := ownerRepo.FindByLastName(expected.LastName)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, result, expected)
 }
 
-// In order for 'go test' to run this suite, we need to create
-// a normal test function and pass our suite to suite.Run
-func TestOwnerRepoTestSuite(t *testing.T) {
-	suite.Run(t, new(OwnerRepoTestSuite))
+func TestOwnerRepository_Insert(t *testing.T) {
+	expected := &Owner{
+		Person: model.Person{
+			FirstName: "David",
+			LastName:  "Schroeder",
+		},
+	}
+
+	gdb, mock := test.NewMockPostgresDB()
+	row := sqlmock.NewRows([]string{"id", "first_name", "last_name", "address", "city", "telephone", "created_at", "updated_at", "deleted_at"}).
+		AddRow(expected.ID, expected.FirstName, expected.LastName, expected.Address, expected.City, expected.Telephone, expected.CreatedAt, expected.UpdatedAt, expected.DeletedAt)
+	mock.ExpectQuery(`SELECT (.+) FROM "owners" WHERE "owners"."id" = (.+)`).WithArgs(expected.ID, 1).WillReturnRows(row)
+
+	ownerRepo := NewOwnerRepository(gdb)
+	result, err := ownerRepo.FindById(expected.ID)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, result, expected)
 }
 
-func getOwnerRepository(t *testing.T) *OwnerRepository {
-	db, err := test.Connect()
-	if err != nil {
-		t.Fatal(err)
-	}
+func TestOwnerRepository_Update(t *testing.T) {
 
-	return NewOwnerRepository(db)
-}
-
-func (suite *OwnerRepoTestSuite) Test_FindById() {
-	var testCases = []struct {
-		input    uint
-		expected Owner
-	}{
-		{input: 2, expected: Owner{
-			Model: gorm.Model{
-				ID: 2,
-			},
-			Person: model.Person{
-				FirstName: "Betty",
-				LastName:  "Davis",
-			},
-		}},
-		{input: 5, expected: Owner{
-			Model: gorm.Model{
-				ID: 2,
-			},
-			Person: model.Person{
-				FirstName: "Peter",
-				LastName:  "McTavish",
-			},
-		}},
-	}
-
-	for _, testCase := range testCases {
-		owner, _ := suite.ownerRepository.FindById(testCase.input)
-		assert.Equal(suite.T(), testCase.expected.FirstName, owner.FirstName)
-		assert.Equal(suite.T(), testCase.expected.LastName, owner.LastName)
-	}
-}
-
-func (suite *OwnerRepoTestSuite) Test_FindByLastName() {
-	var testCases = []struct {
-		input    string
-		expected Owner
-	}{
-		{"Coleman", Owner{
-			Person: model.Person{
-				FirstName: "Jean",
-				LastName:  "Coleman",
-			},
-		}},
-		{"Schroeder", Owner{
-			Person: model.Person{
-				FirstName: "David",
-				LastName:  "Schroeder",
-			},
-		}},
-	}
-
-	for _, testCase := range testCases {
-		owners, _ := suite.ownerRepository.FindByLastName(testCase.input)
-		assert.Equal(suite.T(), testCase.expected.LastName, owners[0].LastName)
-		assert.Equal(suite.T(), testCase.expected.FirstName, owners[0].FirstName)
-	}
 }

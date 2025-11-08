@@ -45,9 +45,9 @@ func (repository *PetRepository) FindAll() ([]Pet, error) {
 func (repository *PetRepository) FindById(id uint) (*Pet, error) {
 	log.Info().Uint("id", id).Msg("Search pet by id.")
 
-	var pet Pet
+	var pet *Pet
 	result := repository.db.Joins("Species").Where("pets.id = ?", id).First(&pet)
-	return &pet, result.Error
+	return pet, result.Error
 }
 
 func (repository *PetRepository) FindByIdWithVisits(id uint) (*Pet, error) {
