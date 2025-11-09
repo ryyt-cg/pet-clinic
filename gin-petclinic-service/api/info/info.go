@@ -7,5 +7,5 @@ type response struct {
 	Description string `json:"description"`
 	Version     string `json:"version"`
 	Ip          string `json:"ip"`
-	GitCommit   string `json:"gitCommit"`
+	GitCommit   string `json:"gitCommit,omitempty"`
 }
