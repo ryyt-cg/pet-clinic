@@ -5,6 +5,10 @@ import (
 	"gin-petclinic-service/api/health"
 	"gin-petclinic-service/api/info"
 	"gin-petclinic-service/api/owner"
+	"gin-petclinic-service/api/pet"
+	"gin-petclinic-service/api/vet"
+	"gin-petclinic-service/api/visit"
+
 	//"gin-petclinic-service/api/pet"
 	//"gin-petclinic-service/api/vet"
 	//"gin-petclinic-service/api/visit"
@@ -83,19 +87,19 @@ func loadComponents() {
 	ownerRouter := owner.NewRouter(ownerService)
 
 	// Pet
-	//petRepository := repository.NewPetRepository(db)
-	//petService := pet.NewService(petRepository)
-	//petRouter := pet.NewRouter(petService)
-	//
-	//// Vet
-	//vetRepository := repository.NewVetRepository(db)
-	//vetService := vet.NewService(vetRepository)
-	//vetRouter := vet.NewRouter(vetService)
-	//
-	//// Visit
-	//visitRepository := repository.NewVisitRepository(db)
-	//visitService := visit.NewService(visitRepository)
-	//visitRouter := visit.NewRouter(visitService)
+	petRepository := repository.NewPetRepository(db)
+	petService := pet.NewService(petRepository)
+	petRouter := pet.NewRouter(petService)
+
+	// Vet
+	vetRepository := repository.NewVetRepository(db)
+	vetService := vet.NewService(vetRepository)
+	vetRouter := vet.NewRouter(vetService)
+
+	// Visit
+	visitRepository := repository.NewVisitRepository(db)
+	visitService := visit.NewService(visitRepository)
+	visitRouter := visit.NewRouter(visitService)
 
 	//authenService := service.NewAuthenService(logger)
 
@@ -109,9 +113,9 @@ func loadComponents() {
 	healthCheckRouter.Register(home.Group("/health"))
 	infoRouter.Register(home.Group("/info"))
 	ownerRouter.Register(v1.Group("/owners"))
-	//petRouter.Register(v1.Group("/pets"))
-	//vetRouter.Register(v1.Group("/vets"))
-	//visitRouter.Register(v1.Group("/visits"))
+	petRouter.Register(v1.Group("/pets"))
+	vetRouter.Register(v1.Group("/vets"))
+	visitRouter.Register(v1.Group("/visits"))
 }
 
 //	@title			Pet Clinic API

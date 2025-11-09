@@ -63,7 +63,7 @@
 				
 				<option value="file3">gin-petclinic-service/api/health/mock_check_servicer.go (0.0%)</option>
 				
-				<option value="file4">gin-petclinic-service/api/info/info_router.go (83.3%)</option>
+				<option value="file4">gin-petclinic-service/api/info/info_router.go (100.0%)</option>
 				
 				<option value="file5">gin-petclinic-service/api/info/info_service.go (100.0%)</option>
 				
@@ -71,41 +71,55 @@
 				
 				<option value="file7">gin-petclinic-service/api/owner/owner_request.go (100.0%)</option>
 				
-				<option value="file8">gin-petclinic-service/api/owner/owner_response.go (100.0%)</option>
+				<option value="file8">gin-petclinic-service/api/owner/owner_response.go (76.0%)</option>
 				
-				<option value="file9">gin-petclinic-service/api/owner/owner_router.go (86.7%)</option>
+				<option value="file9">gin-petclinic-service/api/owner/owner_router.go (92.7%)</option>
 				
 				<option value="file10">gin-petclinic-service/api/owner/owner_service.go (100.0%)</option>
 				
-				<option value="file11">gin-petclinic-service/api/service/auth_service.go (0.0%)</option>
+				<option value="file11">gin-petclinic-service/api/pet/pet_request.go (86.7%)</option>
 				
-				<option value="file12">gin-petclinic-service/api/visit/visit_request.go (100.0%)</option>
+				<option value="file12">gin-petclinic-service/api/pet/pet_response.go (91.2%)</option>
 				
-				<option value="file13">gin-petclinic-service/api/visit/visit_response.go (100.0%)</option>
+				<option value="file13">gin-petclinic-service/api/pet/pet_router.go (0.0%)</option>
 				
-				<option value="file14">gin-petclinic-service/api/visit/visit_router.go (19.0%)</option>
+				<option value="file14">gin-petclinic-service/api/pet/pet_service.go (100.0%)</option>
 				
-				<option value="file15">gin-petclinic-service/api/visit/visit_service.go (100.0%)</option>
+				<option value="file15">gin-petclinic-service/api/service/auth_service.go (0.0%)</option>
 				
-				<option value="file16">gin-petclinic-service/cmd/server.go (0.0%)</option>
+				<option value="file16">gin-petclinic-service/api/vet/specialty.go (100.0%)</option>
 				
-				<option value="file17">gin-petclinic-service/docs/docs.go (0.0%)</option>
+				<option value="file17">gin-petclinic-service/api/vet/vet_request.go (100.0%)</option>
 				
-				<option value="file18">gin-petclinic-service/internal/ds/http_server.go (85.7%)</option>
+				<option value="file18">gin-petclinic-service/api/vet/vet_response.go (100.0%)</option>
 				
-				<option value="file19">gin-petclinic-service/internal/errors/response.go (73.5%)</option>
+				<option value="file19">gin-petclinic-service/api/vet/vet_router.go (20.9%)</option>
 				
-				<option value="file20">gin-petclinic-service/internal/log/logger.go (100.0%)</option>
+				<option value="file20">gin-petclinic-service/api/vet/vet_service.go (100.0%)</option>
 				
-				<option value="file21">gin-petclinic-service/internal/log/mock_logger.go (0.0%)</option>
+				<option value="file21">gin-petclinic-service/api/visit/visit_request.go (100.0%)</option>
 				
-				<option value="file22">gin-petclinic-service/internal/pagination/pages.go (100.0%)</option>
+				<option value="file22">gin-petclinic-service/api/visit/visit_response.go (96.4%)</option>
 				
-				<option value="file23">gin-petclinic-service/internal/test/api.go (0.0%)</option>
+				<option value="file23">gin-petclinic-service/api/visit/visit_router.go (65.8%)</option>
 				
-				<option value="file24">gin-petclinic-service/internal/test/embedded_postgres.go (0.0%)</option>
+				<option value="file24">gin-petclinic-service/api/visit/visit_service.go (100.0%)</option>
 				
-				<option value="file25">gin-petclinic-service/internal/test/etl.go (0.0%)</option>
+				<option value="file25">gin-petclinic-service/cmd/server.go (0.0%)</option>
+				
+				<option value="file26">gin-petclinic-service/docs/docs.go (0.0%)</option>
+				
+				<option value="file27">gin-petclinic-service/internal/ds/http_server.go (85.7%)</option>
+				
+				<option value="file28">gin-petclinic-service/internal/errors/response.go (73.5%)</option>
+				
+				<option value="file29">gin-petclinic-service/internal/pagination/pages.go (100.0%)</option>
+				
+				<option value="file30">gin-petclinic-service/internal/test/api.go (0.0%)</option>
+				
+				<option value="file31">gin-petclinic-service/internal/test/embedded_postgres.go (0.0%)</option>
+				
+				<option value="file32">gin-petclinic-service/internal/test/etl.go (0.0%)</option>
 				
 				</select>
 			</div>
@@ -288,10 +302,13 @@ func NewMockCheckServicer(t interface {
 		<pre class="file" id="file4" style="display: none">package info
 
 import (
+        "gin-petclinic-service/config/app"
+        resterr "gin-petclinic-service/internal/errors"
         "net/http"
         "strings"
 
         "github.com/gin-gonic/gin"
+        "github.com/rs/zerolog/log"
 )
 
 type Router struct {
@@ -301,7 +318,10 @@ type Router struct {
 
 // NewRouter creates a new Router
 func NewRouter(infoService Servicer, ipService IPServicer) *Router <span class="cov8" title="1">{
-        return &amp;Router{infoService, ipService}
+        return &amp;Router{
+                infoService: infoService,
+                ipService:   ipService,
+        }
 }</span>
 
 // Register registers the router to the gin engine
@@ -311,21 +331,29 @@ func (infoRouter *Router) Register(router *gin.RouterGroup) <span class="cov8" t
 
 // appInfo        Show app info
 func (infoRouter *Router) appInfo(c *gin.Context) <span class="cov8" title="1">{
+        log.Info().Msg("Fetching app info")
         result, err := infoRouter.infoService.getAppInfo()
-        if err != nil </span><span class="cov0" title="0">{
-                c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Error fetching app info")
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return
         }</span>
 
-        <span class="cov8" title="1">ips, err := infoRouter.ipService.lookupIP("localhost")
-        if err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">ips, err := infoRouter.ipService.lookupIP(app.Config.Server.Host)
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Failed to lookup IP address")
                 result.Ip = "Unknown host"
         }</span> else<span class="cov8" title="1"> {
-                for _, ip := range ips </span><span class="cov8" title="1">{
-                        result.Ip += ip.String() + "; "
+                // Convert IP addresses to string and join them with commas
+                strIPs := make([]string, len(ips))
+                for i, ip := range ips </span><span class="cov8" title="1">{
+                        strIPs[i] = ip.String()
                 }</span>
-                <span class="cov8" title="1">result.Ip = strings.TrimSpace(result.Ip)</span>
+                <span class="cov8" title="1">log.Debug().Str("host", app.Config.Server.Host).Strs("ips", strIPs).Msg("IP addresses for host")
+                result.Ip = strings.Join(strIPs, ",")</span>
         }
 
+        // Content-Type will be application/json by c.JSON
         <span class="cov8" title="1">c.JSON(http.StatusOK, result)</span>
 }
 </pre>
@@ -339,7 +367,7 @@ import (
 )
 
 type Servicer interface {
-        getAppInfo() (*Info, error)
+        getAppInfo() (*response, error)
 }
 
 type Service struct {
@@ -349,9 +377,9 @@ func NewService() *Service <span class="cov8" title="1">{
         return &amp;Service{}
 }</span>
 
-func (service *Service) getAppInfo() (*Info, error) <span class="cov8" title="1">{
+func (service *Service) getAppInfo() (*response, error) <span class="cov8" title="1">{
         // this block make GetAppInfo() not testable.
-        info := &amp;Info{
+        info := &amp;response{
                 AppName:     app.Config.AppInfo.Name,
                 Description: app.Config.AppInfo.Description,
                 Version:     app.Config.AppInfo.Version,
@@ -398,8 +426,7 @@ import (
 // 1. Composes the validation functions to enforce the input contracts.
 // 2. Composes the transformation functions to transform the input contracts into the domain model.
 // 3. Composes the error handling functions to handle the errors.
-
-type AddRequest struct {
+type addRequest struct {
         FirstName string `json:"firstName"`
         LastName  string `json:"lastName"`
         Address   string `json:"address"`
@@ -407,7 +434,7 @@ type AddRequest struct {
         Telephone string `json:"telephone"`
 }
 
-type UpdateRequest struct {
+type updateRequest struct {
         ID        uint   `json:"id"`
         FirstName string `json:"firstName"`
         LastName  string `json:"lastName"`
@@ -416,8 +443,14 @@ type UpdateRequest struct {
         Telephone string `json:"telephone"`
 }
 
-func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner <span class="cov8" title="1">{
-        return &amp;repository.Owner{
+// toOwnerEntity
+// Map an AddRequest to repository.Owner
+func toOwnerEntity(ownerRequest *addRequest) *repository.Owner <span class="cov8" title="1">{
+        if ownerRequest == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">return &amp;repository.Owner{
                 Person: model.Person{
                         FirstName: ownerRequest.FirstName,
                         LastName:  ownerRequest.LastName,
@@ -426,11 +459,17 @@ func ToOwnerEntity(ownerRequest *AddRequest) *repository.Owner <span class="cov8
                 Address:   ownerRequest.Address,
                 City:      ownerRequest.City,
                 Telephone: ownerRequest.Telephone,
-        }
-}</span>
+        }</span>
+}
 
-func ToOwnerEntityFromUpdateRequest(ownerRequest *UpdateRequest) *repository.Owner <span class="cov8" title="1">{
-        return &amp;repository.Owner{
+// toOwnerEntityFromUpdateRequest
+// Map an UpdateRequest to repository.Owner
+func toOwnerEntityFromUpdateRequest(ownerRequest *updateRequest) *repository.Owner <span class="cov8" title="1">{
+        if ownerRequest == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">return &amp;repository.Owner{
                 Model: gorm.Model{
                         ID: ownerRequest.ID,
                 },
@@ -442,16 +481,16 @@ func ToOwnerEntityFromUpdateRequest(ownerRequest *UpdateRequest) *repository.Own
                 Address:   ownerRequest.Address,
                 City:      ownerRequest.City,
                 Telephone: ownerRequest.Telephone,
-        }
-}</span>
+        }</span>
+}
 </pre>
 		
 		<pre class="file" id="file8" style="display: none">package owner
 
 import (
-        "gin-petclinic-service/api/pet"
         "gin-petclinic-service/internal/repository"
         "gin-petclinic-service/internal/repository/model"
+        "time"
 )
 
 // Owner Responses - A collection of responses (output contracts) for the owner API.
@@ -460,7 +499,7 @@ import (
 // 3. Composes the error handling functions to handle the errors.
 
 // UpdateResponse - owner add/update response
-type UpdateResponse struct {
+type updateResponse struct {
         ID        uint   `json:"id"`
         FirstName string `json:"firstName"`
         LastName  string `json:"lastName"`
@@ -469,49 +508,124 @@ type UpdateResponse struct {
         Telephone string `json:"telephone"`
 }
 
-// FromUpdateEntity - convert owner entity to response
-func (ur *UpdateResponse) FromUpdateEntity(owner *repository.Owner) <span class="cov8" title="1">{
-        ur.ID = owner.ID
-        ur.FirstName = owner.FirstName
-        ur.LastName = owner.LastName
-        ur.Address = owner.Address
-        ur.City = owner.City
-        ur.Telephone = owner.Telephone
-}</span>
+// toUpdateResponse
+// Map a repository.Owner to UpdateResponse
+func toUpdateResponse(owner *repository.Owner) *updateResponse <span class="cov8" title="1">{
+        if owner == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">return &amp;updateResponse{
+                ID:        owner.ID,
+                FirstName: owner.FirstName,
+                LastName:  owner.LastName,
+                Address:   owner.Address,
+                City:      owner.City,
+                Telephone: owner.Telephone,
+        }</span>
+}
 
 // Response - owner response
-type Response struct {
-        ID        uint           `json:"id"`
-        FirstName string         `json:"firstName"`
-        LastName  string         `json:"lastName"`
-        Address   string         `json:"address"`
-        City      string         `json:"city"`
-        Telephone string         `json:"telephone"`
-        Pets      []pet.Response `json:"pets,omitempty"`
+type response struct {
+        ID        uint          `json:"id"`
+        FirstName string        `json:"firstName"`
+        LastName  string        `json:"lastName"`
+        Address   string        `json:"address"`
+        City      string        `json:"city"`
+        Telephone string        `json:"telephone"`
+        Pets      []petResponse `json:"pets,omitempty"`
+}
+
+type petResponse struct {
+        ID        uint   `json:"id"`
+        Name      string `json:"name"`
+        Birthdate string `json:"birthdate"`
+        Species   string `json:"species"`
 }
 
 // Responses - list of owners
-type Responses struct {
+type responses struct {
         Context model.Context `json:"context"`
-        Owners  []Response    `json:"owners"`
+        Owners  []response    `json:"owners"`
 }
 
-func (resp *Response) FromOwner(owner *repository.Owner) <span class="cov8" title="1">{
-        resp.ID = owner.ID
-        resp.FirstName = owner.FirstName
-        resp.LastName = owner.LastName
-        resp.Address = owner.Address
-        resp.City = owner.City
-        resp.Telephone = owner.Telephone
-        resp.Pets = pet.FromPets(owner.Pets)
-}</span>
-
-func FromOwners(owners []repository.Owner) []Response <span class="cov8" title="1">{
-        ownerResponses := make([]Response, len(owners))
-        for i, v := range owners </span><span class="cov8" title="1">{
-                ownerResponses[i].FromOwner(&amp;v)
+// toResponse
+// Map a repository.Owner to Response
+func toResponse(owner *repository.Owner) *response <span class="cov8" title="1">{
+        if owner == nil </span><span class="cov0" title="0">{
+                return nil
         }</span>
+
+        <span class="cov8" title="1">return &amp;response{
+                ID:        owner.ID,
+                FirstName: owner.FirstName,
+                LastName:  owner.LastName,
+                Address:   owner.Address,
+                City:      owner.City,
+                Telephone: owner.Telephone,
+                Pets:      toPetResponses(owner.Pets),
+        }</span>
+}
+
+// toResponse
+// Map a repository.Owner to Response
+func toResponses(owner *repository.Owner) *response <span class="cov0" title="0">{
+        if owner == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">return &amp;response{
+                ID:        owner.ID,
+                FirstName: owner.FirstName,
+                LastName:  owner.LastName,
+                Address:   owner.Address,
+                City:      owner.City,
+                Telephone: owner.Telephone,
+                Pets:      toPetResponses(owner.Pets),
+        }</span>
+}
+
+func fromOwners(owners []repository.Owner) []response <span class="cov8" title="1">{
+        ownerResponses := make([]response, len(owners))
+        for i, v := range owners </span><span class="cov8" title="1">{
+                ownerResponses[i] = *toResponse(&amp;v)
+        }</span>
+
         <span class="cov8" title="1">return ownerResponses</span>
+}
+
+// petResponse
+
+// ToPetResponse
+// Map a repository.Pet to Response
+func toPetResponse(pet *repository.Pet) *petResponse <span class="cov8" title="1">{
+        if pet == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">var responseBirthday string
+        if pet.Birthdate != nil </span><span class="cov8" title="1">{
+                responseBirthday = pet.Birthdate.Format(time.DateOnly)
+        }</span>
+
+        <span class="cov8" title="1">return &amp;petResponse{
+                ID:        pet.ID,
+                Name:      pet.Name,
+                Birthdate: responseBirthday,
+                Species:   pet.Species.Name,
+        }</span>
+}
+
+func toPetResponses(pets []repository.Pet) []petResponse <span class="cov8" title="1">{
+        if len(pets) == 0 </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">petResponses := make([]petResponse, len(pets))
+        for i, pet := range pets </span><span class="cov8" title="1">{
+                petResponses[i] = *toPetResponse(&amp;pet)
+        }</span>
+        <span class="cov8" title="1">return petResponses</span>
 }
 </pre>
 		
@@ -601,15 +715,10 @@ func (r *Router) ownersByLastName(c *gin.Context) <span class="cov8" title="1">{
         lastName := c.Query("last-name")
         response, err := r.service.getOwnerByLastName(lastName)
         if err != nil </span><span class="cov8" title="1">{
-                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
-                        log.Error().Err(err).Str("lastName", lastName).Msg("Find no owner with this last name.")
-                        c.JSON(http.StatusNotFound, resterr.NotFound("Find no owner with last name: "+lastName))
-                        return
-                }</span>
-                <span class="cov8" title="1">log.Error().Err(err).Str("lastName", lastName).Msg("Fail to get owner by last name.")
+                log.Error().Err(err).Str("lastName", lastName).Msg("Fail to get owner by last name.")
                 c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
-                return</span>
-        }
+                return
+        }</span>
 
         <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
 }
@@ -628,15 +737,10 @@ func (r *Router) ownersByLastName(c *gin.Context) <span class="cov8" title="1">{
 func (r *Router) allOwners(c *gin.Context) <span class="cov8" title="1">{
         responses, err := r.service.getAllOwners()
         if err != nil </span><span class="cov8" title="1">{
-                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
-                        log.Warn().Msg("Find no owner.")
-                        c.JSON(http.StatusNotFound, resterr.NotFound("Find no owner"))
-                        return
-                }</span>
-                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to get all owners.")
+                log.Error().Err(err).Msg("Fail to get all owners.")
                 c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
-                return</span>
-        }
+                return
+        }</span>
 
         <span class="cov8" title="1">c.JSON(http.StatusOK, responses)</span>
 }
@@ -691,7 +795,7 @@ func (r *Router) ownerByIdWithPets(c *gin.Context) <span class="cov8" title="1">
 // @Failure                500        {object}        errors.ErrorResponse
 // @Router                /owners                 [post]
 func (r *Router) addNewOwner(c *gin.Context) <span class="cov8" title="1">{
-        var ownerRequest AddRequest
+        var ownerRequest addRequest
         err := c.ShouldBindJSON(&amp;ownerRequest)
         if err != nil </span><span class="cov0" title="0">{
                 log.Error().Err(err).Msg("Fail to Unmarshal JSON.")
@@ -722,7 +826,7 @@ func (r *Router) addNewOwner(c *gin.Context) <span class="cov8" title="1">{
 // @Failure                500        {object}        errors.ErrorResponse
 // @Router                /owners/{id}         [put]
 func (r *Router) updateOwner(c *gin.Context) <span class="cov8" title="1">{
-        var ownerRequest UpdateRequest
+        var ownerRequest updateRequest
         id, err := strconv.Atoi(c.Param("id"))
         if err != nil </span><span class="cov8" title="1">{
                 log.Warn().Msg("Fail to convert ID to int.")
@@ -751,20 +855,22 @@ func (r *Router) updateOwner(c *gin.Context) <span class="cov8" title="1">{
 		<pre class="file" id="file10" style="display: none">package owner
 
 import (
+        "errors"
         "gin-petclinic-service/internal/repository"
         "gin-petclinic-service/internal/repository/model"
 
         "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
 )
 
 // Servicer - owner service interface
 type Servicer interface {
-        getOwnerById(id uint) (*Response, error)
-        getAllOwners() (*Responses, error)
-        getOwnerByIdWithPets(id uint) (*Response, error)
-        getOwnerByLastName(lastName string) (*Responses, error)
-        create(ownerRequest *AddRequest) (*Response, error)
-        update(id uint, updateOwner *UpdateRequest) (*UpdateResponse, error)
+        getOwnerById(id uint) (*response, error)
+        getAllOwners() (*responses, error)
+        getOwnerByIdWithPets(id uint) (*response, error)
+        getOwnerByLastName(lastName string) (*responses, error)
+        create(ownerRequest *addRequest) (*response, error)
+        update(id uint, updateOwner *updateRequest) (*updateResponse, error)
 }
 
 type Service struct {
@@ -776,7 +882,7 @@ func NewService(repository repository.OwnerRepositorier) *Service <span class="c
 }</span>
 
 // getOwnerById - retrieve owner by id
-func (service *Service) getOwnerById(id uint) (*Response, error) <span class="cov8" title="1">{
+func (service *Service) getOwnerById(id uint) (*response, error) <span class="cov8" title="1">{
         log.Debug().Uint("id", id).Msg("Get owner by id.")
         owner, err := service.repository.FindById(id)
         if err != nil </span><span class="cov8" title="1">{
@@ -784,43 +890,49 @@ func (service *Service) getOwnerById(id uint) (*Response, error) <span class="co
                 return nil, err
         }</span>
 
-        <span class="cov8" title="1">response := &amp;Response{}
-        response.FromOwner(owner)
+        <span class="cov8" title="1">response := toResponse(owner)
         return response, nil</span>
 }
 
 // getOwnerByLastName - retrieve owners with pets and visits by last name
-func (service *Service) getOwnerByLastName(lastName string) (*Responses, error) <span class="cov8" title="1">{
+func (service *Service) getOwnerByLastName(lastName string) (*responses, error) <span class="cov8" title="1">{
         log.Debug().Str("lastName", lastName).Msg("Get owners by last name.")
         owners, err := service.repository.FindByLastName(lastName)
 
         if err != nil </span><span class="cov8" title="1">{
-                log.Error().Err(err).Msg("Fail to retrieve owner by last name.")
-                return nil, err
-        }</span>
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        return &amp;responses{
+                                Owners: []response{},
+                        }, nil
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve owner by last name.")
+                return nil, err</span>
+        }
 
-        <span class="cov8" title="1">ownersJson := FromOwners(owners)
+        <span class="cov8" title="1">ownersJson := fromOwners(owners)
         contextJson := model.Context{Count: len(ownersJson)}
-        return &amp;Responses{Owners: ownersJson, Context: contextJson}, nil</span>
+        return &amp;responses{Owners: ownersJson, Context: contextJson}, nil</span>
 }
 
 // getAllOwners - retrieve all owners
-func (service *Service) getAllOwners() (*Responses, error) <span class="cov8" title="1">{
+func (service *Service) getAllOwners() (*responses, error) <span class="cov8" title="1">{
         log.Debug().Msg("Get all owner")
         owners, err := service.repository.FindAll()
         if err != nil </span><span class="cov8" title="1">{
-                log.Error().Err(err).Msg("Fail to retrieve all owner.")
-                return nil, err
-        }</span>
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        return &amp;responses{Owners: []response{}, Context: model.Context{}}, nil
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve all owner.")
+                return nil, err</span>
+        }
 
         // convert to []Response &amp; model.Context
-        <span class="cov8" title="1">ownersJson := FromOwners(owners)
-        contextJson := model.Context{Count: len(ownersJson)}
-        return &amp;Responses{Owners: ownersJson, Context: contextJson}, nil</span>
+        <span class="cov8" title="1">ownersJson := fromOwners(owners)
+        return &amp;responses{Owners: ownersJson, Context: model.Context{Count: len(ownersJson)}}, nil</span>
 }
 
 // getOwnerByIdWithPets - retrieve by id with pets
-func (service *Service) getOwnerByIdWithPets(id uint) (*Response, error) <span class="cov8" title="1">{
+func (service *Service) getOwnerByIdWithPets(id uint) (*response, error) <span class="cov8" title="1">{
         log.Debug().Uint("id", id).Msg("Fail owner with pets by id.")
         owner, err := service.repository.FindByIdWithPets(id)
         if err != nil </span><span class="cov8" title="1">{
@@ -828,15 +940,14 @@ func (service *Service) getOwnerByIdWithPets(id uint) (*Response, error) <span c
                 return nil, err
         }</span>
 
-        <span class="cov8" title="1">response := &amp;Response{}
-        response.FromOwner(owner)
+        <span class="cov8" title="1">response := toResponse(owner)
         return response, nil</span>
 }
 
 // create - create new owner
-func (service *Service) create(ownerRequest *AddRequest) (*Response, error) <span class="cov8" title="1">{
+func (service *Service) create(ownerRequest *addRequest) (*response, error) <span class="cov8" title="1">{
         log.Debug().Msg("Create new owner")
-        owner := ToOwnerEntity(ownerRequest)
+        owner := toOwnerEntity(ownerRequest)
         newOwner, err := service.repository.Insert(owner)
 
         if err != nil </span><span class="cov8" title="1">{
@@ -844,15 +955,14 @@ func (service *Service) create(ownerRequest *AddRequest) (*Response, error) <spa
                 return nil, err
         }</span>
 
-        <span class="cov8" title="1">response := &amp;Response{}
-        response.FromOwner(newOwner)
+        <span class="cov8" title="1">response := toResponse(newOwner)
         return response, nil</span>
 }
 
 // update - update owner
-func (service *Service) update(id uint, request *UpdateRequest) (*UpdateResponse, error) <span class="cov8" title="1">{
+func (service *Service) update(id uint, request *updateRequest) (*updateResponse, error) <span class="cov8" title="1">{
         log.Debug().Msg("Update an owner.")
-        ownerEntity := ToOwnerEntityFromUpdateRequest(request)
+        ownerEntity := toOwnerEntityFromUpdateRequest(request)
         ownerEntity.ID = id
         updatedOwner, err := service.repository.Update(ownerEntity)
 
@@ -861,13 +971,658 @@ func (service *Service) update(id uint, request *UpdateRequest) (*UpdateResponse
                 return nil, err
         }</span>
 
-        <span class="cov8" title="1">response := &amp;UpdateResponse{}
-        response.FromUpdateEntity(updatedOwner)
+        <span class="cov8" title="1">response := toUpdateResponse(updatedOwner)
         return response, nil</span>
 }
 </pre>
 		
-		<pre class="file" id="file11" style="display: none">package service
+		<pre class="file" id="file11" style="display: none">package pet
+
+import (
+        "gin-petclinic-service/internal/repository"
+        "time"
+
+        "gorm.io/gorm"
+)
+
+type request struct {
+        Name      string `json:"name" binding:"required"`
+        Birthdate string `json:"birthdate" binding:"required"`
+        SpeciesID uint   `json:"speciesID" binding:"required"`
+        OwnerID   uint   `json:"ownerID" binding:"required"`
+}
+
+type addRequest struct {
+        Name      string `json:"name" binding:"required"`
+        Birthdate string `json:"birthdate" binding:"required"`
+        SpeciesID uint   `json:"speciesID" binding:"required"`
+        OwnerID   uint   `json:"ownerID" binding:"required"`
+}
+
+type updateRequest struct {
+        ID        uint   `json:"id" binding:"required"`
+        Name      string `json:"name" binding:"required"`
+        Birthdate string `json:"birthdate" binding:"required"`
+        SpeciesID uint   `json:"speciesID" binding:"required"`
+        OwnerID   uint   `json:"ownerID" binding:"required"`
+}
+
+// requestSchema
+// Validate Pet request payload
+//var requestSchema = z.Struct(z.Shape{
+//        "name":      z.String().Required(),
+//        "birthdate": z.String(),
+//        "speciesID": z.Uint(),
+//        "ownerID":   z.Uint(),
+//})
+
+// toPet
+// Map Request to repository.Pet
+func toPet(petRequest *request) (*repository.Pet, error) <span class="cov8" title="1">{
+        // TODO need to add data validation
+        birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">petEntity := &amp;repository.Pet{
+                Name:      petRequest.Name,
+                Birthdate: &amp;birthday,
+                SpeciesID: petRequest.SpeciesID,
+                OwnerID:   petRequest.OwnerID,
+        }
+
+        return petEntity, nil</span>
+}
+
+// fromAddRequest
+// Map AddRequest to repository.Pet
+func fromAddRequest(petRequest *addRequest) (*repository.Pet, error) <span class="cov8" title="1">{
+        if petRequest == nil </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+
+        <span class="cov8" title="1">birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return &amp;repository.Pet{
+                Name:      petRequest.Name,
+                Birthdate: &amp;birthday,
+                SpeciesID: petRequest.SpeciesID,
+                OwnerID:   petRequest.OwnerID,
+        }, nil</span>
+}
+
+// fromUpdateRequest
+// Map UpdateRequest to repository.Pet
+func fromUpdateRequest(petRequest *updateRequest) (*repository.Pet, error) <span class="cov8" title="1">{
+        birthday, err := time.Parse(time.DateOnly, petRequest.Birthdate)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return &amp;repository.Pet{
+                Model: gorm.Model{
+                        ID: petRequest.ID,
+                },
+                Name:      petRequest.Name,
+                Birthdate: &amp;birthday,
+                SpeciesID: petRequest.SpeciesID,
+                OwnerID:   petRequest.OwnerID,
+        }, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package pet
+
+import (
+        "gin-petclinic-service/internal/repository"
+        "gin-petclinic-service/internal/repository/model"
+        "time"
+)
+
+type ownerResponse struct {
+}
+
+type visitResponse struct {
+        ID          uint   `json:"id"`
+        VisitDate   string `json:"visitDate"`
+        Description string `json:"description"`
+        PetID       uint   `json:"petID"`
+}
+
+type response struct {
+        ID        uint            `json:"id"`
+        Name      string          `json:"name"`
+        Birthdate string          `json:"birthdate"`
+        Species   string          `json:"species"`
+        Visits    []visitResponse `json:"visits,omitempty"`
+}
+
+type responses struct {
+        Context model.Context `json:"context"`
+        Pets    []response    `json:"pets"`
+}
+
+type updateResponse struct {
+        ID        uint   `json:"id"`
+        Name      string `json:"name"`
+        Birthdate string `json:"birthdate"`
+        SpeciesID uint   `json:"speciesID"`
+        OwnerID   uint   `json:"ownerID"`
+}
+
+type addResponse struct {
+        ID        uint   `json:"id"`
+        Name      string `json:"name"`
+        Birthdate string `json:"birthdate"`
+        SpeciesID uint   `json:"speciesID"`
+        OwnerID   uint   `json:"ownerID"`
+}
+
+// toResponse
+// Map a repository.Pet to Response
+func toResponse(pet *repository.Pet) *response <span class="cov8" title="1">{
+        if pet == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">var responseBirthday string
+        if pet.Birthdate != nil </span><span class="cov8" title="1">{
+                responseBirthday = pet.Birthdate.Format(time.DateOnly)
+        }</span>
+
+        <span class="cov8" title="1">return &amp;response{
+                ID:        pet.ID,
+                Name:      pet.Name,
+                Birthdate: responseBirthday,
+                Species:   pet.Species.Name,
+                Visits:    toVisitResponses(pet.Visits),
+        }</span>
+}
+
+// toADDResponse
+// Map a repository.Pet to addResponse
+func toAddResponse(pet *repository.Pet) *addResponse <span class="cov8" title="1">{
+        if pet == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">var responseBirthday string
+        if pet.Birthdate != nil </span><span class="cov8" title="1">{
+                responseBirthday = pet.Birthdate.Format(time.DateOnly)
+        }</span>
+
+        <span class="cov8" title="1">return &amp;addResponse{
+                ID:        pet.ID,
+                Name:      pet.Name,
+                Birthdate: responseBirthday,
+                SpeciesID: pet.Species.ID,
+                OwnerID:   pet.OwnerID,
+        }</span>
+}
+
+// toUpdateResponse
+// Map a repository.Pet to updateResponse
+func toUpdateResponse(pet *repository.Pet) *updateResponse <span class="cov8" title="1">{
+        if pet == nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">var responseBirthday string
+        if pet.Birthdate != nil </span><span class="cov8" title="1">{
+                responseBirthday = pet.Birthdate.Format(time.DateOnly)
+        }</span>
+
+        <span class="cov8" title="1">return &amp;updateResponse{
+                ID:        pet.ID,
+                Name:      pet.Name,
+                Birthdate: responseBirthday,
+                SpeciesID: pet.Species.ID,
+                OwnerID:   pet.OwnerID,
+        }</span>
+}
+
+func fromPets(pets []repository.Pet) []response <span class="cov8" title="1">{
+        if len(pets) == 0 </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">petResponses := make([]response, len(pets))
+        for i, pet := range pets </span><span class="cov8" title="1">{
+                petResponses[i] = *toResponse(&amp;pet)
+        }</span>
+        <span class="cov8" title="1">return petResponses</span>
+}
+
+// toResponses
+// Map list of repository.Pet to responses
+func toResponses(pets []repository.Pet) *responses <span class="cov8" title="1">{
+        petResponses := fromPets(pets)
+        contextJson := model.Context{Count: len(petResponses)}
+        return &amp;responses{Pets: petResponses, Context: contextJson}
+}</span>
+
+func toVisitResponse(visit repository.Visit) *visitResponse <span class="cov8" title="1">{
+        return &amp;visitResponse{
+                ID:          visit.ID,
+                VisitDate:   visit.VisitDate.Format(time.DateOnly),
+                Description: visit.Description,
+                PetID:       visit.PetID,
+        }
+}</span>
+
+func toVisitResponses(visits []repository.Visit) []visitResponse <span class="cov8" title="1">{
+        if len(visits) == 0 </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">visitResponses := make([]visitResponse, len(visits))
+        for i, v := range visits </span><span class="cov8" title="1">{
+                visitResponses[i] = *toVisitResponse(v)
+        }</span>
+
+        <span class="cov8" title="1">return visitResponses</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package pet
+
+import (
+        "errors"
+        "gin-petclinic-service/api"
+        resterr "gin-petclinic-service/internal/errors"
+        "net/http"
+        "strconv"
+
+        "github.com/gin-gonic/gin"
+        "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
+)
+
+type Router struct {
+        service Servicer
+}
+
+// NewRouter - create new router
+func NewRouter(service Servicer) *Router <span class="cov0" title="0">{
+        return &amp;Router{service}
+}</span>
+
+// Register - register routes
+func (router *Router) Register(routerGroup *gin.RouterGroup) <span class="cov0" title="0">{
+        routerGroup.GET("all", router.getAll)
+        routerGroup.GET(":id", router.getById)
+        routerGroup.GET(":id/visits", router.getWithVisitsById)
+        routerGroup.GET("", router.getByQueryParam)
+        routerGroup.POST("", router.create)
+        routerGroup.PUT(":id", router.update)
+}</span>
+
+// allPets - retrieve all pets
+// @Tags                pets
+// @Summary        List all pets
+//
+// @Description        Get all pets
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets/all                 [get]
+func (router *Router) getAll(c *gin.Context) <span class="cov0" title="0">{
+        log.Info().Msg("Retrieve all pets")
+        responses, err := router.service.getAllPets()
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        log.Error().Err(err).Msg("find no pets.")
+                        c.JSON(http.StatusNotFound, resterr.NotFound("No pets found."))
+                        return
+                }</span>
+                <span class="cov0" title="0">log.Error().Err(err).Msg("Unable to get all pets.")
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, responses)</span>
+}
+
+// petById - retrieve pet by id
+// @Tags                pets
+// @Summary                Get pet by ID
+//
+// @Description        Get pet by ID
+// @Param                id        path        int        true        "Pet ID"
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets/{id}                 [get]
+func (router *Router) getById(c *gin.Context) <span class="cov0" title="0">{
+        log.Info().Msg("Retrieve pet by id")
+        id, err := strconv.Atoi(c.Param("id"))
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to convert to number.")
+                c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
+                return
+        }</span>
+
+        <span class="cov0" title="0">response, err := router.service.getPetById(uint(id))
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        log.Error().Err(err).Int("id", id).Msg("find no pet by this id.")
+                        c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+                        return
+                }</span>
+                <span class="cov0" title="0">log.Error().Err(err).Int("id", id).Msg("Unable to get pet by id.")
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+// petWithVisitsById - get pet with visits by id
+// @Tags                pets
+// @Summary                Get pet with visits by ID
+//
+// @Description        Get pet with visits by ID
+// @Param                id        path        int        true        "Pet ID"
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                400        {object}        errors.ErrorResponse
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets/{id}/visits                 [get]
+func (router *Router) getWithVisitsById(c *gin.Context) <span class="cov0" title="0">{
+        id, err := strconv.Atoi(c.Param("id"))
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to convert to number.")
+                c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
+                return
+        }</span>
+
+        <span class="cov0" title="0">response, err := router.service.getPetWithVisitsById(uint(id))
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        log.Error().Err(err).Msg("find no pet by this id.")
+                        c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+                        return
+                }</span>
+                <span class="cov0" title="0">log.Error().Err(err).Msg("Unable to get pet by id.")
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+// petByQueryParam -
+// @Tags                pets
+// @Summary                Get pet by name
+//
+// @Description        Get pet by name
+// @Param                name        query        string        true        "Pet Name"
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets                         [get]
+func (router *Router) getByQueryParam(c *gin.Context) <span class="cov0" title="0">{
+        var nameParam api.NameParam
+        err := c.BindQuery(&amp;nameParam)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to bind query param.")
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">router.getByName(c, nameParam)</span>
+}
+
+// petByName - get pet by name
+func (router *Router) getByName(c *gin.Context, param api.NameParam) <span class="cov0" title="0">{
+        pets, err := router.service.getPetsByName(param.Name)
+
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        log.Error().Err(err).Str("name", param.Name).Msg("find no pet by this name")
+                        c.JSON(http.StatusNotFound, resterr.NotFound("No pets found with name: "+param.Name))
+                        return
+                }</span>
+                <span class="cov0" title="0">log.Error().Err(err).Str("name", param.Name).Msg("Unable to get pets by name.")
+                // If there is an error other than not found, return internal server
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(""))
+                return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, pets)</span>
+}
+
+// addNewPet - add new pet
+// @Tags                pets
+// @Summary                Add a new pet
+//
+// @Description        Add a new pet
+// @Param                Request        body        AddRequest        true        "Add pet"
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                400        {object}        errors.ErrorResponse
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets                         [post]
+func (router *Router) create(c *gin.Context) <span class="cov0" title="0">{
+        var request addRequest
+        err := c.ShouldBind(&amp;request)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">log.Info().Str("name", request.Name).Msg("Add a new pet.")
+        petEntity, err := fromAddRequest(&amp;request)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to convert request to pet entity.")
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">petResponse, err := router.service.create(petEntity)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to create pet.")
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return
+        }</span>
+        <span class="cov0" title="0">c.JSON(http.StatusCreated, petResponse)</span>
+}
+
+// updatePet - update pet
+// @Tags                pets
+// @Summary                update a pet
+//
+// @Description        update pet
+// @Param                id        path        int        true        "Pet ID"
+// @Param                Request        body        UpdateRequest        true        "Update pet"
+// @Produce                json
+// @Success                200        {object}        Responses
+// @Failure                400        {object}        errors.ErrorResponse
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /pets/{id}                 [put]
+func (router *Router) update(c *gin.Context) <span class="cov0" title="0">{
+        var request updateRequest
+        id, err := strconv.Atoi(c.Param("id"))
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to convert to number.")
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">err = c.ShouldBind(&amp;request)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">log.Info().Str("name", request.Name).Msg("Update a pet.")
+        petEntity, err := fromUpdateRequest(&amp;request)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to convert request to pet entity.")
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">petEntity.ID = uint(id)
+        petResponse, err := router.service.update(petEntity)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to update pet.")
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusCreated, petResponse)</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package pet
+
+import (
+        "errors"
+        "gin-petclinic-service/internal/repository"
+        "gin-petclinic-service/internal/repository/model"
+
+        "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
+)
+
+type Servicer interface {
+        getAllPets() (*responses, error)
+        getPetById(id uint) (*response, error)
+        getPetWithVisitsById(id uint) (*response, error)
+        getPetsByName(name string) (*responses, error)
+        create(pet *repository.Pet) (*addResponse, error)
+        update(pet *repository.Pet) (*updateResponse, error)
+}
+
+type Service struct {
+        repository repository.PetRepositorier
+}
+
+func NewService(repository repository.PetRepositorier) *Service <span class="cov8" title="1">{
+        return &amp;Service{repository: repository}
+}</span>
+
+// getAllPets - retrieve all pets
+func (service *Service) getAllPets() (*responses, error) <span class="cov8" title="1">{
+        log.Debug().Msg("Retrieve all pets")
+        pets, err := service.repository.FindAll()
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        return &amp;responses{
+                                Context: model.Context{},
+                                Pets:    []response{},
+                        }, nil
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve all pets.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">petResponses := fromPets(pets)
+        contextJson := model.Context{Count: len(petResponses)}
+        return &amp;responses{Pets: petResponses, Context: contextJson}, nil</span>
+}
+
+// getPetById - retrieve pet by id
+func (service *Service) getPetById(id uint) (*response, error) <span class="cov8" title="1">{
+        log.Debug().Uint("id", id).Msg("Retrieve pet by id.")
+        petF, err := service.repository.FindById(id)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Uint("id", id).Msg("Pet by id not found.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve pet by id.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := toResponse(petF)
+        return response, nil</span>
+}
+
+func (service *Service) getPetWithVisitsById(id uint) (*response, error) <span class="cov8" title="1">{
+        log.Debug().Uint("id", id).Msg("Retrieve pet by id.")
+        petF, err := service.repository.FindByIdWithVisits(id)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Uint("id", id).Msg("Pet by id not found.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve pet by id.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := toResponse(petF)
+        return response, nil</span>
+}
+
+// getPetByName - retrieve pet by name
+func (service *Service) getPetsByName(name string) (*responses, error) <span class="cov8" title="1">{
+        log.Debug().Str("name", name).Msg("retrieve pets by name.")
+
+        pets, err := service.repository.FindByName(name)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        return &amp;responses{
+                                Context: model.Context{},
+                                Pets:    []response{},
+                        }, nil
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Str("name", name).Msg("fail to retrieve pets by name.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">return toResponses(pets), nil</span>
+}
+
+// create - create new pet
+func (service *Service) create(pet *repository.Pet) (*addResponse, error) <span class="cov8" title="1">{
+        log.Debug().Str("name", pet.Name).Msg("Create new pet.")
+        newPet, err := service.repository.Insert(pet)
+
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Fail new pet failed.")
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">response := toAddResponse(newPet)
+        return response, nil</span>
+}
+
+// update - update pet
+func (service *Service) update(pet *repository.Pet) (*updateResponse, error) <span class="cov8" title="1">{
+        log.Info().Any("pet", pet).Msg("Update a vet.")
+        updatedPet, err := service.repository.Update(pet)
+
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Msg("No pet found for update.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to Update pet.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := toUpdateResponse(updatedPet)
+        return response, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package service
 
 import (
         "errors"
@@ -875,33 +1630,29 @@ import (
         "net/http"
         "strings"
 
-        "go.uber.org/zap"
-
         "github.com/gin-gonic/gin"
         jwtverifier "github.com/okta/okta-jwt-verifier-golang"
 )
 
 type AuthenService struct {
-        logger      *zap.Logger
         jwtVerifier *jwtverifier.JwtVerifier
 }
 
-//func NewAuthenService(logger *zap.Logger) *AuthenService {
-//        tv := map[string]string{}
-//        tv["aud"] = app.Config.Okta.OAuth2.Audience
-//        tv["cid"] = app.Config.Okta.OAuth2.ClientId
-//        tv["scp"] = app.Config.Okta.OAuth2.Scopes
-//
-//        jvConfig := jwtverifier.JwtVerifier{
-//                Issuer:           app.Config.Okta.OAuth2.Issuer,
-//                ClaimsToValidate: tv,
-//        }
-//
-//        return &amp;AuthenService{
-//                logger:      logger,
-//                jwtVerifier: jvConfig.New(),
-//        }
-//}
+func NewAuthenService() *AuthenService <span class="cov0" title="0">{
+        tv := map[string]string{}
+        //tv["aud"] = app.Config.Okta.OAuth2.Audience
+        //tv["cid"] = app.Config.Okta.OAuth2.ClientId
+        //tv["scp"] = app.Config.Okta.OAuth2.Scopes
+
+        jvConfig := jwtverifier.JwtVerifier{
+                //Issuer:           app.Config.Okta.OAuth2.Issuer,
+                ClaimsToValidate: tv,
+        }
+
+        return &amp;AuthenService{
+                jwtVerifier: jvConfig.New(),
+        }
+}</span>
 
 // redirect and return un-authorized exception
 func (authSvc *AuthenService) RedirectURL(c *gin.Context) <span class="cov0" title="0">{
@@ -922,7 +1673,538 @@ func (authSvc *AuthenService) Verify(bearerToken string) error <span class="cov0
 }
 </pre>
 		
-		<pre class="file" id="file12" style="display: none">package visit
+		<pre class="file" id="file16" style="display: none">package vet
+
+import (
+        "gin-petclinic-service/internal/repository"
+        "gin-petclinic-service/internal/repository/model"
+
+        "gorm.io/gorm"
+)
+
+type specialtyResponse struct {
+        ID   uint   `json:"id"`
+        Name string `json:"name"`
+}
+
+type specialtiesResponse struct {
+        Context     model.Context       `json:"context"`
+        Specialties []specialtyResponse `json:"specialties"`
+}
+
+func (s *specialtyResponse) fromSpecialty(specialty *repository.Specialty) <span class="cov8" title="1">{
+        s.ID = specialty.ID
+        s.Name = specialty.Name
+}</span>
+
+func toSpecialtyResponses(specialties []repository.Specialty) *[]specialtyResponse <span class="cov8" title="1">{
+        if len(specialties) == 0 </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">specialtyResponses := make([]specialtyResponse, len(specialties))
+        for i, s := range specialties </span><span class="cov8" title="1">{
+                specialtyResponses[i].ID = s.ID
+                specialtyResponses[i].Name = s.Name
+        }</span>
+        <span class="cov8" title="1">return &amp;specialtyResponses</span>
+}
+
+func toSpecialtiesResponses(specialties []repository.Specialty) *specialtiesResponse <span class="cov8" title="1">{
+        specialtyResponses := make([]specialtyResponse, len(specialties))
+        for i, s := range specialties </span><span class="cov8" title="1">{
+                specialtyResponses[i].ID = s.ID
+                specialtyResponses[i].Name = s.Name
+        }</span>
+        <span class="cov8" title="1">specialtiesResponse := &amp;specialtiesResponse{
+                Context:     model.Context{Count: len(specialtyResponses)},
+                Specialties: specialtyResponses,
+        }
+        return specialtiesResponse</span>
+}
+
+func toSpecialty(specialty *specialtyResponse) *repository.Specialty <span class="cov8" title="1">{
+        return &amp;repository.Specialty{
+                Model: gorm.Model{
+                        ID: specialty.ID,
+                },
+                Name: specialty.Name,
+        }
+}</span>
+
+func toSpecialties(specialties []specialtyResponse) *[]repository.Specialty <span class="cov8" title="1">{
+        specialtyEntities := make([]repository.Specialty, len(specialties))
+        for i, s := range specialties </span><span class="cov8" title="1">{
+                specialtyEntities[i] = *toSpecialty(&amp;s)
+        }</span>
+
+        <span class="cov8" title="1">return &amp;specialtyEntities</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package vet
+
+import (
+        "gin-petclinic-service/internal/repository"
+        "gin-petclinic-service/internal/repository/model"
+
+        validation "github.com/go-ozzo/ozzo-validation/v4"
+        "gorm.io/gorm"
+)
+
+type addRequest struct {
+        FirstName   string `json:"firstName" binding:"required"`
+        LastName    string `json:"lastName" binding:"required"`
+        Specialties []uint `json:"specialties" binding:"required"`
+}
+
+type updateRequest struct {
+        ID          uint   `json:"id" binding:"required"`
+        FirstName   string `json:"firstName" binding:"required"`
+        LastName    string `json:"lastName" binding:"required"`
+        Specialties []uint `json:"specialties" binding:"required"`
+}
+
+func (vr addRequest) Validate() error <span class="cov8" title="1">{
+        return validation.ValidateStruct(&amp;vr,
+                validation.Field(&amp;vr.FirstName, validation.Required),
+                validation.Field(&amp;vr.LastName, validation.Required),
+                //validation.Field(&amp;vr.Specialties, validation.Required),
+        )
+}</span>
+
+// fromAddRequest
+// Map an addRequest to repository.Vet
+func fromAddRequest(vetRequest *addRequest) *repository.Vet <span class="cov8" title="1">{
+        return &amp;repository.Vet{
+                Person: model.Person{
+                        FirstName: vetRequest.FirstName,
+                        LastName:  vetRequest.LastName,
+                },
+                //Specialties: *toSpecialties(vetRequest.Specialties),
+        }
+}</span>
+
+// fromUpdateRequest
+// Map an updateRequest to repository.Vet
+func fromUpdateRequest(vetRequest *updateRequest) *repository.Vet <span class="cov8" title="1">{
+        return &amp;repository.Vet{
+                Model: gorm.Model{
+                        ID: vetRequest.ID,
+                },
+                Person: model.Person{
+                        FirstName: vetRequest.FirstName,
+                        LastName:  vetRequest.LastName,
+                },
+                //Specialties: *toSpecialties(vetRequest.Specialties),
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package vet
+
+import (
+        "gin-petclinic-service/internal/repository"
+        "gin-petclinic-service/internal/repository/model"
+)
+
+type response struct {
+        ID          uint                 `json:"id"`
+        FirstName   string               `json:"firstName"`
+        LastName    string               `json:"lastName"`
+        Specialties *[]specialtyResponse `json:"specialties,omitempty"`
+}
+
+type responses struct {
+        Context model.Context `json:"context"`
+        Vets    []response    `json:"vets"`
+}
+
+// fromVet
+// Map a response to repository.Vet
+func (vr *response) fromVet(vet *repository.Vet) <span class="cov8" title="1">{
+        vr.ID = vet.ID
+        vr.FirstName = vet.FirstName
+        vr.LastName = vet.LastName
+        vr.Specialties = toSpecialtyResponses(vet.Specialties)
+}</span>
+
+// fromVets
+// Map a list of repository.Vet to a list of response
+func fromVets(vets []repository.Vet) []response <span class="cov8" title="1">{
+        if len(vets) == 0 </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">vetResponses := make([]response, len(vets))
+        for i, v := range vets </span><span class="cov8" title="1">{
+                vetResponses[i].fromVet(&amp;v)
+        }</span>
+        <span class="cov8" title="1">return vetResponses</span>
+}
+
+// toResponses
+// Map a list of repository.Vet to a responses
+func toResponses(vets []repository.Vet) *responses <span class="cov8" title="1">{
+        vetsJson := fromVets(vets)
+        contextJson := model.Context{Count: len(vetsJson)}
+        return &amp;responses{Vets: vetsJson, Context: contextJson}
+}</span>
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package vet
+
+import (
+        "errors"
+        resterr "gin-petclinic-service/internal/errors"
+        "net/http"
+        "strconv"
+
+        "github.com/gin-gonic/gin"
+        "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
+)
+
+type Router struct {
+        service Servicer
+}
+
+func NewRouter(service Servicer) *Router <span class="cov8" title="1">{
+        return &amp;Router{service}
+}</span>
+
+// Register
+// register vet endpoints
+func (vetRouter *Router) Register(router *gin.RouterGroup) <span class="cov8" title="1">{
+        router.GET("specialties", vetRouter.getAllSpecialties)
+        router.GET("all", vetRouter.allVets)
+        router.GET(":id", vetRouter.vetById)
+        router.GET(":id/specialties", vetRouter.getVetByIdWithSpecialties)
+        router.GET("", vetRouter.vetByParam)
+        router.POST("", vetRouter.create)
+        router.PUT(":id", vetRouter.update)
+}</span>
+
+// allSpecialties - retrieve all specialties
+
+func (vetRouter *Router) getAllSpecialties(c *gin.Context) <span class="cov0" title="0">{
+        log.Info().Msg("get all specialties")
+        response, err := vetRouter.service.getAllSpecialties()
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+// vetById - retrieve vet by id
+func (vetRouter *Router) vetById(c *gin.Context) <span class="cov8" title="1">{
+        pathID := c.Param("id")
+
+        id, err := strconv.Atoi(pathID)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
+                return
+        }</span>
+
+        <span class="cov8" title="1">response, err := vetRouter.service.getVetById(uint(id))
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+                        return
+                }</span>
+
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+func (vetRouter *Router) vetByParam(c *gin.Context) <span class="cov8" title="1">{
+        lastName := c.Query("last-name")
+
+        vetRouter.vetByLastName(c, lastName)
+        return
+}</span>
+
+// vetByLastName - retrieve vet by last name
+func (vetRouter *Router) vetByLastName(c *gin.Context, lastName string) <span class="cov8" title="1">{
+        response, err := vetRouter.service.getVetByLastName(lastName)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+// AllVets - retrieve all vets
+// @Tags        vets
+//
+//        @Summary        List all vets
+//
+// @Description        Get all vets
+// @Produce                json
+// @Success                200        {object}        responses
+// @Failure                404        {object}        errors.ErrorResponse
+// @Failure                500        {object}        errors.ErrorResponse
+// @Router                /vets/all                 [get]
+func (vetRouter *Router) allVets(c *gin.Context) <span class="cov0" title="0">{
+        response, err := vetRouter.service.getAllVets()
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+// AllVetsWithSpecialties - retrieve all vets with specialties
+func (vetRouter *Router) getVetByIdWithSpecialties(c *gin.Context) <span class="cov0" title="0">{
+        pathID := c.Param("id")
+
+        id, err := strconv.Atoi(pathID)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
+                return
+        }</span>
+
+        <span class="cov0" title="0">response, err := vetRouter.service.getVetByIdWithSpecialties(uint(id))
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+                        return
+                }</span>
+
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return</span>
+        }
+
+        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+}
+
+// addNewVet - add new vet
+func (vetRouter *Router) create(c *gin.Context) <span class="cov0" title="0">{
+        var vetRequest addRequest
+        err := c.ShouldBindJSON(&amp;vetRequest)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">vetEntity := fromAddRequest(&amp;vetRequest)
+        newVet, err := vetRouter.service.create(vetEntity)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Fail to create vet.")
+                if err != nil </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                        return
+                }</span>
+        }
+        <span class="cov0" title="0">c.JSON(http.StatusCreated, newVet)</span>
+}
+
+func (vetRouter *Router) update(c *gin.Context) <span class="cov0" title="0">{
+        var vetRequest updateRequest
+        id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
+                return
+        }</span>
+
+        <span class="cov0" title="0">err = c.ShouldBindJSON(&amp;vetRequest)
+        // ShouldBindJSON will return an error if the request body is not valid JSON
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("Unable to Unmarshal JSON.")
+                c.JSON(http.StatusBadRequest, resterr.BadRequestWithDetails(err))
+                return
+        }</span>
+
+        <span class="cov0" title="0">vetEntity := fromUpdateRequest(&amp;vetRequest)
+        vetEntity.ID = uint(id)
+        newVet, err := vetRouter.service.update(vetEntity)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+                        return
+                }</span>
+                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return</span>
+        }
+        <span class="cov0" title="0">c.JSON(http.StatusCreated, newVet)</span>
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package vet
+
+import (
+        "errors"
+        "gin-petclinic-service/internal/repository"
+        "gin-petclinic-service/internal/repository/model"
+
+        "github.com/rs/zerolog/log"
+        "gorm.io/gorm"
+)
+
+type Servicer interface {
+        getAllSpecialties() (*specialtiesResponse, error)
+        getVetById(id uint) (*response, error)
+        getVetByIdWithSpecialties(id uint) (*response, error)
+        getVetByLastName(lastName string) (*responses, error)
+        getAllVets() (*responses, error)
+        getAllVetsWithSpecialties() (*responses, error)
+        create(vet *repository.Vet) (*response, error)
+        update(vet *repository.Vet) (*response, error)
+}
+
+type Service struct {
+        repository repository.VetRepositorier
+}
+
+func NewService(repository repository.VetRepositorier) *Service <span class="cov8" title="1">{
+        return &amp;Service{repository: repository}
+}</span>
+
+// getAllSpecialties - retrieve all specialties
+func (service *Service) getAllSpecialties() (*specialtiesResponse, error) <span class="cov8" title="1">{
+        specialties, err := service.repository.FindAllSpecialties()
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Msg("No specialties found.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve all specialties.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">specialtiesResponses := toSpecialtiesResponses(specialties)
+        return specialtiesResponses, nil</span>
+}
+
+// getVetById - retrieve vet by id
+func (service *Service) getVetById(id uint) (*response, error) <span class="cov8" title="1">{
+        log.Debug().Uint("id", id).Msg("GET vet by id")
+        vet, err := service.repository.FindById(id)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Uint("id", id).Msg("Vet by id not found.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+
+                <span class="cov8" title="1">log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve vet by id.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := &amp;response{}
+        response.fromVet(vet)
+        return response, nil</span>
+}
+
+func (service *Service) getVetByIdWithSpecialties(id uint) (*response, error) <span class="cov8" title="1">{
+        vet, err := service.repository.FindByIdWithSpecialties(id)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Uint("id", id).Msg("Vet by id not found with specialties.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Uint("id", id).Msg("Fail to retrieve vet by id with specialties")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := &amp;response{}
+        response.fromVet(vet)
+        return response, nil</span>
+}
+
+func (service *Service) getVetByLastName(lastName string) (*responses, error) <span class="cov8" title="1">{
+        vets, err := service.repository.FindByLastName(lastName)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Str("lastName", lastName).Msg("No vets found with this last name.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Str("lastName", lastName).Msg("Fail to retrieve the vets by last name.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">vetsJson := fromVets(vets)
+        contextJson := model.Context{Count: len(vetsJson)}
+        return &amp;responses{Vets: vetsJson, Context: contextJson}, nil</span>
+}
+
+// getAllVets - retrieve all vets
+func (service *Service) getAllVets() (*responses, error) <span class="cov8" title="1">{
+        vets, err := service.repository.FindAll()
+
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Msg("No vets found.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve all vets.")
+                return nil, err</span>
+        }
+        <span class="cov8" title="1">log.Debug().Msg("counts of all vets")
+
+        vetsJson := fromVets(vets)
+        contextJson := model.Context{Count: len(vetsJson)}
+        return &amp;responses{Vets: vetsJson, Context: contextJson}, nil</span>
+}
+
+func (service *Service) getAllVetsWithSpecialties() (*responses, error) <span class="cov8" title="1">{
+        vets, err := service.repository.FindAllPreload()
+
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Msg("No vets found with specialties.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve all vets.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">return toResponses(vets), nil</span>
+}
+
+// create - create new vet
+func (service *Service) create(vet *repository.Vet) (*response, error) <span class="cov8" title="1">{
+        log.Info().Any("vet", vet).Msg("Create new vet.")
+        newVet, err := service.repository.Insert(vet)
+
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Msg("Fail new vet failed.")
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">response := &amp;response{}
+        response.fromVet(newVet)
+        return response, nil</span>
+}
+
+// update - update vet
+func (service *Service) update(vet *repository.Vet) (*response, error) <span class="cov8" title="1">{
+        log.Info().Any("vet", vet).Msg("Update a vet.")
+        updatedVet, err := service.repository.Update(vet)
+
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Msg("No vet found for update.")
+                        return nil, gorm.ErrRecordNotFound
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("Update vet failed.")
+                return nil, err</span>
+        }
+
+        <span class="cov8" title="1">response := &amp;response{}
+        response.fromVet(updatedVet)
+        return response, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package visit
 
 import (
         "gin-petclinic-service/internal/repository"
@@ -931,27 +2213,29 @@ import (
         "gorm.io/gorm"
 )
 
-type Request struct {
+type request struct {
         ID          uint   `json:"id"`
         VisitDate   string `json:"visitDate" binding:"required"`
         Description string `json:"description" binding:"required"`
         PetID       uint   `json:"petID" binding:"required"`
 }
 
-type AddRequest struct {
+type addRequest struct {
         VisitDate   string `json:"visitDate" binding:"required"`
         Description string `json:"description" binding:"required"`
         PetID       uint   `json:"petID" binding:"required"`
 }
 
-type UpdateRequest struct {
+type updateRequest struct {
         ID          uint   `json:"id"`
         VisitDate   string `json:"visitDate" binding:"required"`
         Description string `json:"description" binding:"required"`
         PetID       uint   `json:"petID" binding:"required"`
 }
 
-func FromAddRequest(request *AddRequest) (*repository.Visit, error) <span class="cov8" title="1">{
+// fromAddRequest
+// Map an addRequest to repository.Visit
+func fromAddRequest(request *addRequest) (*repository.Visit, error) <span class="cov8" title="1">{
         visitEntify := &amp;repository.Visit{
                 Description: request.Description,
                 PetID:       request.PetID,
@@ -966,7 +2250,9 @@ func FromAddRequest(request *AddRequest) (*repository.Visit, error) <span class=
         return visitEntify, nil</span>
 }
 
-func FromUpdateRequest(request *UpdateRequest) (*repository.Visit, error) <span class="cov8" title="1">{
+// fromUpdateRequest
+// Map a updateRequest to repository.Visit
+func fromUpdateRequest(request *updateRequest) (*repository.Visit, error) <span class="cov8" title="1">{
         visitEntify := &amp;repository.Visit{
                 Model:       gorm.Model{ID: request.ID},
                 Description: request.Description,
@@ -983,7 +2269,7 @@ func FromUpdateRequest(request *UpdateRequest) (*repository.Visit, error) <span 
 }
 </pre>
 		
-		<pre class="file" id="file13" style="display: none">package visit
+		<pre class="file" id="file22" style="display: none">package visit
 
 import (
         "gin-petclinic-service/internal/repository"
@@ -991,28 +2277,28 @@ import (
         "time"
 )
 
-type Response struct {
+type response struct {
         ID          uint   `json:"id"`
         VisitDate   string `json:"visitDate"`
         Description string `json:"description"`
         PetID       uint   `json:"petID"`
 }
 
-type UpdateResponse struct {
+type updateResponse struct {
         ID          uint   `json:"id"`
         VisitDate   string `json:"visitDate"`
         Description string `json:"description"`
-        PetID       uint   `json:"petII"`
+        PetID       uint   `json:"petID"`
 }
 
-type Responses struct {
+type responses struct {
         Context model.Context `json:"context"`
-        Visits  []Response    `json:"visits"`
+        Visits  []response    `json:"visits"`
 }
 
-// FromVisit
-// Map from repository visit to json visit response
-func (vr *Response) FromVisit(visit *repository.Visit) <span class="cov8" title="1">{
+// fromVisit
+// Map from repository.Visit to json response
+func (vr *response) fromVisit(visit *repository.Visit) <span class="cov8" title="1">{
         vr.ID = visit.ID
         if visit.VisitDate == nil </span><span class="cov8" title="1">{
                 vr.VisitDate = ""
@@ -1024,24 +2310,39 @@ func (vr *Response) FromVisit(visit *repository.Visit) <span class="cov8" title=
         vr.PetID = visit.PetID</span>
 }
 
-func FromVisits(visits []repository.Visit) []Response <span class="cov8" title="1">{
-        visitResponses := make([]Response, len(visits))
+// fromVisits
+// Map from repository.Visit list to response list
+func fromVisits(visits []repository.Visit) []response <span class="cov8" title="1">{
+        if len(visits) == 0 </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        <span class="cov8" title="1">visitResponses := make([]response, len(visits))
         for i, v := range visits </span><span class="cov8" title="1">{
-                visitResponses[i].FromVisit(&amp;v)
+                visitResponses[i].fromVisit(&amp;v)
         }</span>
 
         <span class="cov8" title="1">return visitResponses</span>
 }
 
-// FromVisitsToResponses
-// Map from repository visit list to json list of visit response
-func FromVisitsToResponses(visits []repository.Visit) *Responses <span class="cov8" title="1">{
-        visitResponses := make([]Response, len(visits))
-        for i, v := range visits </span><span class="cov8" title="1">{
-                visitResponses[i].FromVisit(&amp;v)
+// fromVisitsToResponses
+// Map from repository.Visit list to responses
+func fromVisitsToResponses(visits []repository.Visit) *responses <span class="cov8" title="1">{
+        if len(visits) == 0 </span><span class="cov0" title="0">{
+                return &amp;responses{
+                        Context: model.Context{
+                                Count: len(visits),
+                        },
+                        Visits: nil,
+                }
         }</span>
 
-        <span class="cov8" title="1">responses := &amp;Responses{
+        <span class="cov8" title="1">visitResponses := make([]response, len(visits))
+        for i, v := range visits </span><span class="cov8" title="1">{
+                visitResponses[i].fromVisit(&amp;v)
+        }</span>
+
+        <span class="cov8" title="1">responses := &amp;responses{
                 Context: model.Context{
                         Count: len(visits),
                 },
@@ -1050,25 +2351,36 @@ func FromVisitsToResponses(visits []repository.Visit) *Responses <span class="co
         return responses</span>
 }
 
-func ToResponses(responses []Response) *Responses <span class="cov8" title="1">{
-        result := make([]Response, len(responses))
-        for i, v := range responses </span><span class="cov8" title="1">{
+// toResponses
+// Map list of response to responses
+func toResponses(visitResponses []response) *responses <span class="cov8" title="1">{
+        if len(visitResponses) == 0 </span><span class="cov8" title="1">{
+                return &amp;responses{
+                        Context: model.Context{
+                                Count: len(visitResponses),
+                        },
+                        Visits: nil,
+                }
+        }</span>
+
+        <span class="cov8" title="1">result := make([]response, len(visitResponses))
+        for i, v := range visitResponses </span><span class="cov8" title="1">{
                 result[i].ID = v.ID
                 result[i].VisitDate = v.VisitDate
                 result[i].Description = v.Description
                 result[i].PetID = v.PetID
         }</span>
 
-        <span class="cov8" title="1">return &amp;Responses{
+        <span class="cov8" title="1">return &amp;responses{
                 Context: model.Context{
-                        Count: len(responses),
+                        Count: len(visitResponses),
                 },
                 Visits: result,
         }</span>
 }
 </pre>
 		
-		<pre class="file" id="file14" style="display: none">package visit
+		<pre class="file" id="file23" style="display: none">package visit
 
 import (
         "errors"
@@ -1104,7 +2416,7 @@ func (r *Router) Register(router *gin.RouterGroup) <span class="cov8" title="1">
 // @Description        Get visit by ID
 // @Param                id        path        int        true        "Visit ID"
 // @Produce                json
-// @Success                200        {object}        Response
+// @Success                200        {object}        response
 // @Failure                400        {object}        errors.ErrorResponse
 // @Failure                404        {object}        errors.ErrorResponse
 // @Failure                500        {object}        errors.ErrorResponse
@@ -1114,22 +2426,26 @@ func (r *Router) visitById(c *gin.Context) <span class="cov8" title="1">{
         log.Info().Str("pathID", pathID).Msg("Get pet by id")
 
         id, err := strconv.Atoi(pathID)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
+                log.Error().Err(err).Str("id", pathID).Msg("Invalid visit ID")
                 c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
                 return
         }</span>
 
         <span class="cov8" title="1">response, err := r.service.getVisitById(uint(id))
-        if err != nil </span><span class="cov0" title="0">{
-                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Str("id", pathID).Msg("Visit by id not found")
                         c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
                         return
                 }</span>
-                <span class="cov0" title="0">c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+
+                <span class="cov8" title="1">log.Error().Err(err).Str("id", pathID).Msg("fail to get a visit by id")
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
                 return</span>
         }
 
-        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
 }
 
 // allVisits - get all visits
@@ -1138,36 +2454,46 @@ func (r *Router) visitById(c *gin.Context) <span class="cov8" title="1">{
 //
 // @Description        Get all visits
 // @Produce                json
-// @Success                200        {object}        Responses
+// @Success                200        {object}        responses
 // @Failure                404        {object}        errors.ErrorResponse
 // @Failure                500        {object}        errors.ErrorResponse
 // @Router                /visits/all                [get]
-func (r *Router) allVisits(c *gin.Context) <span class="cov0" title="0">{
+func (r *Router) allVisits(c *gin.Context) <span class="cov8" title="1">{
         log.Info().Msg("get all visits")
         response, err := r.service.getAllVisits()
-        if err != nil </span><span class="cov0" title="0">{
-                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
-                return
-        }</span>
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Msg("get no visits found")
+                        c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+                        return
+                }</span>
 
-        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("get all visits failed")
+                c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
+                return</span>
+        }
+
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
 }
 
 func (r *Router) addNewVisit(c *gin.Context) <span class="cov0" title="0">{
         log.Info().Msg("add new visit")
-        var visit AddRequest
+        var visit addRequest
         if err := c.ShouldBindJSON(&amp;visit); err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("fail to bind json request")
                 c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
                 return
         }</span>
 
-        <span class="cov0" title="0">visitEntity, err := FromAddRequest(&amp;visit)
+        <span class="cov0" title="0">visitEntity, err := fromAddRequest(&amp;visit)
         if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("fail to bind json request")
                 c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
                 return
         }</span>
         <span class="cov0" title="0">response, err := r.service.create(visitEntity)
         if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("fail to create visit")
                 c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
                 return
         }</span>
@@ -1182,56 +2508,65 @@ func (r *Router) addNewVisit(c *gin.Context) <span class="cov0" title="0">{
 // @Description        Update visit
 // @Produce                json
 // @Param                id        path                int        true        "Visit ID"
-// @Param                Request                        body                UpdateRequest        true        "Update visit"
-// @Success                200        {object}        Responses
+// @Param                request                        body                updateRequest        true        "Update visit"
+// @Success                200        {object}        responses
 // @Failure                404        {object}        errors.ErrorResponse
 // @Failure                500        {object}        errors.ErrorResponse
 // @Router                /visits/{id}         [put]
-func (r *Router) updateVisit(c *gin.Context) <span class="cov0" title="0">{
+func (r *Router) updateVisit(c *gin.Context) <span class="cov8" title="1">{
         log.Info().Msg("update visit")
-        var visit UpdateRequest
+        var visit updateRequest
         if err := c.ShouldBindJSON(&amp;visit); err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("fail to bind json request")
                 c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
                 return
         }</span>
 
-        <span class="cov0" title="0">id, err := strconv.Atoi(c.Param("id"))
+        <span class="cov8" title="1">id, err := strconv.Atoi(c.Param("id"))
         if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("fail to convert id to int")
                 c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
                 return
         }</span>
 
-        <span class="cov0" title="0">visitEntity, err := FromUpdateRequest(&amp;visit)
+        <span class="cov8" title="1">visitEntity, err := fromUpdateRequest(&amp;visit)
         if err != nil </span><span class="cov0" title="0">{
+                log.Error().Err(err).Msg("fail to convert to visit entity")
                 c.JSON(http.StatusBadRequest, resterr.BadRequest(err.Error()))
                 return
         }</span>
-        <span class="cov0" title="0">visitEntity.ID = uint(id)
+        <span class="cov8" title="1">visitEntity.ID = uint(id)
         response, err := r.service.update(visitEntity)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        log.Error().Err(err).Msg("update visit by id not found")
+                        c.JSON(http.StatusNotFound, resterr.NotFound(err.Error()))
+                }</span>
+                <span class="cov8" title="1">log.Error().Err(err).Msg("fail to update visit")
                 c.JSON(http.StatusInternalServerError, resterr.InternalServerError(err.Error()))
-                return
-        }</span>
+                return</span>
+        }
 
-        <span class="cov0" title="0">c.JSON(http.StatusOK, response)</span>
+        <span class="cov8" title="1">c.JSON(http.StatusOK, response)</span>
 }
 </pre>
 		
-		<pre class="file" id="file15" style="display: none">package visit
+		<pre class="file" id="file24" style="display: none">package visit
 
 import (
         "errors"
         "gin-petclinic-service/internal/repository"
+        "gin-petclinic-service/internal/repository/model"
 
         "github.com/rs/zerolog/log"
         "gorm.io/gorm"
 )
 
 type Servicer interface {
-        getVisitById(id uint) (*Response, error)
-        getAllVisits() (*Responses, error)
-        create(visit *repository.Visit) (*Response, error)
-        update(visit *repository.Visit) (*Response, error)
+        getVisitById(id uint) (*response, error)
+        getAllVisits() (*responses, error)
+        create(visit *repository.Visit) (*response, error)
+        update(visit *repository.Visit) (*response, error)
 }
 
 type Service struct {
@@ -1242,7 +2577,7 @@ func NewService(repository repository.VisitRepositorier) *Service <span class="c
         return &amp;Service{repository: repository}
 }</span>
 
-func (service *Service) getVisitById(id uint) (*Response, error) <span class="cov8" title="1">{
+func (service *Service) getVisitById(id uint) (*response, error) <span class="cov8" title="1">{
         visit, err := service.repository.FindById(id)
         if err != nil </span><span class="cov8" title="1">{
                 if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
@@ -1253,18 +2588,20 @@ func (service *Service) getVisitById(id uint) (*Response, error) <span class="co
                 return nil, err</span>
         }
 
-        <span class="cov8" title="1">response := &amp;Response{}
-        response.FromVisit(visit)
+        <span class="cov8" title="1">response := &amp;response{}
+        response.fromVisit(visit)
         return response, nil</span>
 }
 
-func (service *Service) getAllVisits() (*Responses, error) <span class="cov8" title="1">{
+func (service *Service) getAllVisits() (*responses, error) <span class="cov8" title="1">{
         visits, err := service.repository.FindAll()
 
         if err != nil </span><span class="cov8" title="1">{
                 if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
-                        log.Error().Msg("No visits found.")
-                        return nil, gorm.ErrRecordNotFound
+                        return &amp;responses{
+                                Context: model.Context{},
+                                Visits:  []response{},
+                        }, nil
                 }</span>
 
                 <span class="cov8" title="1">log.Error().Err(err).Msg("Fail to retrieve all visits.")
@@ -1272,24 +2609,24 @@ func (service *Service) getAllVisits() (*Responses, error) <span class="cov8" ti
         }
         <span class="cov8" title="1">log.Debug().Int("count", len(visits)).Msg("counts of all visits")
 
-        // convert to []Response &amp; model.Context
-        responses := FromVisitsToResponses(visits)
+        // convert to []response &amp; model.Context
+        responses := fromVisitsToResponses(visits)
         return responses, nil</span>
 }
 
-func (service *Service) create(visit *repository.Visit) (*Response, error) <span class="cov8" title="1">{
+func (service *Service) create(visit *repository.Visit) (*response, error) <span class="cov8" title="1">{
         newVisit, err := service.repository.Insert(visit)
         if err != nil </span><span class="cov8" title="1">{
                 log.Error().Err(err).Msg("Fail to create visit.")
                 return nil, err
         }</span>
 
-        <span class="cov8" title="1">response := &amp;Response{}
-        response.FromVisit(newVisit)
+        <span class="cov8" title="1">response := &amp;response{}
+        response.fromVisit(newVisit)
         return response, nil</span>
 }
 
-func (service *Service) update(visit *repository.Visit) (*Response, error) <span class="cov8" title="1">{
+func (service *Service) update(visit *repository.Visit) (*response, error) <span class="cov8" title="1">{
         updatedVisit, err := service.repository.Update(visit)
         if err != nil </span><span class="cov8" title="1">{
                 if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
@@ -1300,13 +2637,13 @@ func (service *Service) update(visit *repository.Visit) (*Response, error) <span
                 return nil, err</span>
         }
 
-        <span class="cov8" title="1">response := &amp;Response{}
-        response.FromVisit(updatedVisit)
+        <span class="cov8" title="1">response := &amp;response{}
+        response.fromVisit(updatedVisit)
         return response, nil</span>
 }
 </pre>
 		
-		<pre class="file" id="file16" style="display: none">package main
+		<pre class="file" id="file25" style="display: none">package main
 
 import (
         "context"
@@ -1316,6 +2653,10 @@ import (
         "gin-petclinic-service/api/pet"
         "gin-petclinic-service/api/vet"
         "gin-petclinic-service/api/visit"
+
+        //"gin-petclinic-service/api/pet"
+        //"gin-petclinic-service/api/vet"
+        //"gin-petclinic-service/api/visit"
         "gin-petclinic-service/config/app"
         _ "gin-petclinic-service/docs"
         "gin-petclinic-service/internal/dbase"
@@ -1478,7 +2819,7 @@ func main() <span class="cov0" title="0">{
 }
 </pre>
 		
-		<pre class="file" id="file17" style="display: none">// Package docs Code generated by swaggo/swag. DO NOT EDIT
+		<pre class="file" id="file26" style="display: none">// Package docs Code generated by swaggo/swag. DO NOT EDIT
 package docs
 
 import "github.com/swaggo/swag"
@@ -2525,7 +3866,7 @@ func init() <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file18" style="display: none">package ds
+		<pre class="file" id="file27" style="display: none">package ds
 
 import (
         "crypto/tls"
@@ -2575,7 +3916,7 @@ func (httpSrv *HttpServer) HttpRouter() *http.Server <span class="cov8" title="1
 }
 </pre>
 		
-		<pre class="file" id="file19" style="display: none">package errors
+		<pre class="file" id="file28" style="display: none">package errors
 
 import (
         "net/http"
@@ -2712,469 +4053,7 @@ func InvalidInput(errs validation.Errors) ErrorResponse <span class="cov8" title
 }
 </pre>
 		
-		<pre class="file" id="file20" style="display: none">// Package log provides context-aware and structured logging capabilities.
-package log
-
-import (
-        "context"
-        "net/http"
-
-        "github.com/google/uuid"
-        "go.uber.org/zap"
-        "go.uber.org/zap/zapcore"
-        "go.uber.org/zap/zaptest/observer"
-)
-
-// Logger is a logger that supports log levels, context and structured logging.
-type Logger interface {
-        // With returns a logger based off the root logger and decorates it with the given context and arguments.
-        With(ctx context.Context, args ...interface{}) Logger
-
-        // Debug uses fmt.Sprint to construct and log a message at DEBUG level
-        Debug(args ...interface{})
-        // Info uses fmt.Sprint to construct and log a message at INFO level
-        Info(args ...interface{})
-        // Error uses fmt.Sprint to construct and log a message at ERROR level
-        Error(args ...interface{})
-
-        // Debugf uses fmt.Sprintf to construct and log a message at DEBUG level
-        Debugf(format string, args ...interface{})
-        // Infof uses fmt.Sprintf to construct and log a message at INFO level
-        Infof(format string, args ...interface{})
-        // Errorf uses fmt.Sprintf to construct and log a message at ERROR level
-        Errorf(format string, args ...interface{})
-}
-
-type logger struct {
-        *zap.SugaredLogger
-}
-
-type contextKey int
-
-const (
-        requestIDKey contextKey = iota
-        correlationIDKey
-)
-
-// New creates a new logger using the default configuration.
-func New() Logger <span class="cov8" title="1">{
-        l, _ := zap.NewProduction()
-        return NewWithZap(l)
-}</span>
-
-// NewWithZap creates a new logger using the preconfigured zap logger.
-func NewWithZap(l *zap.Logger) Logger <span class="cov8" title="1">{
-        return &amp;logger{l.Sugar()}
-}</span>
-
-// NewForTest returns a new logger and the corresponding observed logs which can be used in unit tests to verify log entries.
-func NewForTest() (Logger, *observer.ObservedLogs) <span class="cov8" title="1">{
-        core, recorded := observer.New(zapcore.InfoLevel)
-        return NewWithZap(zap.New(core)), recorded
-}</span>
-
-// With returns a logger based off the root logger and decorates it with the given context and arguments.
-//
-// If the context contains request ID and/or correlation ID information (recorded via WithRequestID()
-// and WithCorrelationID()), they will be added to every log message generated by the new logger.
-//
-// The arguments should be specified as a sequence of name, value pairs with names being strings.
-// The arguments will also be added to every log message generated by the logger.
-func (l *logger) With(ctx context.Context, args ...interface{}) Logger <span class="cov8" title="1">{
-        if ctx != nil </span><span class="cov8" title="1">{
-                if id, ok := ctx.Value(requestIDKey).(string); ok </span><span class="cov8" title="1">{
-                        args = append(args, zap.String("request_id", id))
-                }</span>
-                <span class="cov8" title="1">if id, ok := ctx.Value(correlationIDKey).(string); ok </span><span class="cov8" title="1">{
-                        args = append(args, zap.String("correlation_id", id))
-                }</span>
-        }
-        <span class="cov8" title="1">if len(args) &gt; 0 </span><span class="cov8" title="1">{
-                return &amp;logger{l.SugaredLogger.With(args...)}
-        }</span>
-        <span class="cov8" title="1">return l</span>
-}
-
-// WithRequest returns a context which knows the request ID and correlation ID in the given request.
-func WithRequest(ctx context.Context, req *http.Request) context.Context <span class="cov8" title="1">{
-        id := getRequestID(req)
-        if id == "" </span><span class="cov8" title="1">{
-                id = uuid.New().String()
-        }</span>
-        <span class="cov8" title="1">ctx = context.WithValue(ctx, requestIDKey, id)
-        if id := getCorrelationID(req); id != "" </span><span class="cov8" title="1">{
-                ctx = context.WithValue(ctx, correlationIDKey, id)
-        }</span>
-        <span class="cov8" title="1">return ctx</span>
-}
-
-// getCorrelationID extracts the correlation ID from the HTTP request
-func getCorrelationID(req *http.Request) string <span class="cov8" title="1">{
-        return req.Header.Get("X-Correlation-ID")
-}</span>
-
-// getRequestID extracts the correlation ID from the HTTP request
-func getRequestID(req *http.Request) string <span class="cov8" title="1">{
-        return req.Header.Get("X-Request-ID")
-}</span>
-</pre>
-		
-		<pre class="file" id="file21" style="display: none">// Code generated by mockery v2.52.2. DO NOT EDIT.
-
-package log
-
-import (
-        context "context"
-
-        mock "github.com/stretchr/testify/mock"
-)
-
-// MockLogger is an autogenerated mock type for the Logger type
-type MockLogger struct {
-        mock.Mock
-}
-
-type MockLogger_Expecter struct {
-        mock *mock.Mock
-}
-
-func (_m *MockLogger) EXPECT() *MockLogger_Expecter <span class="cov0" title="0">{
-        return &amp;MockLogger_Expecter{mock: &amp;_m.Mock}
-}</span>
-
-// Debug provides a mock function with given fields: args
-func (_m *MockLogger) Debug(args ...interface{}) <span class="cov0" title="0">{
-        var _ca []interface{}
-        _ca = append(_ca, args...)
-        _m.Called(_ca...)
-}</span>
-
-// MockLogger_Debug_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Debug'
-type MockLogger_Debug_Call struct {
-        *mock.Call
-}
-
-// Debug is a helper method to define mock.On call
-//   - args ...interface{}
-func (_e *MockLogger_Expecter) Debug(args ...interface{}) *MockLogger_Debug_Call <span class="cov0" title="0">{
-        return &amp;MockLogger_Debug_Call{Call: _e.mock.On("Debug",
-                append([]interface{}{}, args...)...)}
-}</span>
-
-func (_c *MockLogger_Debug_Call) Run(run func(args ...interface{})) *MockLogger_Debug_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                variadicArgs := make([]interface{}, len(args)-0)
-                for i, a := range args[0:] </span><span class="cov0" title="0">{
-                        if a != nil </span><span class="cov0" title="0">{
-                                variadicArgs[i] = a.(interface{})
-                        }</span>
-                }
-                <span class="cov0" title="0">run(variadicArgs...)</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockLogger_Debug_Call) Return() *MockLogger_Debug_Call <span class="cov0" title="0">{
-        _c.Call.Return()
-        return _c
-}</span>
-
-func (_c *MockLogger_Debug_Call) RunAndReturn(run func(...interface{})) *MockLogger_Debug_Call <span class="cov0" title="0">{
-        _c.Run(run)
-        return _c
-}</span>
-
-// Debugf provides a mock function with given fields: format, args
-func (_m *MockLogger) Debugf(format string, args ...interface{}) <span class="cov0" title="0">{
-        var _ca []interface{}
-        _ca = append(_ca, format)
-        _ca = append(_ca, args...)
-        _m.Called(_ca...)
-}</span>
-
-// MockLogger_Debugf_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Debugf'
-type MockLogger_Debugf_Call struct {
-        *mock.Call
-}
-
-// Debugf is a helper method to define mock.On call
-//   - format string
-//   - args ...interface{}
-func (_e *MockLogger_Expecter) Debugf(format interface{}, args ...interface{}) *MockLogger_Debugf_Call <span class="cov0" title="0">{
-        return &amp;MockLogger_Debugf_Call{Call: _e.mock.On("Debugf",
-                append([]interface{}{format}, args...)...)}
-}</span>
-
-func (_c *MockLogger_Debugf_Call) Run(run func(format string, args ...interface{})) *MockLogger_Debugf_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                variadicArgs := make([]interface{}, len(args)-1)
-                for i, a := range args[1:] </span><span class="cov0" title="0">{
-                        if a != nil </span><span class="cov0" title="0">{
-                                variadicArgs[i] = a.(interface{})
-                        }</span>
-                }
-                <span class="cov0" title="0">run(args[0].(string), variadicArgs...)</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockLogger_Debugf_Call) Return() *MockLogger_Debugf_Call <span class="cov0" title="0">{
-        _c.Call.Return()
-        return _c
-}</span>
-
-func (_c *MockLogger_Debugf_Call) RunAndReturn(run func(string, ...interface{})) *MockLogger_Debugf_Call <span class="cov0" title="0">{
-        _c.Run(run)
-        return _c
-}</span>
-
-// Error provides a mock function with given fields: args
-func (_m *MockLogger) Error(args ...interface{}) <span class="cov0" title="0">{
-        var _ca []interface{}
-        _ca = append(_ca, args...)
-        _m.Called(_ca...)
-}</span>
-
-// MockLogger_Error_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Error'
-type MockLogger_Error_Call struct {
-        *mock.Call
-}
-
-// Error is a helper method to define mock.On call
-//   - args ...interface{}
-func (_e *MockLogger_Expecter) Error(args ...interface{}) *MockLogger_Error_Call <span class="cov0" title="0">{
-        return &amp;MockLogger_Error_Call{Call: _e.mock.On("Error",
-                append([]interface{}{}, args...)...)}
-}</span>
-
-func (_c *MockLogger_Error_Call) Run(run func(args ...interface{})) *MockLogger_Error_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                variadicArgs := make([]interface{}, len(args)-0)
-                for i, a := range args[0:] </span><span class="cov0" title="0">{
-                        if a != nil </span><span class="cov0" title="0">{
-                                variadicArgs[i] = a.(interface{})
-                        }</span>
-                }
-                <span class="cov0" title="0">run(variadicArgs...)</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockLogger_Error_Call) Return() *MockLogger_Error_Call <span class="cov0" title="0">{
-        _c.Call.Return()
-        return _c
-}</span>
-
-func (_c *MockLogger_Error_Call) RunAndReturn(run func(...interface{})) *MockLogger_Error_Call <span class="cov0" title="0">{
-        _c.Run(run)
-        return _c
-}</span>
-
-// Errorf provides a mock function with given fields: format, args
-func (_m *MockLogger) Errorf(format string, args ...interface{}) <span class="cov0" title="0">{
-        var _ca []interface{}
-        _ca = append(_ca, format)
-        _ca = append(_ca, args...)
-        _m.Called(_ca...)
-}</span>
-
-// MockLogger_Errorf_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Errorf'
-type MockLogger_Errorf_Call struct {
-        *mock.Call
-}
-
-// Errorf is a helper method to define mock.On call
-//   - format string
-//   - args ...interface{}
-func (_e *MockLogger_Expecter) Errorf(format interface{}, args ...interface{}) *MockLogger_Errorf_Call <span class="cov0" title="0">{
-        return &amp;MockLogger_Errorf_Call{Call: _e.mock.On("Errorf",
-                append([]interface{}{format}, args...)...)}
-}</span>
-
-func (_c *MockLogger_Errorf_Call) Run(run func(format string, args ...interface{})) *MockLogger_Errorf_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                variadicArgs := make([]interface{}, len(args)-1)
-                for i, a := range args[1:] </span><span class="cov0" title="0">{
-                        if a != nil </span><span class="cov0" title="0">{
-                                variadicArgs[i] = a.(interface{})
-                        }</span>
-                }
-                <span class="cov0" title="0">run(args[0].(string), variadicArgs...)</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockLogger_Errorf_Call) Return() *MockLogger_Errorf_Call <span class="cov0" title="0">{
-        _c.Call.Return()
-        return _c
-}</span>
-
-func (_c *MockLogger_Errorf_Call) RunAndReturn(run func(string, ...interface{})) *MockLogger_Errorf_Call <span class="cov0" title="0">{
-        _c.Run(run)
-        return _c
-}</span>
-
-// Info provides a mock function with given fields: args
-func (_m *MockLogger) Info(args ...interface{}) <span class="cov0" title="0">{
-        var _ca []interface{}
-        _ca = append(_ca, args...)
-        _m.Called(_ca...)
-}</span>
-
-// MockLogger_Info_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Info'
-type MockLogger_Info_Call struct {
-        *mock.Call
-}
-
-// Info is a helper method to define mock.On call
-//   - args ...interface{}
-func (_e *MockLogger_Expecter) Info(args ...interface{}) *MockLogger_Info_Call <span class="cov0" title="0">{
-        return &amp;MockLogger_Info_Call{Call: _e.mock.On("Info",
-                append([]interface{}{}, args...)...)}
-}</span>
-
-func (_c *MockLogger_Info_Call) Run(run func(args ...interface{})) *MockLogger_Info_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                variadicArgs := make([]interface{}, len(args)-0)
-                for i, a := range args[0:] </span><span class="cov0" title="0">{
-                        if a != nil </span><span class="cov0" title="0">{
-                                variadicArgs[i] = a.(interface{})
-                        }</span>
-                }
-                <span class="cov0" title="0">run(variadicArgs...)</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockLogger_Info_Call) Return() *MockLogger_Info_Call <span class="cov0" title="0">{
-        _c.Call.Return()
-        return _c
-}</span>
-
-func (_c *MockLogger_Info_Call) RunAndReturn(run func(...interface{})) *MockLogger_Info_Call <span class="cov0" title="0">{
-        _c.Run(run)
-        return _c
-}</span>
-
-// Infof provides a mock function with given fields: format, args
-func (_m *MockLogger) Infof(format string, args ...interface{}) <span class="cov0" title="0">{
-        var _ca []interface{}
-        _ca = append(_ca, format)
-        _ca = append(_ca, args...)
-        _m.Called(_ca...)
-}</span>
-
-// MockLogger_Infof_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Infof'
-type MockLogger_Infof_Call struct {
-        *mock.Call
-}
-
-// Infof is a helper method to define mock.On call
-//   - format string
-//   - args ...interface{}
-func (_e *MockLogger_Expecter) Infof(format interface{}, args ...interface{}) *MockLogger_Infof_Call <span class="cov0" title="0">{
-        return &amp;MockLogger_Infof_Call{Call: _e.mock.On("Infof",
-                append([]interface{}{format}, args...)...)}
-}</span>
-
-func (_c *MockLogger_Infof_Call) Run(run func(format string, args ...interface{})) *MockLogger_Infof_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                variadicArgs := make([]interface{}, len(args)-1)
-                for i, a := range args[1:] </span><span class="cov0" title="0">{
-                        if a != nil </span><span class="cov0" title="0">{
-                                variadicArgs[i] = a.(interface{})
-                        }</span>
-                }
-                <span class="cov0" title="0">run(args[0].(string), variadicArgs...)</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockLogger_Infof_Call) Return() *MockLogger_Infof_Call <span class="cov0" title="0">{
-        _c.Call.Return()
-        return _c
-}</span>
-
-func (_c *MockLogger_Infof_Call) RunAndReturn(run func(string, ...interface{})) *MockLogger_Infof_Call <span class="cov0" title="0">{
-        _c.Run(run)
-        return _c
-}</span>
-
-// With provides a mock function with given fields: ctx, args
-func (_m *MockLogger) With(ctx context.Context, args ...interface{}) Logger <span class="cov0" title="0">{
-        var _ca []interface{}
-        _ca = append(_ca, ctx)
-        _ca = append(_ca, args...)
-        ret := _m.Called(_ca...)
-
-        if len(ret) == 0 </span><span class="cov0" title="0">{
-                panic("no return value specified for With")</span>
-        }
-
-        <span class="cov0" title="0">var r0 Logger
-        if rf, ok := ret.Get(0).(func(context.Context, ...interface{}) Logger); ok </span><span class="cov0" title="0">{
-                r0 = rf(ctx, args...)
-        }</span> else<span class="cov0" title="0"> {
-                if ret.Get(0) != nil </span><span class="cov0" title="0">{
-                        r0 = ret.Get(0).(Logger)
-                }</span>
-        }
-
-        <span class="cov0" title="0">return r0</span>
-}
-
-// MockLogger_With_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'With'
-type MockLogger_With_Call struct {
-        *mock.Call
-}
-
-// With is a helper method to define mock.On call
-//   - ctx context.Context
-//   - args ...interface{}
-func (_e *MockLogger_Expecter) With(ctx interface{}, args ...interface{}) *MockLogger_With_Call <span class="cov0" title="0">{
-        return &amp;MockLogger_With_Call{Call: _e.mock.On("With",
-                append([]interface{}{ctx}, args...)...)}
-}</span>
-
-func (_c *MockLogger_With_Call) Run(run func(ctx context.Context, args ...interface{})) *MockLogger_With_Call <span class="cov0" title="0">{
-        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
-                variadicArgs := make([]interface{}, len(args)-1)
-                for i, a := range args[1:] </span><span class="cov0" title="0">{
-                        if a != nil </span><span class="cov0" title="0">{
-                                variadicArgs[i] = a.(interface{})
-                        }</span>
-                }
-                <span class="cov0" title="0">run(args[0].(context.Context), variadicArgs...)</span>
-        })
-        <span class="cov0" title="0">return _c</span>
-}
-
-func (_c *MockLogger_With_Call) Return(_a0 Logger) *MockLogger_With_Call <span class="cov0" title="0">{
-        _c.Call.Return(_a0)
-        return _c
-}</span>
-
-func (_c *MockLogger_With_Call) RunAndReturn(run func(context.Context, ...interface{}) Logger) *MockLogger_With_Call <span class="cov0" title="0">{
-        _c.Call.Return(run)
-        return _c
-}</span>
-
-// NewMockLogger creates a new instance of MockLogger. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
-// The first argument is typically a *testing.T value.
-func NewMockLogger(t interface {
-        mock.TestingT
-        Cleanup(func())
-}) *MockLogger <span class="cov0" title="0">{
-        mock := &amp;MockLogger{}
-        mock.Mock.Test(t)
-
-        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
-
-        <span class="cov0" title="0">return mock</span>
-}
-</pre>
-		
-		<pre class="file" id="file22" style="display: none">// Package pagination provides support for pagination requests and responses.
+		<pre class="file" id="file29" style="display: none">// Package pagination provides support for pagination requests and responses.
 package pagination
 
 import (
@@ -3322,7 +4201,7 @@ func (p *Pages) BuildLinks(baseURL string, defaultPerPage int) [4]string <span c
 }
 </pre>
 		
-		<pre class="file" id="file23" style="display: none">package test
+		<pre class="file" id="file30" style="display: none">package test
 
 import (
         "bytes"
@@ -3331,8 +4210,17 @@ import (
         "strings"
         "testing"
 
+        "github.com/gin-gonic/gin"
         "github.com/stretchr/testify/assert"
 )
+
+// SetupRouter
+// Configure default Gin engine
+func SetupRouter() *gin.Engine <span class="cov0" title="0">{
+        gin.SetMode(gin.TestMode)
+        r := gin.Default()
+        return r
+}</span>
 
 // APITestCase represents the data needed to describe an API test case.
 type APITestCase struct {
@@ -3369,7 +4257,7 @@ func Endpoint(t *testing.T, router http.Handler, tc APITestCase) <span class="co
 }
 </pre>
 		
-		<pre class="file" id="file24" style="display: none">package test
+		<pre class="file" id="file31" style="display: none">package test
 
 import (
         "testing"
@@ -3407,7 +4295,7 @@ func PgStart(t *testing.T, dir string) *embeddedpostgres.EmbeddedPostgres <span 
 }
 </pre>
 		
-		<pre class="file" id="file25" style="display: none">package test
+		<pre class="file" id="file32" style="display: none">package test
 
 import (
         "time"

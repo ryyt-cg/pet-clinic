@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -94,9 +93,6 @@ func Test_ownerById(t *testing.T) {
 }
 
 func Test_ownerByIdWithPets(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("Owner by ID with Pets endpoint", zap.String("function", "Test_ownerByIdWithPets"))
-
 	ownerWithPetsResponse := &response{
 		ID:        1,
 		FirstName: "Nat",
@@ -288,9 +284,6 @@ func Test_OwnerByLastName(t *testing.T) {
 }
 
 func Test_AllOwners(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("All owner endpoint", zap.String("function", "TestAllOwners"))
-
 	ownersResponse := &responses{
 		Context: model.Context{Count: 2},
 		Owners: []response{
@@ -368,8 +361,6 @@ func Test_AllOwners(t *testing.T) {
 }
 
 func Test_CreateOwner(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("Create Owner endpoint", zap.String("function", "Test_CreateOwner"))
 	ownerRequest := &addRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",
@@ -434,9 +425,6 @@ func Test_CreateOwner(t *testing.T) {
 }
 
 func Test_UpdateOwner(t *testing.T) {
-	logger, _ := zap.NewProduction()
-	logger.Info("Update Owner endpoint", zap.String("function", "Test_UpdateOwner"))
-
 	ownerRequest := &updateRequest{
 		FirstName: "Nat",
 		LastName:  "Cole",

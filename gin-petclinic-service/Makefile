@@ -41,7 +41,7 @@ view-test-coverage:
 	go tool cover -html=coverage.out -o coverage.html
 
 live-reload:
-	air -c ./air/.air.linux.conf
+	air -d -c ./air/.air.linux.conf
 
 run:
 	go run cmd/server.go

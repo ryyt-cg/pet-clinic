@@ -6,33 +6,29 @@ import (
 	"net/http"
 	"strings"
 
-	"go.uber.org/zap"
-
 	"github.com/gin-gonic/gin"
 	jwtverifier "github.com/okta/okta-jwt-verifier-golang"
 )
 
 type AuthenService struct {
-	logger      *zap.Logger
 	jwtVerifier *jwtverifier.JwtVerifier
 }
 
-//func NewAuthenService(logger *zap.Logger) *AuthenService {
-//	tv := map[string]string{}
-//	tv["aud"] = app.Config.Okta.OAuth2.Audience
-//	tv["cid"] = app.Config.Okta.OAuth2.ClientId
-//	tv["scp"] = app.Config.Okta.OAuth2.Scopes
-//
-//	jvConfig := jwtverifier.JwtVerifier{
-//		Issuer:           app.Config.Okta.OAuth2.Issuer,
-//		ClaimsToValidate: tv,
-//	}
-//
-//	return &AuthenService{
-//		logger:      logger,
-//		jwtVerifier: jvConfig.New(),
-//	}
-//}
+func NewAuthenService() *AuthenService {
+	tv := map[string]string{}
+	//tv["aud"] = app.Config.Okta.OAuth2.Audience
+	//tv["cid"] = app.Config.Okta.OAuth2.ClientId
+	//tv["scp"] = app.Config.Okta.OAuth2.Scopes
+
+	jvConfig := jwtverifier.JwtVerifier{
+		//Issuer:           app.Config.Okta.OAuth2.Issuer,
+		ClaimsToValidate: tv,
+	}
+
+	return &AuthenService{
+		jwtVerifier: jvConfig.New(),
+	}
+}
 
 // redirect and return un-authorized exception
 func (authSvc *AuthenService) RedirectURL(c *gin.Context) {
