@@ -26,7 +26,7 @@ view-test-coverage:
 	go tool cover -html=coverage.out -o coverage.html
 
 live-reload:
-	air -c ./air/.air.linux.conf
+	air -c ./air/.air.linux.toml
 
 swag:
 	swag i -g cmd/server.go
