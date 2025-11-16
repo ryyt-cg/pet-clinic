@@ -118,9 +118,9 @@ func loadConfig() {
 
 	// Create a new Circuit Breaker with custom configuration
 	cb := circuitbreaker.New(circuitbreaker.Config{
-		FailureThreshold: 3,               // Max failures before opening the circuit
-		Timeout:          5 * time.Second, // Wait time before retrying
-		SuccessThreshold: 2,               // Required successes to move back to closed state
+		FailureThreshold: app.Config.CircuitBreaker.FailureThreshold,                     // Max failures before opening the circuit
+		Timeout:          time.Duration(app.Config.CircuitBreaker.Timeout) * time.Second, // Wait time before retrying
+		SuccessThreshold: app.Config.CircuitBreaker.SuccessThreshold,                     // Required successes to move back to closed state
 	})
 	// Apply Circuit Breaker to ALL routes
 	fiberApp.Use(circuitbreaker.Middleware(cb))
