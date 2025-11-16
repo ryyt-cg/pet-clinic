@@ -9,6 +9,7 @@ import (
 	"fiber3-petclinic-service/api/vet"
 	"fiber3-petclinic-service/api/visit"
 	"fiber3-petclinic-service/config/app"
+	_ "fiber3-petclinic-service/docs"
 	"fiber3-petclinic-service/internal/dbase"
 	"fiber3-petclinic-service/internal/repository"
 	"fmt"
@@ -18,9 +19,8 @@ import (
 	"syscall"
 	"time"
 
-	_ "fiber3-petclinic-service/docs"
-
 	"github.com/gofiber/contrib/monitor"
+	"github.com/gofiber/contrib/v3/circuitbreaker"
 	"github.com/gofiber/contrib/v3/swaggo"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/compress"
@@ -116,13 +116,14 @@ func loadConfig() {
 	// Monitor
 	fiberApp.Get(app.Config.Server.BaseURL+"/monitor", monitor.New(monitor.Config{Title: "fiber3-petclinic-service Monitor"}))
 
-	//cb := circuitbreaker.New(circuitbreaker.Config{
-	//	FailureThreshold: app.Config.CircuitBreaker.FailureThreshold,
-	//	Timeout:          time.Duration(app.Config.CircuitBreaker.Timeout) * time.Second,
-	//	SuccessThreshold: app.Config.CircuitBreaker.SuccessThreshold,
-	//})
-	//
-	//fiberApp.Use(circuitbreaker.Middleware(cb))
+	// Create a new Circuit Breaker with custom configuration
+	cb := circuitbreaker.New(circuitbreaker.Config{
+		FailureThreshold: 3,               // Max failures before opening the circuit
+		Timeout:          5 * time.Second, // Wait time before retrying
+		SuccessThreshold: 2,               // Required successes to move back to closed state
+	})
+	// Apply Circuit Breaker to ALL routes
+	fiberApp.Use(circuitbreaker.Middleware(cb))
 
 	// Middleware for Enforcing Accept only application/json requests
 	fiberApp.Use(func(c fiber.Ctx) error {

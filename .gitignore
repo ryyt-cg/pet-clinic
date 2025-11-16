@@ -10,3 +10,4 @@ AI/video_scripts.md
 AI/ai_prompt_template.md
 /zap-petclinic-service/.zig-cache
 /fiber3-petclinic-service/bin
+/fiber3-petclinic-service/tmp
