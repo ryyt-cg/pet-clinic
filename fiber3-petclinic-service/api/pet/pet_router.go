@@ -35,7 +35,7 @@ func (router *Router) Register(route fiber.Router) {
 //
 // @Description	Get all pets
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets/all 		[get]
@@ -62,7 +62,7 @@ func (router *Router) getAll(c fiber.Ctx) error {
 // @Description	Get pet by ID
 // @Param		id	path	int	true	"Pet ID"
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/pets/{id} 		[get]
@@ -96,7 +96,7 @@ func (router *Router) getById(c fiber.Ctx) error {
 // @Description	Get pet with visits by ID
 // @Param		id	path	int	true	"Pet ID"
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		400	{object}	errors.ErrorResponse
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
@@ -131,7 +131,7 @@ func (router *Router) getWithVisitsById(c fiber.Ctx) error {
 // @Description	Get pet by name
 // @Param		name	query	string	true	"Pet Name"
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
@@ -170,9 +170,9 @@ func (router *Router) getByName(c fiber.Ctx, param string) error {
 // @Summary		Add a new pet
 //
 // @Description	Add a new pet
-// @Param		Request	body	AddRequest	true	"Add pet"
+// @Param		Request	body	addRequest	true	"Add pet"
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		400	{object}	errors.ErrorResponse
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
@@ -208,9 +208,9 @@ func (router *Router) create(c fiber.Ctx) error {
 //
 // @Description	update pet
 // @Param		id	path	int	true	"Pet ID"
-// @Param		Request	body	UpdateRequest	true	"Update pet"
+// @Param		Request	body	updateRequest	true	"Update pet"
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		400	{object}	errors.ErrorResponse
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse

@@ -21,6 +21,7 @@ import (
 	_ "fiber3-petclinic-service/docs"
 
 	"github.com/gofiber/contrib/monitor"
+	"github.com/gofiber/contrib/v3/swaggo"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/compress"
 	"github.com/gofiber/fiber/v3/middleware/cors"
@@ -137,7 +138,8 @@ func loadConfig() {
 	fiberApp.Use(requestid.New()) // Generate a unique request ID for each request
 
 	fiberApp.Get(app.Config.Server.BaseURL+"/ready", healthcheck.New(ready.Config()))
-	//fiberApp.Get(app.Config.Server.BaseURL+"/swagger/*", swagger.HandlerDefault)
+	// Mount the UI with the default configuration under /swagger
+	fiberApp.Get(app.Config.Server.BaseURL+"/swagger/*", swaggo.HandlerDefault)
 }
 
 func loadComponents() {
@@ -190,8 +192,8 @@ func loadComponents() {
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host      localhost:8092
-// @BasePath  /api/pet-clinic/v1
+// @host      	localhost:8092
+// @BasePath	/api/pet-clinic/v1
 
 // @securityDefinitions.basic  BasicAuth
 

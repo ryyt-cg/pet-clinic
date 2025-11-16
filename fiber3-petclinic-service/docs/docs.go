@@ -9,7 +9,16 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -38,7 +47,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/owner.Responses"
+                            "$ref": "#/definitions/owner.responses"
                         }
                     },
                     "404": {
@@ -71,7 +80,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/owner.AddRequest"
+                            "$ref": "#/definitions/owner.addRequest"
                         }
                     }
                 ],
@@ -79,7 +88,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/owner.UpdateResponse"
+                            "$ref": "#/definitions/owner.updateResponse"
                         }
                     },
                     "400": {
@@ -111,7 +120,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/owner.Responses"
+                            "$ref": "#/definitions/owner.responses"
                         }
                     },
                     "404": {
@@ -152,7 +161,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/owner.Response"
+                            "$ref": "#/definitions/owner.response"
                         }
                     },
                     "400": {
@@ -198,7 +207,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/owner.UpdateRequest"
+                            "$ref": "#/definitions/owner.updateRequest"
                         }
                     }
                 ],
@@ -206,7 +215,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/owner.UpdateResponse"
+                            "$ref": "#/definitions/owner.updateResponse"
                         }
                     },
                     "400": {
@@ -247,7 +256,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/owner.Response"
+                            "$ref": "#/definitions/owner.response"
                         }
                     },
                     "400": {
@@ -294,7 +303,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pet.Responses"
+                            "$ref": "#/definitions/pet.responses"
                         }
                     },
                     "404": {
@@ -327,7 +336,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/pet.AddRequest"
+                            "$ref": "#/definitions/pet.addRequest"
                         }
                     }
                 ],
@@ -335,7 +344,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pet.Responses"
+                            "$ref": "#/definitions/pet.responses"
                         }
                     },
                     "400": {
@@ -373,7 +382,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pet.Responses"
+                            "$ref": "#/definitions/pet.responses"
                         }
                     },
                     "404": {
@@ -414,7 +423,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pet.Responses"
+                            "$ref": "#/definitions/pet.responses"
                         }
                     },
                     "404": {
@@ -454,7 +463,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/pet.UpdateRequest"
+                            "$ref": "#/definitions/pet.updateRequest"
                         }
                     }
                 ],
@@ -462,7 +471,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pet.Responses"
+                            "$ref": "#/definitions/pet.responses"
                         }
                     },
                     "400": {
@@ -509,7 +518,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pet.Responses"
+                            "$ref": "#/definitions/pet.responses"
                         }
                     },
                     "400": {
@@ -547,7 +556,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/vet.Responses"
+                            "$ref": "#/definitions/vet.responses"
                         }
                     },
                     "404": {
@@ -579,7 +588,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/visit.Responses"
+                            "$ref": "#/definitions/visit.responses"
                         }
                     },
                     "404": {
@@ -620,7 +629,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/visit.Response"
+                            "$ref": "#/definitions/visit.response"
                         }
                     },
                     "400": {
@@ -662,11 +671,11 @@ const docTemplate = `{
                     },
                     {
                         "description": "Update visit",
-                        "name": "Request",
+                        "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/visit.UpdateRequest"
+                            "$ref": "#/definitions/visit.updateRequest"
                         }
                     }
                 ],
@@ -674,7 +683,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/visit.Responses"
+                            "$ref": "#/definitions/visit.responses"
                         }
                     },
                     "404": {
@@ -714,7 +723,7 @@ const docTemplate = `{
                 }
             }
         },
-        "owner.AddRequest": {
+        "owner.addRequest": {
             "type": "object",
             "properties": {
                 "address": {
@@ -734,7 +743,24 @@ const docTemplate = `{
                 }
             }
         },
-        "owner.Response": {
+        "owner.petResponse": {
+            "type": "object",
+            "properties": {
+                "birthdate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "species": {
+                    "type": "string"
+                }
+            }
+        },
+        "owner.response": {
             "type": "object",
             "properties": {
                 "address": {
@@ -755,7 +781,7 @@ const docTemplate = `{
                 "pets": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/pet.Response"
+                        "$ref": "#/definitions/owner.petResponse"
                     }
                 },
                 "telephone": {
@@ -763,7 +789,7 @@ const docTemplate = `{
                 }
             }
         },
-        "owner.Responses": {
+        "owner.responses": {
             "type": "object",
             "properties": {
                 "context": {
@@ -772,12 +798,12 @@ const docTemplate = `{
                 "owners": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/owner.Response"
+                        "$ref": "#/definitions/owner.response"
                     }
                 }
             }
         },
-        "owner.UpdateRequest": {
+        "owner.updateRequest": {
             "type": "object",
             "properties": {
                 "address": {
@@ -800,7 +826,7 @@ const docTemplate = `{
                 }
             }
         },
-        "owner.UpdateResponse": {
+        "owner.updateResponse": {
             "type": "object",
             "properties": {
                 "address": {
@@ -823,7 +849,7 @@ const docTemplate = `{
                 }
             }
         },
-        "pet.AddRequest": {
+        "pet.addRequest": {
             "type": "object",
             "required": [
                 "birthdate",
@@ -846,7 +872,7 @@ const docTemplate = `{
                 }
             }
         },
-        "pet.Response": {
+        "pet.response": {
             "type": "object",
             "properties": {
                 "birthdate": {
@@ -864,12 +890,12 @@ const docTemplate = `{
                 "visits": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/visit.Response"
+                        "$ref": "#/definitions/pet.visitResponse"
                     }
                 }
             }
         },
-        "pet.Responses": {
+        "pet.responses": {
             "type": "object",
             "properties": {
                 "context": {
@@ -878,12 +904,12 @@ const docTemplate = `{
                 "pets": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/pet.Response"
+                        "$ref": "#/definitions/pet.response"
                     }
                 }
             }
         },
-        "pet.UpdateRequest": {
+        "pet.updateRequest": {
             "type": "object",
             "required": [
                 "birthdate",
@@ -910,7 +936,24 @@ const docTemplate = `{
                 }
             }
         },
-        "vet.Response": {
+        "pet.visitResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "petID": {
+                    "type": "integer"
+                },
+                "visitDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "vet.response": {
             "type": "object",
             "properties": {
                 "firstName": {
@@ -930,7 +973,7 @@ const docTemplate = `{
                 }
             }
         },
-        "vet.Responses": {
+        "vet.responses": {
             "type": "object",
             "properties": {
                 "context": {
@@ -939,7 +982,7 @@ const docTemplate = `{
                 "vets": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/vet.Response"
+                        "$ref": "#/definitions/vet.response"
                     }
                 }
             }
@@ -955,7 +998,7 @@ const docTemplate = `{
                 }
             }
         },
-        "visit.Response": {
+        "visit.response": {
             "type": "object",
             "properties": {
                 "description": {
@@ -972,7 +1015,7 @@ const docTemplate = `{
                 }
             }
         },
-        "visit.Responses": {
+        "visit.responses": {
             "type": "object",
             "properties": {
                 "context": {
@@ -981,12 +1024,12 @@ const docTemplate = `{
                 "visits": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/visit.Response"
+                        "$ref": "#/definitions/visit.response"
                     }
                 }
             }
         },
-        "visit.UpdateRequest": {
+        "visit.updateRequest": {
             "type": "object",
             "required": [
                 "description",
@@ -1008,16 +1051,25 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "1.0",
+	Host:             "localhost:8092",
+	BasePath:         "/api/pet-clinic/v1",
 	Schemes:          []string{},
-	Title:            "",
+	Title:            "Pet Clinic API",
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
