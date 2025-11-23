@@ -6,8 +6,13 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	oteltrace "go.opentelemetry.io/otel/trace"
 	"gorm.io/gorm"
 )
+
+var tracer = otel.Tracer("owners-router")
 
 type Router struct {
 	service Servicer
@@ -40,6 +45,9 @@ func (r *Router) Register(router fiber.Router) {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/owners/all		[get]
 func (r *Router) allOwners(c *fiber.Ctx) error {
+	_, span := tracer.Start(c.UserContext(), "ownerById", oteltrace.WithAttributes())
+	defer span.End()
+
 	log.Info().Msg("Getting all owners.")
 	responses, err := r.service.getAllOwners()
 
@@ -65,6 +73,9 @@ func (r *Router) allOwners(c *fiber.Ctx) error {
 // @Router		/owners/{id} [get]
 func (r *Router) ownerById(c *fiber.Ctx) error {
 	strID := c.Params("id")
+	_, span := tracer.Start(c.UserContext(), "ownerById", oteltrace.WithAttributes(attribute.String("id", strID)))
+	defer span.End()
+
 	log.Info().Str("id", strID).Msg("GET owner by ID")
 	id, err := c.ParamsInt("id")
 
@@ -101,6 +112,10 @@ func (r *Router) ownerById(c *fiber.Ctx) error {
 // @Router		/owners/{id}/pets [get]
 func (r *Router) ownerByIdWithPets(c *fiber.Ctx) error {
 	strID := c.Params("id")
+
+	_, span := tracer.Start(c.UserContext(), "ownerByIdWithPets", oteltrace.WithAttributes(attribute.String("id", strID)))
+	defer span.End()
+
 	log.Info().Str("id", strID).Msg("GET owner with pets by ID")
 	id, err := c.ParamsInt("id")
 
@@ -136,6 +151,10 @@ func (r *Router) ownerByIdWithPets(c *fiber.Ctx) error {
 // @Router		/owners [get]
 func (r *Router) ownersByLastName(c *fiber.Ctx) error {
 	lastName := c.Query("last-name")
+
+	_, span := tracer.Start(c.UserContext(), "ownersByLastName", oteltrace.WithAttributes(attribute.String("lastName", lastName)))
+	defer span.End()
+
 	log.Info().Str("lastName", lastName).Msg("GET owner by last name")
 
 	response, err := r.service.getOwnerByLastName(lastName)
@@ -160,6 +179,10 @@ func (r *Router) ownersByLastName(c *fiber.Ctx) error {
 // @Router		/owners 		[post]
 func (r *Router) addNewOwner(c *fiber.Ctx) error {
 	log.Info().Msg("Post a new owner.")
+
+	_, span := tracer.Start(c.UserContext(), "addNewOwner", oteltrace.WithAttributes())
+	defer span.End()
+
 	ownerRequest := new(addRequest)
 	err := c.BodyParser(ownerRequest)
 	if err != nil {
@@ -190,6 +213,10 @@ func (r *Router) addNewOwner(c *fiber.Ctx) error {
 // @Router		/owners/{id} 	[put]
 func (r *Router) updateOwner(c *fiber.Ctx) error {
 	strID := c.Params("id")
+
+	_, span := tracer.Start(c.UserContext(), "updateOwner", oteltrace.WithAttributes(attribute.String("id", strID)))
+	defer span.End()
+
 	log.Info().Str("id", strID).Msg("PUT update owner by ID")
 	id, err := c.ParamsInt("id")
 

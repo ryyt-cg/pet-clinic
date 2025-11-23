@@ -11,6 +11,7 @@ import (
 	"fiber-petclinic-service/config/app"
 	"fiber-petclinic-service/internal/dbase"
 	"fiber-petclinic-service/internal/repository"
+	"fiber-petclinic-service/internal/telemetry"
 	"os"
 	"os/signal"
 	"syscall"
@@ -21,6 +22,7 @@ import (
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/contrib/circuitbreaker"
 	"github.com/gofiber/contrib/fiberzerolog"
+	"github.com/gofiber/contrib/otelfiber/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -91,6 +93,7 @@ func loadConfig() {
 	fiberApp.Use(cors.New())
 	// Initialize default config
 	fiberApp.Use(favicon.New())
+	fiberApp.Use(otelfiber.Middleware())
 
 	// Enable Compression
 	if app.Config.Server.EnableCompression {
@@ -191,6 +194,13 @@ func loadComponents() {
 func main() {
 	loadConfig()
 	loadComponents()
+
+	tp := telemetry.InitTracer()
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			log.Error().Err(err).Msg("Error shutting down tracer provider")
+		}
+	}()
 
 	// Start the server on port define in yaml in a goroutine
 	go func() {

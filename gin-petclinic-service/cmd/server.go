@@ -30,6 +30,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"golang.org/x/sync/errgroup"
 	"gorm.io/gorm"
 )
@@ -64,6 +65,9 @@ func loadConfig() {
 	// By default, gin.DefaultWriter = os.Stdout
 	r.Use(gin.Logger())
 	r.Use(middleware.JSONContentType())
+
+	// OpenTelemetry middleware
+	r.Use(otelgin.Middleware("gin-petclinic-service"))
 
 	// Recovery middleware recovers from any panics and writes a 500 if there was one.
 	r.Use(gin.Recovery())

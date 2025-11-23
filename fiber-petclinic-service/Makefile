@@ -42,7 +42,7 @@ view-test-coverage:
 	go tool cover -html=coverage.out -o coverage.html
 
 live-reload:
-	air -c ./air/.air.linux.conf
+	air -c ./air/.air.linux.toml
 
 run:
 	go run cmd/main.go
