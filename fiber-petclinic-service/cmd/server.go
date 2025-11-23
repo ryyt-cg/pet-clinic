@@ -19,7 +19,6 @@ import (
 
 	_ "fiber-petclinic-service/docs"
 
-	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/contrib/circuitbreaker"
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/contrib/otelfiber/v2"
@@ -101,11 +100,6 @@ func loadConfig() {
 			Level: compress.Level(app.Config.Server.CompressionLevel),
 		}))
 	}
-
-	prometheus := fiberprometheus.New("fiber-petclinic-service")
-	prometheus.RegisterAt(fiberApp, app.Config.Server.BaseURL+"/metrics")
-	prometheus.SetSkipPaths([]string{"/ping"}) // Optional: Remove some paths from metrics
-	fiberApp.Use(prometheus.Middleware)
 
 	// Monitor
 	fiberApp.Get(app.Config.Server.BaseURL+"/monitor", monitor.New(monitor.Config{Title: "fiber-petclinic-service Monitor"}))

@@ -1,12 +1,19 @@
 package repository
 
 import (
+	"context"
+	"strconv"
 	"time"
 
 	"github.com/rs/zerolog/log"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	oteltrace "go.opentelemetry.io/otel/trace"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
+
+var tracer = otel.Tracer("owners-repository")
 
 // OwnerRepositorier - owner repository interface
 // It composes the interfaces to interact with the database
@@ -40,6 +47,10 @@ func NewOwnerRepository(db *gorm.DB) *OwnerRepository {
 func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
 	log.Info().Uint("id", id).Msg("search owner by id.")
 
+	_, span := tracer.Start(context.Background(), "FindById",
+		oteltrace.WithAttributes(attribute.String("id", strconv.FormatUint(uint64(id), 10))))
+	defer span.End()
+
 	var owner Owner
 	// Pets.Type - Nested Preloading (Eager Loading)
 	err := repository.db.First(&owner, id).Error
@@ -56,6 +67,10 @@ func (repository *OwnerRepository) FindById(id uint) (*Owner, error) {
 func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, error) {
 	log.Info().Str("lastName", lastName).Msg("Search owner by last name.")
 
+	_, span := tracer.Start(context.Background(), "FindByLastName",
+		oteltrace.WithAttributes(attribute.String("lastName", lastName)))
+	defer span.End()
+
 	// Pets.Type - Nested Preloading (Eager Loading)
 	var owners []Owner
 	err := repository.db.Where("last_name = ?", lastName).Find(&owners).Error
@@ -71,6 +86,9 @@ func (repository *OwnerRepository) FindByLastName(lastName string) ([]Owner, err
 // SELECT * FROM "owners" WHERE "owners"."deleted_at" IS NULL
 func (repository *OwnerRepository) FindAll() ([]Owner, error) {
 	log.Info().Msg("get list of owners")
+
+	_, span := tracer.Start(context.Background(), "FindAll", oteltrace.WithAttributes())
+	defer span.End()
 
 	var owners []Owner
 	// Get all owners
@@ -92,6 +110,10 @@ func (repository *OwnerRepository) FindAll() ([]Owner, error) {
 func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
 	log.Info().Msg("get a owner with pets")
 
+	_, span := tracer.Start(context.Background(), "FindByIdWithPets",
+		oteltrace.WithAttributes(attribute.String("id", strconv.FormatUint(uint64(id), 10))))
+	defer span.End()
+
 	var owner Owner
 	/*
 	 clause.Associations won’t preload nested associations, but can use it with Nested Preloading together
@@ -111,6 +133,10 @@ func (repository *OwnerRepository) FindByIdWithPets(id uint) (*Owner, error) {
 //	VALUES ('George','Franklin','110 W. Liberty St.','Madison','6085551023','2021-09-26 15:00:00','2021-09-26 15:00:00')
 func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) {
 	log.Info().Any("owner", owner).Msg("Insert a new owner.")
+
+	_, span := tracer.Start(context.Background(), "Insert", oteltrace.WithAttributes())
+	defer span.End()
+
 	now := time.Now()
 	owner.UpdatedAt = now
 	owner.CreatedAt = now
@@ -127,6 +153,11 @@ func (repository *OwnerRepository) Insert(owner *Owner) (*Owner, error) {
 // UPDATE "owners" SET "first_name" = 'George', "last_name" = 'Franklin', "address" = '110 W. Liberty St.',
 func (repository *OwnerRepository) Update(owner *Owner) (*Owner, error) {
 	log.Info().Uint("id", owner.ID).Msg("Update owner")
+
+	_, span := tracer.Start(context.Background(), "Update",
+		oteltrace.WithAttributes(attribute.String("id", strconv.FormatUint(uint64(owner.ID), 10))))
+	defer span.End()
+
 	owner.UpdatedAt = time.Now()
 
 	// Omit the column name from update...

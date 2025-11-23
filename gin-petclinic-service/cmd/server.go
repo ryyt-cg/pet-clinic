@@ -142,6 +142,7 @@ func loadComponents() {
 func main() {
 	loadConfig()
 	loadComponents()
+
 	// add swagger endpoint
 	r.GET(app.Config.Server.BaseURL+"/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

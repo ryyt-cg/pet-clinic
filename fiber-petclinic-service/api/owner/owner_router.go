@@ -45,7 +45,7 @@ func (r *Router) Register(router fiber.Router) {
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/owners/all		[get]
 func (r *Router) allOwners(c *fiber.Ctx) error {
-	_, span := tracer.Start(c.UserContext(), "ownerById", oteltrace.WithAttributes())
+	_, span := tracer.Start(c.UserContext(), "allOwners", oteltrace.WithAttributes())
 	defer span.End()
 
 	log.Info().Msg("Getting all owners.")
@@ -105,7 +105,7 @@ func (r *Router) ownerById(c *fiber.Ctx) error {
 // @Description	Get owner that has pets by ID
 // @Param		id	path	int	true	"Owner ID"
 // @Produce		json
-// @Success		200	{object}	Response
+// @Success		200	{object}	response
 // @Failure		400	{object}	errors.ErrorResponse
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
@@ -145,7 +145,7 @@ func (r *Router) ownerByIdWithPets(c *fiber.Ctx) error {
 // @Description	Get owners by last name
 // @Param		last-name	query	string	true	"Owner last name"
 // @Produce		json
-// @Success		200	{object}	Responses
+// @Success		200	{object}	responses
 // @Failure		404	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/owners [get]
@@ -172,8 +172,8 @@ func (r *Router) ownersByLastName(c *fiber.Ctx) error {
 //
 // @Description	Insert new owner
 // @Produce		json
-// @Param		Request			body	AddRequest	true	"Add owner"
-// @Success		200	{object}	UpdateResponse
+// @Param		Request			body	addRequest	true	"Add owner"
+// @Success		200	{object}	updateResponse
 // @Failure		400	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/owners 		[post]
@@ -206,8 +206,8 @@ func (r *Router) addNewOwner(c *fiber.Ctx) error {
 // @Description	Update new owner
 // @Produce		json
 // @Param		id	path	int	true	"Owner ID"
-// @Param		Request			body	UpdateRequest	true	"Update owner"
-// @Success		200	{object}	UpdateResponse
+// @Param		Request			body	updateRequest	true	"Update owner"
+// @Success		200	{object}	updateResponse
 // @Failure		400	{object}	errors.ErrorResponse
 // @Failure		500	{object}	errors.ErrorResponse
 // @Router		/owners/{id} 	[put]

@@ -12,12 +12,15 @@ import (
 	_ "fiber3-petclinic-service/docs"
 	"fiber3-petclinic-service/internal/dbase"
 	"fiber3-petclinic-service/internal/repository"
+	"fiber3-petclinic-service/internal/telemetry"
 	"fmt"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 	"time"
+
+	otelfiber "github.com/gofiber/contrib/v3/otel"
 
 	"github.com/gofiber/contrib/monitor"
 	"github.com/gofiber/contrib/v3/circuitbreaker"
@@ -115,6 +118,7 @@ func loadConfig() {
 
 	// Monitor
 	fiberApp.Get(app.Config.Server.BaseURL+"/monitor", monitor.New(monitor.Config{Title: "fiber3-petclinic-service Monitor"}))
+	fiberApp.Use(otelfiber.Middleware())
 
 	// Create a new Circuit Breaker with custom configuration
 	cb := circuitbreaker.New(circuitbreaker.Config{
@@ -203,6 +207,13 @@ func loadComponents() {
 func main() {
 	loadConfig()
 	loadComponents()
+
+	tp := telemetry.InitTracer()
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			log.Error().Err(err).Msg("Error shutting down tracer provider")
+		}
+	}()
 
 	// Start the server on port define in yaml in a goroutine
 	go func() {

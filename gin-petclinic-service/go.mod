@@ -21,6 +21,7 @@ require (
 	github.com/swaggo/swag v1.16.6
 	github.com/vrischmann/envconfig v1.4.1
 	github.com/zsais/go-gin-prometheus v0.1.0
+	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.63.0
 	golang.org/x/net v0.43.0
 	golang.org/x/sync v0.16.0
 	gopkg.in/go-playground/assert.v1 v1.2.1
@@ -89,7 +90,6 @@ require (
 	github.com/ugorji/go/codec v1.3.0 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.63.0 // indirect
 	go.opentelemetry.io/otel v1.38.0 // indirect
 	go.opentelemetry.io/otel/metric v1.38.0 // indirect
 	go.opentelemetry.io/otel/trace v1.38.0 // indirect
