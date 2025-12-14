@@ -1,10 +1,12 @@
+// Package vet provides vet endpoints, services, requests, and responses
 package vet
 
 import (
 	"errors"
-	resterr "gin-petclinic-service/internal/errors"
 	"net/http"
 	"strconv"
+
+	resterr "gin-petclinic-service/internal/errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
@@ -19,12 +21,11 @@ func NewRouter(service Servicer) *Router {
 	return &Router{service}
 }
 
-// Register
-// register vet endpoints
+// Register register vet endpoints
 func (vetRouter *Router) Register(router *gin.RouterGroup) {
 	router.GET("specialties", vetRouter.getAllSpecialties)
 	router.GET("all", vetRouter.allVets)
-	router.GET(":id", vetRouter.vetById)
+	router.GET(":id", vetRouter.vetByID)
 	router.GET(":id/specialties", vetRouter.getVetByIdWithSpecialties)
 	router.GET("", vetRouter.vetByParam)
 	router.POST("", vetRouter.create)
@@ -44,8 +45,8 @@ func (vetRouter *Router) getAllSpecialties(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// vetById - retrieve vet by id
-func (vetRouter *Router) vetById(c *gin.Context) {
+// vetByID - retrieve vet by id
+func (vetRouter *Router) vetByID(c *gin.Context) {
 	pathID := c.Param("id")
 
 	id, err := strconv.Atoi(pathID)

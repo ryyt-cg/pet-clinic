@@ -16,8 +16,8 @@ func TestPgConnectSuccess(t *testing.T) {
 	sqlDB, _ := db.DB()
 	assert.NotNil(t, sqlDB)
 
-	assert.Equal(t, app.Config.Database.MaxIdleConns, sqlDB.Stats().MaxIdleClosed)
-	assert.Equal(t, app.Config.Database.MaxOpenConns, sqlDB.Stats().MaxOpenConnections)
+	assert.Equal(t, app.Config.Database.MaxIdleConnections, sqlDB.Stats().MaxIdleClosed)
+	assert.Equal(t, app.Config.Database.MaxOpenConnections, sqlDB.Stats().MaxOpenConnections)
 }
 
 //func TestPgConnectPanicOnInvalidDSN(t *testing.T) {

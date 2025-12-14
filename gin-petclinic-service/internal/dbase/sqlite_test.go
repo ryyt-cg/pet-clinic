@@ -1,14 +1,16 @@
 package dbase
 
 import (
+
 	"gin-petclinic-service/config/app"
-	"testing"
+	"gin-petclinic-service/config/app"
+
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestSqliteConnectSuccess(t *testing.T) {
-	db, _ := SqliteConnect()
+	db, _ := Connect()
 
 	assert.NotNil(t, db)
 

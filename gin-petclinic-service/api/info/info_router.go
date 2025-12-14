@@ -1,10 +1,12 @@
+// Package info provides info endpoints, services, requests, and responses
 package info
 
 import (
-	"gin-petclinic-service/config/app"
-	resterr "gin-petclinic-service/internal/errors"
 	"net/http"
 	"strings"
+
+	"gin-petclinic-service/config/app"
+	resterr "gin-petclinic-service/internal/errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"

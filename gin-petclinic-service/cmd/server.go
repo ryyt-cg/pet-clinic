@@ -52,7 +52,7 @@ func loadConfig() {
 
 	sqlite := dbase.Sqlite{}
 	var err error
-	db, err = sqlite.Connect(context.Background())
+	db, err = sqlite.Connect()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Fail to connect the database.")
 	}
