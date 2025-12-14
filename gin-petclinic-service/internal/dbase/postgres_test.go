@@ -8,7 +8,8 @@ import (
 )
 
 func TestPgConnectSuccess(t *testing.T) {
-	db := PgConnect()
+	pg := Postgres{}
+	db, _ := Connect()
 
 	assert.NotNil(t, db)
 

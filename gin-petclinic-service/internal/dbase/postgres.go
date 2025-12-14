@@ -3,6 +3,7 @@ package dbase
 import (
 	"context"
 	"fmt"
+
 	"gin-petclinic-service/config/app"
 	"time"
 
@@ -13,15 +14,13 @@ import (
 )
 
 type Database interface {
-	Connect(context.Context) (*gorm.DB, error)
+	Connect() (*gorm.DB, error)
 }
-
-type Postgres struct {
-}
+{type Postgres struct{}
 
 // Connect
 // Create connection pooling using GORM postgres driver.
-func (p Postgres) Connect(ctx context.Context) (*gorm.DB, error) {
+func (p Postgres) Connect() (*gorm.DB, error) {
 	// data service name (DSN) example:
 	// "host=localhost user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=UTC"
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",

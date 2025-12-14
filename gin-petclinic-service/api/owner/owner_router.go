@@ -1,10 +1,12 @@
+// Package owner provides owner endpoints and Servicer
 package owner
 
 import (
 	"errors"
-	resterr "gin-petclinic-service/internal/errors"
 	"net/http"
 	"strconv"
+
+	resterr "gin-petclinic-service/internal/errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"

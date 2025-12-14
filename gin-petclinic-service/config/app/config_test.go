@@ -17,9 +17,9 @@ func Test_AppConfigValidation(t *testing.T) {
 				Driver: "postgres",
 				Dsn:    "postgres://user:password@localhost:5432/dbname",
 			},
-			MaxIdleConns: 10,
-			MaxOpenConns: 100,
-			MaxIdleTime:  30,
+			MaxIdleConnections: 10,
+			MaxOpenConnections: 100,
+			MaxIdleTime:              30,
 		},
 		Okta: OktaConfig{
 			OAuth2: OAuth2Config{

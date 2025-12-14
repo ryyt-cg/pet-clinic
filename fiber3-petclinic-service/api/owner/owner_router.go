@@ -1,9 +1,12 @@
+// Package owner
+// Contains owner router and service
 package owner
 
 import (
 	"errors"
-	resterr "fiber3-petclinic-service/internal/errors"
 	"strconv"
+
+	resterr "fiber3-petclinic-service/internal/errors"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/rs/zerolog/log"
@@ -49,8 +52,6 @@ func (r *Router) allOwners(c fiber.Ctx) error {
 	log.Info().Msg("Getting all owners.")
 	_, span := tracer.Start(c.Context(), "allOwners", oteltrace.WithAttributes())
 	defer span.End()
-	responses, err := r.service.getAllOwners()
-
 	if err != nil {
 		log.Error().Err(err).Msg("Fail to get all owners.")
 		return c.Status(fiber.StatusInternalServerError).JSON(resterr.InternalServerError(err.Error()))

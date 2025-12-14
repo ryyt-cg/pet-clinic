@@ -1,3 +1,4 @@
+// Package pet provides pet endpoints and services
 package pet
 
 import (

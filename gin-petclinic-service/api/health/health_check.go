@@ -1,3 +1,4 @@
+// Package health provides health endpoints & services
 package health
 
 import validation "github.com/go-ozzo/ozzo-validation/v4"
